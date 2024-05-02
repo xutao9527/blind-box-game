@@ -69,7 +69,6 @@
 </template>
 <script setup>
 import {http} from "@/core/axios/index.js";
-import AuthMenu from "./AuthMenu.vue";
 
 const visible = ref(false)
 const currentUserId = ref('')

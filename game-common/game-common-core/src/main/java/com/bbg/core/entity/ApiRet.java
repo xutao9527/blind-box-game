@@ -1,10 +1,7 @@
 package com.bbg.core.entity;
 
-
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
 import java.io.Serial;
 import java.io.Serializable;
 

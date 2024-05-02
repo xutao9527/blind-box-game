@@ -73,8 +73,7 @@ const scope = effectScope()
 scope.run(() => {
   const dynamicHeightUpdate = () => {
     let top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'))
-    let dynamicHeight = useWindowSize().height.value - (top + header.value.$el.offsetHeight + 51 + 32 + 33);
-    tableDynamicHeight.value = dynamicHeight;
+    tableDynamicHeight.value = useWindowSize().height.value - (top + header.value.$el.offsetHeight + 51 + 32 + 33);
     emitter.emit('bbgWindowResize');
   }
   useResizeObserver(header, () => {

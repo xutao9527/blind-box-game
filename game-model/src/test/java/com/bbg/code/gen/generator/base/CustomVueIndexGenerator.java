@@ -37,7 +37,7 @@ public class CustomVueIndexGenerator implements IGenerator {
                 Map<String, Object> params = new HashMap<>(4);
                 params.put("table", table);
                 params.put("entityClassName", table.buildEntityClassName());
-                globalConfig.getTemplateConfig().getTemplate().generate(params, templatePath, vueFile);;
+                globalConfig.getTemplateConfig().getTemplate().generate(params, templatePath, vueFile);
                 System.out.println("IndexVue ---> " + vueFile);
             }
         }
