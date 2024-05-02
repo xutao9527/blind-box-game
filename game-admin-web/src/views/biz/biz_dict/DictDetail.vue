@@ -1,4 +1,3 @@
-
 <template>
   <div class="bbg_sub_table">
   <el-form label-position="right" label-width="10" :inline="true" size="small">
@@ -25,7 +24,7 @@
     <el-table-column prop="value" label="具体值"/>
     <el-table-column prop="enable" label="状态">
       <template #default="scope">
-        {{scope.row.enable?'是':'否'}}
+        {{scope.row.enable?'启动':'停用'}}
       </template>
     </el-table-column>
     <el-table-column prop="updateTime" label="修改时间"/>

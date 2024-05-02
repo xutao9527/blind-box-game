@@ -49,7 +49,7 @@
         <el-table-column prop="birthday" label="生日"/>
         <el-table-column prop="enable" label="状态">
         <template #default="scope">
-            {{scope.row.enable?'是':'否'}}
+            {{scope.row.enable?'启动':'停用'}}
         </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>

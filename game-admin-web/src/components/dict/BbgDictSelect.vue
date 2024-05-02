@@ -48,4 +48,17 @@ watch(() => props.value, (newVal) => {
 const handleChange = (value) => {
   emit('update:value', value)
 }
+
+const getLabel = (value)=>{
+  const foundElement = bizDictDetail.value.find(obj => obj.value === value)
+  if(foundElement){
+    return foundElement.label
+  }else{
+    return ""
+  }
+}
+
+defineExpose({
+  getLabel
+})
 </script>

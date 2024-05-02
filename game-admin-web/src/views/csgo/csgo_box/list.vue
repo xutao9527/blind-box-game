@@ -5,16 +5,13 @@
         <el-col :span="18">
           <el-row>
             <div class="bbg-table-header-input">
-              <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
+              <el-input v-model="tableProps.reqParams.queryEntity.name" placeholder="箱子名称"/>
             </div>
-            <div class="bbg-table-header-input" style="width: 420px">
-              <el-date-picker
-                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
-                  type="datetimerange"
-                  start-placeholder="Start date"
-                  end-placeholder="End date"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-              />
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dictTypeRef" :dict-id="'1785914176081506304'" placeholder="箱子类型"/>
+            </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.group" ref="dictGroupRef" :dict-id="'1785915487250296832'" placeholder="箱子分组"/>
             </div>
           </el-row>
         </el-col>
@@ -33,17 +30,31 @@
                   :data="tableProps.apiRet.data.records"
                   :height="tableDynamicHeight"
                   table-layout="auto"
+                  default-expand-all
                   border show-overflow-tooltip>
+          <el-table-column type="expand" label="#">
+            <template #default="props">
+              <BoxGood :row-ojb="props.row"/>
+            </template>
+          </el-table-column>
         <el-table-column prop="id" label="主键"/>
         <el-table-column prop="name" label="箱子名称"/>
         <el-table-column prop="nameAlias" label="箱子别名"/>
         <el-table-column prop="imageUrl" label="图片地址"/>
-        <el-table-column prop="type" label="箱子类型"/>
-        <el-table-column prop="group" label="箱子分组"/>
+        <el-table-column prop="type" label="箱子类型">
+          <template #default="scope">
+            {{dictTypeRef.getLabel(scope.row.type)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="group" label="箱子分组">
+          <template #default="scope">
+            {{dictGroupRef.getLabel(scope.row.group)}}
+          </template>
+        </el-table-column>
         <el-table-column prop="price" label="箱子价格"/>
         <el-table-column prop="enable" label="状态">
         <template #default="scope">
-            {{scope.row.enable?'是':'否'}}
+            {{scope.row.enable?'启动':'停用'}}
         </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
@@ -77,7 +88,11 @@
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
+import BoxGood from "@/views/csgo/csgo_box/BoxGood.vue";
 
+
+const dictTypeRef = ref(null)
+const dictGroupRef = ref(null)
 const header = ref(null);
 const tableDynamicHeight = ref(0)
 

@@ -16,7 +16,6 @@
                 当前角色: {{ roleName }}
               </div>
             </el-row>
-
           </el-col>
           <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
             <el-row>
@@ -36,7 +35,7 @@
           <el-table-column prop="remark" label="角色描述"/>
           <el-table-column prop="enable" label="状态">
             <template #default="scope">
-              {{ scope.row.enable ? '启动' : '停用' }}
+              {{scope.row.enable?'启动':'停用'}}
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="创建时间"/>
@@ -75,14 +74,7 @@ const currentUserId = ref('')
 const roleName = ref('');
 const authMenuRef = ref(null)
 
-const authRole = async (userId) => {
-  currentUserId.value = userId;
-  await tableProps.fetchData()
-  let userRole = {
-    userId: userId,
-  }
-  const apiRet = await http.post('/sysUser/getUserRole', userRole)
-  roleName.value = apiRet.data ? apiRet.data.name : "无"
+const selectData = async () => {
   visible.value = true;
 }
 
@@ -103,7 +95,7 @@ const select = async (row) => {
 }
 
 defineExpose({
-  authRole
+  selectData
 })
 
 const tableProps = reactive({

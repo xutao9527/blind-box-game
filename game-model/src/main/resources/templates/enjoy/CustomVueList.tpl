@@ -40,7 +40,7 @@
         #if(column.propertySimpleType == "Boolean")
         <el-table-column prop="#(column.property)" label="#(column.comment)">
         <template #[[#default="scope"]]#>
-            {{scope.row.#(column.property)?'是':'否'}}
+            {{scope.row.#(column.property)?'启用':'停用'}}
         </template>
         </el-table-column>
         #else

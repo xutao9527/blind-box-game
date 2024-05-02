@@ -20,10 +20,10 @@
                 <el-input v-model="data.imageUrl"/>
               </el-form-item>
               <el-form-item label="箱子类型">
-                <el-input v-model="data.type"/>
+                <bbg-dict-select v-model:value="data.type" :dict-id="'1785914176081506304'" placeholder="箱子类型"/>
               </el-form-item>
               <el-form-item label="箱子分组">
-                <el-input v-model="data.group"/>
+                <bbg-dict-select v-model:value="data.group" :dict-id="'1785915487250296832'" placeholder="箱子分组"/>
               </el-form-item>
               <el-form-item label="箱子价格">
                 <el-input v-model="data.price"/>

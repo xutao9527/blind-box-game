@@ -23,7 +23,9 @@ public class GenAdmin {
 
     public static String[] csgoTables = {
             "csgo_config",
-            "csgo_goods"
+            "csgo_goods",
+            "csgo_box",
+            "csgo_box_goods",
     };
 
     @Test

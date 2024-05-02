@@ -84,7 +84,6 @@
                 <artifactId>spring-webmvc</artifactId>
                 <version>${spring-web.version}</version>
             </dependency>
-
             <!-- 数据库 -->
             <dependency>
                 <groupId>com.mybatis-flex</groupId>
