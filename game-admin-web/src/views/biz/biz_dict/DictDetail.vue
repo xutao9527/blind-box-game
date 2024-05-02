@@ -1,27 +1,31 @@
 <template>
   <div class="bbg_sub_table">
-  <el-form label-position="right" label-width="10" :inline="true" size="small">
-    <el-form-item >
+  <el-form label-position="right"  :inline="true" size="small">
+    <el-form-item label="名称">
       <el-input v-model="tableProps.editData.label" placeholder="名称"/>
     </el-form-item>
-    <el-form-item >
+    <el-form-item label="别名">
       <el-input v-model="tableProps.editData.labelAlias" placeholder="别名"/>
     </el-form-item>
-    <el-form-item >
+    <el-form-item label="具体值">
       <el-input v-model="tableProps.editData.value" placeholder="具体值"/>
     </el-form-item>
-    <el-form-item >
+    <el-form-item label="排序">
+      <el-input v-model="tableProps.editData.sort" placeholder="排序"/>
+    </el-form-item>
+    <el-form-item label="状态">
       <el-switch v-model="tableProps.editData.enable" placeholder="状态"/>
     </el-form-item>
     <el-form-item >
       <el-button icon="Plus" @click="submit">{{ submitText }}</el-button>
-      <el-button icon="Plus" @click="toEdit(undefined)">取消</el-button>
+      <el-button icon="Close" @click="toEdit(undefined)">取消</el-button>
     </el-form-item>
   </el-form>
   <el-table :data="tableProps.apiRet.data" size="small">
     <el-table-column prop="label" label="名称"/>
     <el-table-column prop="labelAlias" label="别名"/>
     <el-table-column prop="value" label="具体值"/>
+    <el-table-column prop="sort" label="排序"/>
     <el-table-column prop="enable" label="状态">
       <template #default="scope">
         {{scope.row.enable?'启动':'停用'}}

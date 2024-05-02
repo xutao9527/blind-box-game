@@ -30,11 +30,10 @@
                   :data="tableProps.apiRet.data.records"
                   :height="tableDynamicHeight"
                   table-layout="auto"
-                  default-expand-all
                   border show-overflow-tooltip>
           <el-table-column type="expand" label="#">
             <template #default="props">
-              <BoxGood :row-ojb="props.row"/>
+              <BoxGood v-model:row-ojb="props.row"/>
             </template>
           </el-table-column>
         <el-table-column prop="id" label="主键"/>

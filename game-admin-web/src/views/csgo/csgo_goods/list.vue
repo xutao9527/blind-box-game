@@ -33,7 +33,7 @@
         <el-table-column prop="itemName" label="皮肤名称"/>
         <!--        <el-table-column prop="shortName" label="皮肤短名"/>-->
         <el-table-column prop="marketHashName" label="皮肤市场名称"/>
-        <el-table-column prop="imageUrl" label="图片地址">
+        <el-table-column prop="imageUrl" label="图片">
           <template #default="scope">
             <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
           </template>

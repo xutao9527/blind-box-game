@@ -83,6 +83,12 @@ public class CsgoBoxGoodsRecord extends BaseModel implements Serializable {
     private BigDecimal rate;
 
     /**
+     * 排序
+     */
+    @Schema(description = "排序")
+    private Integer sort;
+
+    /**
      * 状态:1=启动,0=禁用
      */
     @Schema(description = "状态:1=启动,0=禁用")

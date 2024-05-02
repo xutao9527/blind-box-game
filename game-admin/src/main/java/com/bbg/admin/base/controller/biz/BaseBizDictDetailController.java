@@ -5,6 +5,7 @@ import com.bbg.model.biz.BizDictDetail;
 import com.bbg.admin.service.biz.BizDictDetailService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
+import com.bbg.model.sys.SysMenu;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.constant.SqlOperator;
@@ -56,7 +57,8 @@ public class BaseBizDictDetailController extends BaseController<BizDictDetail, B
     @PostMapping("list")
     @Operation(description = "查询所有")
     public ApiRet<List<BizDictDetail>> list(@RequestBody BizDictDetail model) {
-        return ApiRet.buildOk(bizDictDetailService.list(QueryWrapper.create(model)));
+        QueryWrapper queryWrapper = QueryWrapper.create(model).orderBy(BizDictDetail::getSort, true);
+        return ApiRet.buildOk(bizDictDetailService.list(queryWrapper));
     }
 
     @PostMapping("page")

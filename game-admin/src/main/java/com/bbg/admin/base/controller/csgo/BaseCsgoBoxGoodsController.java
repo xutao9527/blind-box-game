@@ -1,6 +1,7 @@
 package com.bbg.admin.base.controller.csgo;
 
 import com.bbg.admin.base.BaseController;
+import com.bbg.model.biz.BizDictDetail;
 import com.bbg.model.csgo.CsgoBoxGoods;
 import com.bbg.admin.service.csgo.CsgoBoxGoodsService;
 import com.bbg.core.entity.ApiRet;
@@ -58,7 +59,8 @@ public class BaseCsgoBoxGoodsController extends BaseController<CsgoBoxGoods, Csg
     @PostMapping("list")
     @Operation(description = "查询所有")
     public ApiRet<List<CsgoBoxGoods>> list(@RequestBody CsgoBoxGoods model) {
-        return ApiRet.buildOk(csgoBoxGoodsService.list(QueryWrapper.create(model)));
+        QueryWrapper queryWrapper = QueryWrapper.create(model).orderBy(CsgoBoxGoods::getSort, true);
+        return ApiRet.buildOk(csgoBoxGoodsService.list(queryWrapper));
     }
 
     @PostMapping("page")
