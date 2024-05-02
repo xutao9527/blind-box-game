@@ -18,7 +18,7 @@ import java.io.Serial;
  * 系统字典详情 实体类。
  *
  * @author bbg
- * @since 2024-05-01
+ * @since 2024-05-02
  */
 @Data
 @SuperBuilder

@@ -17,17 +17,17 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * Csgo商品表 实体类。
+ * CSGO商品表 实体类。
  *
  * @author bbg
- * @since 2024-05-01
+ * @since 2024-05-02
  */
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "Csgo商品表")
+@Schema(description = "CSGO商品表")
 @Table(value = "csgo_goods")
 public class CsgoGoodsRecord extends BaseModel implements Serializable {
 

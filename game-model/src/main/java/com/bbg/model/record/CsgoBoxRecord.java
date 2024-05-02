@@ -4,6 +4,7 @@ import com.bbg.model.base.BaseModel;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +16,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 系统用户 实体类。
+ * CSGO箱子 实体类。
  *
  * @author bbg
  * @since 2024-05-02
@@ -25,9 +26,9 @@ import java.io.Serial;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "系统用户")
-@Table(value = "sys_user")
-public class SysUserRecord extends BaseModel implements Serializable {
+@Schema(description = "CSGO箱子")
+@Table(value = "csgo_box")
+public class CsgoBoxRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -40,28 +41,40 @@ public class SysUserRecord extends BaseModel implements Serializable {
     private Long id;
 
     /**
-     * 手机
+     * 箱子名称
      */
-    @Schema(description = "手机")
-    private String mobile;
+    @Schema(description = "箱子名称")
+    private String name;
 
     /**
-     * 账号
+     * 箱子别名
      */
-    @Schema(description = "账号")
-    private String account;
+    @Schema(description = "箱子别名")
+    private String nameAlias;
 
     /**
-     * 密码
+     * 图片地址
      */
-    @Schema(description = "密码")
-    private String password;
+    @Schema(description = "图片地址")
+    private String imageUrl;
 
     /**
-     * 超管:1=是,0=否
+     * 箱子类型
      */
-    @Schema(description = "超管:1=是,0=否")
-    private Boolean superAdmin;
+    @Schema(description = "箱子类型")
+    private String type;
+
+    /**
+     * 箱子分组
+     */
+    @Schema(description = "箱子分组")
+    private String group;
+
+    /**
+     * 箱子价格
+     */
+    @Schema(description = "箱子价格")
+    private BigDecimal price;
 
     /**
      * 状态:1=启动,0=禁用
