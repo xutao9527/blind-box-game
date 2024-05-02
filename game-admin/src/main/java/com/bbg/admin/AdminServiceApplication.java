@@ -1,0 +1,18 @@
+package com.bbg.admin;
+
+import com.mybatisflex.spring.boot.FlexTransactionAutoConfiguration;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
+
+@SpringBootApplication(exclude = FlexTransactionAutoConfiguration.class)
+@MapperScan("com.bbg.admin.mapper")
+@ComponentScan(basePackages = {"com.bbg.core","com.bbg.admin"})
+@EnableFeignClients
+public class AdminServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(AdminServiceApplication.class, args);
+    }
+}

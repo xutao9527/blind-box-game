@@ -1,0 +1,64 @@
+server:
+  port: 5500
+
+spring:
+  application:
+    name: admin-server
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      discovery:
+        namespace: be713592-842b-4885-9251-9fd0f3d0f770
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 3000 # 连接超时时间
+            read-timeout: 3000 # 读取超时时间
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/gbb?characterEncoding=utf-8&useInformationSchema=true
+    username: root
+    password: 123456
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 1
+      password: 123321
+      timeout: 3000 # 读超时
+      connectTimeout: 5000 # 连接超时
+      lettuce:  # Lettuce连接池
+        pool:
+          # 最小空闲连接
+          min-idle: 5
+          # 最大空闲连接
+          max-idle: 10
+          # 最大连接数
+          max-active: 100
+          # 连接分配应该阻塞的最大时间
+          max-wait: 2000
+
+
+springdoc:
+  api-docs:
+    path: /api-doc
+  swagger-ui:
+    path: /doc
+
+#retrofit:
+#  global-retry:
+#    # 是否启用全局重试
+#    enable: true
+#    # 全局重试间隔时间
+#    interval-ms: 3000
+#    # 全局最大重试次数
+#    max-retries: 3
+#    # 全局重试规则
+#    retry-rules:
+#      - response_status_not_2xx
+#      - occur_io_exception
+#  auto-set-prototype-scope-for-path-math-interceptor: false
+
+
