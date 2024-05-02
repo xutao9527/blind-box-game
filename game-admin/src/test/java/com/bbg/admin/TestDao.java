@@ -1,7 +1,6 @@
 package com.bbg.admin;
 
 import com.bbg.admin.service.sys.SysRoleService;
-import com.bbg.model.sys.SysRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
