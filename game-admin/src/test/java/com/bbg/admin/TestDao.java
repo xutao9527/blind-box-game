@@ -15,9 +15,6 @@ public class TestDao {
 
     @Test
     public void addRole(){
-        SysRole.create().setId(1L).setName("zhang").save();
-
-
 
     }
 }
