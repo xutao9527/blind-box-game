@@ -3,6 +3,7 @@ package com.bbg.core.aop;
 import cn.hutool.core.lang.Pair;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.service.RedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @Aspect
 @Component
+@Slf4j
 public class RedisLockAspect {
     @Autowired
     RedisService redisService;
@@ -29,7 +31,7 @@ public class RedisLockAspect {
                 result = point.proceed();
             }
         } catch (Throwable throwable) {
-            System.out.println("RedisLockAspect:" + throwable.getMessage());
+            log.error("RedisLockAspect:" + throwable.getMessage());
             throw throwable;
         } finally {
             if (pair != null) {
