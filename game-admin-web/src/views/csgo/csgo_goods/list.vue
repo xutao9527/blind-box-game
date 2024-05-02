@@ -30,36 +30,38 @@
                 table-layout="auto"
                 border show-overflow-tooltip>
         <el-table-column prop="id" label="主键id"/>
-        <el-table-column prop="itemName" label="皮肤名称"/>
+        <el-table-column prop="itemName" label="皮肤名称" width="340"/>
         <!--        <el-table-column prop="shortName" label="皮肤短名"/>-->
-        <el-table-column prop="marketHashName" label="皮肤市场名称"/>
-        <el-table-column prop="imageUrl" label="图片">
+        <el-table-column prop="marketHashName" label="皮肤市场名称" width="340"/>
+        <el-table-column prop="imageUrl" label="图片" width="80">
           <template #default="scope">
             <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
           </template>
         </el-table-column>
+        <el-table-column prop="price" label="价格"/>
+        <el-table-column prop="cnyPrice" label="人名币价格" width="100"/>
+        <el-table-column prop="quantity" label="商品数量"/>
         <!--        <el-table-column prop="type" label="类型"/>-->
-        <el-table-column prop="typeName" label="类型名称"/>
+        <el-table-column prop="typeName" label="类型名称" width="100"/>
         <!--        <el-table-column prop="exterior" label="外观"/>-->
-        <el-table-column prop="exteriorName" label="外观名称"/>
+        <el-table-column prop="exteriorName" label="外观名称" width="100"/>
         <!--        <el-table-column prop="exteriorColor" label="外观颜色"/>-->
         <!--        <el-table-column prop="quality" label="类别"/>-->
-        <el-table-column prop="qualityName" label="类别名称"/>
+        <el-table-column prop="qualityName" label="类别名称" width="100"/>
         <!--        <el-table-column prop="qualityColor" label="类别颜色"/>-->
         <!--        <el-table-column prop="rarity" label="品质"/>-->
         <el-table-column prop="rarityName" label="品质名称"/>
         <!--        <el-table-column prop="rarityColor" label="品质颜色"/>-->
-        <el-table-column prop="price" label="价格"/>
-        <el-table-column prop="cnyPrice" label="人名币价格"/>
-        <el-table-column prop="imageUrl" label="图片地址"/>
-        <el-table-column prop="quantity" label="商品数量"/>
+
+
+
         <!--        <el-table-column prop="status" label="状态">-->
         <!--        <template #default="scope">-->
         <!--            {{scope.row.status?'是':'否'}}-->
         <!--        </template>-->
         <!--        </el-table-column>-->
-        <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column prop="editTime" label="编辑时间"/>
+<!--        <el-table-column prop="createTime" label="创建时间"/>-->
+        <el-table-column prop="editTime" label="编辑时间" width="200"/>
 <!--        <el-table-column fixed="right" label="操作">-->
 <!--          <template #default="scope">-->
 <!--            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>-->

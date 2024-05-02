@@ -17,7 +17,6 @@
 <script setup>
 import {useTabsStore} from "@/store/tabsStore.js";
 
-
 const store = useTabsStore()
 const router = useRouter()
 onMounted(() => {
@@ -48,7 +47,7 @@ const handleTabsEdit = (
     if (store.tabs.length !== 1) {
       //store.removeTab(targetName)
       if(store.currentName === targetName){
-        console.log(targetName)
+        // console.log(targetName)
         store.tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
             const nextTab = store.tabs[index + 1] || store.tabs[index - 1]
