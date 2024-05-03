@@ -66,7 +66,7 @@ public class SysUserController extends BaseSysUserController {
     @PostMapping("authUserRole")
     @Operation(description = "授权用户的角色")
     public ApiRet<Boolean> authUserRole(@RequestBody SysUserRole sysUserRole) {
-        sysUserRoleService.remove(QueryWrapper.create(SysUserRole.builder().userId(sysUserRole.getUserId()).build()));
+        sysUserRoleService.remove(QueryWrapper.create(new SysUserRole().setUserId(sysUserRole.getUserId())));
         return ApiRet.buildOk(sysUserRoleService.save(sysUserRole));
     }
 
@@ -74,7 +74,7 @@ public class SysUserController extends BaseSysUserController {
     @Operation(description = "获得用户的角色")
     public ApiRet<SysRole> getUserRole(@RequestBody SysUserRole sysUserRole) {
         SysRole sysRole = null;
-        SysUserRole userRole = sysUserRoleService.getOne(QueryWrapper.create(SysUserRole.builder().userId(sysUserRole.getUserId()).build()));
+        SysUserRole userRole = sysUserRoleService.getOne(QueryWrapper.create(new SysUserRole().setUserId(sysUserRole.getUserId())));
         if (userRole != null) {
             sysRole = sysRoleService.getById(userRole.getRoleId());
         }
@@ -86,7 +86,7 @@ public class SysUserController extends BaseSysUserController {
     public ApiRet<Boolean> authRoleMenu(@RequestBody List<SysRoleMenu> roleMenuList) {
         boolean result = false;
         if (roleMenuList != null && !roleMenuList.isEmpty()) {
-            sysRoleMenuService.remove(QueryWrapper.create(SysRoleMenu.builder().roleId(roleMenuList.get(0).getRoleId()).build()));
+            sysRoleMenuService.remove(QueryWrapper.create(new SysRoleMenu().setRoleId(roleMenuList.get(0).getRoleId())));
             result = sysRoleMenuService.saveBatch(roleMenuList);
         }
         return ApiRet.buildOk(result);
@@ -95,7 +95,7 @@ public class SysUserController extends BaseSysUserController {
     @PostMapping("getRoleMenu")
     @Operation(description = "获得角色的菜单")
     public ApiRet<List<SysRoleMenu>> getRoleMenu(@RequestBody SysRoleMenu sysRoleMenu) {
-        QueryWrapper queryWrapper = QueryWrapper.create(SysRoleMenu.builder().roleId(sysRoleMenu.getRoleId()).build());
+        QueryWrapper queryWrapper = QueryWrapper.create(new SysRoleMenu().setRoleId(sysRoleMenu.getRoleId()));
         List<SysRoleMenu> sysMenuList = sysRoleMenuService.list(queryWrapper);
         return ApiRet.buildOk(sysMenuList);
     }
@@ -114,9 +114,9 @@ public class SysUserController extends BaseSysUserController {
         if (sysUser != null && sysUser.getSuperAdmin()) {
             sysMenus = sysMenuService.list();
         } else if (sysUser != null) {
-            SysUserRole sysUserRole = sysUserRoleService.getOne(QueryWrapper.create(SysUserRole.builder().userId(sysUser.getId()).build()));
+            SysUserRole sysUserRole = sysUserRoleService.getOne(QueryWrapper.create(new SysUserRole().setUserId(sysUser.getId())));
             if (sysUserRole != null) {
-                List<SysRoleMenu> sysRoleMenuList = sysRoleMenuService.list(QueryWrapper.create(SysRoleMenu.builder().roleId(sysUserRole.getRoleId()).build()));
+                List<SysRoleMenu> sysRoleMenuList = sysRoleMenuService.list(QueryWrapper.create(new SysRoleMenu().setRoleId(sysUserRole.getRoleId())));
                 if (sysRoleMenuList != null && !sysRoleMenuList.isEmpty()) {
                     sysMenus = sysMenuService.list(QueryWrapper.create().in(SysMenu::getId, sysRoleMenuList.stream().map(SysRoleMenuRecord::getMenuId).toList()));
                 }

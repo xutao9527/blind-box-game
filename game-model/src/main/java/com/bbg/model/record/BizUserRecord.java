@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
@@ -19,12 +19,12 @@ import java.io.Serial;
  * 业务用户 实体类。
  *
  * @author bbg
- * @since 2024-05-02
+ * @since 2024-05-03
  */
 @Data
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "业务用户")
 @Table(value = "biz_user")

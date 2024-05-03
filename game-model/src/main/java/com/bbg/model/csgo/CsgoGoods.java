@@ -4,11 +4,12 @@ import com.bbg.model.record.CsgoGoodsRecord;
 
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.experimental.SuperBuilder;
+import lombok.experimental.Accessors;
 
-@SuperBuilder
 @NoArgsConstructor
-@Schema(description = "Csgo商品表")
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+@Schema(description = "CSGO商品表")
 public class CsgoGoods extends CsgoGoodsRecord {
 
 }

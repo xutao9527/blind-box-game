@@ -6,10 +6,11 @@ import com.mybatisflex.annotation.ColumnMask;
 import com.mybatisflex.core.mask.Masks;
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.experimental.SuperBuilder;
+import lombok.experimental.Accessors;
 
-@SuperBuilder
 @NoArgsConstructor
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "系统用户")
 public class SysUser extends SysUserRecord {
     /**

@@ -5,11 +5,18 @@ import com.bbg.core.box.dto.LoginDto;
 import com.bbg.model.biz.BizUser;
 import com.bbg.box.service.biz.BizUserService;
 import com.bbg.core.entity.ApiRet;
+import com.bbg.model.sys.SysUser;
+import com.mybatisflex.core.constant.SqlOperator;
+import com.mybatisflex.core.mask.MaskManager;
+import com.mybatisflex.core.query.QueryCondition;
+import com.mybatisflex.core.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+
+import java.util.UUID;
 
 /**
  * 业务用户 控制层。
@@ -27,8 +34,14 @@ public class BizUserController extends BaseController<BizUser, BizUserService> {
     @PostMapping("login")
     @Operation(description = "用户登录")
     public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginReq loginReq) {
-        System.out.println(loginReq);
-        return ApiRet.buildOk(LoginDto.LoginRes.builder().build());
+        LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
+        QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setMobile(loginReq.getMobile()));
+        BizUser bizUser = MaskManager.execWithoutMask(() -> bizUserService.getOne(queryWrapper));
+        if (null != bizUser && bizUser.getPassword().equals(loginReq.getPassword())) {
+            bizUser.setPassword(null);
+            loginRes.setBizUser(bizUser).setToken(UUID.randomUUID().toString());
+        }
+        return ApiRet.buildOk(loginRes);
     }
 
     @GetMapping("logout")

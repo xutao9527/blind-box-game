@@ -24,12 +24,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 #if(withActiveRecord)
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 #else
 import lombok.AllArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 #if(entityConfig.getSuperClass())
 import lombok.EqualsAndHashCode;
 #end
@@ -52,10 +51,10 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 #else
 @Data
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 #if(entityConfig.getSuperClass())
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 #end
 #end

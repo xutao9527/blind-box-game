@@ -1,15 +1,21 @@
 package com.bbg.core.box.dto;
 
+import com.bbg.model.biz.BizUser;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 public class LoginDto {
 
     @Data
-    @Builder
+    @Accessors(chain = true)
     @Schema(description = "登录参数")
-    public static class LoginReq{
+    public static class LoginReq implements Serializable {
         /**
          * 手机号
          */
@@ -24,19 +30,18 @@ public class LoginDto {
     }
 
     @Data
-    @Builder
+    @Accessors(chain = true)
     @Schema(description = "登录结果")
-    public static class LoginRes{
+    public static class LoginRes implements Serializable{
         /**
-         * 手机号
+         * 用户
          */
-        @Schema(description = "手机号")
-        private String mobile;
+        BizUser bizUser;
 
         /**
-         * 密码
+         * 用户token
          */
         @Schema(description = "密码")
-        private String password;
+        private String token;
     }
 }

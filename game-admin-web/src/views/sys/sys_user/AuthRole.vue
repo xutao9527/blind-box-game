@@ -44,7 +44,7 @@
           <el-table-column fixed="right" label="操作">
             <template #default="scope">
               <el-button link type="primary" size="small" @click="select(scope.row)">选择</el-button>
-              <el-button link type="primary" size="small" @click="authMenu(scope.row)">菜单</el-button>
+              <el-button link type="primary" size="small" @click="authRoleMenu(scope.row)">菜单</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -65,9 +65,10 @@
       </el-footer>
     </el-container>
   </el-dialog>
-  <AuthMenu ref="authMenuRef"/>
+  <AuthMenu ref="authMenuRef"></AuthMenu>
 </template>
 <script setup>
+import AuthMenu from "./AuthMenu.vue";
 import {http} from "@/core/axios/index.js";
 
 const visible = ref(false)
@@ -86,7 +87,7 @@ const authRole = async (userId) => {
   visible.value = true;
 }
 
-const authMenu = async (row) =>{
+const authRoleMenu = async (row) =>{
   authMenuRef.value.authMenu(row)
 }
 
