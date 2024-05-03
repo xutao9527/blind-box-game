@@ -24,6 +24,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>com.bbg</groupId>
+            <artifactId>game-common-box</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
@@ -48,5 +53,6 @@
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
         </dependency>
+
     </dependencies>
 </project>

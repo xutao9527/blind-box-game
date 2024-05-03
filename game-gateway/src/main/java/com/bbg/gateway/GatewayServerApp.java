@@ -1,4 +1,4 @@
-package com.bbg;
+package com.bbg.gateway;
 
 
 import org.springframework.boot.SpringApplication;
@@ -10,7 +10,7 @@ import java.io.IOException;
 @SpringBootApplication
 public class GatewayServerApp {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         SpringApplication.run(GatewayServerApp.class,args);
     }
 }
