@@ -32,9 +32,6 @@ public class GenBox {
         CodeGenNormal codeGenNormal = new CodeGenNormal();
         codeGenNormal.generateService(bizTables, "com.bbg.box", ".biz", extPackagePath);
         codeGenNormal.generateService(csgoTables, "com.bbg.box", ".csgo", extPackagePath);
-        // codeGenNormal.generateBaseController(bizTables, "com.bbg.admin", ".biz", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
-        // codeGenNormal.generateBaseController(csgoTables, "com.bbg.admin", ".csgo", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
-        // codeGenNormal.generateBaseController(sysTables, "com.bbg.admin", ".sys", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
         codeGenNormal.generateController(bizTables, "com.bbg.box", ".biz", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
         codeGenNormal.generateController(csgoTables, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
 
