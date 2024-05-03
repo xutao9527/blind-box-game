@@ -12,7 +12,7 @@
     <modules>
         <module>game-gateway</module>
         <module>game-model</module>
-        <module>game-app</module>
+        <module>game-box-app</module>
         <module>game-common</module>
         <module>game-admin</module>
     </modules>
