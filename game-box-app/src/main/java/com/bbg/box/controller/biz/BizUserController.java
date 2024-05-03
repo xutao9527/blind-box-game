@@ -37,11 +37,13 @@ public class BizUserController extends BaseController<BizUser, BizUserService> {
         LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
         QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setMobile(loginReq.getMobile()));
         BizUser bizUser = MaskManager.execWithoutMask(() -> bizUserService.getOne(queryWrapper));
-        if (null != bizUser && bizUser.getPassword().equals(loginReq.getPassword())) {
+        if (null != bizUser && bizUser.getEnable() && bizUser.getPassword().equals(loginReq.getPassword())) {
             bizUser.setPassword(null);
-            loginRes.setBizUser(bizUser).setToken(UUID.randomUUID().toString());
+            String token = redisService.userLogin(bizUser);
+            loginRes.setBizUser(bizUser).setToken(token);
+            return ApiRet.buildOk(loginRes);
         }
-        return ApiRet.buildOk(loginRes);
+        return ApiRet.buildNo(loginRes,"用户不存在!");
     }
 
     @GetMapping("logout")
@@ -49,7 +51,7 @@ public class BizUserController extends BaseController<BizUser, BizUserService> {
     public ApiRet<String> logout() {
         String token = request.getHeader("token");
         if (token != null) {
-            redisService.adminLogout(token);
+            redisService.userLogout(token);
         }
         return ApiRet.buildOk(token);
     }

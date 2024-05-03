@@ -27,6 +27,17 @@ public class BoxGameMockController {
     @PostMapping("login")
     @Operation(description = "用户登录")
     public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginReq loginReq) {
+        ApiRet<LoginDto.LoginRes> apiRet = boxGameMockService.login(loginReq);
+        if(apiRet.isOk()){
+            BoxGameMockService.GameMockInterceptor.token = apiRet.getData().getToken();
+        }
         return boxGameMockService.login(loginReq);
+    }
+
+    @PostMapping("logout")
+    @Operation(description = "用户登出")
+    public ApiRet<String> logout() {
+        BoxGameMockService.GameMockInterceptor.token = null;
+        return boxGameMockService.logout();
     }
 }
