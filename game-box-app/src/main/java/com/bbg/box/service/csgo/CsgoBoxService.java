@@ -1,7 +1,10 @@
 package com.bbg.box.service.csgo;
 
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.bbg.model.csgo.CsgoBox;
+
+import java.util.List;
 
 /**
  * CSGO箱子 服务层。
@@ -10,5 +13,5 @@ import com.bbg.model.csgo.CsgoBox;
  * @since 2024-05-03
  */
 public interface CsgoBoxService extends IService<CsgoBox> {
-
+    List<CsgoBox> list(QueryWrapper query);
 }

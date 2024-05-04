@@ -1,6 +1,7 @@
 package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
+import com.bbg.core.box.dto.BoxDto;
 import com.bbg.model.csgo.CsgoBox;
 import com.bbg.box.service.csgo.CsgoBoxService;
 import com.bbg.core.entity.ApiRet;
@@ -32,5 +33,11 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     @Autowired
     protected  CsgoBoxService csgoBoxService;
 
-
+    @PostMapping("list")
+    @Operation(description = "获得盲盒列表")
+    public ApiRet<List<CsgoBox>> list(@RequestBody BoxDto.GetBoxReq model) {
+        QueryWrapper queryWrapper = QueryWrapper.create(new CsgoBox().setEnable(true).setType(model.getType()));
+        List<CsgoBox> boxes = csgoBoxService.list(queryWrapper);
+        return ApiRet.buildOk(boxes);
+    }
 }

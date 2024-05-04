@@ -98,7 +98,7 @@ public class BizUserRecord extends BaseModel implements Serializable {
      * 类型:1-普通,2-测试
      */
     @Schema(description = "类型:1-普通,2-测试")
-    private Integer type;
+    private String type;
 
     /**
      * 状态:1=启动,0=禁用

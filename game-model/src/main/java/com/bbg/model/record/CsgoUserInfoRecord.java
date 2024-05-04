@@ -49,7 +49,7 @@ public class CsgoUserInfoRecord extends BaseModel implements Serializable {
      * 用户类型
      */
     @Schema(description = "用户类型")
-    private Integer userType;
+    private String userType;
 
     /**
      * 推广码

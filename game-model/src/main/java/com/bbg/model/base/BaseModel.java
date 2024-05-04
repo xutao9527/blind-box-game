@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
 @Accessors(chain = true)
-public class BaseModel {
+public class BaseModel implements Serializable {
     /**
      * 扩展参数
      */

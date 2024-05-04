@@ -67,7 +67,7 @@ public class CsgoCapitalRecordRecord extends BaseModel implements Serializable {
      * 变更类型
      */
     @Schema(description = "变更类型")
-    private Integer type;
+    private String type;
 
     /**
      * 变更来源

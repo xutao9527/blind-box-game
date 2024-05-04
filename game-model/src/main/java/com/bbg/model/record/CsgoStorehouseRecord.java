@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 个人装备仓库 实体类。
+ * 装备仓库 实体类。
  *
  * @author bbg
  * @since 2024-05-04
@@ -26,7 +26,7 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "个人装备仓库")
+@Schema(description = "装备仓库")
 @Table(value = "csgo_storehouse")
 public class CsgoStorehouseRecord extends BaseModel implements Serializable {
 
@@ -80,7 +80,7 @@ public class CsgoStorehouseRecord extends BaseModel implements Serializable {
      * 来源类型
      */
     @Schema(description = "来源类型")
-    private Integer sourceType;
+    private String sourceType;
 
     /**
      * 来源编号

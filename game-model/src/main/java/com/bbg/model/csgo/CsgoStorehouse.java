@@ -6,10 +6,11 @@ import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.experimental.Accessors;
 
+@Data
 @NoArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "个人装备仓库")
+@Schema(description = "装备仓库")
 public class CsgoStorehouse extends CsgoStorehouseRecord {
 
 }

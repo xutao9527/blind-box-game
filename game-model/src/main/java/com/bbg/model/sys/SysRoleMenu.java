@@ -6,6 +6,7 @@ import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.experimental.Accessors;
 
+@Data
 @NoArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
