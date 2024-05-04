@@ -8,24 +8,27 @@ import java.util.Arrays;
 
 public class GenAdmin {
     public static String[] sysTables = {
-            "sys_menu",
-            "sys_role",
-            "sys_role_menu",
-            "sys_user",
-            "sys_user_role",
+            "sys_menu",//菜单
+            "sys_role",//角色
+            "sys_role_menu",//角色菜单
+            "sys_user",//用户
+            "sys_user_role",//用户角色
     };
 
     public static String[] bizTables = {
-            "biz_user",
-            "biz_dict",
-            "biz_dict_detail",
+            "biz_user",//账号
+            "biz_dict",//业务字典
+            "biz_dict_detail",//字典详情
     };
 
     public static String[] csgoTables = {
-            "csgo_config",
-            "csgo_goods",
-            "csgo_box",
-            "csgo_box_goods",
+            "csgo_user_info",//用户信息
+            "csgo_config",//游戏配置
+            "csgo_goods",//商品信息
+            "csgo_box",//盲盒
+            "csgo_box_goods",//盲盒商品
+            "csgo_storehouse",//装备仓库
+            "csgo_capital_record",//资金流水
     };
 
     @Test

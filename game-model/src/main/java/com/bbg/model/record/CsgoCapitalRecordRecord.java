@@ -4,7 +4,6 @@ import com.bbg.model.base.BaseModel;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * CSGO箱子商品 实体类。
+ * 资金流水 实体类。
  *
  * @author bbg
  * @since 2024-05-04
@@ -26,9 +25,9 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "CSGO箱子商品")
-@Table(value = "csgo_box_goods")
-public class CsgoBoxGoodsRecord extends BaseModel implements Serializable {
+@Schema(description = "资金流水")
+@Table(value = "csgo_capital_record")
+public class CsgoCapitalRecordRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -41,58 +40,40 @@ public class CsgoBoxGoodsRecord extends BaseModel implements Serializable {
     private Long id;
 
     /**
-     * 游戏箱子
+     * 用户编号
      */
-    @Schema(description = "游戏箱子")
-    private Long boxId;
+    @Schema(description = "用户编号")
+    private String userId;
 
     /**
-     * 游戏商品
+     * 变更金额
      */
-    @Schema(description = "游戏商品")
-    private Long goodId;
+    @Schema(description = "变更金额")
+    private String changeMoney;
 
     /**
-     * 商品名称
+     * 变更前金额
      */
-    @Schema(description = "商品名称")
-    private String name;
+    @Schema(description = "变更前金额")
+    private String beforeMoney;
 
     /**
-     * 商品别名
+     * 变更后金额
      */
-    @Schema(description = "商品别名")
-    private String nameAlias;
+    @Schema(description = "变更后金额")
+    private String afterMoney;
 
     /**
-     * 图片地址
+     * 变更类型
      */
-    @Schema(description = "图片地址")
-    private String imageUrl;
+    @Schema(description = "变更类型")
+    private Integer type;
 
     /**
-     * 商品价格
+     * 变更来源
      */
-    @Schema(description = "商品价格")
-    private BigDecimal price;
-
-    /**
-     * 获得概率
-     */
-    @Schema(description = "获得概率")
-    private BigDecimal rate;
-
-    /**
-     * 排序
-     */
-    @Schema(description = "排序")
-    private Integer sort;
-
-    /**
-     * 状态:1=启动,0=禁用
-     */
-    @Schema(description = "状态:1=启动,0=禁用")
-    private Boolean enable;
+    @Schema(description = "变更来源")
+    private String sourceId;
 
     /**
      * 创建时间

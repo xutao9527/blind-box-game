@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * CSGO箱子商品 实体类。
+ * 个人装备仓库 实体类。
  *
  * @author bbg
  * @since 2024-05-04
@@ -26,9 +26,9 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "CSGO箱子商品")
-@Table(value = "csgo_box_goods")
-public class CsgoBoxGoodsRecord extends BaseModel implements Serializable {
+@Schema(description = "个人装备仓库")
+@Table(value = "csgo_storehouse")
+public class CsgoStorehouseRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -41,15 +41,15 @@ public class CsgoBoxGoodsRecord extends BaseModel implements Serializable {
     private Long id;
 
     /**
-     * 游戏箱子
+     * 用户编号
      */
-    @Schema(description = "游戏箱子")
-    private Long boxId;
+    @Schema(description = "用户编号")
+    private Long userId;
 
     /**
-     * 游戏商品
+     * 商品编号
      */
-    @Schema(description = "游戏商品")
+    @Schema(description = "商品编号")
     private Long goodId;
 
     /**
@@ -71,22 +71,28 @@ public class CsgoBoxGoodsRecord extends BaseModel implements Serializable {
     private String imageUrl;
 
     /**
-     * 商品价格
+     * 变更类型
      */
-    @Schema(description = "商品价格")
+    @Schema(description = "变更类型")
     private BigDecimal price;
 
     /**
-     * 获得概率
+     * 来源类型
      */
-    @Schema(description = "获得概率")
-    private BigDecimal rate;
+    @Schema(description = "来源类型")
+    private Integer sourceType;
 
     /**
-     * 排序
+     * 来源编号
      */
-    @Schema(description = "排序")
-    private Integer sort;
+    @Schema(description = "来源编号")
+    private Long sourceId;
+
+    /**
+     * 商品状态
+     */
+    @Schema(description = "商品状态")
+    private Integer status;
 
     /**
      * 状态:1=启动,0=禁用
