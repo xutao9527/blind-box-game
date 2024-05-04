@@ -6,6 +6,7 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -18,10 +19,10 @@ public class RedisBaseImpl implements RedisBase {
     public Pair<Boolean, RLock> tryLock(RedisLock redisLock) throws InterruptedException {
         RLock rLock = redissonClient.getLock(redisLock.value());
         boolean lockRet;
-        if(redisLock.leaseFlag()){
-            lockRet = rLock.tryLock(redisLock.waitTime(),redisLock.leaseTime(),redisLock.timeUnit());
-        }else {
-            lockRet = rLock.tryLock(redisLock.waitTime(),redisLock.timeUnit());
+        if (redisLock.leaseFlag()) {
+            lockRet = rLock.tryLock(redisLock.waitTime(), redisLock.leaseTime(), redisLock.timeUnit());
+        } else {
+            lockRet = rLock.tryLock(redisLock.waitTime(), redisLock.timeUnit());
         }
         return new Pair<>(lockRet, rLock);
     }
@@ -32,7 +33,7 @@ public class RedisBaseImpl implements RedisBase {
     }
 
     public void unLock(RLock rLock) {
-        if(rLock.isHeldByCurrentThread()){
+        if (rLock.isHeldByCurrentThread()) {
             rLock.unlock();
         }
     }
@@ -41,8 +42,12 @@ public class RedisBaseImpl implements RedisBase {
         return redisTemplate.opsForValue().get(key);
     }
 
-    public void set(String key, Object value, Long liveTime) {
-        redisTemplate.opsForValue().set(key, value, liveTime, TimeUnit.SECONDS);
+    public Boolean expire(String key, Long liveTime, TimeUnit unit) {
+        return redisTemplate.expire(key, liveTime, unit);
+    }
+
+    public void set(String key, Object value, Long liveTime, TimeUnit unit) {
+        redisTemplate.opsForValue().set(key, value, liveTime, unit);
     }
 
     public void delete(String key) {

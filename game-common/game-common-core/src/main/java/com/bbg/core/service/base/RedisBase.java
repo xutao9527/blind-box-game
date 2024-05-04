@@ -15,7 +15,9 @@ public interface RedisBase {
 
     Object get(Object key);
 
-    void set(String key, Object value, Long liveTime);
+    Boolean expire(String key, Long liveTime, TimeUnit unit);
+
+    void set(String key, Object value, Long liveTime, TimeUnit unit);
 
     void delete(String key);
 }

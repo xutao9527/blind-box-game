@@ -35,13 +35,13 @@
                   table-layout="auto"
                   border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="mobile" label="手机号"/>
+        <el-table-column prop="nickName" label="昵称"/>
+        <el-table-column prop="mobile" label="手机号" width="120"/>
         <el-table-column prop="account" label="登录账号"/>
         <el-table-column prop="password" label="密码"/>
         <el-table-column prop="type" label="类型"/>
         <el-table-column prop="money" label="金额"/>
         <el-table-column prop="moneySign" label="金额校验"/>
-        <el-table-column prop="nickName" label="昵称"/>
         <el-table-column prop="photo" label="头像"/>
         <el-table-column prop="email" label="邮箱"/>
         <el-table-column prop="name" label="真实姓名"/>

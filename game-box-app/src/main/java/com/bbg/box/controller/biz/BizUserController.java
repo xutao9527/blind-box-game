@@ -40,6 +40,7 @@ public class BizUserController extends BaseController<BizUser, BizUserService> {
         if (null != bizUser && bizUser.getEnable() && bizUser.getPassword().equals(loginReq.getPassword())) {
             bizUser.setPassword(null);
             String token = redisService.userLogin(bizUser);
+            System.out.println("user login:"+token);
             loginRes.setBizUser(bizUser).setToken(token);
             return ApiRet.buildOk(loginRes);
         }
@@ -47,9 +48,10 @@ public class BizUserController extends BaseController<BizUser, BizUserService> {
     }
 
     @GetMapping("logout")
-    @Operation(description = "管理员登出")
+    @Operation(description = "用户登出")
     public ApiRet<String> logout() {
         String token = request.getHeader("token");
+        System.out.println("user logout:"+token);
         if (token != null) {
             redisService.userLogout(token);
         }

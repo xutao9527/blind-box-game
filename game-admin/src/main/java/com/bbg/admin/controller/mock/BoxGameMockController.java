@@ -31,13 +31,16 @@ public class BoxGameMockController {
         if(apiRet.isOk()){
             BoxGameMockService.GameMockInterceptor.token = apiRet.getData().getToken();
         }
-        return boxGameMockService.login(loginReq);
+        return apiRet;
     }
 
     @PostMapping("logout")
     @Operation(description = "用户登出")
     public ApiRet<String> logout() {
-        BoxGameMockService.GameMockInterceptor.token = null;
-        return boxGameMockService.logout();
+        ApiRet<String> apiRet = boxGameMockService.logout();
+        if(apiRet.isOk()){
+            BoxGameMockService.GameMockInterceptor.token = null;
+        }
+        return apiRet;
     }
 }
