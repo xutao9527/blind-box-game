@@ -18,7 +18,7 @@
         <hutool.version>5.8.26</hutool.version>
         <lombok.version>1.18.30</lombok.version>
         <mysql.version>8.3.0</mysql.version>
-        <mybatis-flex.version>1.8.4</mybatis-flex.version>
+        <mybatis-flex.version>1.8.8</mybatis-flex.version>
         <HikariCP.version>5.1.0</HikariCP.version>
         <springdoc.version>2.4.0</springdoc.version>
         <fastjson.version>2.0.49</fastjson.version>

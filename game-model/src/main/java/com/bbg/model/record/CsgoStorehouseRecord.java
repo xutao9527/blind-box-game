@@ -71,9 +71,9 @@ public class CsgoStorehouseRecord extends BaseModel implements Serializable {
     private String imageUrl;
 
     /**
-     * 变更类型
+     * 商品价值
      */
-    @Schema(description = "变更类型")
+    @Schema(description = "商品价值")
     private BigDecimal price;
 
     /**
@@ -89,10 +89,16 @@ public class CsgoStorehouseRecord extends BaseModel implements Serializable {
     private Long sourceId;
 
     /**
+     * 来源信息
+     */
+    @Schema(description = "来源信息")
+    private String sourceInfo;
+
+    /**
      * 商品状态
      */
     @Schema(description = "商品状态")
-    private Integer status;
+    private String status;
 
     /**
      * 状态:1=启动,0=禁用

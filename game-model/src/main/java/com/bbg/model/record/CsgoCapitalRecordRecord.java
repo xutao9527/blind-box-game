@@ -4,6 +4,7 @@ import com.bbg.model.base.BaseModel;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,25 +44,25 @@ public class CsgoCapitalRecordRecord extends BaseModel implements Serializable {
      * 用户编号
      */
     @Schema(description = "用户编号")
-    private String userId;
+    private Long userId;
 
     /**
      * 变更金额
      */
     @Schema(description = "变更金额")
-    private String changeMoney;
+    private BigDecimal changeMoney;
 
     /**
      * 变更前金额
      */
     @Schema(description = "变更前金额")
-    private String beforeMoney;
+    private BigDecimal beforeMoney;
 
     /**
      * 变更后金额
      */
     @Schema(description = "变更后金额")
-    private String afterMoney;
+    private BigDecimal afterMoney;
 
     /**
      * 变更类型

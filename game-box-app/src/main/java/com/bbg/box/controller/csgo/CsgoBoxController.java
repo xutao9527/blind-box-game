@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,6 +44,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
 
     @PostMapping("open")
     @Operation(description = "打开盲盒")
+    @Transactional(rollbackFor = Exception.class)
     public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model) {
         BizUser bizUser = getCurrentUser();
         csgoBoxService.openBox(bizUser,model.getBoxId());

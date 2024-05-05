@@ -5,6 +5,7 @@ import com.bbg.model.record.CsgoStorehouseRecord;
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor

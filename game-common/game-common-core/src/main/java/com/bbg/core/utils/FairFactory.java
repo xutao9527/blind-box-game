@@ -5,6 +5,7 @@ import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.HmacAlgorithm;
+import com.bbg.model.biz.BizUser;
 import lombok.Builder;
 import lombok.Data;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +23,19 @@ public class FairFactory {
         String clientSeed = DigestUtil.sha256Hex(snowflake.nextIdStr().getBytes());
         return FairEntity.builder().secretHash(secretHash).secretSalt(secretSalt).publicHash(publicHash).clientSeed(clientSeed).build();
     }
+
+    /**
+     * 生产公平性密钥对象
+     */
+    public static FairEntity build(BizUser bizUser) {
+        FairFactory.FairEntity fairEntity = FairFactory.FairEntity.builder()
+                .clientSeed(bizUser.getCsgoUserInfo().getClientSeed())
+                .publicHash(bizUser.getCsgoUserInfo().getPublicHash())
+                .secretSalt(bizUser.getCsgoUserInfo().getSecretSalt())
+                .secretHash(bizUser.getCsgoUserInfo().getSecretHash()).build();
+        return fairEntity;
+    }
+
 
     /**
      * 辅助方法：拼接两个字节数组
