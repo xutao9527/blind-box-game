@@ -26,7 +26,7 @@ import java.io.Serial;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "系统菜单")
-@Table(value = "sys_menu")
+@Table("sys_menu")
 public class SysMenuRecord extends BaseModel implements Serializable {
 
     @Serial

@@ -26,7 +26,7 @@ import java.io.Serial;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "系统角色")
-@Table(value = "sys_role")
+@Table("sys_role")
 public class SysRoleRecord extends BaseModel implements Serializable {
 
     @Serial

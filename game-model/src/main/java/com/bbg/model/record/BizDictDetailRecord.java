@@ -26,7 +26,7 @@ import java.io.Serial;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "系统字典详情")
-@Table(value = "biz_dict_detail")
+@Table("biz_dict_detail")
 public class BizDictDetailRecord extends BaseModel implements Serializable {
 
     @Serial

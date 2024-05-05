@@ -26,7 +26,7 @@ import java.io.Serial;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "游戏配置")
-@Table(value = "csgo_config")
+@Table("csgo_config")
 public class CsgoConfigRecord extends BaseModel implements Serializable {
 
     @Serial

@@ -27,7 +27,7 @@ import java.io.Serial;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "CSGO箱子")
-@Table(value = "csgo_box")
+@Table("csgo_box")
 public class CsgoBoxRecord extends BaseModel implements Serializable {
 
     @Serial

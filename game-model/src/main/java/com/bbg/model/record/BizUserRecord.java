@@ -27,7 +27,7 @@ import java.io.Serial;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "业务用户")
-@Table(value = "biz_user")
+@Table("biz_user")
 public class BizUserRecord extends BaseModel implements Serializable {
 
     @Serial
