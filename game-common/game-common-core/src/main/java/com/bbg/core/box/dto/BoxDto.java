@@ -41,7 +41,6 @@ public class BoxDto {
     @Accessors(chain = true)
     @Schema(description = "打开盲盒结果")
     public static class OpenBoxRes implements Serializable {
-
         @Schema(description = "新用户信息")
         BizUser bizUser;
         @Schema(description = "获得的装备")

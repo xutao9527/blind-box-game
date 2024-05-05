@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "box-app-server",configuration = BoxGameMockService.GameMockInterceptor.class)
 public interface BoxGameMockService {
 
-
     @PostMapping("/bizUser/login")
     ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginReq loginReq);
 
@@ -30,12 +29,10 @@ public interface BoxGameMockService {
     @PostMapping("/csgoBox/open")
     ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model);
 
-
     class GameMockInterceptor implements RequestInterceptor {
         public static volatile String token = null;
         @Override
         public void apply(RequestTemplate requestTemplate) {
-            System.out.println(token);
             if (token != null) {
                 requestTemplate.header("token",token);
             }

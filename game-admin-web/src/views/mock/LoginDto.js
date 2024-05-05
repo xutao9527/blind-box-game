@@ -11,7 +11,6 @@ export const loginMock = reactive({
     login: async () => {
         const apiRet = await http.post('boxGameMock/login', loginMock.loginReq)
         if(apiRet.ok){
-            console.log(apiRet.data.token)
             mockGlobal.bizUser = apiRet.data.bizUser
             mockGlobal.bizToken = apiRet.data.token
         }
@@ -20,7 +19,6 @@ export const loginMock = reactive({
     logout: async () => {
         const apiRet = await http.post('boxGameMock/logout')
         if(apiRet.ok){
-            console.log(apiRet.data.token)
             mockGlobal.bizUser = {}
             mockGlobal.bizToken = null
         }

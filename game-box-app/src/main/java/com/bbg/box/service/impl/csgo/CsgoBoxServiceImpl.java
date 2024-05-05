@@ -45,7 +45,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
     RedisService redisService;
 
 
-    public CsgoBox getBoxesById(Long id){
+    public CsgoBox getBoxesById(Long id) {
         CsgoBox box = getMapper().selectOneWithRelationsByQuery(
                 QueryWrapper.create(new CsgoBox()
                         .setId(id)
@@ -54,15 +54,15 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         return this.transformBoxGoods(box);
     }
 
-    public List<CsgoBox> getBoxesByType(String type){
+    public List<CsgoBox> getBoxesByType(String type) {
         QueryWrapper queryWrapper = QueryWrapper.create(new CsgoBox().setEnable(true).setType(type));
-        List<CsgoBox>  csgoBoxes = getMapper().selectListWithRelationsByQuery(queryWrapper);
+        List<CsgoBox> csgoBoxes = getMapper().selectListWithRelationsByQuery(queryWrapper);
         csgoBoxes.forEach(this::transformBoxGoods);
         return csgoBoxes;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BoxDto.OpenBoxRes openBox(BizUser bizUser, Long boxId){
+    public BoxDto.OpenBoxRes openBox(BizUser bizUser, Long boxId) {
         BoxDto.OpenBoxRes boxRes = new BoxDto.OpenBoxRes();
         // 使用FairEntity,进行roll点
         FairFactory.FairEntity fairEntity = FairFactory.build(bizUser);
@@ -93,19 +93,19 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                     .setUpdateTime(null);
             csgoUserInfoService.updateById(csgoUserInfo);
 
-            System.out.println("扣钱之前:"+bizUser.getMoney());
-            System.out.println("回合数之前:"+bizUser.getCsgoUserInfo().getRoundNumber());
+            System.out.println("扣钱之前:" + bizUser.getMoney());
+            System.out.println("回合数之前:" + bizUser.getCsgoUserInfo().getRoundNumber());
 
             // 构造流水记录
             CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
             capitalRecord.setUserId(bizUser.getId())
-                    .setChangeMoney(csgoBox.getPrice().negate());    //扣钱,转为负数
+                    .setChangeMoney(csgoBox.getPrice().negate());    // 扣钱,转为负数
             // 更新用户金额
             bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
-
-            System.out.println("扣钱之后:"+bizUser.getMoney());
-            System.out.println("回合数之后:"+bizUser.getCsgoUserInfo().getRoundNumber());
-            System.out.println(bizUser.getMoney());
+            System.out.println("盲盒价格:" + csgoBox.getPrice() + "盲盒价格:" + csgoBox.getPrice());
+            System.out.println("扣钱之后:" + bizUser.getMoney());
+            System.out.println("回合数之后:" + bizUser.getCsgoUserInfo().getRoundNumber());
+            System.out.println();
             // 跟新缓存
             redisService.updateUser(bizUser);
             boxRes.setBizUser(bizUser);
@@ -116,7 +116,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
     /**
      * 转化并设置盲盒中商品的roll点范围
      */
-    private CsgoBox transformBoxGoods(CsgoBox csgoBox){
+    private CsgoBox transformBoxGoods(CsgoBox csgoBox) {
         AtomicReference<BigDecimal> startRound = new AtomicReference<>(BigDecimal.ZERO);
         List<CsgoBoxGoods> boxGoods = csgoBox.getCsgoBoxGoods().stream().map(boxGood -> {
             BigDecimal roundWeight = boxGood.getRate()

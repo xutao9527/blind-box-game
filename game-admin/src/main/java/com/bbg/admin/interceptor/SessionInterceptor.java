@@ -26,14 +26,12 @@ public class SessionInterceptor implements HandlerInterceptor {
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
-
     @Override
     // 请求处理之后但在视图渲染之前执行的拦截逻辑
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
-
 
     @Override
     // 请求完成后的拦截逻辑，可以用于资源清理等操作

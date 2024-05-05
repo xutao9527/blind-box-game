@@ -1,6 +1,7 @@
 package com.bbg.admin.controller.mock;
 
 import com.bbg.admin.third.mock.BoxGameMockService;
+import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.LoginDto;
 import com.bbg.core.entity.ApiRet;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,5 +43,15 @@ public class BoxGameMockController {
             BoxGameMockService.GameMockInterceptor.token = null;
         }
         return apiRet;
+    }
+
+    @PostMapping("list")
+    public ApiRet<BoxDto.GetBoxRes> list(@RequestBody BoxDto.GetBoxReq model){
+        return boxGameMockService.list(model);
+    }
+
+    @PostMapping("open")
+    public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model){
+        return boxGameMockService.openBox(model);
     }
 }
