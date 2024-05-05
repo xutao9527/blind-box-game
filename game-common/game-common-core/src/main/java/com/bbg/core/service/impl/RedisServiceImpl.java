@@ -60,6 +60,8 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
         return newToken;
     }
 
+
+
     public void userLogout(String token) {
         BizUser user = getUser(token);
         if (user != null) {
@@ -80,7 +82,15 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
             String userId = "user::token::uid::" + bizUser.getId();
             expire(userId, 3600L+3, TimeUnit.SECONDS);
             expire(userToken, 3600L, TimeUnit.SECONDS);
+        }
+    }
 
+    public void updateUser(BizUser user){
+        String userId = "user::token::uid::" + user.getId();
+        String oldToken = (String) get(userId);
+        if(oldToken!=null){
+            set(userId, oldToken, 3600L+3, TimeUnit.SECONDS);
+            set(oldToken, user, 3600L, TimeUnit.SECONDS);
         }
     }
 }

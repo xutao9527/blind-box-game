@@ -27,6 +27,8 @@ public interface RedisService extends RedisBase {
     BizUser getUser(String token);
 
     // 用户session延期
-    public void expireUser(String token);
+    void expireUser(String token);
 
+    // 更新用户缓存
+    void updateUser(BizUser user);
 }

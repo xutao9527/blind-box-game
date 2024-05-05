@@ -1,5 +1,6 @@
 package com.bbg.box.service.csgo;
 
+import com.bbg.core.box.dto.BoxDto;
 import com.bbg.model.biz.BizUser;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
@@ -19,5 +20,5 @@ public interface CsgoBoxService extends IService<CsgoBox> {
 
     List<CsgoBox> getBoxesByType(String type);
 
-    void openBox(BizUser bizUser, Long boxId);
+    BoxDto.OpenBoxRes openBox(BizUser bizUser, Long boxId);
 }

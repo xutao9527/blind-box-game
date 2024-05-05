@@ -1,6 +1,8 @@
 package com.bbg.core.box.dto;
 
+import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBox;
+import com.bbg.model.csgo.CsgoStorehouse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -31,9 +33,6 @@ public class BoxDto {
     @Accessors(chain = true)
     @Schema(description = "打开盲盒")
     public static class OpenBoxReq implements Serializable {
-        /**
-         * 箱子类型
-         */
         @Schema(description = "箱子类型")
         private Long boxId;
     }
@@ -42,10 +41,10 @@ public class BoxDto {
     @Accessors(chain = true)
     @Schema(description = "打开盲盒结果")
     public static class OpenBoxRes implements Serializable {
-        /**
-         * 箱子类型
-         */
-        @Schema(description = "箱子类型")
-        private String type;
+
+        @Schema(description = "新用户信息")
+        BizUser bizUser;
+        @Schema(description = "获得的装备")
+        CsgoStorehouse luckStorehouse;
     }
 }

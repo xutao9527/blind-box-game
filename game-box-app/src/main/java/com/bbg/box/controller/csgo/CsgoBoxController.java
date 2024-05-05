@@ -44,10 +44,9 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
 
     @PostMapping("open")
     @Operation(description = "打开盲盒")
-    @Transactional(rollbackFor = Exception.class)
     public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model) {
         BizUser bizUser = getCurrentUser();
-        csgoBoxService.openBox(bizUser,model.getBoxId());
-        return ApiRet.buildOk(new BoxDto.OpenBoxRes());
+        BoxDto.OpenBoxRes boxRes = csgoBoxService.openBox(bizUser, model.getBoxId());
+        return ApiRet.buildOk(boxRes);
     }
 }

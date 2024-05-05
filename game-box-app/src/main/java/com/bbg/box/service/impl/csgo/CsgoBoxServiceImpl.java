@@ -4,6 +4,8 @@ import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.CsgoCapitalRecordService;
 import com.bbg.box.service.csgo.CsgoStorehouseService;
 import com.bbg.box.service.csgo.CsgoUserInfoService;
+import com.bbg.core.box.dto.BoxDto;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.*;
@@ -39,6 +41,8 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
     BizUserService bizUserService;
     @Autowired
     CsgoUserInfoService csgoUserInfoService;
+    @Autowired
+    RedisService redisService;
 
 
     public CsgoBox getBoxesById(Long id){
@@ -58,7 +62,8 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void openBox(BizUser bizUser, Long boxId){
+    public BoxDto.OpenBoxRes openBox(BizUser bizUser, Long boxId){
+        BoxDto.OpenBoxRes boxRes = new BoxDto.OpenBoxRes();
         // 使用FairEntity,进行roll点
         FairFactory.FairEntity fairEntity = FairFactory.build(bizUser);
         int roundNumber = fairEntity.roll(bizUser.getCsgoUserInfo().getRoundNumber());
@@ -79,35 +84,33 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                     .setImageUrl(luckGood.getImageUrl())
                     .setPrice(luckGood.getPrice());
             csgoStorehouseService.save(storehouse);
+            boxRes.setLuckStorehouse(storehouse);
+            // 更新递增后roll点回合数
+            CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
+            csgoUserInfo.setId(bizUser.getCsgoUserInfo().getId())
+                    .setRoundNumber(bizUser.getCsgoUserInfo().getRoundNumber() + 1)
+                    .setCreateTime(null)
+                    .setUpdateTime(null);
+            csgoUserInfoService.updateById(csgoUserInfo);
 
-            // 添加流水记录
+            System.out.println("扣钱之前:"+bizUser.getMoney());
+            System.out.println("回合数之前:"+bizUser.getCsgoUserInfo().getRoundNumber());
+
+            // 构造流水记录
             CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
             capitalRecord.setUserId(bizUser.getId())
-                    .setChangeMoney(luckGood.getPrice().negate())
-                    .setBeforeMoney(bizUser.getMoney())
-                    .setAfterMoney(bizUser.getMoney().add(luckGood.getPrice().negate()));
-            csgoCapitalRecordService.save(capitalRecord);
+                    .setChangeMoney(csgoBox.getPrice().negate());    //扣钱,转为负数
+            // 更新用户金额
+            bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
 
-            // 更新用户金额等数据
-            BizUser user = new BizUser();
-            user.setId(bizUser.getId());
-            user.setMoney(capitalRecord.getAfterMoney());
-            bizUserService.updateById(user);
-            bizUser.setMoney(capitalRecord.getAfterMoney());
-            // 更新用户金额等数据
-            CsgoUserInfo csgoUserInfo = bizUser.getCsgoUserInfo();
-            csgoUserInfo.setRoundNumber(csgoUserInfo.getRoundNumber()+1);
-            csgoUserInfo.setCreateTime(null);
-            csgoUserInfo.setUpdateTime(null);
-            csgoUserInfoService.updateById(csgoUserInfo);
-            int i = 100/0;
+            System.out.println("扣钱之后:"+bizUser.getMoney());
+            System.out.println("回合数之后:"+bizUser.getCsgoUserInfo().getRoundNumber());
+            System.out.println(bizUser.getMoney());
+            // 跟新缓存
+            redisService.updateUser(bizUser);
+            boxRes.setBizUser(bizUser);
         }
-
-
-
-
-
-
+        return boxRes;
     }
 
     /**
