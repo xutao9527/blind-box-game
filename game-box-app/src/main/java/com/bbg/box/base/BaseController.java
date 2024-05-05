@@ -3,6 +3,7 @@ package com.bbg.box.base;
 import cn.hutool.core.util.StrUtil;
 import com.bbg.core.service.RedisService;
 import com.bbg.model.base.BaseModel;
+import com.bbg.model.biz.BizUser;
 import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -23,5 +24,9 @@ public class BaseController<T, S extends IService<T>> {
     @Autowired(required = false)
     protected RedisService redisService;
 
+    public BizUser getCurrentUser(){
+        String token =  request.getHeader("token");
+        return redisService.getUser(token);
+    }
 
 }

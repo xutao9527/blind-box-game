@@ -1,5 +1,6 @@
 package com.bbg.box.service.csgo;
 
+import com.bbg.model.biz.BizUser;
 import com.mybatisflex.core.service.IService;
 import com.bbg.model.csgo.CsgoBoxGoods;
 

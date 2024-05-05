@@ -47,7 +47,7 @@ public class CodeGenEntity extends CodeGenBase {
         GeneratorFactory.registerGenerator("EntityImpl", new CustomEntityGenerator());
         GlobalConfig globalConfig = new GlobalConfig();
 
-        globalConfig.setCustomConfig("EntityImplOverwriteEnable", true);
+        globalConfig.setCustomConfig("EntityImplOverwriteEnable", false);
 
         globalConfig.getStrategyConfig()
                 .setGenerateTable(generateTables);

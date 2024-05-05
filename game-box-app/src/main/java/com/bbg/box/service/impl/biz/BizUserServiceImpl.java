@@ -1,5 +1,6 @@
 package com.bbg.box.service.impl.biz;
 
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.biz.BizUser;
 import com.bbg.box.mapper.biz.BizUserMapper;
@@ -14,5 +15,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> implements BizUserService {
-
+    public BizUser getOneWithRelations(QueryWrapper query){
+        return getMapper().selectOneWithRelationsByQuery(query);
+    }
 }

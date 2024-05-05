@@ -98,7 +98,8 @@ const select = async (row) => {
   props.good.nameAlias = row.marketHashName
   props.good.imageUrl = row.imageUrl
   props.good.price = row.cnyPrice
-  ElMessage({type: 'success', message: '选择商品'})
+  ElMessage({type: 'success', message: '选择完成'})
+  visible.value = false;
 }
 
 defineExpose({

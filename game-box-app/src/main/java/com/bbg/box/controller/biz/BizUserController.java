@@ -36,7 +36,7 @@ public class BizUserController extends BaseController<BizUser, BizUserService> {
     public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginReq loginReq) {
         LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
         QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setMobile(loginReq.getMobile()));
-        BizUser bizUser = MaskManager.execWithoutMask(() -> bizUserService.getOne(queryWrapper));
+        BizUser bizUser = MaskManager.execWithoutMask(() -> bizUserService.getOneWithRelations(queryWrapper));
         if (null != bizUser && bizUser.getEnable() && bizUser.getPassword().equals(loginReq.getPassword())) {
             bizUser.setPassword(null);
             String token = redisService.userLogin(bizUser);

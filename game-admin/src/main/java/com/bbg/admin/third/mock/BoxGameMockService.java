@@ -2,6 +2,7 @@ package com.bbg.admin.third.mock;
 
 
 import com.bbg.admin.third.zbt.ZBTHttpService;
+import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.LoginDto;
 import com.bbg.core.entity.ApiRet;
 import feign.RequestInterceptor;
@@ -16,11 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "box-app-server",configuration = BoxGameMockService.GameMockInterceptor.class)
 public interface BoxGameMockService {
 
+
     @PostMapping("/bizUser/login")
     ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginReq loginReq);
 
     @GetMapping("/bizUser/logout")
     ApiRet<String> logout();
+
+    @PostMapping("/csgoBox/list")
+    ApiRet<BoxDto.GetBoxRes> list(@RequestBody BoxDto.GetBoxReq model);
+
+    @PostMapping("/csgoBox/open")
+    ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model);
 
 
     class GameMockInterceptor implements RequestInterceptor {

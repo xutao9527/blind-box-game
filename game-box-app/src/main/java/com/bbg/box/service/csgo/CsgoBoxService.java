@@ -1,5 +1,6 @@
 package com.bbg.box.service.csgo;
 
+import com.bbg.model.biz.BizUser;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.bbg.model.csgo.CsgoBox;
@@ -13,5 +14,10 @@ import java.util.List;
  * @since 2024-05-03
  */
 public interface CsgoBoxService extends IService<CsgoBox> {
-    List<CsgoBox> list(QueryWrapper query);
+
+    public CsgoBox getBoxesById(Long id);
+
+    public List<CsgoBox> getBoxesByType(String type);
+
+    public void openBox(BizUser bizUser, Long boxId);
 }

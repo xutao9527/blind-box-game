@@ -16,6 +16,6 @@ import java.util.List;
 @Schema(description = "CSGO箱子")
 public class CsgoBox extends CsgoBoxRecord {
 
-    @RelationOneToMany(selfField = "id",targetField = "boxId")
+    @RelationOneToMany(selfField = "id",targetField = "boxId",orderBy = "sort")
     private List<CsgoBoxGoods> csgoBoxGoods;
 }
