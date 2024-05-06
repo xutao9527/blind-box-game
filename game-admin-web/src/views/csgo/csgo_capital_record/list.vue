@@ -5,7 +5,7 @@
         <el-col :span="18">
           <el-row>
             <div class="bbg-table-header-input">
-              <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
+              <el-input v-model="tableProps.reqParams.queryEntity.userId" placeholder="用户编号"/>
             </div>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker

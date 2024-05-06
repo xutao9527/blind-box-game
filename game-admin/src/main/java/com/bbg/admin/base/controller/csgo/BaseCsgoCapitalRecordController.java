@@ -68,6 +68,7 @@ public class BaseCsgoCapitalRecordController extends BaseController<CsgoCapitalR
         SqlOperators operators = SqlOperators.of().set(CsgoCapitalRecord::getId, SqlOperator.EQUALS);
         QueryWrapper queryWrapper = reqParams.getQueryEntity() == null ? QueryWrapper.create() : QueryWrapper.create(reqParams.getQueryEntity(), operators);
         queryWrapper = super.buildQueryWrapper(queryWrapper, reqParams.getQueryEntity());
+        queryWrapper.orderBy(CsgoCapitalRecord::getId,false);
         return ApiRet.buildOk(csgoCapitalRecordService.page(reqParams.getPage(), queryWrapper));
     }
 }
