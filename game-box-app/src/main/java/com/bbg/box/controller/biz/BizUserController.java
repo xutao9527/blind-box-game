@@ -29,7 +29,7 @@ import java.util.UUID;
 @RequestMapping("/bizUser")
 public class BizUserController extends BaseController<BizUser, BizUserService> {
     @Autowired
-    protected  BizUserService bizUserService;
+    protected BizUserService bizUserService;
 
     @PostMapping("login")
     @Operation(description = "用户登录")
@@ -42,7 +42,7 @@ public class BizUserController extends BaseController<BizUser, BizUserService> {
             loginRes.setBizUser(bizUser).setToken(token);
             return ApiRet.buildOk(loginRes);
         }
-        return ApiRet.buildNo(loginRes,"用户不存在!");
+        return ApiRet.buildNo(loginRes, "用户不存在!");
     }
 
     @GetMapping("logout")

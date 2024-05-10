@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "box-app-server",configuration = BoxGameMockService.GameMockInterceptor.class)
+@FeignClient(name = "box-app-server", configuration = BoxGameMockService.GameMockInterceptor.class)
 public interface BoxGameMockService {
 
     @PostMapping("/bizUser/login")
@@ -31,10 +31,11 @@ public interface BoxGameMockService {
 
     class GameMockInterceptor implements RequestInterceptor {
         public static volatile String token = null;
+
         @Override
         public void apply(RequestTemplate requestTemplate) {
             if (token != null) {
-                requestTemplate.header("token",token);
+                requestTemplate.header("token", token);
             }
         }
     }
