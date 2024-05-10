@@ -28,7 +28,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     @Autowired
     CsgoCapitalRecordService csgoCapitalRecordService;
 
-    public BizUser getOneByMobile(String mobile){
+    public BizUser getOneByMobile(String mobile) {
         QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setMobile(mobile));
         return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsByQuery(queryWrapper));
     }
