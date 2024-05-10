@@ -1,6 +1,6 @@
-package com.bbg.core.service;
+package com.bbg.core.box.service;
 
-import com.bbg.core.service.base.RedisBase;
+import com.bbg.core.base.RedisBase;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.sys.SysUser;
 

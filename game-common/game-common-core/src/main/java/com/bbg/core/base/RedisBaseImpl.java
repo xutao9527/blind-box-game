@@ -1,4 +1,4 @@
-package com.bbg.core.service.base;
+package com.bbg.core.base;
 
 import cn.hutool.core.lang.Pair;
 import com.bbg.core.annotation.RedisLock;
@@ -7,7 +7,6 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class RedisBaseImpl implements RedisBase {

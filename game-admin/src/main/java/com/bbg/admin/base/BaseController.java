@@ -1,21 +1,16 @@
 package com.bbg.admin.base;
 
 import cn.hutool.core.util.StrUtil;
-import com.bbg.core.entity.ApiRet;
-import com.bbg.core.service.RedisService;
+import com.bbg.core.box.service.RedisService;
 import com.bbg.model.base.BaseModel;
-import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.io.Serializable;
+
 import java.util.List;
 
 public class BaseController<T, S extends IService<T>> {

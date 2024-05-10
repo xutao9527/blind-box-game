@@ -1,7 +1,7 @@
-package com.bbg.core.service.impl;
+package com.bbg.core.box.service.impl;
 
-import com.bbg.core.service.RedisService;
-import com.bbg.core.service.base.RedisBaseImpl;
+import com.bbg.core.box.service.RedisService;
+import com.bbg.core.base.RedisBaseImpl;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.sys.SysUser;
 import org.springframework.stereotype.Service;
@@ -59,8 +59,6 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
         set(userToken, user, 3600L, TimeUnit.SECONDS);
         return newToken;
     }
-
-
 
     public void userLogout(String token) {
         BizUser user = getUser(token);

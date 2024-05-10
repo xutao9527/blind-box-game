@@ -1,4 +1,4 @@
-package com.bbg.core.service.base;
+package com.bbg.core.base;
 
 import cn.hutool.core.lang.Pair;
 import com.bbg.core.annotation.RedisLock;

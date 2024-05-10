@@ -5,7 +5,7 @@ import com.bbg.box.service.csgo.CsgoCapitalRecordService;
 import com.bbg.box.service.csgo.CsgoStorehouseService;
 import com.bbg.box.service.csgo.CsgoUserInfoService;
 import com.bbg.core.box.dto.BoxDto;
-import com.bbg.core.service.RedisService;
+import com.bbg.core.box.service.RedisService;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.*;
@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
  * CSGO箱子 服务层实现。

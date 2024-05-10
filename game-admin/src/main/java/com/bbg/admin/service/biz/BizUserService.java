@@ -1,5 +1,6 @@
 package com.bbg.admin.service.biz;
 
+import com.bbg.model.csgo.CsgoCapitalRecord;
 import com.mybatisflex.core.service.IService;
 import com.bbg.model.biz.BizUser;
 
@@ -11,4 +12,6 @@ import com.bbg.model.biz.BizUser;
  */
 public interface BizUserService extends IService<BizUser> {
 
+    // 更新用户金额
+    BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord);
 }

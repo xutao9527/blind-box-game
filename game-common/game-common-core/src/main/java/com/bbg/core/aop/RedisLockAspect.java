@@ -2,7 +2,7 @@ package com.bbg.core.aop;
 
 import cn.hutool.core.lang.Pair;
 import com.bbg.core.annotation.RedisLock;
-import com.bbg.core.service.RedisService;
+import com.bbg.core.box.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
