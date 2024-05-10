@@ -54,8 +54,9 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
-        <el-table-column fixed="right" label="操作" width="100">
+        <el-table-column fixed="right" label="操作" width="140">
           <template #default="scope">
+            <el-button link type="primary" size="small" @click="openUpdateBizUserMoney(scope.row)">充值</el-button>
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
             <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
           </template>
@@ -150,6 +151,32 @@ const tableProps = reactive({
     }
   }
 });
+
+const openUpdateBizUserMoney = (row) => {
+  ElMessageBox.prompt('请输入充值金额', '充值', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    inputPattern:
+        /^-?\d+(\.\d{1,2})?$/,
+    inputErrorMessage: 'Invalid Email',
+  })
+      .then(async ({value}) => {
+        const apiRet = await http.get(`/bizUser/updateBizUserMoney/${row.id}/${value}`)
+        if(apiRet.ok){
+          ElMessage({
+            type: 'success',
+            message: `充值成功!`,
+          })
+          await tableProps.fetchData()
+        }
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: 'Input canceled',
+        })
+      })
+}
 
 const emits = defineEmits(['activeRightTabs']);
 defineExpose({
