@@ -29,26 +29,26 @@
         <el-table class="bbg-table-main"
                   :data="tableProps.apiRet.data.records"
                   table-layout="auto"
+                  @sortChange="tableProps.sortChange"
                   height="440"
                   border show-overflow-tooltip>
           <el-table-column prop="id" label="主键id"/>
-          <el-table-column prop="itemName" label="皮肤名称"/>
-          <el-table-column prop="marketHashName" label="皮肤市场名称"/>
-          <el-table-column prop="imageUrl" label="图片地址">
+          <el-table-column prop="itemName" label="皮肤名称" width="300"/>
+
+          <el-table-column prop="imageUrl" label="图片" width="80">
             <template #default="scope">
               <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
             </template>
           </el-table-column>
-          <el-table-column prop="typeName" label="类型名称"/>
-          <el-table-column prop="exteriorName" label="外观名称"/>
-          <el-table-column prop="qualityName" label="类别名称"/>
-          <el-table-column prop="rarityName" label="品质名称"/>
           <el-table-column prop="price" label="价格"/>
-          <el-table-column prop="cnyPrice" label="人名币价格"/>
-          <el-table-column prop="imageUrl" label="图片地址"/>
-          <el-table-column prop="quantity" label="商品数量"/>
-          <el-table-column prop="createTime" label="创建时间"/>
-          <el-table-column prop="editTime" label="编辑时间"/>
+          <el-table-column prop="cnyPrice" label="人名币价格" width="120" sortable="custom"/>
+          <el-table-column prop="quantity" label="商品数量" width="110" sortable="custom"/>
+          <el-table-column prop="typeName" label="类型名称" width="100"/>
+          <el-table-column prop="marketHashName" label="皮肤市场名称" width="340"/>
+          <el-table-column prop="exteriorName" label="外观名称" width="100"/>
+          <el-table-column prop="qualityName" label="类别名称" width="100"/>
+          <el-table-column prop="rarityName" label="品质名称"/>
+          <el-table-column prop="editTime" label="编辑时间" width="200"/>
           <el-table-column fixed="right" label="操作">
             <template #default="scope">
               <el-button link type="primary" size="small" @click="select(scope.row)">选择</el-button>
@@ -131,6 +131,17 @@ const tableProps = reactive({
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
+  },
+  sortChange: async (column)=>{
+    console.log(column)
+    if(column.order === "descending"){
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
+    }else if(column.order === "ascending"){
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'ascending'}
+    }else{
+      delete tableProps.reqParams.queryEntity.expandProps.orderField;
+    }
+    tableProps.fetchData()
   }
 });
 </script>
