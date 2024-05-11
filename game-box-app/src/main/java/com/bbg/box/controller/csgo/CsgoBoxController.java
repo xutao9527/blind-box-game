@@ -1,19 +1,27 @@
 package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
+import com.bbg.box.service.biz.BizDictService;
+import com.bbg.box.service.csgo.CsgoBoxGoodsService;
 import com.bbg.core.box.dto.BoxDto;
+import com.bbg.model.biz.BizDict;
+import com.bbg.model.biz.BizDictDetail;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBox;
 import com.bbg.box.service.csgo.CsgoBoxService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
+import com.bbg.model.csgo.CsgoBoxGoods;
 import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.constant.SqlOperator;
 import com.mybatisflex.core.query.SqlOperators;
 import lombok.RequiredArgsConstructor;
+
 import java.io.Serializable;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +41,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RequestMapping("/csgoBox")
 public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     @Autowired
-    protected  CsgoBoxService csgoBoxService;
+    protected CsgoBoxService csgoBoxService;
+    @Autowired
+    protected CsgoBoxGoodsService csgoBoxGoodsService;
+    @Autowired
+    protected BizDictService bizDictService;
 
     @PostMapping("list")
     @Operation(description = "获得盲盒列表")
@@ -48,5 +60,22 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
         BizUser bizUser = getCurrentUser();
         BoxDto.OpenBoxRes boxRes = csgoBoxService.openBox(bizUser, model.getBoxId());
         return ApiRet.buildOk(boxRes);
+    }
+
+    @GetMapping("dreamList")
+    @Operation(description = "获得追梦列表")
+    public ApiRet<Boolean> list() {
+        BizDict bizDict = bizDictService.getMapper().selectOneWithRelationsById(1785914176081506304l);
+        BizDictDetail bizDictDetail = bizDict.getBizDictDetails().stream().filter(detail -> detail.getLabel().equals("追梦盲盒")).findFirst().orElse(null);
+        if (bizDictDetail != null) {
+            QueryWrapper queryWrapper = QueryWrapper.create()
+                    .from(CsgoBoxGoods.class)
+                    .in(
+                            CsgoBoxGoods::getBoxId,
+                            QueryWrapper.create().select(QueryMethods.column(CsgoBox::getId)).from(CsgoBox.class).where(CsgoBox::getType).eq(bizDictDetail.getValue())
+                    );
+            List<CsgoBoxGoods> csgoBoxGoodsList = csgoBoxGoodsService.list(queryWrapper);
+        }
+        return ApiRet.buildOk(true);
     }
 }

@@ -43,7 +43,6 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
     @Autowired
     RedisService redisService;
 
-
     public CsgoBox getBoxesById(Long id) {
         CsgoBox box = getMapper().selectOneWithRelationsByQuery(
                 QueryWrapper.create(new CsgoBox()
