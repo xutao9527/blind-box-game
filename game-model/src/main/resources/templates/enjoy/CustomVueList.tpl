@@ -35,6 +35,7 @@
                   :data="tableProps.apiRet.data.records"
                   :height="tableDynamicHeight"
                   table-layout="auto"
+                  @sortChange="tableProps.sortChange"
                   border show-overflow-tooltip>
         #for(column : table.columns)
         #if(column.propertySimpleType == "Boolean")
@@ -134,14 +135,24 @@ const tableProps = reactive({
     tableProps.reqParams.page.pageSize = pageSize;
     tableProps.fetchData()
   },
-
   fetchData: async () => {
     const apiRet = await http.post('/#(entityVarName)/page', tableProps.reqParams)
     if (apiRet.ok) {
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
-  }
+  },
+  sortChange: async (column)=>{
+      console.log(column)
+      if(column.order === "descending"){
+        tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
+      }else if(column.order === "ascending"){
+        tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'ascending'}
+      }else{
+        delete tableProps.reqParams.queryEntity.expandProps.orderField;
+      }
+      tableProps.fetchData()
+    }
 });
 
 const emits = defineEmits(['activeRightTabs']);

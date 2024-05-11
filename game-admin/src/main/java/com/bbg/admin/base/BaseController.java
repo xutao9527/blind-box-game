@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 public class BaseController<T, S extends IService<T>> {
     @Autowired
@@ -30,6 +31,11 @@ public class BaseController<T, S extends IService<T>> {
                 if (value instanceof List && ((List<?>) value).size() == 2) {
                     QueryCondition queryCondition = QueryMethods.column(StrUtil.toUnderlineCase(key)).between(((List<?>) value).get(0), ((List<?>) value).get(1));
                     queryWrapper.and(queryCondition);
+                }
+                if(key.equals("orderField") && value instanceof Map<?,?>){
+                    ((Map<?, ?>) value).forEach((sortField,sortValue)->{
+                        queryWrapper.orderBy(QueryMethods.column(StrUtil.toUnderlineCase((String) sortField)),sortValue.equals("ascending"));
+                    });
                 }
             });
         }

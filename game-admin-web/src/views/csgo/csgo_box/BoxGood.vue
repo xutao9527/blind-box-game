@@ -23,7 +23,7 @@
         <el-button icon="Position" @click="goodsSelectRef.selectData()">选择</el-button>
         <el-button icon="Plus" @click="submit">{{ submitText }}</el-button>
         <el-button icon="Close" @click="toEdit(undefined)">取消</el-button>
-        <el-button :type="enableButtonType" icon="Open" @click="enableBox">{{props.rowOjb.enable?'停用':'启用'}}({{sumRate}})</el-button>
+        <el-button :type="enableButtonType" icon="Open" @click="enableBox">{{props.rowOjb.enable?'停用':'启用'}}{{sumRate}}</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="tableProps.apiRet.data" size="small">
@@ -58,15 +58,27 @@
 import {http} from "@/core/axios/index.js";
 import GoodsSelect from "@/views/csgo/csgo_box/GoodsSelect.vue";
 
-const enableButtonType = computed(() =>sumRate.value === 100 ? 'success' : 'danger')
+const enableButtonType = computed(() => {
+  if(props.rowOjb.type === '1' || props.rowOjb.type === '2'){
+    return sumRate.value === 100 ? 'success' : 'danger'
+  }else {
+    return 'success'
+  }
+})
 const sumRate = computed(()=>{
-  return tableProps.apiRet.data.reduce((accumulator, currentObject) => {
-    if(currentObject.enable){
-      return accumulator + currentObject.rate;
-    }else{
-      return accumulator
-    }
-  }, 0);
+  if(props.rowOjb.type === '1' || props.rowOjb.type === '2'){
+    return '('+tableProps.apiRet.data.reduce((accumulator, currentObject) => {
+      if(currentObject.enable){
+        return accumulator + currentObject.rate;
+      }else{
+        return accumulator
+      }
+    }, 0)+')';
+  }else{
+    return ''
+  }
+
+
 })
 
 const enableBox = async () =>{
@@ -81,16 +93,27 @@ const enableBox = async () =>{
       ElMessage({type: 'success', message: '停用成功!'})
     }
   }else{
-    if(sumRate.value === 100){
+
+    if(props.rowOjb.type === '1' || props.rowOjb.type === '2'){
+      if(sumRate.value === 100){
+        data.enable = true;
+        props.rowOjb.enable = true;
+        const apiRet = await http.post('/csgoBox/update', data)
+        if (apiRet.ok) {
+          ElMessage({type: 'success', message: '启动成功!'})
+        }
+      }else{
+        ElMessage({type: 'error', message: '总概率之和不等于100,不能启用'})
+      }
+    }else{
       data.enable = true;
       props.rowOjb.enable = true;
       const apiRet = await http.post('/csgoBox/update', data)
       if (apiRet.ok) {
         ElMessage({type: 'success', message: '启动成功!'})
       }
-    }else{
-      ElMessage({type: 'error', message: '总概率之和不等于100,不能启用'})
     }
+
   }
 }
 
