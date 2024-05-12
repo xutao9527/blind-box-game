@@ -40,6 +40,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="id" label="主键"/>
+        <el-table-column prop="tag" label="标识"/>
         <el-table-column prop="name" label="名称"/>
         <el-table-column prop="nameAlias" label="别名"/>
         <el-table-column prop="remark" label="描述"/>

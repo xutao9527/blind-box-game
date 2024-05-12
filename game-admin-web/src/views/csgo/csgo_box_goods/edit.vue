@@ -22,6 +22,12 @@
               <el-form-item label="商品别名">
                 <el-input v-model="data.nameAlias"/>
               </el-form-item>
+              <el-form-item label="商品类型">
+                <el-input v-model="data.type"/>
+              </el-form-item>
+              <el-form-item label="类型名称">
+                <el-input v-model="data.typeName"/>
+              </el-form-item>
               <el-form-item label="图片地址">
                 <el-input v-model="data.imageUrl"/>
               </el-form-item>
@@ -30,6 +36,9 @@
               </el-form-item>
               <el-form-item label="获得概率">
                 <el-input v-model="data.rate"/>
+              </el-form-item>
+              <el-form-item label="排序">
+                <el-input v-model="data.sort"/>
               </el-form-item>
               <el-form-item label="状态">
                 <el-switch v-model="data.enable"/>

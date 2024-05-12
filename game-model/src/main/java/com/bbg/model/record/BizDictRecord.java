@@ -52,6 +52,12 @@ public class BizDictRecord extends BaseModel implements Serializable {
     private String nameAlias;
 
     /**
+     * 标识
+     */
+    @Schema(description = "标识")
+    private String tag;
+
+    /**
      * 描述
      */
     @Schema(description = "描述")

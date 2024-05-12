@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 @Target(ElementType.METHOD)
 public @interface RedisLock {
     /**
-     * 分布式锁的 key，必须：请保持唯一性，支持 spring el表达式
+     * 分布式锁的 key，必须保持唯一性，支持 spring el表达式
      *
      */
     String value();

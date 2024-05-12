@@ -33,18 +33,22 @@
                   :data="tableProps.apiRet.data.records"
                   :height="tableDynamicHeight"
                   table-layout="auto"
+                  @sortChange="tableProps.sortChange"
                   border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"/>
         <el-table-column prop="boxId" label="游戏箱子"/>
         <el-table-column prop="goodId" label="游戏商品"/>
         <el-table-column prop="name" label="商品名称"/>
         <el-table-column prop="nameAlias" label="商品别名"/>
+        <el-table-column prop="type" label="商品类型"/>
+        <el-table-column prop="typeName" label="类型名称"/>
         <el-table-column prop="imageUrl" label="图片地址"/>
         <el-table-column prop="price" label="商品价格"/>
         <el-table-column prop="rate" label="获得概率"/>
+        <el-table-column prop="sort" label="排序"/>
         <el-table-column prop="enable" label="状态">
         <template #default="scope">
-            {{scope.row.enable?'启动':'停用'}}
+            {{scope.row.enable?'启用':'停用'}}
         </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
@@ -136,14 +140,24 @@ const tableProps = reactive({
     tableProps.reqParams.page.pageSize = pageSize;
     tableProps.fetchData()
   },
-
   fetchData: async () => {
     const apiRet = await http.post('/csgoBoxGoods/page', tableProps.reqParams)
     if (apiRet.ok) {
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
-  }
+  },
+  sortChange: async (column)=>{
+      console.log(column)
+      if(column.order === "descending"){
+        tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
+      }else if(column.order === "ascending"){
+        tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'ascending'}
+      }else{
+        delete tableProps.reqParams.queryEntity.expandProps.orderField;
+      }
+      tableProps.fetchData()
+    }
 });
 
 const emits = defineEmits(['activeRightTabs']);

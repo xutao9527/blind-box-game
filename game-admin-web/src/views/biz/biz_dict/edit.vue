@@ -16,6 +16,9 @@
               <el-form-item label="别名">
                 <el-input v-model="data.nameAlias"/>
               </el-form-item>
+              <el-form-item label="标识">
+                <el-input v-model="data.tag"/>
+              </el-form-item>
               <el-form-item label="描述">
                 <el-input v-model="data.remark"/>
               </el-form-item>
