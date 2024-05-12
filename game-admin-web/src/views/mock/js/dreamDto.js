@@ -1,5 +1,5 @@
 import {http} from "@/core/axios/index.js";
-import {mockGlobal} from "@/views/mock/mockGlobal.js";
+import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 export const dreamMock = reactive({
     dreamListReq: {
@@ -17,6 +17,5 @@ export const dreamMock = reactive({
         if (apiRet.ok) {
             dreamMock.dreamListRes.dreamGoodsPage = apiRet.data.dreamGoodsPage
         }
-
     }
 })

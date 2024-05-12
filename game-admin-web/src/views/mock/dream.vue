@@ -12,7 +12,6 @@
               <el-row  justify="center">
                 <el-col :span="8" style="text-align: center">
                   <el-card style="height: 100px;width: 100px;" @click="dreamGoodSelectRef.selectData()">
-<!--                    {{JSON.stringify(dreamGood)}}-->
                     <template v-if="dreamGood.id">
                       <el-image :src="dreamGood.imageUrl"></el-image>
                     </template>
@@ -39,8 +38,19 @@
             </el-card>
           </el-col>
           <el-col :span="8">
-            <el-card style="width: 300px; height: 250px">
-
+            <el-card style="width: 300px; height: 250px" body-style="margin-top: 50px">
+              <el-row  justify="center">
+                <el-col :span="8" style="text-align: center">
+                  <el-card style="height: 100px;width: 100px;" >
+                    <el-icon size="50"><QuestionFilled /></el-icon>
+                  </el-card>
+                  <el-text>
+                    <el-text type="warning" size="large">
+                      随机饰品
+                    </el-text>
+                  </el-text>
+                </el-col>
+              </el-row>
             </el-card>
           </el-col>
         </el-row>
@@ -50,7 +60,7 @@
           </el-col>
         </el-row>
         <el-row justify="center" style="margin-top: 50px">
-          <el-button size="large"  type="success" >追梦(350.0)</el-button>
+          <el-button size="large"  type="success" v-show="mockGlobal.bizToken !==null">追梦({{ dreamGoodPrice }})</el-button>
         </el-row>
       </el-card>
       </el-scrollbar>
@@ -69,9 +79,10 @@
   </el-container>
 </template>
 <script setup>
-import {boxMock} from "@/views/mock/boxDto.js";
+import {boxMock} from "@/views/mock/js/boxDto.js";
 import DreamGoodSelect from "@/views/mock/dreamGoodSelect.vue";
-import {Minus, Plus} from "@element-plus/icons-vue";
+import {Minus, Plus, QuestionFilled} from "@element-plus/icons-vue";
+import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 const dreamRate = ref(5)
 const dreamMarks = reactive({
@@ -81,6 +92,13 @@ const dreamMarks = reactive({
 
 const dreamGood = ref({})
 const dreamGoodSelectRef = ref(null)
+const dreamGoodPrice = computed(()=>{
+  if(dreamGood.value.id){
+    return ((dreamGood.value.price * dreamGood.value.rate * dreamRate.value) / 100).toFixed(2)
+  }else{
+    return '0.00'
+  }
+})
 
 </script>
 <style lang="less" scoped>

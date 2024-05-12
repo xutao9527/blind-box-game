@@ -67,7 +67,7 @@
   </el-dialog>
 </template>
 <script setup>
-import {dreamMock} from "@/views/mock/dreamDto.js";
+import {dreamMock} from "@/views/mock/js/dreamDto.js";
 
 const visible = ref(false)
 const selectData = async () => {
@@ -88,6 +88,7 @@ const select = async (row) => {
   props.good.id = row.id
   props.good.imageUrl = row.imageUrl
   props.good.price = row.price
+  props.good.rate = row.rate
   ElMessage({type: 'success', message: '选择完成'})
   visible.value = false;
 }

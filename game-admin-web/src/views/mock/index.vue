@@ -53,8 +53,8 @@
   </el-container>
 </template>
 <script setup>
-import {loginMock} from "@/views/mock/LoginDto.js";
-import {mockGlobal} from "./mockGlobal.js";
+import {loginMock} from "@/views/mock/js/LoginDto.js";
+import {mockGlobal} from "./js/mockGlobal.js";
 import box from "@/views/mock/box.vue";
 import Dream from "@/views/mock/dream.vue";
 

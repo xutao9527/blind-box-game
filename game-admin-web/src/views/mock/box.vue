@@ -50,8 +50,8 @@
   </el-container>
 </template>
 <script setup>
-import {boxMock} from "@/views/mock/boxDto.js";
-import {mockGlobal} from "@/views/mock/mockGlobal.js";
+import {boxMock} from "@/views/mock/js/boxDto.js";
+import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 onMounted(() => {
   boxMock.boxList();

@@ -1,5 +1,5 @@
 import {http} from "@/core/axios/index.js";
-import {mockGlobal} from "@/views/mock/mockGlobal.js";
+import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 
 export const loginMock = reactive({
