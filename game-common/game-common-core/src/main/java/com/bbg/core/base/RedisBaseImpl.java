@@ -45,6 +45,10 @@ public class RedisBaseImpl implements RedisBase {
         return redisTemplate.expire(key, liveTime, unit);
     }
 
+    public void set(String key, Object value){
+        redisTemplate.opsForValue().set(key,value);
+    }
+
     public void set(String key, Object value, Long liveTime, TimeUnit unit) {
         redisTemplate.opsForValue().set(key, value, liveTime, unit);
     }

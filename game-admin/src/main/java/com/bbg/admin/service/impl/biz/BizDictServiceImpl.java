@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BizDictServiceImpl extends ServiceImpl<BizDictMapper, BizDict> implements BizDictService {
 
-    @RedisCache(value = "#tag")
+    @RedisCache(key = "dict::tag",value = "#tag")
     public BizDict getDictByTag(String tag){
         QueryWrapper queryWrapper = QueryWrapper.create().and(BizDict::getTag).eq(tag);
         return getMapper().selectOneWithRelationsByQuery(queryWrapper);
