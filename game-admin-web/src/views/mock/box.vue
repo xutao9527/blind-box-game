@@ -40,7 +40,6 @@
         <el-text type="primary" size="large">开箱记录</el-text>
         <el-button  @click="boxMock.openBoxRecord = []" link>清除</el-button>
       </el-row>
-
       <el-scrollbar class="record_scrollbar">
         <p v-for="r in boxMock.openBoxRecord">
           获得=> [{{ r.name }}] , [{{ r.price }}]
@@ -65,7 +64,6 @@ onMounted(() => {
   .box-aside {
     height: calc(100vh - 322px);
     border: 1px solid var(--el-border-color);
-
     .record_scrollbar {
       height: calc(100vh - 351px);
     }

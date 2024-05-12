@@ -13,7 +13,7 @@ import java.util.List;
 public class BoxDto {
     @Data
     @Accessors(chain = true)
-    @Schema(description = "获得盲盒列表")
+    @Schema(description = "获得盲盒列表参数")
     public static class GetBoxReq implements Serializable {
         @Schema(description = "箱子类型")
         private String type;
@@ -31,9 +31,9 @@ public class BoxDto {
 
     @Data
     @Accessors(chain = true)
-    @Schema(description = "打开盲盒")
+    @Schema(description = "打开盲盒参数")
     public static class OpenBoxReq implements Serializable {
-        @Schema(description = "箱子类型")
+        @Schema(description = "箱子编号")
         private Long boxId;
     }
 
@@ -42,8 +42,8 @@ public class BoxDto {
     @Schema(description = "打开盲盒结果")
     public static class OpenBoxRes implements Serializable {
         @Schema(description = "新用户信息")
-        BizUser bizUser;
+        private BizUser bizUser;
         @Schema(description = "获得的装备")
-        CsgoStorehouse luckStorehouse;
+        private CsgoStorehouse luckStorehouse;
     }
 }

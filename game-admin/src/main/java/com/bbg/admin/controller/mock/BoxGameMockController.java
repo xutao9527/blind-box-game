@@ -47,17 +47,26 @@ public class BoxGameMockController {
     }
 
     @PostMapping("list")
+    @Operation(description = "盲盒列表")
     public ApiRet<BoxDto.GetBoxRes> list(@RequestBody BoxDto.GetBoxReq model){
         return boxGameMockService.list(model);
     }
 
     @PostMapping("open")
+    @Operation(description = "开盲盒")
     public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model){
         return boxGameMockService.openBox(model);
     }
 
     @PostMapping("dreamList")
+    @Operation(description = "追梦列表")
     public ApiRet<DreamDto.DreamListRes> list(@RequestBody DreamDto.DreamListReq model){
         return boxGameMockService.dreamList(model);
+    }
+
+    @PostMapping("dreamGood")
+    @Operation(description = "进行追梦")
+    public ApiRet<DreamDto.DreamGoodRes> dreamGood(@RequestBody DreamDto.DreamGoodReq model){
+        return boxGameMockService.dreamGood(model);
     }
 }

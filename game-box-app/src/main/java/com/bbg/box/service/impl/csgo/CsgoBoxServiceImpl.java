@@ -1,10 +1,10 @@
 package com.bbg.box.service.impl.csgo;
 
+import cn.hutool.core.util.RandomUtil;
 import com.bbg.box.service.biz.BizUserService;
-import com.bbg.box.service.csgo.CsgoCapitalRecordService;
-import com.bbg.box.service.csgo.CsgoStorehouseService;
-import com.bbg.box.service.csgo.CsgoUserInfoService;
+import com.bbg.box.service.csgo.*;
 import com.bbg.core.box.dto.BoxDto;
+import com.bbg.core.box.dto.DreamDto;
 import com.bbg.core.box.service.RedisService;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.model.biz.BizUser;
@@ -12,7 +12,6 @@ import com.bbg.model.csgo.*;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.box.mapper.csgo.CsgoBoxMapper;
-import com.bbg.box.service.csgo.CsgoBoxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +41,12 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
     CsgoUserInfoService csgoUserInfoService;
     @Autowired
     RedisService redisService;
+    @Autowired
+    CsgoBoxGoodsService csgoBoxGoodsService;
 
+    /**
+     * 根据编号获得盲盒
+     */
     public CsgoBox getBoxesById(Long id) {
         CsgoBox box = getMapper().selectOneWithRelationsByQuery(
                 QueryWrapper.create(new CsgoBox()
@@ -52,6 +56,9 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         return this.transformBoxGoods(box);
     }
 
+    /**
+     * 根据类型获得盲盒列表
+     */
     public List<CsgoBox> getBoxesByType(String type) {
         QueryWrapper queryWrapper = QueryWrapper.create(new CsgoBox().setEnable(true).setType(type));
         List<CsgoBox> csgoBoxes = getMapper().selectListWithRelationsByQuery(queryWrapper);
@@ -59,6 +66,9 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         return csgoBoxes;
     }
 
+    /**
+     * 开盲盒
+     */
     @Transactional(rollbackFor = Exception.class)
     public BoxDto.OpenBoxRes openBox(BizUser bizUser, Long boxId) {
         BoxDto.OpenBoxRes boxRes = new BoxDto.OpenBoxRes();
@@ -90,10 +100,8 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                     .setCreateTime(null)
                     .setUpdateTime(null);
             csgoUserInfoService.updateById(csgoUserInfo);
-
             System.out.println("扣钱之前:" + bizUser.getMoney());
             System.out.println("回合数之前:" + bizUser.getCsgoUserInfo().getRoundNumber());
-
             // 构造流水记录
             CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
             capitalRecord.setUserId(bizUser.getId())
@@ -109,6 +117,53 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
             boxRes.setBizUser(bizUser);
         }
         return boxRes;
+    }
+
+    /**
+     * 进行追梦
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public DreamDto.DreamGoodRes dreamGood(BizUser bizUser, DreamDto.DreamGoodReq model) {
+        DreamDto.DreamGoodRes dreamGoodRes = new DreamDto.DreamGoodRes();
+        CsgoBoxGoods csgoBoxGoods = csgoBoxGoodsService.getById(model.getBoxGoodId());
+        // 计算扣除的用户金额
+        BigDecimal consumeMoney =
+                csgoBoxGoods.getPrice()
+                        .multiply(csgoBoxGoods.getRate())
+                        .multiply(model.getProbability())
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        // roll点数
+        FairFactory.FairEntity fairEntity = FairFactory.build(bizUser);
+        int round = RandomUtil.randomInt(1, FairFactory.FairEntity.SEED_MAX_ROLL);
+        int roundNumber = fairEntity.roll(round);
+        // 中奖区间
+        BigDecimal winningRange = model.getProbability()
+                .multiply(BigDecimal.valueOf(FairFactory.FairEntity.SEED_MAX_ROLL))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+        // 判断是否中奖
+        boolean isWinGood = roundNumber < winningRange.intValue();
+        if(isWinGood){
+            // 保存背包
+            CsgoStorehouse storehouse = new CsgoStorehouse();
+            storehouse.setUserId(bizUser.getId())
+                    .setGoodId(csgoBoxGoods.getGoodId())
+                    .setName(csgoBoxGoods.getName())
+                    .setNameAlias(csgoBoxGoods.getNameAlias())
+                    .setImageUrl(csgoBoxGoods.getImageUrl())
+                    .setPrice(csgoBoxGoods.getPrice());
+            csgoStorehouseService.save(storehouse);
+            dreamGoodRes.setCsgoBoxGood(csgoBoxGoods);
+        }
+        // 构造流水记录
+        CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
+        capitalRecord.setUserId(bizUser.getId())
+                .setChangeMoney(consumeMoney.negate());    // 扣钱,转为负数
+        //更新用户金额
+        bizUser = bizUserService.updateUserMoney(bizUser,capitalRecord);
+        // 跟新缓存
+        redisService.updateUser(bizUser);
+        dreamGoodRes.setBizUser(bizUser);
+        return dreamGoodRes;
     }
 
     /**

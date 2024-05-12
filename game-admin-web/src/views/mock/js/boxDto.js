@@ -12,8 +12,13 @@ export const boxMock = reactive({
             boxMock.getBoxRes = apiRet.data
         }
     },
-    openBoxReq:{},
-    openBoxRes:{},
+    openBoxReq:{
+        boxId:null,
+    },
+    openBoxRes:{
+        bizUser:null,
+        luckStorehouse:null,
+    },
     openBoxRecord:[],
     openBox: async (boxId) => {
         boxMock.openBoxReq.boxId = boxId;
@@ -22,6 +27,7 @@ export const boxMock = reactive({
             boxMock.openBoxRes = apiRet.data
             mockGlobal.bizUser.money = boxMock.openBoxRes.bizUser.money
             boxMock.openBoxRecord.push(boxMock.openBoxRes.luckStorehouse)
+            ElMessage({type: 'success', message: `中奖:${boxMock.openBoxRes.luckStorehouse.name}`})
         }
     }
 })

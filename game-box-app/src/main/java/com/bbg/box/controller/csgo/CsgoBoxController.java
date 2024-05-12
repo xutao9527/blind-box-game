@@ -84,4 +84,12 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
         }
         return ApiRet.buildOk(new DreamDto.DreamListRes().setDreamGoodsPage(page));
     }
+
+    @PostMapping("dreamGood")
+    @Operation(description = "进行追梦")
+    public ApiRet<DreamDto.DreamGoodRes> dreamGood(@RequestBody DreamDto.DreamGoodReq model){
+        BizUser bizUser = getCurrentUser();
+        DreamDto.DreamGoodRes dreamGoodRes =csgoBoxService.dreamGood(bizUser,model);
+        return ApiRet.buildOk(dreamGoodRes);
+    }
 }

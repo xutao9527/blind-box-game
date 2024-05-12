@@ -60,7 +60,7 @@
           </el-col>
         </el-row>
         <el-row justify="center" style="margin-top: 50px">
-          <el-button size="large"  type="success" v-show="mockGlobal.bizToken !==null">追梦({{ dreamGoodPrice }})</el-button>
+          <el-button size="large"  @click="startDreamGood" type="success" v-show="mockGlobal.bizToken !==null">追梦({{ dreamGoodPrice }})</el-button>
         </el-row>
       </el-card>
       </el-scrollbar>
@@ -68,10 +68,10 @@
     <el-aside class="box-aside" width="400px">
       <el-row style="display: flex;align-items: center;justify-content: space-between">
         <el-text type="primary" size="large">追梦记录</el-text>
-        <el-button @click="boxMock.openBoxRecord = []" link>清除</el-button>
+        <el-button @click="dreamMock.dreamGoodRecord = []" link>清除</el-button>
       </el-row>
       <el-scrollbar class="record_scrollbar">
-        <p v-for="r in boxMock.openBoxRecord">
+        <p v-for="r in dreamMock.dreamGoodRecord">
           获得=> [{{ r.name }}] , [{{ r.price }}]
         </p>
       </el-scrollbar>
@@ -79,10 +79,10 @@
   </el-container>
 </template>
 <script setup>
-import {boxMock} from "@/views/mock/js/boxDto.js";
 import DreamGoodSelect from "@/views/mock/dreamGoodSelect.vue";
 import {Minus, Plus, QuestionFilled} from "@element-plus/icons-vue";
 import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
+import {dreamMock} from "@/views/mock/js/dreamDto.js";
 
 const dreamRate = ref(5)
 const dreamMarks = reactive({
@@ -99,6 +99,16 @@ const dreamGoodPrice = computed(()=>{
     return '0.00'
   }
 })
+
+const startDreamGood =() =>{
+  if(dreamGood.value.id){
+    dreamMock.dreamGoodReq.boxGoodId = dreamGood.value.id
+    dreamMock.dreamGoodReq.probability = dreamRate.value
+    dreamMock.dreamGood()
+  }else {
+    ElMessage({type: 'warning', message: '请选择梦想装备!'})
+  }
+}
 
 </script>
 <style lang="less" scoped>
