@@ -24,7 +24,7 @@ public class BaseController<T, S extends IService<T>> {
     @Autowired(required = false)
     protected RedisService redisService;
 
-    public QueryWrapper buildQueryWrapper(QueryWrapper queryWrapper, T queryEntity) {
+    public QueryWrapper buildQueryWrapper(QueryWrapper queryWrapper, Object queryEntity) {
         // Entity.expandProps 扩展属性为List并size等2, 进行范围查询
         if (queryEntity instanceof BaseModel && ((BaseModel) queryEntity).getExpandProps() != null) {
             ((BaseModel) queryEntity).getExpandProps().forEach((key, value) -> {

@@ -66,9 +66,9 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
 
     @PostMapping("dreamList")
     @Operation(description = "获得追梦列表")
-    public ApiRet<DreamDto.DreamRes> dreamList(@RequestBody DreamDto.DreamReq model) {
+    public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody DreamDto.DreamListReq model) {
         Page<CsgoBoxGoods> page = null;
-        BizDict bizDict = bizDictService.getMapper().selectOneWithRelationsById(1785914176081506304l);
+        BizDict bizDict = bizDictService.getMapper().selectOneWithRelationsById(1785914176081506304L);
         BizDictDetail bizDictDetail = bizDict.getBizDictDetails().stream().filter(detail -> detail.getLabel().equals("追梦盲盒")).findFirst().orElse(null);
         if (bizDictDetail != null) {
             QueryWrapper queryWrapper = QueryWrapper.create()
@@ -79,8 +79,9 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
                             CsgoBoxGoods::getBoxId,
                             QueryWrapper.create().select(QueryMethods.column(CsgoBox::getId)).from(CsgoBox.class).where(CsgoBox::getType).eq(bizDictDetail.getValue())
                     );
-             page = csgoBoxGoodsService.page(Page.of(model.getPageNumber(),model.getPageSize()),queryWrapper);
+            queryWrapper = super.buildQueryWrapper(queryWrapper, model);
+            page = csgoBoxGoodsService.page(Page.of(model.getPageNumber(), model.getPageSize()), queryWrapper);
         }
-        return ApiRet.buildOk(new DreamDto.DreamRes().setCsgoBoxGoodsPage(page));
+        return ApiRet.buildOk(new DreamDto.DreamListRes().setDreamGoodsPage(page));
     }
 }

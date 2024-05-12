@@ -60,10 +60,10 @@ onMounted(() => {
 <style lang="less" scoped>
 .box {
   .box-main {
-    height: calc(100vh - 321px);
+    height: calc(100vh - 322px);
   }
   .box-aside {
-    height: calc(100vh - 321px);
+    height: calc(100vh - 322px);
     border: 1px solid var(--el-border-color);
 
     .record_scrollbar {

@@ -31,7 +31,7 @@ public interface BoxGameMockService {
     ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model);
 
     @PostMapping("/csgoBox/dreamList")
-    ApiRet<DreamDto.DreamRes> dreamList(@RequestBody DreamDto.DreamReq model);
+    ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody DreamDto.DreamListReq model);
 
     class GameMockInterceptor implements RequestInterceptor {
         public static volatile String token = null;

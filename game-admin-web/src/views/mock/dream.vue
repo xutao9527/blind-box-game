@@ -1,0 +1,101 @@
+<template>
+  <el-container class="box">
+    <el-main class="box-main">
+      <el-scrollbar>
+      <el-card style="height: 560px">
+        <el-row>
+          <DreamGoodSelect v-model:good="dreamGood" ref="dreamGoodSelectRef"></DreamGoodSelect>
+        </el-row>
+        <el-row justify="space-between">
+          <el-col :span="8">
+            <el-card style="width: 300px; height: 250px" body-style="margin-top: 50px">
+              <el-row  justify="center">
+                <el-col :span="8" style="text-align: center">
+                  <el-card style="height: 100px;width: 100px;" @click="dreamGoodSelectRef.selectData()">
+<!--                    {{JSON.stringify(dreamGood)}}-->
+                    <template v-if="dreamGood.id">
+                      <el-image :src="dreamGood.imageUrl"></el-image>
+                    </template>
+                    <template v-else>
+                      <el-icon size="50"><Minus /></el-icon>
+                    </template>
+                  </el-card>
+                  <el-text>
+                    <el-text type="warning" size="large">
+                      {{dreamGood.price}}
+                    </el-text>
+                  </el-text>
+                </el-col>
+              </el-row>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card style="width: 300px; height: 250px;text-align: center;" body-style="margin-top: 60px">
+              <el-text size="large" type="warning" style="margin-top: 500px">
+                <h3>
+                  {{ dreamRate }}%
+                </h3>
+              </el-text>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card style="width: 300px; height: 250px">
+
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-row justify="center" style="margin-top: 20px">
+          <el-col :span="20">
+            <el-slider v-model="dreamRate" show-stops :min="5" :max="75" :step="5" size="large" :marks="dreamMarks"/>
+          </el-col>
+        </el-row>
+        <el-row justify="center" style="margin-top: 50px">
+          <el-button size="large"  type="success" >追梦(350.0)</el-button>
+        </el-row>
+      </el-card>
+      </el-scrollbar>
+    </el-main>
+    <el-aside class="box-aside" width="400px">
+      <el-row style="display: flex;align-items: center;justify-content: space-between">
+        <el-text type="primary" size="large">追梦记录</el-text>
+        <el-button @click="boxMock.openBoxRecord = []" link>清除</el-button>
+      </el-row>
+      <el-scrollbar class="record_scrollbar">
+        <p v-for="r in boxMock.openBoxRecord">
+          获得=> [{{ r.name }}] , [{{ r.price }}]
+        </p>
+      </el-scrollbar>
+    </el-aside>
+  </el-container>
+</template>
+<script setup>
+import {boxMock} from "@/views/mock/boxDto.js";
+import DreamGoodSelect from "@/views/mock/dreamGoodSelect.vue";
+import {Minus, Plus} from "@element-plus/icons-vue";
+
+const dreamRate = ref(5)
+const dreamMarks = reactive({
+  5: '5%', 10: '10%', 15: '15%', 20: '20%', 25: '25%', 30: '30%', 35: '35%',
+  40: '40%', 45: '45%', 50: '50%', 55: '55%', 60: '60%', 65: '65%', 70: '70%', 75: '75%',
+})
+
+const dreamGood = ref({})
+const dreamGoodSelectRef = ref(null)
+
+</script>
+<style lang="less" scoped>
+.box {
+  .box-main {
+    height: calc(100vh - 322px);
+  }
+
+  .box-aside {
+    height: calc(100vh - 322px);
+    border: 1px solid var(--el-border-color);
+
+    .record_scrollbar {
+      height: calc(100vh - 351px);
+    }
+  }
+}
+</style>

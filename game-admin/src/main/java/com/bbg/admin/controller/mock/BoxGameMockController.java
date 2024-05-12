@@ -57,7 +57,7 @@ public class BoxGameMockController {
     }
 
     @PostMapping("dreamList")
-    public ApiRet<DreamDto.DreamRes> list(@RequestBody DreamDto.DreamReq model){
+    public ApiRet<DreamDto.DreamListRes> list(@RequestBody DreamDto.DreamListReq model){
         return boxGameMockService.dreamList(model);
     }
 }

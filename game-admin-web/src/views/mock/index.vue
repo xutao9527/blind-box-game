@@ -31,12 +31,13 @@
       </el-row>
     </el-header>
     <el-main class="mock-main">
-      <el-tabs tab-position="right" model-value="box" >
+      <el-tabs tab-position="right" model-value="second" >
+
         <el-tab-pane label="盲盒" name="box">
           <box></box>
         </el-tab-pane>
         <el-tab-pane label="追梦" name="second">
-          追梦
+          <dream></dream>
         </el-tab-pane>
         <el-tab-pane label="Roll房" name="third">
           Roll房
@@ -55,6 +56,7 @@
 import {loginMock} from "@/views/mock/LoginDto.js";
 import {mockGlobal} from "./mockGlobal.js";
 import box from "@/views/mock/box.vue";
+import Dream from "@/views/mock/dream.vue";
 
 </script>
 <style lang="less" scoped>

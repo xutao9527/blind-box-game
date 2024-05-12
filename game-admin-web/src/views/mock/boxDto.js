@@ -9,7 +9,6 @@ export const boxMock = reactive({
     boxList: async () => {
         const apiRet = await http.post('boxGameMock/list', boxMock.getBoxReq)
         if (apiRet.ok) {
-            console.log(apiRet.data)
             boxMock.getBoxRes = apiRet.data
         }
     },
