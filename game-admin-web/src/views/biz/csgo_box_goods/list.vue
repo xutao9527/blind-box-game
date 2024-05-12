@@ -33,30 +33,28 @@
                   :data="tableProps.apiRet.data.records"
                   :height="tableDynamicHeight"
                   table-layout="auto"
+                  @sortChange="tableProps.sortChange"
                   border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="nickName" label="昵称"/>
-        <el-table-column prop="mobile" label="手机号" width="120"/>
-        <el-table-column prop="account" label="登录账号"/>
-        <el-table-column prop="password" label="密码"/>
-        <el-table-column prop="type" label="类型"/>
-        <el-table-column prop="money" label="金额"/>
-<!--        <el-table-column prop="moneySign" label="金额校验"/>-->
-<!--        <el-table-column prop="photo" label="头像"/>-->
-<!--        <el-table-column prop="email" label="邮箱"/>-->
-<!--        <el-table-column prop="name" label="真实姓名"/>-->
-<!--        <el-table-column prop="idCard" label="身份证"/>-->
-<!--        <el-table-column prop="birthday" label="生日"/>-->
+        <el-table-column prop="boxId" label="游戏箱子"/>
+        <el-table-column prop="goodId" label="游戏商品"/>
+        <el-table-column prop="name" label="商品名称"/>
+        <el-table-column prop="nameAlias" label="商品别名"/>
+        <el-table-column prop="type" label="商品类型"/>
+        <el-table-column prop="typeName" label="类型名称"/>
+        <el-table-column prop="imageUrl" label="图片地址"/>
+        <el-table-column prop="price" label="商品价格"/>
+        <el-table-column prop="rate" label="获得概率"/>
+        <el-table-column prop="sort" label="排序"/>
         <el-table-column prop="enable" label="状态">
         <template #default="scope">
-            {{scope.row.enable?'启动':'停用'}}
+            {{scope.row.enable?'启用':'停用'}}
         </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
-        <el-table-column fixed="right" label="操作" width="140">
+        <el-table-column fixed="right" label="操作">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="openUpdateBizUserMoney(scope.row)">充值</el-button>
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
             <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
           </template>
@@ -116,7 +114,7 @@ const edit = (row) => {
 }
 
 const remove = async (row) => {
-  const apiRet = await http.get(`/bizUser/remove/${row.id}`)
+  const apiRet = await http.get(`/csgoBoxGoods/remove/${row.id}`)
   if (apiRet.ok) {
     ElMessage({type: 'success', message: apiRet.msg})
     await tableProps.fetchData()
@@ -142,41 +140,25 @@ const tableProps = reactive({
     tableProps.reqParams.page.pageSize = pageSize;
     tableProps.fetchData()
   },
-
   fetchData: async () => {
-    const apiRet = await http.post('/bizUser/page', tableProps.reqParams)
+    const apiRet = await http.post('/csgoBoxGoods/page', tableProps.reqParams)
     if (apiRet.ok) {
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
-  }
+  },
+  sortChange: async (column)=>{
+      console.log(column)
+      if(column.order === "descending"){
+        tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
+      }else if(column.order === "ascending"){
+        tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'ascending'}
+      }else{
+        delete tableProps.reqParams.queryEntity.expandProps.orderField;
+      }
+      tableProps.fetchData()
+    }
 });
-
-const openUpdateBizUserMoney = (row) => {
-  ElMessageBox.prompt('请输入充值金额', '充值', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    inputPattern:
-        /^-?\d+(\.\d{1,2})?$/,
-    inputErrorMessage: 'Invalid Email',
-  })
-      .then(async ({value}) => {
-        const apiRet = await http.get(`/bizUser/updateBizUserMoney/${row.id}/${value}`)
-        if(apiRet.ok){
-          ElMessage({
-            type: 'success',
-            message: `充值成功!`,
-          })
-          await tableProps.fetchData()
-        }
-      })
-      .catch(() => {
-        ElMessage({
-          type: 'info',
-          message: 'Input canceled',
-        })
-      })
-}
 
 const emits = defineEmits(['activeRightTabs']);
 defineExpose({

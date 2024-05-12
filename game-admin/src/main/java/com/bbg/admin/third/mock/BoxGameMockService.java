@@ -3,6 +3,7 @@ package com.bbg.admin.third.mock;
 
 import com.bbg.admin.third.zbt.ZBTHttpService;
 import com.bbg.core.box.dto.BoxDto;
+import com.bbg.core.box.dto.DreamDto;
 import com.bbg.core.box.dto.LoginDto;
 import com.bbg.core.entity.ApiRet;
 import feign.RequestInterceptor;
@@ -28,6 +29,9 @@ public interface BoxGameMockService {
 
     @PostMapping("/csgoBox/open")
     ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model);
+
+    @PostMapping("/csgoBox/dreamList")
+    ApiRet<DreamDto.DreamRes> dreamList(@RequestBody DreamDto.DreamReq model);
 
     class GameMockInterceptor implements RequestInterceptor {
         public static volatile String token = null;

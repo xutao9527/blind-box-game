@@ -4,6 +4,7 @@ import com.bbg.box.base.BaseController;
 import com.bbg.box.service.biz.BizDictService;
 import com.bbg.box.service.csgo.CsgoBoxGoodsService;
 import com.bbg.core.box.dto.BoxDto;
+import com.bbg.core.box.dto.DreamDto;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizDictDetail;
 import com.bbg.model.biz.BizUser;
@@ -12,6 +13,7 @@ import com.bbg.box.service.csgo.CsgoBoxService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
 import com.bbg.model.csgo.CsgoBoxGoods;
+import com.bbg.model.csgo.CsgoGoods;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -62,20 +64,23 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
         return ApiRet.buildOk(boxRes);
     }
 
-    @GetMapping("dreamList")
+    @PostMapping("dreamList")
     @Operation(description = "获得追梦列表")
-    public ApiRet<Boolean> list() {
+    public ApiRet<DreamDto.DreamRes> dreamList(@RequestBody DreamDto.DreamReq model) {
+        Page<CsgoBoxGoods> page = null;
         BizDict bizDict = bizDictService.getMapper().selectOneWithRelationsById(1785914176081506304l);
         BizDictDetail bizDictDetail = bizDict.getBizDictDetails().stream().filter(detail -> detail.getLabel().equals("追梦盲盒")).findFirst().orElse(null);
         if (bizDictDetail != null) {
             QueryWrapper queryWrapper = QueryWrapper.create()
                     .from(CsgoBoxGoods.class)
+                    .and(CsgoBoxGoods::getName).like(model.getName())
+                    .and(CsgoBoxGoods::getType).eq(model.getType())
                     .in(
                             CsgoBoxGoods::getBoxId,
                             QueryWrapper.create().select(QueryMethods.column(CsgoBox::getId)).from(CsgoBox.class).where(CsgoBox::getType).eq(bizDictDetail.getValue())
                     );
-            List<CsgoBoxGoods> csgoBoxGoodsList = csgoBoxGoodsService.list(queryWrapper);
+             page = csgoBoxGoodsService.page(Page.of(model.getPageNumber(),model.getPageSize()),queryWrapper);
         }
-        return ApiRet.buildOk(true);
+        return ApiRet.buildOk(new DreamDto.DreamRes().setCsgoBoxGoodsPage(page));
     }
 }

@@ -19,7 +19,7 @@ import java.io.Serial;
  * CSGO箱子商品 实体类。
  *
  * @author bbg
- * @since 2024-05-05
+ * @since 2024-05-12
  */
 @Data
 @NoArgsConstructor
@@ -63,6 +63,18 @@ public class CsgoBoxGoodsRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "商品别名")
     private String nameAlias;
+
+    /**
+     * 商品类型
+     */
+    @Schema(description = "商品类型")
+    private String type;
+
+    /**
+     * 类型名称
+     */
+    @Schema(description = "类型名称")
+    private String typeName;
 
     /**
      * 图片地址

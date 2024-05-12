@@ -2,6 +2,7 @@ package com.bbg.admin.controller.mock;
 
 import com.bbg.admin.third.mock.BoxGameMockService;
 import com.bbg.core.box.dto.BoxDto;
+import com.bbg.core.box.dto.DreamDto;
 import com.bbg.core.box.dto.LoginDto;
 import com.bbg.core.entity.ApiRet;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,5 +54,10 @@ public class BoxGameMockController {
     @PostMapping("open")
     public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model){
         return boxGameMockService.openBox(model);
+    }
+
+    @PostMapping("dreamList")
+    public ApiRet<DreamDto.DreamRes> list(@RequestBody DreamDto.DreamReq model){
+        return boxGameMockService.dreamList(model);
     }
 }

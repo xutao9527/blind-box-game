@@ -18,7 +18,7 @@ import java.io.Serial;
  * 系统用户 实体类。
  *
  * @author bbg
- * @since 2024-05-05
+ * @since 2024-05-12
  */
 @Data
 @NoArgsConstructor

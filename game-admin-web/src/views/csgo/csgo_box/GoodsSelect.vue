@@ -98,6 +98,8 @@ const select = async (row) => {
   props.good.nameAlias = row.marketHashName
   props.good.imageUrl = row.imageUrl
   props.good.price = row.cnyPrice
+  props.good.type = row.type
+  props.good.typeName = row.typeName
   ElMessage({type: 'success', message: '选择完成'})
   visible.value = false;
 }
@@ -133,7 +135,6 @@ const tableProps = reactive({
     }
   },
   sortChange: async (column)=>{
-    console.log(column)
     if(column.order === "descending"){
       tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
     }else if(column.order === "ascending"){
@@ -141,7 +142,7 @@ const tableProps = reactive({
     }else{
       delete tableProps.reqParams.queryEntity.expandProps.orderField;
     }
-    tableProps.fetchData()
+    await tableProps.fetchData()
   }
 });
 </script>
