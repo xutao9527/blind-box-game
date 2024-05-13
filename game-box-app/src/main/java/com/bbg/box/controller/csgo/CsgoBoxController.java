@@ -66,7 +66,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     }
 
     @PostMapping("dreamList")
-    @Operation(description = "获得追梦列表")
+    @Operation(description = "获得追梦商品列表")
     public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody DreamDto.DreamListReq model) {
         Page<CsgoBoxGoods> page = null;
         BizDict bizDict = bizDictService.getDictByTag("csgo_box_type");

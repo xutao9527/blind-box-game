@@ -35,16 +35,16 @@
         <el-tab-pane label="盲盒" name="box">
           <box></box>
         </el-tab-pane>
-        <el-tab-pane label="追梦" name="second">
+        <el-tab-pane label="追梦" name="dream">
           <dream></dream>
         </el-tab-pane>
-        <el-tab-pane label="Roll房" name="third">
-          Roll房
-        </el-tab-pane>
-        <el-tab-pane label="竞技场" name="third">
+        <el-tab-pane label="竞技场" name="battle">
           竞技场
         </el-tab-pane>
-        <el-tab-pane label="个人中心" name="fourth">
+        <el-tab-pane label="Roll房" name="roll">
+          Roll房
+        </el-tab-pane>
+        <el-tab-pane label="个人中心" name="userInfo">
           个人中心
         </el-tab-pane>
       </el-tabs>
