@@ -47,7 +47,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         BizUser newUser =  getMapper().selectOneWithRelationsById(updateUser.getId());
         // 补资金流水
         capitalRecord.setAfterMoney(newUser.getMoney());
-        capitalRecord.setBeforeMoney(bizUser.getMoney());
+        capitalRecord.setBeforeMoney(newUser.getMoney().subtract(capitalRecord.getChangeMoney()));
         csgoCapitalRecordService.save(capitalRecord);
         return newUser;
     }

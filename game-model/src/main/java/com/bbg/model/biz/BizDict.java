@@ -17,6 +17,6 @@ import java.util.List;
 @Schema(description = "系统字典")
 public class BizDict extends BizDictRecord {
 
-    @RelationOneToMany(selfField = "id",targetField = "dictId",orderBy = "sort")
+    @RelationOneToMany(selfField = "id", targetField = "dictId", orderBy = "sort")
     private List<BizDictDetail> bizDictDetails;
 }
