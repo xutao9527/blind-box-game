@@ -4,6 +4,7 @@ import com.bbg.model.base.BaseModel;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +16,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * CSGO用户信息 实体类。
+ * 对战房间 实体类。
  *
  * @author bbg
  * @since 2024-05-13
@@ -25,79 +26,37 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "CSGO用户信息")
-@Table("csgo_user_info")
-public class CsgoUserInfoRecord extends BaseModel implements Serializable {
+@Schema(description = "对战房间")
+@Table("csgo_battle_room")
+public class CsgoBattleRoomRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键
-     */
     @Id
-    @Schema(description = "主键")
+    @Schema(description = "")
     private Long id;
 
-    /**
-     * 用户编号
-     */
-    @Schema(description = "用户编号")
-    private Long userId;
+    @Schema(description = "")
+    private Long createUserId;
 
     /**
-     * 用户类型
+     * 对战模式
      */
-    @Schema(description = "用户类型")
-    private String userType;
+    @Schema(description = "对战模式")
+    private String battleModel;
 
     /**
-     * 推广码
+     * 房间价格
      */
-    @Schema(description = "推广码")
-    private String spreadCode;
+    @Schema(description = "房间价格")
+    private BigDecimal roomPrice;
 
     /**
-     * 邀请码
+     * 房间状态
      */
-    @Schema(description = "邀请码")
-    private String invitationCode;
-
-    /**
-     * 渠道
-     */
-    @Schema(description = "渠道")
-    private String channelCode;
-
-    /**
-     * 身份证姓名
-     */
-    @Schema(description = "身份证姓名")
-    private String idCardName;
-
-    /**
-     * 身份证号码
-     */
-    @Schema(description = "身份证号码")
-    private String idCardNo;
-
-    /**
-     * 配置值
-     */
-    @Schema(description = "配置值")
-    private String steamId;
-
-    /**
-     * 配置描述
-     */
-    @Schema(description = "配置描述")
-    private String steamLink;
-
-    /**
-     * 最后登录IP
-     */
-    @Schema(description = "最后登录IP")
-    private String lastLoginIp;
+    @Schema(description = "房间状态")
+    private String status;
 
     /**
      * 秘密哈希
@@ -122,12 +81,6 @@ public class CsgoUserInfoRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "客户端种子")
     private String clientSeed;
-
-    /**
-     * 轮数
-     */
-    @Schema(description = "轮数")
-    private Integer roundNumber;
 
     /**
      * 创建时间

@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 角色-菜单-中间 实体类。
+ * 对战房间用户 实体类。
  *
  * @author bbg
  * @since 2024-05-13
@@ -24,25 +24,30 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "角色-菜单-中间")
-@Table("sys_role_menu")
-public class SysRoleMenuRecord extends BaseModel implements Serializable {
+@Schema(description = "对战房间用户")
+@Table("csgo_battle_room_box")
+public class CsgoBattleRoomBoxRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 角色编号
+     * 编号
      */
     @Id
-    @Schema(description = "角色编号")
-    private Long roleId;
+    @Schema(description = "编号")
+    private Long id;
 
     /**
-     * 菜单编号
+     * 房间编号
      */
-    @Id
-    @Schema(description = "菜单编号")
-    private Long menuId;
+    @Schema(description = "房间编号")
+    private Long roomId;
+
+    /**
+     * 箱子编号
+     */
+    @Schema(description = "箱子编号")
+    private Long boxId;
 
 }

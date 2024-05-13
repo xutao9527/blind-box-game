@@ -4,7 +4,6 @@ import com.bbg.model.base.BaseModel;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 系统角色 实体类。
+ * 对战房间用户 实体类。
  *
  * @author bbg
  * @since 2024-05-13
@@ -25,48 +24,48 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "系统角色")
-@Table("sys_role")
-public class SysRoleRecord extends BaseModel implements Serializable {
+@Schema(description = "对战房间用户")
+@Table("csgo_battle_room_user")
+public class CsgoBattleRoomUserRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * 编号
      */
     @Id
-    @Schema(description = "主键")
+    @Schema(description = "编号")
     private Long id;
 
     /**
-     * 角色名
+     * 房间编号
      */
-    @Schema(description = "角色名")
-    private String name;
+    @Schema(description = "房间编号")
+    private Long roomId;
 
     /**
-     * 角色描述
+     * 用户编号
      */
-    @Schema(description = "角色描述")
-    private String remark;
+    @Schema(description = "用户编号")
+    private Long userId;
 
     /**
-     * 状态:1=启动,0=禁用
+     * 昵称
      */
-    @Schema(description = "状态:1=启动,0=禁用")
-    private Boolean enable;
+    @Schema(description = "昵称")
+    private String nickName;
 
     /**
-     * 创建时间
+     * 头像图片
      */
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    @Schema(description = "头像图片")
+    private String imageUrl;
 
     /**
-     * 修改时间
+     * 是否赢家
      */
-    @Schema(description = "修改时间")
-    private LocalDateTime updateTime;
+    @Schema(description = "是否赢家")
+    private Boolean isWin;
 
 }

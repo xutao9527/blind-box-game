@@ -21,6 +21,9 @@ public class GenBox {
             "csgo_box_goods",//盲盒商品
             "csgo_storehouse",//装备仓库
             "csgo_capital_record",//资金流水
+            "csgo_battle_room",//对战房间
+            "csgo_battle_room_box",//房间的箱子
+            "csgo_battle_room_user",//房间的用户
     };
 
     @Test
