@@ -1,6 +1,6 @@
 package com.bbg.core.constants;
 
-public class CacheKey {
+public class KeyConst {
 
 
     // 字典标签缓存
@@ -13,7 +13,6 @@ public class CacheKey {
     public final static String USER_TOKEN_UID = "user::token::uid";
     // user token
     public final static String USER_INFO_TOKEN = "user::info::token";
-
 
     // 方法锁  同步数据
     public final static String METHOD_SYNC_DATA_LOCK = "method::syncData";

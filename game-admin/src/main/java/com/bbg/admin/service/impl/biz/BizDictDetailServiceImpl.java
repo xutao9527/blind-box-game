@@ -2,7 +2,7 @@ package com.bbg.admin.service.impl.biz;
 
 import com.bbg.admin.service.biz.BizDictService;
 import com.bbg.core.box.service.RedisService;
-import com.bbg.core.constants.CacheKey;
+import com.bbg.core.constants.KeyConst;
 import com.bbg.model.biz.BizDict;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.biz.BizDictDetail;
@@ -31,7 +31,7 @@ public class BizDictDetailServiceImpl extends ServiceImpl<BizDictDetailMapper, B
     public boolean save(BizDictDetail entity){
         BizDict bizDict = bizDictService.getById(entity.getDictId());
         if (bizDict != null) {
-            redisService.delete(CacheKey.build(CacheKey.DICT_TAG, bizDict.getTag()));
+            redisService.delete(KeyConst.build(KeyConst.DICT_TAG, bizDict.getTag()));
         }
         return this.getMapper().insert(entity,true) > 0;
     }
@@ -42,7 +42,7 @@ public class BizDictDetailServiceImpl extends ServiceImpl<BizDictDetailMapper, B
         if(bizDictDetail!=null){
             BizDict bizDict = bizDictService.getById(bizDictDetail.getDictId());
             if (bizDict != null) {
-                redisService.delete(CacheKey.build(CacheKey.DICT_TAG, bizDict.getTag()));
+                redisService.delete(KeyConst.build(KeyConst.DICT_TAG, bizDict.getTag()));
             }
             return getMapper().deleteById(id) > 0;
         }
@@ -54,7 +54,7 @@ public class BizDictDetailServiceImpl extends ServiceImpl<BizDictDetailMapper, B
     public boolean updateById(BizDictDetail entity){
         BizDict bizDict = bizDictService.getById(entity.getDictId());
         if (bizDict != null) {
-            redisService.delete(CacheKey.build(CacheKey.DICT_TAG, bizDict.getTag()));
+            redisService.delete(KeyConst.build(KeyConst.DICT_TAG, bizDict.getTag()));
         }
         return getMapper().update(entity) > 0;
     }

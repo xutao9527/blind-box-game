@@ -1,23 +1,19 @@
 package com.bbg.admin.service.impl.biz;
 
-import com.bbg.admin.service.biz.BizDictDetailService;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.box.service.RedisService;
-import com.bbg.core.constants.CacheKey;
+import com.bbg.core.constants.KeyConst;
 import com.bbg.model.biz.BizDictDetail;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.biz.BizDict;
 import com.bbg.admin.mapper.biz.BizDictMapper;
 import com.bbg.admin.service.biz.BizDictService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 系统字典 服务层实现。
@@ -32,7 +28,7 @@ public class BizDictServiceImpl extends ServiceImpl<BizDictMapper, BizDict> impl
 
     public final RedisService redisService;
 
-    @RedisCache(value = "#tag", key = CacheKey.DICT_TAG)
+    @RedisCache(value = "#tag", key = KeyConst.DICT_TAG)
     public BizDict getDictByTag(String tag) {
         QueryWrapper queryWrapper = QueryWrapper.create().and(BizDict::getTag).eq(tag);
         return getMapper().selectOneWithRelationsByQuery(queryWrapper);
@@ -42,7 +38,7 @@ public class BizDictServiceImpl extends ServiceImpl<BizDictMapper, BizDict> impl
     public boolean removeById(Serializable id) {
         BizDict bizDict = getMapper().selectOneById(id);
         if (bizDict != null) {
-            redisService.delete(CacheKey.build(CacheKey.DICT_TAG, bizDict.getTag()));
+            redisService.delete(KeyConst.build(KeyConst.DICT_TAG, bizDict.getTag()));
             getMapper().deleteByQuery(QueryWrapper.create(new BizDictDetail().setDictId(bizDict.getId())));
             return getMapper().deleteById(id) > 0;
         }
@@ -50,7 +46,7 @@ public class BizDictServiceImpl extends ServiceImpl<BizDictMapper, BizDict> impl
     }
 
     @Override
-    @RedisClear(value = "#entity.tag", key = CacheKey.DICT_TAG)
+    @RedisClear(value = "#entity.tag", key = KeyConst.DICT_TAG)
     public boolean updateById(BizDict entity) {
         return this.updateById(entity, true);
     }

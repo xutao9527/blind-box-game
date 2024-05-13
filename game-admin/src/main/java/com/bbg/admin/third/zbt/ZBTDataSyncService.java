@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.bbg.admin.service.csgo.CsgoGoodsService;
 import com.bbg.core.annotation.RedisLock;
-import com.bbg.core.constants.CacheKey;
+import com.bbg.core.constants.KeyConst;
 import com.bbg.model.csgo.CsgoGoods;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -30,7 +30,7 @@ public class ZBTDataSyncService {
 
     private boolean isRunning = false;
 
-    @RedisLock(value = "'zbtData'",key = CacheKey.METHOD_SYNC_DATA_LOCK)
+    @RedisLock(value = "'zbtData'",key = KeyConst.METHOD_SYNC_DATA_LOCK)
     public boolean syncData() {
         boolean isOk = false;
         if (!isRunning) {

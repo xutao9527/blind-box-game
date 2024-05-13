@@ -7,7 +7,7 @@ import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.DreamDto;
 import com.bbg.core.box.service.RedisService;
-import com.bbg.core.constants.CacheKey;
+import com.bbg.core.constants.KeyConst;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.*;
@@ -72,7 +72,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
      * 开盲盒
      */
     @Transactional(rollbackFor = Exception.class)
-    @RedisLock(value = "#bizUser.id", key = CacheKey.METHOD_OPEN_BOX_LOCK)
+    @RedisLock(value = "#bizUser.id", key = KeyConst.METHOD_OPEN_BOX_LOCK)
     public BoxDto.OpenBoxRes openBox(BizUser bizUser, Long boxId) {
         BoxDto.OpenBoxRes boxRes = new BoxDto.OpenBoxRes();
         // 使用FairEntity,进行roll点
@@ -126,7 +126,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
      * 进行追梦
      */
     @Transactional(rollbackFor = Exception.class)
-    @RedisLock(value = "#bizUser.id", key = CacheKey.METHOD_DREAM_GOOD_LOCK)
+    @RedisLock(value = "#bizUser.id", key = KeyConst.METHOD_DREAM_GOOD_LOCK)
     public DreamDto.DreamGoodRes dreamGood(BizUser bizUser, DreamDto.DreamGoodReq model) {
         DreamDto.DreamGoodRes dreamGoodRes = new DreamDto.DreamGoodRes();
         CsgoBoxGoods csgoBoxGoods = csgoBoxGoodsService.getById(model.getBoxGoodId());
