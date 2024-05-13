@@ -19,4 +19,16 @@ public class BizDict extends BizDictRecord {
 
     @RelationOneToMany(selfField = "id", targetField = "dictId", orderBy = "sort")
     private List<BizDictDetail> bizDictDetails;
+
+    public String getValueByAlias(String alias){
+        String value = null;
+        if(bizDictDetails!=null){
+            BizDictDetail dictDetail = bizDictDetails.stream().filter(detail -> detail.getLabelAlias().equals(alias)).findFirst().orElse(null);
+            if(dictDetail!=null){
+                value = dictDetail.getValue();
+            }
+        }
+        return value;
+    }
+
 }

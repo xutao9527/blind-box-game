@@ -7,6 +7,9 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.userId" placeholder="用户编号"/>
             </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="capitalTypeRef" :tag="'csgo_capital_type'" placeholder="流水类型"/>
+            </div>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
@@ -39,7 +42,11 @@
         <el-table-column prop="changeMoney" label="变更金额"/>
         <el-table-column prop="beforeMoney" label="变更前金额"/>
         <el-table-column prop="afterMoney" label="变更后金额"/>
-        <el-table-column prop="type" label="变更类型"/>
+        <el-table-column prop="type" label="变更类型">
+          <template #default="scope">
+            {{capitalTypeRef.getLabel(scope.row.type)}}
+          </template>
+        </el-table-column>
         <el-table-column prop="sourceId" label="变更来源"/>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
@@ -73,6 +80,7 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
 
+const capitalTypeRef = ref(null)
 const header = ref(null);
 const tableDynamicHeight = ref(0)
 

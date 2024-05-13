@@ -1,6 +1,7 @@
 package com.bbg.box.service.impl.csgo;
 
 import cn.hutool.core.util.RandomUtil;
+import com.bbg.box.service.biz.BizDictService;
 import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.*;
 import com.bbg.core.annotation.RedisLock;
@@ -14,6 +15,7 @@ import com.bbg.model.csgo.*;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.box.mapper.csgo.CsgoBoxMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @since 2024-05-03
  */
 @Service
+@RequiredArgsConstructor
 public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> implements CsgoBoxService {
 
     @Autowired
@@ -45,6 +48,8 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
     RedisService redisService;
     @Autowired
     CsgoBoxGoodsService csgoBoxGoodsService;
+    @Autowired
+    BizDictService bizDictService;
 
     /**
      * 根据编号获得盲盒
@@ -108,6 +113,8 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
             // 构造流水记录
             CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
             capitalRecord.setUserId(bizUser.getId())
+                    .setSourceId(boxId.toString())
+                    .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("open_box"))  //流水类型
                     .setChangeMoney(csgoBox.getPrice().negate());    // 扣钱,转为负数
             // 更新用户金额
             bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
@@ -161,6 +168,8 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         // 构造流水记录
         CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
         capitalRecord.setUserId(bizUser.getId())
+                .setSourceId(model.getBoxGoodId().toString())
+                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("dream"))  //流水类型
                 .setChangeMoney(consumeMoney.negate());    // 扣钱,转为负数
         // 更新用户金额
         bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);

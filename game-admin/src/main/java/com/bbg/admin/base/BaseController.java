@@ -3,6 +3,8 @@ package com.bbg.admin.base;
 import cn.hutool.core.util.StrUtil;
 import com.bbg.core.box.service.RedisService;
 import com.bbg.model.base.BaseModel;
+import com.bbg.model.biz.BizUser;
+import com.bbg.model.sys.SysUser;
 import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -23,6 +25,11 @@ public class BaseController<T, S extends IService<T>> {
 
     @Autowired(required = false)
     protected RedisService redisService;
+
+    public SysUser getCurrentUser(){
+        String token =  request.getHeader("token");
+        return redisService.getAdmin(token);
+    }
 
     public QueryWrapper buildQueryWrapper(QueryWrapper queryWrapper, Object queryEntity) {
         // Entity.expandProps 扩展属性为List并size等2, 进行范围查询
