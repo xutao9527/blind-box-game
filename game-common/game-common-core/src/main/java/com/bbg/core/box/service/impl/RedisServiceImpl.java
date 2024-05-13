@@ -2,9 +2,11 @@ package com.bbg.core.box.service.impl;
 
 import com.bbg.core.box.service.RedisService;
 import com.bbg.core.base.RedisBaseImpl;
+import com.bbg.core.constants.CacheKey;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.sys.SysUser;
 import org.springframework.stereotype.Service;
+
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -12,14 +14,14 @@ import java.util.concurrent.TimeUnit;
 public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
 
     public String adminLogin(SysUser user) {
-        String adminUserId = "admin::token::uid::" + user.getId();
+        String adminUserId = CacheKey.build(CacheKey.ADMIN_TOKEN_UID, user.getId().toString());
         String newToken = UUID.randomUUID().toString();
-        String adminUserToken = "admin::info::token::" + newToken;
+        String adminUserToken = CacheKey.build(CacheKey.ADMIN_INFO_TOKEN, newToken);
         String oldToken = (String) get(adminUserId);
         if (oldToken != null) {
             delete(oldToken);
         }
-        set(adminUserId, adminUserToken, 3600L+3, TimeUnit.SECONDS);
+        set(adminUserId, adminUserToken, 3600L + 3, TimeUnit.SECONDS);
         set(adminUserToken, user, 3600L, TimeUnit.SECONDS);
         return newToken;
     }
@@ -27,35 +29,35 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
     public void adminLogout(String token) {
         SysUser user = getAdmin(token);
         if (user != null) {
-            delete("admin::token::uid::" + user.getId());
-            delete("admin::info::token::" + token);
+            delete(CacheKey.build(CacheKey.ADMIN_TOKEN_UID, user.getId().toString()));
+            delete(CacheKey.build(CacheKey.ADMIN_INFO_TOKEN, token));
         }
     }
 
     public SysUser getAdmin(String token) {
-        String adminUserToken = "admin::info::token::" + token;
+        String adminUserToken = CacheKey.build(CacheKey.ADMIN_INFO_TOKEN, token);
         return (SysUser) get(adminUserToken);
     }
 
-    public void expireAdmin(String token){
-        String adminUserToken = "admin::info::token::" + token;
+    public void expireAdmin(String token) {
+        String adminUserToken = CacheKey.build(CacheKey.ADMIN_INFO_TOKEN, token);
         SysUser sysUser = getAdmin(token);
-        if(sysUser!=null){
-            String adminUserId = "admin::token::uid::" + sysUser.getId();
-            expire(adminUserId, 3600L+3, TimeUnit.SECONDS);
+        if (sysUser != null) {
+            String adminUserId = CacheKey.build(CacheKey.ADMIN_TOKEN_UID, sysUser.getId().toString());
+            expire(adminUserId, 3600L + 3, TimeUnit.SECONDS);
             expire(adminUserToken, 3600L, TimeUnit.SECONDS);
         }
     }
 
     public String userLogin(BizUser user) {
-        String userId = "user::token::uid::" + user.getId();
+        String userId = CacheKey.build(CacheKey.USER_TOKEN_UID, user.getId().toString());
         String newToken = UUID.randomUUID().toString();
-        String userToken = "user::info::token::" + newToken;
+        String userToken = CacheKey.build(CacheKey.USER_INFO_TOKEN, newToken);
         String oldToken = (String) get(userId);
         if (oldToken != null) {
             delete(oldToken);
         }
-        set(userId, userToken, 3600L+3, TimeUnit.SECONDS);
+        set(userId, userToken, 3600L + 3, TimeUnit.SECONDS);
         set(userToken, user, 3600L, TimeUnit.SECONDS);
         return newToken;
     }
@@ -63,31 +65,31 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
     public void userLogout(String token) {
         BizUser user = getUser(token);
         if (user != null) {
-            delete("user::token::uid::" + user.getId());
-            delete("user::info::token::" + token);
+            delete(CacheKey.build(CacheKey.USER_TOKEN_UID, user.getId().toString()));
+            delete(CacheKey.build(CacheKey.USER_INFO_TOKEN, token));
         }
     }
 
     public BizUser getUser(String token) {
-        String bizUserToken = "user::info::token::" + token;
+        String bizUserToken = CacheKey.build(CacheKey.USER_INFO_TOKEN, token);
         return (BizUser) get(bizUserToken);
     }
 
-    public void expireUser(String token){
-        String userToken = "user::info::token::" + token;
+    public void expireUser(String token) {
+        String userToken = CacheKey.build(CacheKey.USER_INFO_TOKEN, token);
         BizUser bizUser = getUser(token);
-        if(bizUser!=null){
-            String userId = "user::token::uid::" + bizUser.getId();
-            expire(userId, 3600L+3, TimeUnit.SECONDS);
+        if (bizUser != null) {
+            String userId = CacheKey.build(CacheKey.USER_TOKEN_UID, bizUser.getId().toString());
+            expire(userId, 3600L + 3, TimeUnit.SECONDS);
             expire(userToken, 3600L, TimeUnit.SECONDS);
         }
     }
 
-    public void updateUser(BizUser user){
-        String userId = "user::token::uid::" + user.getId();
+    public void updateUser(BizUser user) {
+        String userId = CacheKey.build(CacheKey.USER_TOKEN_UID, user.getId().toString());
         String oldToken = (String) get(userId);
-        if(oldToken!=null){
-            set(userId, oldToken, 3600L+3, TimeUnit.SECONDS);
+        if (oldToken != null) {
+            set(userId, oldToken, 3600L + 3, TimeUnit.SECONDS);
             set(oldToken, user, 3600L, TimeUnit.SECONDS);
         }
     }

@@ -23,7 +23,7 @@ public @interface RedisCache {
     /**
      * 缓存时长,不传默认为0,则永久缓存
      */
-    long cacheTime() default 0;
+    long liveTime() default 0;
     /**
      * 时间单位，默认为秒
      *

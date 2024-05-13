@@ -1,10 +1,9 @@
 package com.bbg.core.aop;
 
-
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.box.service.RedisService;
+import com.bbg.core.constants.CacheKey;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.javassist.ClassPool;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,8 +15,6 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
-
 @Aspect
 @Component
 @Slf4j
@@ -28,13 +25,18 @@ public class RedisCacheAspect {
     @Around("@annotation(redisCache)")
     public Object aroundRedisLock(ProceedingJoinPoint point, RedisCache redisCache) throws Throwable {
         String keyPrefix = redisCache.key();
-        Object keyValue = parserSpEL(redisCache.value(), point);
-        String rediskey = keyPrefix+"::"+keyValue;
-        Object cacheObject = redisService.get(rediskey);
+        String keyValue = parserSpEL(redisCache.value(), point).toString();
+        String cacheKey = CacheKey.build(keyPrefix, keyValue);
+        Object cacheObject = redisService.get(cacheKey);
         if (cacheObject == null) {
             cacheObject = point.proceed();
-            if(cacheObject!=null){
-                redisService.set(rediskey,cacheObject);
+            if (cacheObject != null) {
+                if(redisCache.liveTime()==0){
+                    redisService.set(cacheKey, cacheObject);
+                }else{
+                    redisService.set(cacheKey, cacheObject,redisCache.liveTime(),redisCache.timeUnit());
+                }
+
             }
         }
         return cacheObject;
