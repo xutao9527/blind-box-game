@@ -8,10 +8,10 @@
               <el-input v-model="tableProps.reqParams.queryEntity.name" placeholder="箱子名称"/>
             </div>
             <div class="bbg-table-header-input">
-              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dictTypeRef" :dict-id="'1785914176081506304'" placeholder="箱子类型"/>
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dictTypeRef" :tag="'csgo_box_type'" placeholder="箱子类型"/>
             </div>
             <div class="bbg-table-header-input">
-              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.group" ref="dictGroupRef" :dict-id="'1785915487250296832'" placeholder="箱子分组"/>
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.group" ref="dictGroupRef" :tag="'csgo_box_group'" placeholder="箱子分组"/>
             </div>
           </el-row>
         </el-col>

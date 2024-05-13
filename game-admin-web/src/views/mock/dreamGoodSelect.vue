@@ -14,7 +14,7 @@
                 <el-input v-model="tableProps.reqParams.name" placeholder="皮肤名称"/>
               </div>
               <div class="bbg-table-header-input">
-                <bbg-dict-select v-model:value="tableProps.reqParams.type" :dict-id="'1784138822442606592'"
+                <bbg-dict-select v-model:value="tableProps.reqParams.type" :tag="'csgo_good_type'"
                                  placeholder="武器类型"/>
               </div>
             </el-row>

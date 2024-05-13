@@ -4,7 +4,7 @@
              @change="handleChange"
              clearable
              filterable>
-    <el-option v-for="dict in bizDictDetail"
+    <el-option v-for="dict in bizDictDetails"
                :label="dict.label"
                :value="dict.value">
       <span style="float: left">{{ dict.label }}</span>
@@ -21,18 +21,22 @@ const props = defineProps(
       value: {
         type: String,
       },
-      dictId:{
+      tag:{
         required:true
       }
     }
 )
 
-const bizDictDetail = ref([])
+const bizDict = ref({})
+const bizDictDetails = ref([])
 
 const fetchData = async () =>{
-  let apiRet = await http.post('/bizDictDetail/list', {dictId: props.dictId})
+  let apiRet = await http.get(`/bizDict/getDict/${props.tag}`)
   if(apiRet.ok){
-    bizDictDetail.value = apiRet.data
+    bizDict.value = apiRet.data
+    if(bizDict.value && bizDict.value.bizDictDetails){
+      bizDictDetails.value = bizDict.value.bizDictDetails
+    }
   }
 }
 
