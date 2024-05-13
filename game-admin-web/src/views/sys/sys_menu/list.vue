@@ -33,32 +33,39 @@
                 :data="tableProps.apiRet.data.records"
                 :height="tableDynamicHeight"
                 table-layout="auto"
+                size="small"
                 border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="parentId" label="父Id"/>
+        <el-table-column prop="id" label="主键"  width="160"/>
+        <el-table-column prop="parentId" label="父Id" width="160"/>
         <el-table-column prop="title" label="菜单标题"/>
         <el-table-column prop="name" label="菜单名称"/>
         <el-table-column prop="path" label="请求路径"/>
-        <el-table-column prop="icon" label="图标"/>
+        <el-table-column prop="icon" label="图标" width="50">
+          <template #default="scope">
+            <el-icon>
+              <component :is="scope.row.icon" />
+            </el-icon>
+          </template>
+        </el-table-column>
         <el-table-column prop="component" label="组件路径"/>
-        <el-table-column prop="sort" label="排序"/>
-        <el-table-column prop="type" label="类型">
+        <el-table-column prop="sort" label="排序" width="50"/>
+        <el-table-column prop="type" label="类型" width="50">
           <template #default="scope">
             {{ scope.row.type === '1' ? '菜单' : '按钮' }}
           </template>
         </el-table-column>
-        <el-table-column prop="enable" label="显示">
+        <el-table-column prop="enable" label="显示" width="50">
           <template #default="scope">
             {{ scope.row.view ? '是' : '否' }}
           </template>
         </el-table-column>
-        <el-table-column prop="enable" label="启用">
+        <el-table-column prop="enable" label="启用" width="50">
           <template #default="scope">
             {{scope.row.enable?'启动':'停用'}}
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column prop="updateTime" label="修改时间"/>
+        <el-table-column prop="createTime" label="创建时间" width="140"/>
+        <el-table-column prop="updateTime" label="修改时间"  width="140"/>
         <el-table-column fixed="right" label="操作">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>

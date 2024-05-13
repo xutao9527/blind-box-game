@@ -32,5 +32,9 @@ public class CsgoRobotController extends BaseController<CsgoRobot, CsgoRobotServ
     @Autowired
     protected  CsgoRobotService csgoRobotService;
 
-
+    @GetMapping("list")
+    @Operation(description = "查询所有机器人")
+    public ApiRet<List<CsgoRobot>> list() {
+        return ApiRet.buildOk(csgoRobotService.list(QueryWrapper.create().eq(CsgoRobot::getEnable,true)));
+    }
 }
