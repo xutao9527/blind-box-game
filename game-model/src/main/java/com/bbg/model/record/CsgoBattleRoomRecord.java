@@ -33,11 +33,17 @@ public class CsgoBattleRoomRecord extends BaseModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 编号
+     */
     @Id
-    @Schema(description = "")
+    @Schema(description = "编号")
     private Long id;
 
-    @Schema(description = "")
+    /**
+     * 创建用户
+     */
+    @Schema(description = "创建用户")
     private Long createUserId;
 
     /**
@@ -45,6 +51,12 @@ public class CsgoBattleRoomRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "对战模式")
     private String battleModel;
+
+    /**
+     * 房间人数
+     */
+    @Schema(description = "房间人数")
+    private Integer peopleNumber;
 
     /**
      * 房间价格

@@ -20,19 +20,18 @@
       </el-row>
       <el-row>
         <el-col :span="3">
-          <el-text>手机: {{mockGlobal.bizUser.mobile}}</el-text>
+          <el-text>手机: {{ mockGlobal.bizUser.mobile }}</el-text>
         </el-col>
         <el-col :span="3">
-          <el-text>余额: {{mockGlobal.bizUser.money}}</el-text>
+          <el-text>余额: {{ mockGlobal.bizUser.money }}</el-text>
         </el-col>
         <el-col :span="5">
-          <el-text>token: {{mockGlobal.bizToken}}</el-text>
+          <el-text>token: {{ mockGlobal.bizToken }}</el-text>
         </el-col>
       </el-row>
     </el-header>
     <el-main class="mock-main">
-      <el-tabs tab-position="right" model-value="second" >
-
+      <el-tabs tab-position="right" model-value="box">
         <el-tab-pane label="盲盒" name="box">
           <box></box>
         </el-tab-pane>
@@ -66,7 +65,6 @@ import Dream from "@/views/mock/dream.vue";
     height: 150px;
     border: 1px solid var(--el-border-color);
   }
-
   .mock-main {
     height: calc(100vh - 281px);
     border-left: 1px solid var(--el-border-color);

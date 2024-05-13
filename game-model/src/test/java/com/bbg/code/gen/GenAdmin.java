@@ -33,6 +33,7 @@ public class GenAdmin {
             "csgo_battle_room_box",// 房间的箱子
             "csgo_battle_room_user",// 房间的用户
             "csgo_battle_room_good",// 房间获取装备记录
+            "csgo_robot", //机器人
     };
 
     @Test
