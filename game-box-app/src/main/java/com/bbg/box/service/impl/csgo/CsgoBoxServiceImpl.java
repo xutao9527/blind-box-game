@@ -72,7 +72,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
      * 开盲盒
      */
     @Transactional(rollbackFor = Exception.class)
-    @RedisLock(value = "#bizUser.id",key= CacheKey.METHOD_OPEN_BOX_LOCK)
+    @RedisLock(value = "#bizUser.id", key = CacheKey.METHOD_OPEN_BOX_LOCK)
     public BoxDto.OpenBoxRes openBox(BizUser bizUser, Long boxId) {
         BoxDto.OpenBoxRes boxRes = new BoxDto.OpenBoxRes();
         // 使用FairEntity,进行roll点
@@ -126,7 +126,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
      * 进行追梦
      */
     @Transactional(rollbackFor = Exception.class)
-    @RedisLock(value = "#bizUser.id",key= CacheKey.METHOD_DREAM_GOOD_LOCK)
+    @RedisLock(value = "#bizUser.id", key = CacheKey.METHOD_DREAM_GOOD_LOCK)
     public DreamDto.DreamGoodRes dreamGood(BizUser bizUser, DreamDto.DreamGoodReq model) {
         DreamDto.DreamGoodRes dreamGoodRes = new DreamDto.DreamGoodRes();
         CsgoBoxGoods csgoBoxGoods = csgoBoxGoodsService.getById(model.getBoxGoodId());
@@ -146,7 +146,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                 .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
         // 判断是否中奖
         boolean isWinGood = roundNumber < winningRange.intValue();
-        if(isWinGood){
+        if (isWinGood) {
             // 保存背包
             CsgoStorehouse storehouse = new CsgoStorehouse();
             storehouse.setUserId(bizUser.getId())
@@ -162,8 +162,8 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
         capitalRecord.setUserId(bizUser.getId())
                 .setChangeMoney(consumeMoney.negate());    // 扣钱,转为负数
-        //更新用户金额
-        bizUser = bizUserService.updateUserMoney(bizUser,capitalRecord);
+        // 更新用户金额
+        bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
         // 跟新缓存
         redisService.updateUser(bizUser);
         dreamGoodRes.setBizUser(bizUser);
