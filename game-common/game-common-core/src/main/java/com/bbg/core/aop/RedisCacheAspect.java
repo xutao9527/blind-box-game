@@ -1,6 +1,7 @@
 package com.bbg.core.aop;
 
 import com.bbg.core.annotation.RedisCache;
+import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.box.service.RedisService;
 import com.bbg.core.constants.CacheKey;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class RedisCacheAspect {
     RedisService redisService;
 
     @Around("@annotation(redisCache)")
-    public Object aroundRedisLock(ProceedingJoinPoint point, RedisCache redisCache) throws Throwable {
+    public Object aroundRedisCache(ProceedingJoinPoint point, RedisCache redisCache) throws Throwable {
         String keyPrefix = redisCache.key();
         String keyValue = parserSpEL(redisCache.value(), point).toString();
         String cacheKey = CacheKey.build(keyPrefix, keyValue);
@@ -40,6 +41,15 @@ public class RedisCacheAspect {
             }
         }
         return cacheObject;
+    }
+
+    @Around("@annotation(redisClear)")
+    public Object aroundRedisClear(ProceedingJoinPoint point, RedisClear redisClear) throws Throwable {
+        String keyPrefix = redisClear.key();
+        String keyValue = parserSpEL(redisClear.value(), point).toString();
+        String cacheKey = CacheKey.build(keyPrefix, keyValue);
+        redisService.delete(cacheKey);
+        return point.proceed();
     }
 
     public Object parserSpEL(String key, ProceedingJoinPoint point) {
