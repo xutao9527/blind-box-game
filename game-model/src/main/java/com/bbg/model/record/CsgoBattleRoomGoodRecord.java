@@ -4,6 +4,7 @@ import com.bbg.model.base.BaseModel;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 对战房间箱子 实体类。
+ * 对战房间获取装备记录 实体类。
  *
  * @author bbg
  * @since 2024-05-13
@@ -24,9 +25,9 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "对战房间箱子")
-@Table("csgo_battle_room_box")
-public class CsgoBattleRoomBoxRecord extends BaseModel implements Serializable {
+@Schema(description = "对战房间获取装备记录")
+@Table("csgo_battle_room_good")
+public class CsgoBattleRoomGoodRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -45,9 +46,21 @@ public class CsgoBattleRoomBoxRecord extends BaseModel implements Serializable {
     private Long roomId;
 
     /**
-     * 箱子编号
+     * 用户编号
      */
-    @Schema(description = "箱子编号")
-    private Long boxId;
+    @Schema(description = "用户编号")
+    private Long userId;
+
+    /**
+     * 商品编号
+     */
+    @Schema(description = "商品编号")
+    private Long goodId;
+
+    /**
+     * 商品价格
+     */
+    @Schema(description = "商品价格")
+    private BigDecimal goodPrice;
 
 }

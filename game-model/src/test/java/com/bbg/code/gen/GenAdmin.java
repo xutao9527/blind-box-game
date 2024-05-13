@@ -22,16 +22,17 @@ public class GenAdmin {
     };
 
     public static String[] csgoTables = {
-            "csgo_user_info",//用户信息
-            "csgo_config",//游戏配置
-            "csgo_goods",//商品信息
-            "csgo_box",//盲盒
-            "csgo_box_goods",//盲盒商品
-            "csgo_storehouse",//装备仓库
-            "csgo_capital_record",//资金流水
-            "csgo_battle_room",//对战房间
-            "csgo_battle_room_box",//房间的箱子
-            "csgo_battle_room_user",//房间的用户
+            "csgo_user_info",// 用户信息
+            "csgo_config",// 游戏配置
+            "csgo_goods",// 商品信息
+            "csgo_box",// 盲盒
+            "csgo_box_goods",// 盲盒商品
+            "csgo_storehouse",// 装备仓库
+            "csgo_capital_record",// 资金流水
+            "csgo_battle_room",// 对战房间
+            "csgo_battle_room_box",// 房间的箱子
+            "csgo_battle_room_user",// 房间的用户
+            "csgo_battle_room_good",// 房间获取装备记录
     };
 
     @Test
