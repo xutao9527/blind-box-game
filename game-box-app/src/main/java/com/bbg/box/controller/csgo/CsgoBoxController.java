@@ -3,6 +3,7 @@ package com.bbg.box.controller.csgo;
 import com.bbg.box.base.BaseController;
 import com.bbg.box.service.biz.BizDictService;
 import com.bbg.box.service.csgo.CsgoBoxGoodsService;
+import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.DreamDto;
 import com.bbg.model.biz.BizDict;
@@ -68,7 +69,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     @Operation(description = "获得追梦列表")
     public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody DreamDto.DreamListReq model) {
         Page<CsgoBoxGoods> page = null;
-        BizDict bizDict = bizDictService.getMapper().selectOneWithRelationsById(1785914176081506304L);
+        BizDict bizDict = bizDictService.getDictByTag("csgo_box_type");
         BizDictDetail bizDictDetail = bizDict.getBizDictDetails().stream().filter(detail -> detail.getLabel().equals("追梦盲盒")).findFirst().orElse(null);
         if (bizDictDetail != null) {
             QueryWrapper queryWrapper = QueryWrapper.create()

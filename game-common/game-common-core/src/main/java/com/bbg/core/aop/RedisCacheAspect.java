@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @Slf4j
-public class RedisCacheAspect {
+public class RedisCacheAspect extends BaseAspect {
     @Autowired
     RedisService redisService;
 
@@ -37,7 +37,6 @@ public class RedisCacheAspect {
                 }else{
                     redisService.set(cacheKey, cacheObject,redisCache.liveTime(),redisCache.timeUnit());
                 }
-
             }
         }
         return cacheObject;
@@ -52,17 +51,4 @@ public class RedisCacheAspect {
         return point.proceed();
     }
 
-    public Object parserSpEL(String key, ProceedingJoinPoint point) {
-        MethodSignature methodSignature = (MethodSignature) point.getSignature();
-        Expression expression = spelExpressionParser.parseExpression(key);
-        EvaluationContext context = new StandardEvaluationContext();
-        String[] argNames = methodSignature.getParameterNames();
-        Object[] argValues = point.getArgs();
-        for (int i = 0; i < argValues.length; i++) {
-            context.setVariable(argNames[i], argValues[i]);
-        }
-        return expression.getValue(context);
-    }
-
-    private SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
 }

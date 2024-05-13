@@ -9,11 +9,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface RedisClear {
     /**
-     * 缓存键具体值,支持 spring el表达式
+     * 缓存 key 具体值,支持 spring el表达式
      */
     String value() default "";
     /**
-     * 缓存键前缀
+     * 缓存 key 前缀
      */
     String key() default "";
 }

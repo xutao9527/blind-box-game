@@ -3,20 +3,25 @@ package com.bbg.core.aop;
 import cn.hutool.core.lang.Pair;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.service.RedisService;
+import com.bbg.core.constants.CacheKey;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
-
 
 
 @Aspect
 @Component
 @Slf4j
-public class RedisLockAspect {
+public class RedisLockAspect extends BaseAspect {
     @Autowired
     RedisService redisService;
 
@@ -25,7 +30,10 @@ public class RedisLockAspect {
         Object result = null;
         Pair<Boolean, RLock> pair = null;
         try {
-            pair = redisService.tryLock(redisLock);
+            String keyPrefix = redisLock.key();
+            String keyValue = parserSpEL(redisLock.value(), point).toString();
+            String lockKey = CacheKey.build(keyPrefix, keyValue);
+            pair = redisService.tryLock(redisLock, lockKey);
             if (pair.getKey()) {
                 result = point.proceed();
             }
@@ -39,6 +47,4 @@ public class RedisLockAspect {
         }
         return result;
     }
-
-
 }

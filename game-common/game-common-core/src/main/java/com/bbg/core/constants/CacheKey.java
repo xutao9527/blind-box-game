@@ -14,6 +14,14 @@ public class CacheKey {
     // user token
     public final static String USER_INFO_TOKEN = "user::info::token";
 
+
+    // 方法锁  同步数据
+    public final static String METHOD_SYNC_DATA_LOCK = "method::syncData";
+    // 方法锁  开盲盒
+    public final static String METHOD_OPEN_BOX_LOCK = "method::openBox";
+    // 方法锁  追梦
+    public final static String METHOD_DREAM_GOOD_LOCK = "method::dreamGood";
+
     public static String build(String prefix, String key) {
         return "%s::%s".formatted(prefix, key);
     }

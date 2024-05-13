@@ -15,8 +15,8 @@ public class RedisBaseImpl implements RedisBase {
     @Autowired
     private RedissonClient redissonClient;
 
-    public Pair<Boolean, RLock> tryLock(RedisLock redisLock) throws InterruptedException {
-        RLock rLock = redissonClient.getLock(redisLock.value());
+    public Pair<Boolean, RLock> tryLock(RedisLock redisLock,String lockKey) throws InterruptedException {
+        RLock rLock = redissonClient.getLock(lockKey);
         boolean lockRet;
         if (redisLock.leaseFlag()) {
             lockRet = rLock.tryLock(redisLock.waitTime(), redisLock.leaseTime(), redisLock.timeUnit());
@@ -24,11 +24,6 @@ public class RedisBaseImpl implements RedisBase {
             lockRet = rLock.tryLock(redisLock.waitTime(), redisLock.timeUnit());
         }
         return new Pair<>(lockRet, rLock);
-    }
-
-    public Pair<Boolean, RLock> tryLock(String lock, long waitTime, TimeUnit unit) throws InterruptedException {
-        RLock rLock = redissonClient.getLock(lock);
-        return new Pair<>(rLock.tryLock(waitTime, unit), rLock);
     }
 
     public void unLock(RLock rLock) {
@@ -41,8 +36,8 @@ public class RedisBaseImpl implements RedisBase {
         return redisTemplate.opsForValue().get(key);
     }
 
-    public Boolean expire(String key, Long liveTime, TimeUnit unit) {
-        return redisTemplate.expire(key, liveTime, unit);
+    public void expire(String key, Long liveTime, TimeUnit unit) {
+        redisTemplate.expire(key, liveTime, unit);
     }
 
     public void set(String key, Object value){
