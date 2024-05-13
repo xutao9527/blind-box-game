@@ -13,7 +13,7 @@ public class BattleRoomDto {
     @Data
     @Accessors(chain = true)
     @Schema(description = "获得对战房间列表")
-    public static class BattleRoomReq implements Serializable {
+    public static class GetRoomListReq implements Serializable {
         @Schema(description = "页数")
         private Number pageNumber;
         @Schema(description = "页大小")
@@ -25,7 +25,7 @@ public class BattleRoomDto {
     @Data
     @Accessors(chain = true)
     @Schema(description = "获得对战房间结果")
-    public static class BattleRoomRes implements Serializable {
+    public static class GetRoomListRes implements Serializable {
         @Schema(description = "房间列表")
         private Page<CsgoBattleRoom> csgoBattleRoomPage;
     }
@@ -33,7 +33,7 @@ public class BattleRoomDto {
     @Data
     @Accessors(chain = true)
     @Schema(description = "创建对战房间")
-    public static class createBattleRoomReq implements Serializable {
+    public static class CreateRoomReq implements Serializable {
         @Schema(description = "对战模式")
         private String battleModel;
         @Schema(description = "房间人数")
@@ -47,7 +47,7 @@ public class BattleRoomDto {
     @Data
     @Accessors(chain = true)
     @Schema(description = "创建对战房间结果")
-    public static class createBattleRoomRes implements Serializable {
+    public static class CreateRoomRes implements Serializable {
         @Schema(description = "对战房间信息")
         private CsgoBattleRoom csgoBattleRoom;
     }
@@ -55,7 +55,7 @@ public class BattleRoomDto {
     @Data
     @Accessors(chain = true)
     @Schema(description = "获得对战房间")
-    public static class GetBattleRoomReq implements Serializable {
+    public static class GetRoomReq implements Serializable {
         @Schema(description = "对战房间编号")
         private long roomId;
     }
@@ -63,7 +63,7 @@ public class BattleRoomDto {
     @Data
     @Accessors(chain = true)
     @Schema(description = "获得对战房间结果")
-    public static class GetBattleRoomRes implements Serializable {
+    public static class GetRoomRes implements Serializable {
         @Schema(description = "对战房间信息")
         private CsgoBattleRoom csgoBattleRoom;
     }

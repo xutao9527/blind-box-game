@@ -1,6 +1,10 @@
 package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
+import com.bbg.core.annotation.RedisLock;
+import com.bbg.core.box.dto.BattleRoomDto;
+import com.bbg.core.box.dto.BoxDto;
+import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBattleRoom;
 import com.bbg.box.service.csgo.CsgoBattleRoomService;
 import com.bbg.core.entity.ApiRet;
@@ -32,5 +36,27 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
     @Autowired
     protected  CsgoBattleRoomService csgoBattleRoomService;
 
+    @PostMapping("create")
+    @Operation(description = "创建对战房间")
+    public ApiRet<BattleRoomDto.CreateRoomRes> create(@RequestBody BattleRoomDto.CreateRoomReq model){
+        BizUser bizUser = getCurrentUser();
+        BattleRoomDto.CreateRoomRes  createBattleRoomRes = new BattleRoomDto.CreateRoomRes();
+        return ApiRet.buildOk(createBattleRoomRes);
+    }
 
+    @PostMapping("getInfo")
+    @Operation(description = "获得对战房间")
+    public ApiRet<BattleRoomDto.GetRoomRes> getInfo(@RequestBody BattleRoomDto.GetRoomReq model){
+        BizUser bizUser = getCurrentUser();
+        BattleRoomDto.GetRoomRes  createBattleRoomRes = new BattleRoomDto.GetRoomRes();
+        return ApiRet.buildOk(createBattleRoomRes);
+    }
+
+    @PostMapping("getRooms")
+    @Operation(description = "获取对战房间列表")
+    public ApiRet<BattleRoomDto.GetRoomRes> getRooms(@RequestBody BattleRoomDto.GetRoomRes model){
+        BizUser bizUser = getCurrentUser();
+        BattleRoomDto.GetRoomRes  createBattleRoomRes = new BattleRoomDto.GetRoomRes();
+        return ApiRet.buildOk(createBattleRoomRes);
+    }
 }
