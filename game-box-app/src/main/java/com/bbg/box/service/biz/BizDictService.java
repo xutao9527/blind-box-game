@@ -10,5 +10,5 @@ import com.bbg.model.biz.BizDict;
  * @since 2024-05-03
  */
 public interface BizDictService extends IService<BizDict> {
-
+    BizDict getDictByTag(String tag);
 }
