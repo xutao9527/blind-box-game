@@ -54,7 +54,7 @@ const handleChange = (value) => {
 }
 
 const getLabel = (value)=>{
-  const foundElement = bizDictDetail.value.find(obj => obj.value === value)
+  const foundElement = bizDictDetails.value.find(obj => obj.value === value)
   if(foundElement){
     return foundElement.label
   }else{
