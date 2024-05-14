@@ -82,13 +82,13 @@ const enableButtonType = computed(() => {
 
 const sumRate = computed(() => {
   if (props.rowOjb.type === '1' || props.rowOjb.type === '2') {
-    return '(' + tableProps.apiRet.data.reduce((accumulator, currentObject) => {
+    return +tableProps.apiRet.data.reduce((accumulator, currentObject) => {
       if (currentObject.enable) {
         return accumulator + currentObject.rate;
       } else {
         return accumulator
       }
-    }, 0) + ')';
+    }, 0);
   } else {
     return ''
   }
@@ -107,6 +107,7 @@ const enableBox = async () => {
     }
   } else {
     if (props.rowOjb.type === '1' || props.rowOjb.type === '2') {
+      console.log(sumRate.value)
       if (sumRate.value === 100) {
         data.enable = true;
         props.rowOjb.enable = true;
