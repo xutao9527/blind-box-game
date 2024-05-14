@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,7 +53,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
 
     @PostMapping("list")
     @Operation(description = "获得盲盒列表")
-    public ApiRet<BoxDto.GetBoxRes> list(@RequestBody BoxDto.GetBoxReq model) {
+    public ApiRet<BoxDto.GetBoxRes> list(@RequestBody @Validated BoxDto.GetBoxReq model) {
         List<CsgoBox> csgoBoxes = csgoBoxService.getBoxesByType(model.getType());
         return ApiRet.buildOk(new BoxDto.GetBoxRes().setCsgoBoxes(csgoBoxes));
     }
@@ -67,7 +68,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
 
     @PostMapping("dreamList")
     @Operation(description = "获得追梦商品列表")
-    public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody DreamDto.DreamListReq model) {
+    public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody  DreamDto.DreamListReq model) {
         Page<CsgoBoxGoods> page = null;
         BizDict bizDict = bizDictService.getDictByTag("csgo_box_type");
         BizDictDetail bizDictDetail = bizDict.getBizDictDetails().stream().filter(detail -> detail.getLabel().equals("追梦盲盒")).findFirst().orElse(null);

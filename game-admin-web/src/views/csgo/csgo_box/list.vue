@@ -30,6 +30,7 @@
                   :data="tableProps.apiRet.data.records"
                   :height="tableDynamicHeight"
                   table-layout="auto"
+                  @sortChange="tableProps.sortChange"
                   border show-overflow-tooltip>
           <el-table-column type="expand" label="#">
             <template #default="props">
@@ -40,7 +41,7 @@
         <el-table-column prop="name" label="箱子名称"/>
         <el-table-column prop="nameAlias" label="箱子别名"/>
         <el-table-column prop="imageUrl" label="图片地址"/>
-        <el-table-column prop="type" label="箱子类型">
+        <el-table-column prop="type" label="箱子类型"  sortable="custom">
           <template #default="scope">
             {{dictTypeRef.getLabel(scope.row.type)}}
           </template>
@@ -156,6 +157,17 @@ const tableProps = reactive({
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
+  },
+  sortChange: async (column)=>{
+    console.log(column)
+    if(column.order === "descending"){
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
+    }else if(column.order === "ascending"){
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'ascending'}
+    }else{
+      delete tableProps.reqParams.queryEntity.expandProps.orderField;
+    }
+    await tableProps.fetchData()
   }
 });
 

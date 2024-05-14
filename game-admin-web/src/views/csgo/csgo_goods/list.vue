@@ -154,7 +154,7 @@ const tableProps = reactive({
     }else{
       delete tableProps.reqParams.queryEntity.expandProps.orderField;
     }
-    tableProps.fetchData()
+    await tableProps.fetchData()
   }
 });
 
