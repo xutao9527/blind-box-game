@@ -71,7 +71,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody  DreamDto.DreamListReq model) {
         Page<CsgoBoxGoods> page = null;
         BizDict bizDict = bizDictService.getDictByTag("csgo_box_type");
-        BizDictDetail bizDictDetail = bizDict.getBizDictDetails().stream().filter(detail -> detail.getLabel().equals("追梦盲盒")).findFirst().orElse(null);
+        BizDictDetail bizDictDetail = bizDict.getBizDictDetails().stream().filter(detail -> detail.getLabelAlias().equals("dream_box")).findFirst().orElse(null);
         if (bizDictDetail != null) {
             QueryWrapper queryWrapper = QueryWrapper.create()
                     .from(CsgoBoxGoods.class)

@@ -1,10 +1,30 @@
 package com.bbg.box.service.impl.csgo;
 
+import cn.hutool.core.lang.Pair;
+import cn.hutool.core.util.IdUtil;
+import com.bbg.box.service.biz.BizDictService;
+import com.bbg.box.service.csgo.*;
+import com.bbg.core.annotation.RedisLock;
+import com.bbg.core.box.dto.BattleRoomDto;
+import com.bbg.core.constants.KeyConst;
+import com.bbg.core.constants.ServicesConst;
+import com.bbg.core.entity.ApiRet;
+import com.bbg.core.utils.FairFactory;
+import com.bbg.model.biz.BizDict;
+import com.bbg.model.biz.BizUser;
+import com.bbg.model.csgo.*;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import com.bbg.model.csgo.CsgoBattleRoom;
 import com.bbg.box.mapper.csgo.CsgoBattleRoomMapper;
-import com.bbg.box.service.csgo.CsgoBattleRoomService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * 对战房间 服务层实现。
@@ -13,6 +33,205 @@ import org.springframework.stereotype.Service;
  * @since 2024-05-13
  */
 @Service
+@Slf4j
 public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper, CsgoBattleRoom> implements CsgoBattleRoomService {
+    @Autowired
+    CsgoBoxService csgoBoxService;
+    @Autowired
+    BizDictService bizDictService;
+    @Autowired
+    CsgoRobotService csgoRobotService;
+    @Autowired
+    CsgoBattleRoomUserService csgoBattleRoomUserService;
+    @Autowired
+    CsgoBattleRoomBoxService csgoBattleRoomBoxService;
+    @Autowired
+    CsgoBattleRoomGoodService csgoBattleRoomGoodService;
 
+    /**
+     * 创建对战房间
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @RedisLock(value = "#bizUser.id", key = KeyConst.METHOD_CREATE_ROOM_LOCK)
+    public ApiRet<BattleRoomDto.CreateRoomRes> createRoom(BizUser bizUser, BattleRoomDto.CreateRoomReq createRoomReq) {
+        BattleRoomDto.CreateRoomRes createRoomRes = new BattleRoomDto.CreateRoomRes();      // 返回结果
+        List<CsgoRobot> robotList = null;                                                   // 机器人
+        Long roomId = IdUtil.getSnowflake(ServicesConst.BOX_APP.ordinal()).nextId();        // 房间编号
+        BigDecimal roomPrice = BigDecimal.ZERO;                                             // 房间价格
+        // --------------------------------------检查s--------------------------------------
+        // 箱子检查
+        BizDict boxTypeDict = bizDictService.getDictByTag("csgo_box_type");
+        Map<Long, CsgoBox> allBoxMap = csgoBoxService.getBoxesByType(boxTypeDict.getValueByAlias("battle_box"))
+                .stream().collect(Collectors.toMap(CsgoBox::getId, csgoBox -> csgoBox));
+        List<CsgoBox> boxList = Arrays.stream(createRoomReq.getBoxesId())
+                .mapToObj(allBoxMap::get)
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparing(CsgoBox::getId))
+                .toList();
+        if (boxList.isEmpty()) {
+            return ApiRet.buildNo("缺少箱子");
+        }
+        // 余额检查
+        roomPrice = boxList.stream().map(CsgoBox::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (bizUser.getMoney().compareTo(roomPrice) < 0) {
+            return ApiRet.buildNo("金额不够");
+        }
+        // 机器人设置
+        if (createRoomReq.getBoxesId().length > 0) {
+            Map<Long, CsgoRobot> allRobotMap = csgoRobotService.list()
+                    .stream().collect(Collectors.toMap(CsgoRobot::getId, csgoRobot -> csgoRobot));
+            robotList = Arrays.stream(createRoomReq.getRobotsId())
+                    .mapToObj(allRobotMap::get)
+                    .filter(Objects::nonNull)
+                    .limit(createRoomReq.getPeopleNumber() - 1)
+                    .toList();
+        }
+        // --------------------------------------检查e--------------------------------------
+        // --------------------------------------设置数据s--------------------------------------
+        BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");
+        FairFactory.FairEntity fairEntity = FairFactory.build();
+        // 房间
+        CsgoBattleRoom battleRoom = new CsgoBattleRoom();
+        battleRoom.setId(roomId)
+                .setCreateUserId(bizUser.getId())
+                .setBattleModel(createRoomReq.getBattleModel())
+                .setPeopleNumber(createRoomReq.getPeopleNumber())
+                .setRoomPrice(roomPrice)
+                .setStatus(battleStatusDict.getValueByAlias("battle_wait"))                 // 房间状态(等待玩家)
+                .setSecretHash(fairEntity.getSecretHash())
+                .setSecretSalt(fairEntity.getSecretSalt())
+                .setPublicHash(fairEntity.getPublicHash())
+                .setClientSeed(fairEntity.getClientSeed());
+        // 房间关联的箱子
+        boxList.forEach(box -> {
+            CsgoBattleRoomBox roomBox = new CsgoBattleRoomBox();
+            roomBox.setBoxId(box.getId()).setRoomId(roomId).setName(box.getName()).setNameAlias(box.getNameAlias()).setImageUrl(box.getImageUrl());
+            battleRoom.getRoomBoxes().add(roomBox);                                         // 添加参战箱子
+        });
+        // 房间关联的用户
+        CsgoBattleRoomUser createUser = new CsgoBattleRoomUser();
+        createUser.setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
+        battleRoom.getRoomUsers().add(createUser);                                          // 添加参战用户(创建人)
+        if (null != robotList && !robotList.isEmpty()) {
+            BizDict userTypeDict = bizDictService.getDictByTag("user_type");
+            robotList.forEach(robot -> {
+                CsgoBattleRoomUser roomUser = new CsgoBattleRoomUser();
+                roomUser.setRoomId(roomId).setUserId(robot.getId()).setUserType(userTypeDict.getValueByAlias("robot")).setNickName(robot.getName()).setImageUrl(robot.getImageUrl());
+                battleRoom.getRoomUsers().add(roomUser);                                    // 添加参战用户(机器人)
+            });
+        }
+        // 人满,计算对战奖励
+        if (battleRoom.getPeopleNumber() == battleRoom.getRoomUsers().size()) {
+            if (!this.runBattle(battleRoom)) {
+                return ApiRet.buildNo("对战计算异常");
+            }
+        }
+        createRoomRes.setCsgoBattleRoom(battleRoom);
+        // --------------------------------------设置数据e--------------------------------------
+        // this.save(battleRoom);
+        // csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
+        // csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
+        // csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
+        return ApiRet.buildOk(createRoomRes);
+    }
+
+    /**
+     * 对战的具体逻辑
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean runBattle(CsgoBattleRoom csgoBattleRoom) {
+        AtomicInteger round = new AtomicInteger(0);
+        FairFactory.FairEntity fairEntity = FairFactory.build(csgoBattleRoom);
+        List<CsgoBattleRoomGood> roomGoods = new ArrayList<>();
+        csgoBattleRoom.getRoomBoxes().forEach(box -> {
+            csgoBattleRoom.getRoomUsers().forEach(user -> {
+                CsgoBox csgoBox = csgoBoxService.getBoxById(box.getBoxId());
+                int roundNumber = fairEntity.roll(round.getAndIncrement());
+                CsgoBoxGoods luckGood = csgoBox.getCsgoBoxGoods().stream()
+                        .filter(boxGood -> boxGood.getStartRoundNumber().compareTo(BigDecimal.valueOf(roundNumber)) <= 0
+                                && boxGood.getEndRoundNumber().compareTo(BigDecimal.valueOf(roundNumber)) >= 0)
+                        .findFirst().orElse(null);
+                if (luckGood != null) {
+                    CsgoBattleRoomGood roomGood = new CsgoBattleRoomGood();
+                    roomGood.setRoomId(csgoBattleRoom.getId())
+                            .setRollUserId(user.getUserId())
+                            .setRound(round.get())
+                            .setRoundNumber(roundNumber)
+                            .setBoxId(box.getBoxId())
+                            .setGoodId(luckGood.getGoodId())
+                            .setGoodPrice(luckGood.getPrice())
+                            .setGoodImage(luckGood.getImageUrl()).setName(luckGood.getName())
+                            .setNameAlias(luckGood.getNameAlias());
+                    roomGoods.add(roomGood);
+                    System.out.printf("user:%s round:%s roundNumber:%s boxId:%s good:%s%n",
+                            user.getUserId(), round.get(), roundNumber, box.getBoxId(), luckGood.getGoodId());
+                }
+            });
+        });
+        // 中奖结果根据 uid 分组
+        Map<Long, List<CsgoBattleRoomGood>> roomGoodMap = roomGoods.stream().collect(Collectors.groupingBy(CsgoBattleRoomGood::getRollUserId));
+        // 统计每个用户的中奖总额
+        List<Pair<Long, BigDecimal>> userSumMoneyList = roomGoodMap.keySet().stream().map(uid -> {                  // 所有用户列表
+            BigDecimal sumGoodPrice = roomGoodMap.get(uid).stream().map(CsgoBattleRoomGood::getGoodPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+            return new Pair<>(uid, sumGoodPrice);
+        }).toList();
+        Pair<Long, BigDecimal> winUser;                                                                             // 赢的用户
+        List<Pair<Long, BigDecimal>> winUserList;                                                                   // 赢的用户列表
+        BizDict battleModelDict = bizDictService.getDictByTag("csgo_battle_model");
+        if (battleModelDict.getValueByAlias("max_price_model").equals(csgoBattleRoom.getBattleModel())) {           // 欧皇模式赢家
+            winUser = userSumMoneyList.stream().max(Comparator.comparing(Pair::getValue)).orElse(null);
+        } else if (battleModelDict.getValueByAlias("min_price_model").equals(csgoBattleRoom.getBattleModel())) {    // 非酋模式赢家
+            winUser = userSumMoneyList.stream().min(Comparator.comparing(Pair::getValue)).orElse(null);
+        } else {
+            return false;
+        }
+        winUserList = userSumMoneyList.stream().filter(
+                u -> u.getValue().compareTo(winUser.getValue()) == 0 && u.getKey().longValue() != winUser.getKey().longValue()
+        ).collect(Collectors.toList());
+        winUserList.add(winUser);
+        if (winUserList.size() == 1) {                                                                  // 玩家独赢
+            roomGoods.forEach(roomGood -> roomGood.setLuckUserId(winUserList.get(0).getKey()));         // 变更所有装备给赢家
+            csgoBattleRoom.getRoomUsers().forEach(u -> {
+                u.setIsWin(u.getUserId().equals(winUserList.get(0).getKey()));                          // 设置赢家(一个)
+            });
+        } else if (winUserList.size() == csgoBattleRoom.getPeopleNumber()) {                            // 玩家全赢
+            roomGoods.forEach(roomGood -> roomGood.setLuckUserId(roomGood.getRollUserId()));            // 变更所有装备给赢家(自己拿自己的)
+            csgoBattleRoom.getRoomUsers().forEach(roomUser -> roomUser.setIsWin(true));                 // 设置赢家(所有)
+        } else {                                                                                        // 超过一个赢家
+            roomGoods.forEach(roomGood -> {
+                if (winUserList.stream().anyMatch(u -> u.getKey().equals(roomGood.getRollUserId()))) {
+                    roomGood.setLuckUserId(roomGood.getRollUserId());                                   // 变更所有装备给赢家(自己拿自己的)
+                    csgoBattleRoom.getRoomUsers().forEach(u -> {
+                        if (roomGood.getRollUserId().equals(u.getUserId())) {
+                            u.setIsWin(true);                                                           // 设置赢家(部分)
+                        }
+                    });
+                }
+            });
+            // 输的用户列表
+            List<Pair<Long, BigDecimal>> loseUserList = userSumMoneyList.stream().filter(p -> winUserList.stream().noneMatch(w -> w.getKey().equals(p.getKey()))).toList();
+            // 输的装备总值
+            BigDecimal loseSumMoney = loseUserList.stream().map(Pair::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+            // 输的装备总值,构建福利饰品赠送给赢家
+            BizDict boxTypeDict = bizDictService.getDictByTag("csgo_box_type");
+            CsgoBox luckyBagBox = csgoBoxService.getBoxesByType(boxTypeDict.getValueByAlias("lucky_bag")).stream().findFirst().orElse(null);
+            if (luckyBagBox != null && !luckyBagBox.getCsgoBoxGoods().isEmpty()) {
+                winUserList.forEach(p -> {
+                    CsgoBattleRoomGood roomGood = new CsgoBattleRoomGood();
+                    roomGood.setRoomId(csgoBattleRoom.getId())
+                            .setLuckUserId(p.getKey())                                                  // 分福利饰品给赢家
+                            .setGoodId(luckyBagBox.getCsgoBoxGoods().get(0).getGoodId())
+                            .setGoodPrice(loseSumMoney.divide(BigDecimal.valueOf(winUserList.size()), RoundingMode.HALF_UP))
+                            .setGoodImage(luckyBagBox.getCsgoBoxGoods().get(0).getImageUrl())
+                            .setName(luckyBagBox.getCsgoBoxGoods().get(0).getName())
+                            .setNameAlias(luckyBagBox.getCsgoBoxGoods().get(0).getNameAlias());
+                    roomGoods.add(roomGood);
+                });
+            }
+        }
+        csgoBattleRoom.setRoomGoods(roomGoods);
+        BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");
+        csgoBattleRoom.setStatus(battleStatusDict.getValueByAlias("battle_end"));                       // 房间状态(对战结束)
+        return true;
+    }
 }

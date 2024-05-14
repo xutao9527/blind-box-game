@@ -24,4 +24,8 @@ public class ApiRet<T> implements Serializable {
     public static <T> ApiRet<T> buildNo(T data,String msg){
         return new ApiRet<T>().setData(data).setOk(false).setMsg(msg);
     }
+
+    public static <T> ApiRet<T> buildNo(String msg){
+        return new ApiRet<T>().setOk(false).setMsg(msg);
+    }
 }

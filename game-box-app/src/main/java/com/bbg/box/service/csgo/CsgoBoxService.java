@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface CsgoBoxService extends IService<CsgoBox> {
 
-    CsgoBox getBoxesById(Long id);
+    CsgoBox getBoxById(Long id);
 
     List<CsgoBox> getBoxesByType(String type);
 

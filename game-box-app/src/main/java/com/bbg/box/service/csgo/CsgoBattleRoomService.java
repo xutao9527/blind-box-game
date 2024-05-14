@@ -1,5 +1,8 @@
 package com.bbg.box.service.csgo;
 
+import com.bbg.core.box.dto.BattleRoomDto;
+import com.bbg.core.entity.ApiRet;
+import com.bbg.model.biz.BizUser;
 import com.mybatisflex.core.service.IService;
 import com.bbg.model.csgo.CsgoBattleRoom;
 
@@ -10,5 +13,5 @@ import com.bbg.model.csgo.CsgoBattleRoom;
  * @since 2024-05-13
  */
 public interface CsgoBattleRoomService extends IService<CsgoBattleRoom> {
-
+    ApiRet<BattleRoomDto.CreateRoomRes> createRoom(BizUser bizuser, BattleRoomDto.CreateRoomReq createRoomReq);
 }

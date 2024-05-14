@@ -13,6 +13,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
 
+    public final long userLiveTime = 60 * 60 * 24;
+    public final long adminLiveTime = 60 * 60 * 24;
+
     public String adminLogin(SysUser user) {
         String adminUserId = KeyConst.build(KeyConst.ADMIN_TOKEN_UID, user.getId().toString());
         String newToken = UUID.randomUUID().toString();
@@ -21,8 +24,8 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
         if (oldToken != null) {
             delete(oldToken);
         }
-        set(adminUserId, adminUserToken, 3600L + 3, TimeUnit.SECONDS);
-        set(adminUserToken, user, 3600L, TimeUnit.SECONDS);
+        set(adminUserId, adminUserToken, adminLiveTime + 3, TimeUnit.SECONDS);
+        set(adminUserToken, user, adminLiveTime, TimeUnit.SECONDS);
         return newToken;
     }
 
@@ -44,8 +47,8 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
         SysUser sysUser = getAdmin(token);
         if (sysUser != null) {
             String adminUserId = KeyConst.build(KeyConst.ADMIN_TOKEN_UID, sysUser.getId().toString());
-            expire(adminUserId, 3600L + 3, TimeUnit.SECONDS);
-            expire(adminUserToken, 3600L, TimeUnit.SECONDS);
+            expire(adminUserId, adminLiveTime + 3, TimeUnit.SECONDS);
+            expire(adminUserToken, adminLiveTime, TimeUnit.SECONDS);
         }
     }
 
@@ -57,8 +60,8 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
         if (oldToken != null) {
             delete(oldToken);
         }
-        set(userId, userToken, 3600L + 3, TimeUnit.SECONDS);
-        set(userToken, user, 3600L, TimeUnit.SECONDS);
+        set(userId, userToken, userLiveTime + 3, TimeUnit.SECONDS);
+        set(userToken, user, userLiveTime, TimeUnit.SECONDS);
         return newToken;
     }
 
@@ -80,8 +83,8 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
         BizUser bizUser = getUser(token);
         if (bizUser != null) {
             String userId = KeyConst.build(KeyConst.USER_TOKEN_UID, bizUser.getId().toString());
-            expire(userId, 3600L + 3, TimeUnit.SECONDS);
-            expire(userToken, 3600L, TimeUnit.SECONDS);
+            expire(userId, userLiveTime + 3, TimeUnit.SECONDS);
+            expire(userToken, userLiveTime, TimeUnit.SECONDS);
         }
     }
 
@@ -89,8 +92,8 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
         String userId = KeyConst.build(KeyConst.USER_TOKEN_UID, user.getId().toString());
         String oldToken = (String) get(userId);
         if (oldToken != null) {
-            set(userId, oldToken, 3600L + 3, TimeUnit.SECONDS);
-            set(oldToken, user, 3600L, TimeUnit.SECONDS);
+            set(userId, oldToken, userLiveTime + 3, TimeUnit.SECONDS);
+            set(oldToken, user, userLiveTime, TimeUnit.SECONDS);
         }
     }
 }

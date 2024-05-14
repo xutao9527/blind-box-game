@@ -33,8 +33,8 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
     @Operation(description = "创建对战房间")
     public ApiRet<BattleRoomDto.CreateRoomRes> create(@Validated @RequestBody BattleRoomDto.CreateRoomReq model){
         BizUser bizUser = getCurrentUser();
-        BattleRoomDto.CreateRoomRes  createBattleRoomRes = new BattleRoomDto.CreateRoomRes();
-        return ApiRet.buildOk(createBattleRoomRes);
+        ApiRet<BattleRoomDto.CreateRoomRes>   apiRet = csgoBattleRoomService.createRoom(bizUser,model);
+        return apiRet;
     }
 
     @PostMapping("getInfo")

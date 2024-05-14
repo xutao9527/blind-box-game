@@ -15,17 +15,17 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 对战房间获取装备记录 实体类。
+ * 对战奖励装备记录 实体类。
  *
  * @author bbg
- * @since 2024-05-13
+ * @since 2024-05-14
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "对战房间获取装备记录")
+@Schema(description = "对战奖励装备记录")
 @Table("csgo_battle_room_good")
 public class CsgoBattleRoomGoodRecord extends BaseModel implements Serializable {
 
@@ -46,10 +46,34 @@ public class CsgoBattleRoomGoodRecord extends BaseModel implements Serializable 
     private Long roomId;
 
     /**
-     * 用户编号
+     * Roll用户
      */
-    @Schema(description = "用户编号")
-    private Long userId;
+    @Schema(description = "Roll用户")
+    private Long rollUserId;
+
+    /**
+     * 装备归属用户
+     */
+    @Schema(description = "装备归属用户")
+    private Long luckUserId;
+
+    /**
+     * Roll回合
+     */
+    @Schema(description = "Roll回合")
+    private Integer round;
+
+    /**
+     * Roll回合点数
+     */
+    @Schema(description = "Roll回合点数")
+    private Integer roundNumber;
+
+    /**
+     * Roll盲盒编号
+     */
+    @Schema(description = "Roll盲盒编号")
+    private Long boxId;
 
     /**
      * 商品编号
@@ -58,9 +82,27 @@ public class CsgoBattleRoomGoodRecord extends BaseModel implements Serializable 
     private Long goodId;
 
     /**
+     * 商品名称
+     */
+    @Schema(description = "商品名称")
+    private String name;
+
+    /**
+     * 商品别名
+     */
+    @Schema(description = "商品别名")
+    private String nameAlias;
+
+    /**
      * 商品价格
      */
     @Schema(description = "商品价格")
     private BigDecimal goodPrice;
+
+    /**
+     * 商品图片
+     */
+    @Schema(description = "商品图片")
+    private String goodImage;
 
 }

@@ -6,6 +6,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.HmacAlgorithm;
 import com.bbg.model.biz.BizUser;
+import com.bbg.model.csgo.CsgoBattleRoom;
 import lombok.Builder;
 import lombok.Data;
 import java.nio.charset.StandardCharsets;
@@ -28,14 +29,23 @@ public class FairFactory {
      * 生产公平性密钥对象
      */
     public static FairEntity build(BizUser bizUser) {
-        FairFactory.FairEntity fairEntity = FairFactory.FairEntity.builder()
+        return FairEntity.builder()
                 .clientSeed(bizUser.getCsgoUserInfo().getClientSeed())
                 .publicHash(bizUser.getCsgoUserInfo().getPublicHash())
                 .secretSalt(bizUser.getCsgoUserInfo().getSecretSalt())
                 .secretHash(bizUser.getCsgoUserInfo().getSecretHash()).build();
-        return fairEntity;
     }
 
+    /**
+     * 生产公平性密钥对象
+     */
+    public static FairEntity build(CsgoBattleRoom csgoBattleRoom) {
+        return FairEntity.builder()
+                .clientSeed(csgoBattleRoom.getClientSeed())
+                .publicHash(csgoBattleRoom.getPublicHash())
+                .secretSalt(csgoBattleRoom.getSecretSalt())
+                .secretHash(csgoBattleRoom.getSecretHash()).build();
+    }
 
     /**
      * 辅助方法：拼接两个字节数组
