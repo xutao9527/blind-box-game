@@ -137,13 +137,13 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         // --------------------------------------设置数据e--------------------------------------
         // --------------------------------------保存数据s--------------------------------------
         // 构造流水记录
-        CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
-        capitalRecord.setUserId(bizUser.getId())
+        CsgoCapitalRecord userCapitalRecord = new CsgoCapitalRecord();
+        userCapitalRecord.setUserId(bizUser.getId())
                 .setSourceId(battleRoom.getId().toString())
                 .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("battle"))  // 流水类型
                 .setChangeMoney(battleRoom.getRoomPrice().negate());    // 扣钱,转为负数
         // 更新用户金额
-        bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
+        bizUser = bizUserService.updateUserMoney(bizUser, userCapitalRecord);
         battleRoomRes.setBizUser(bizUser);
         // 判断房间状态等于[对战结束],进行 [对战结果保存] 和 [装备派发]
         if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
