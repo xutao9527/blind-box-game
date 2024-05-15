@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
+
 /**
  * 业务用户 服务层实现。
  *
@@ -27,6 +29,11 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
 
     @Autowired
     CsgoCapitalRecordService csgoCapitalRecordService;
+
+    @Override
+    public BizUser getById(Serializable id) {
+        return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsById(id));
+    }
 
     public BizUser getOneByMobile(String mobile) {
         QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setMobile(mobile));

@@ -47,8 +47,8 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
         return csgoBattleRoomService.joinRoom(bizUser, roomId);
     }
 
-    @GetMapping("join")
-    @Operation(description = "用户id加入对战房间(测试)")
+    @GetMapping("joinByUserId")
+    @Operation(description = "加入对战房间(用户Id-测试)")
     public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId") Long roomId, @NotNull @RequestParam("userId") Long userId) {
         BizUser bizUser = bizUserService.getById(userId);
         if (bizUser != null) {

@@ -179,10 +179,15 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         if (bizUser.getMoney().compareTo(battleRoom.getRoomPrice()) < 0) {
             return ApiRet.buildNo("金额不够");
         }
-        // --------------------------------------检查s--------------------------------------
-        // --------------------------------------设置数据s--------------------------------------
         battleRoom.setRoomBoxes(csgoBattleRoomBoxService.list(QueryWrapper.create(new CsgoBattleRoomBox().setRoomId(roomId))));
         battleRoom.setRoomUsers(csgoBattleRoomUserService.list(QueryWrapper.create(new CsgoBattleRoomUser().setRoomId(roomId))));
+        // 已加入检查检查
+        Long userId = bizUser.getId();
+        if (battleRoom.getRoomUsers().stream().anyMatch(roomUser -> roomUser.getUserId().equals(userId))) {
+            return ApiRet.buildNo("用户已加入房间");
+        }
+        // --------------------------------------检查s--------------------------------------
+        // --------------------------------------设置数据s--------------------------------------
         // 添加新加入房间的用户
         CsgoBattleRoomUser roomUser = new CsgoBattleRoomUser();
         roomUser.setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
@@ -206,11 +211,11 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         battleRoomRes.setBizUser(bizUser);
         // 判断房间状态等于[对战结束],进行 [对战结果保存] 和 [装备派发]
         if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
-            csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
-            dispatchBattleGoods(battleRoom);
+            csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());                     // 保存房间中奖商品
+            dispatchBattleGoods(battleRoom);                                                            // 发放商品
+            this.saveOrUpdate(battleRoom);                                                              // 更新房间状态
         }
-        this.save(battleRoom);
-        csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
+        csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());                         // 更新用户
         // --------------------------------------保存数据e--------------------------------------
         return ApiRet.buildOk(battleRoomRes);
     }
