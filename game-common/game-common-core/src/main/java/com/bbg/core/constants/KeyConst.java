@@ -27,7 +27,9 @@ public class KeyConst {
     // 方法锁  追梦
     public final static String METHOD_DREAM_GOOD_LOCK = "method::dreamGood";
     // 方法锁  创建房间
-    public final static String METHOD_CREATE_ROOM_LOCK = "method::CreateRoom";
+    public final static String METHOD_CREATE_ROOM_LOCK = "method::createRoom::userId";
+    // 方法锁  创建房间
+    public final static String METHOD_JOIN_ROOM_LOCK = "method::joinRoom::roomId";
 
     public static String build(String prefix, String key) {
         return "%s::%s".formatted(prefix, key);

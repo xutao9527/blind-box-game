@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.bbg.box.service.biz.BizDictService;
 import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.*;
+import com.bbg.box.utils.IdTool;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BattleRoomDto;
 import com.bbg.core.constants.KeyConst;
@@ -14,6 +15,7 @@ import com.bbg.core.utils.FairFactory;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.*;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.box.mapper.csgo.CsgoBattleRoomMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper, CsgoBattleRoom> implements CsgoBattleRoomService {
+
     @Autowired
     CsgoBoxService csgoBoxService;
     @Autowired
@@ -59,9 +62,9 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     @Transactional(rollbackFor = Exception.class)
     @RedisLock(value = "#bizUser.id", key = KeyConst.METHOD_CREATE_ROOM_LOCK)
     public ApiRet<BattleRoomDto.BattleRoomRes> createRoom(BizUser bizUser, BattleRoomDto.CreateRoomReq createRoomReq) {
-        BattleRoomDto.BattleRoomRes createRoomRes = new BattleRoomDto.BattleRoomRes();      // 返回结果
+        BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();      // 返回结果
         List<CsgoRobot> robotList = null;                                                   // 机器人
-        Long roomId = IdUtil.getSnowflake(ServicesConst.BOX_APP.ordinal()).nextId();        // 房间编号
+        Long roomId = IdTool.nextId();                                                      // 房间编号
         BigDecimal roomPrice;                                                               // 房间价格
         // --------------------------------------检查s--------------------------------------
         // 箱子检查
@@ -141,7 +144,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
                 .setChangeMoney(battleRoom.getRoomPrice().negate());    // 扣钱,转为负数
         // 更新用户金额
         bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
-        createRoomRes.setBizUser(bizUser);
+        battleRoomRes.setBizUser(bizUser);
         // 判断房间状态等于[对战结束],进行 [对战结果保存] 和 [装备派发]
         if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
             csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
@@ -151,8 +154,65 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
         csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
         // --------------------------------------保存数据e--------------------------------------
-        createRoomRes.setCsgoBattleRoom(battleRoom);
-        return ApiRet.buildOk(createRoomRes);
+        battleRoomRes.setCsgoBattleRoom(battleRoom);
+        return ApiRet.buildOk(battleRoomRes);
+    }
+
+    /**
+     * 加入对战房间
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @RedisLock(value = "#roomId", key = KeyConst.METHOD_JOIN_ROOM_LOCK)
+    public ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizUser, Long roomId) {
+        BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();
+        CsgoBattleRoom battleRoom = getById(roomId);
+        // --------------------------------------检查s--------------------------------------
+        if (battleRoom == null) {
+            return ApiRet.buildNo("房间不存在");
+        }
+        // 状态检查
+        BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");
+        if (!battleRoom.getStatus().equals(battleStatusDict.getValueByAlias("battle_wait"))) {
+            return ApiRet.buildNo("房间已结束");
+        }
+        // 余额检查
+        if (bizUser.getMoney().compareTo(battleRoom.getRoomPrice()) < 0) {
+            return ApiRet.buildNo("金额不够");
+        }
+        // --------------------------------------检查s--------------------------------------
+        // --------------------------------------设置数据s--------------------------------------
+        battleRoom.setRoomBoxes(csgoBattleRoomBoxService.list(QueryWrapper.create(new CsgoBattleRoomBox().setRoomId(roomId))));
+        battleRoom.setRoomUsers(csgoBattleRoomUserService.list(QueryWrapper.create(new CsgoBattleRoomUser().setRoomId(roomId))));
+        // 添加新加入房间的用户
+        CsgoBattleRoomUser roomUser = new CsgoBattleRoomUser();
+        roomUser.setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
+        battleRoom.getRoomUsers().add(roomUser);
+        // 判断房间状态等于 [等待中] 和 [人数已满] ,计算对战奖励
+        if (battleRoom.getPeopleNumber() == battleRoom.getRoomUsers().size() && battleRoom.getStatus().equals(battleStatusDict.getValueByAlias("battle_wait"))) {
+            if (!this.runBattle(battleRoom)) {
+                return ApiRet.buildNo("对战计算异常");
+            }
+        }
+        // --------------------------------------设置数据e--------------------------------------
+        // --------------------------------------保存数据s--------------------------------------
+        // 构造流水记录
+        CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
+        capitalRecord.setUserId(bizUser.getId())
+                .setSourceId(battleRoom.getId().toString())
+                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("battle"))    // 流水类型
+                .setChangeMoney(battleRoom.getRoomPrice().negate());                                    // 扣钱,转为负数
+        // 更新用户金额
+        bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
+        battleRoomRes.setBizUser(bizUser);
+        // 判断房间状态等于[对战结束],进行 [对战结果保存] 和 [装备派发]
+        if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
+            csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
+            dispatchBattleGoods(battleRoom);
+        }
+        this.save(battleRoom);
+        csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
+        // --------------------------------------保存数据e--------------------------------------
+        return ApiRet.buildOk(battleRoomRes);
     }
 
     /**
@@ -188,7 +248,6 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     /**
      * 对战的具体逻辑
      */
-    @Transactional(rollbackFor = Exception.class)
     public boolean runBattle(CsgoBattleRoom csgoBattleRoom) {
         AtomicInteger round = new AtomicInteger(0);
         FairFactory.FairEntity fairEntity = FairFactory.build(csgoBattleRoom);
@@ -286,8 +345,4 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     }
 
 
-    public ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizuser, Long roomId) {
-        BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();
-        return ApiRet.buildOk(battleRoomRes);
-    }
 }

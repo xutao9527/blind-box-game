@@ -35,41 +35,41 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
 
     @PostMapping("create")
     @Operation(description = "创建对战房间")
-    public ApiRet<BattleRoomDto.BattleRoomRes> create(@Validated @RequestBody BattleRoomDto.CreateRoomReq model){
+    public ApiRet<BattleRoomDto.BattleRoomRes> create(@Validated @RequestBody BattleRoomDto.CreateRoomReq model) {
         BizUser bizUser = getCurrentUser();
-        return csgoBattleRoomService.createRoom(bizUser,model);
+        return csgoBattleRoomService.createRoom(bizUser, model);
     }
 
     @GetMapping("join")
     @Operation(description = "加入对战房间")
-    public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId")Long roomId){
+    public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId") Long roomId) {
         BizUser bizUser = getCurrentUser();
-        return csgoBattleRoomService.joinRoom(bizUser,roomId);
+        return csgoBattleRoomService.joinRoom(bizUser, roomId);
     }
 
     @GetMapping("join")
     @Operation(description = "用户id加入对战房间(测试)")
-    public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId")Long roomId,@NotNull @RequestParam("userId")Long userId){
+    public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId") Long roomId, @NotNull @RequestParam("userId") Long userId) {
         BizUser bizUser = bizUserService.getById(userId);
-        if(bizUser!=null){
-            return csgoBattleRoomService.joinRoom(bizUser,roomId);
+        if (bizUser != null) {
+            return csgoBattleRoomService.joinRoom(bizUser, roomId);
         }
         return ApiRet.buildNo("用户不存在!");
     }
 
     @PostMapping("getInfo")
     @Operation(description = "获得对战房间")
-    public ApiRet<BattleRoomDto.BattleRoomRes> getInfo(){
+    public ApiRet<BattleRoomDto.BattleRoomRes> getInfo() {
         BizUser bizUser = getCurrentUser();
-        BattleRoomDto.BattleRoomRes  createBattleRoomRes = new BattleRoomDto.BattleRoomRes();
+        BattleRoomDto.BattleRoomRes createBattleRoomRes = new BattleRoomDto.BattleRoomRes();
         return ApiRet.buildOk(createBattleRoomRes);
     }
 
     @PostMapping("getRooms")
     @Operation(description = "获取对战房间列表")
-    public ApiRet<BattleRoomDto.GetRoomListRes> getRooms(@RequestBody BattleRoomDto.GetRoomListReq model){
+    public ApiRet<BattleRoomDto.GetRoomListRes> getRooms(@RequestBody BattleRoomDto.GetRoomListReq model) {
         BizUser bizUser = getCurrentUser();
-        BattleRoomDto.GetRoomListRes  createBattleRoomRes = new BattleRoomDto.GetRoomListRes();
+        BattleRoomDto.GetRoomListRes createBattleRoomRes = new BattleRoomDto.GetRoomListRes();
         return ApiRet.buildOk(createBattleRoomRes);
     }
 }

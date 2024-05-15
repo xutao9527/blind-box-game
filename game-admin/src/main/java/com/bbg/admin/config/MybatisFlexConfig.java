@@ -2,6 +2,7 @@ package com.bbg.admin.config;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import com.bbg.admin.utils.IdTool;
 import com.bbg.core.constants.ServicesConst;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.FlexGlobalConfig;
@@ -38,10 +39,9 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
 
 
     static class SnowFlakeIdKeyGenerator implements IKeyGenerator{
-        private final Snowflake snowflake = IdUtil.getSnowflake(ServicesConst.ADMIN_SERVER.ordinal());
         @Override
         public Object generate(Object o, String s) {
-            return snowflake.nextId();
+            return IdTool.nextId();
         }
     }
 }

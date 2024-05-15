@@ -2,6 +2,7 @@ package com.bbg.box.config;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import com.bbg.box.utils.IdTool;
 import com.bbg.core.constants.ServicesConst;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.FlexGlobalConfig;
@@ -28,7 +29,6 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         keyConfig.setBefore(true);
         FlexGlobalConfig flexGlobalConfig = FlexGlobalConfig.getDefaultConfig();
         flexGlobalConfig.setKeyConfig(keyConfig);
-
         //开启审计功能
         AuditManager.setAuditEnable(true);
         //设置 SQL 审计收集器
@@ -36,12 +36,10 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         AuditManager.setMessageCollector(collector);
     }
 
-
     static class SnowFlakeIdKeyGenerator implements IKeyGenerator{
-        private final Snowflake snowflake = IdUtil.getSnowflake(ServicesConst.BOX_APP.ordinal());
         @Override
         public Object generate(Object o, String s) {
-            return snowflake.nextId();
+            return IdTool.nextId();
         }
     }
 }
