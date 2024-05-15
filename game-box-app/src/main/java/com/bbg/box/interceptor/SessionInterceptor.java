@@ -1,6 +1,8 @@
 package com.bbg.box.interceptor;
 
+import com.alibaba.fastjson.JSON;
 import com.bbg.core.box.service.RedisService;
+import com.bbg.core.entity.ApiRet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class SessionInterceptor implements HandlerInterceptor {
-    public final RedisService redisService;
 
+    public final RedisService redisService;
     @Autowired
     private DiscoveryClient discoveryClient;
 
@@ -34,6 +36,10 @@ public class SessionInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token");
         if (token != null) {
             redisService.expireUser(token);
+        } else{
+            response.setContentType("application/json; charset=utf-8");
+            response.getWriter().print(JSON.toJSON(ApiRet.buildNo("用户没有登录")));
+            return false;
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
