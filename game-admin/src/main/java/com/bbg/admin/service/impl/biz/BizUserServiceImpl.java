@@ -1,7 +1,12 @@
 package com.bbg.admin.service.impl.biz;
 
+import cn.hutool.core.util.IdUtil;
 import com.bbg.admin.service.csgo.CsgoCapitalRecordService;
+import com.bbg.admin.service.csgo.CsgoUserInfoService;
+import com.bbg.core.constants.ServicesConst;
+import com.bbg.core.utils.FairFactory;
 import com.bbg.model.csgo.CsgoCapitalRecord;
+import com.bbg.model.csgo.CsgoUserInfo;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.update.UpdateWrapper;
 import com.mybatisflex.core.util.UpdateEntity;
@@ -24,6 +29,8 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
 
     @Autowired
     CsgoCapitalRecordService csgoCapitalRecordService;
+    @Autowired
+    CsgoUserInfoService csgoUserInfoService;
 
     @Transactional(rollbackFor = Exception.class)
     public BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord) {
@@ -44,4 +51,21 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         return newUser;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean save(BizUser entity) {
+        entity.setId(IdUtil.getSnowflake(ServicesConst.ADMIN_SERVER.ordinal()).nextId());
+        entity.setMoney(null);
+        getMapper().insert(entity,true);
+        FairFactory.FairEntity fairEntity = FairFactory.build();
+        CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
+        csgoUserInfo.setUserId(entity.getId())
+                .setSecretHash(fairEntity.getSecretHash())
+                .setSecretSalt(fairEntity.getSecretSalt())
+                .setPublicHash(fairEntity.getPublicHash())
+                .setClientSeed(fairEntity.getClientSeed())
+                .setRoundNumber(1);
+        csgoUserInfoService.save(csgoUserInfo);
+        return true;
+    }
 }

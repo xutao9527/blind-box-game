@@ -20,7 +20,7 @@ import java.io.Serial;
  * CSGO商品表 实体类。
  *
  * @author bbg
- * @since 2024-05-14
+ * @since 2024-05-15
  */
 @Data
 @NoArgsConstructor

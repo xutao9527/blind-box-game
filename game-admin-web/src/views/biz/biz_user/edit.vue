@@ -20,13 +20,7 @@
                 <el-input v-model="data.password"/>
               </el-form-item>
               <el-form-item label="类型">
-                <el-input v-model="data.type"/>
-              </el-form-item>
-              <el-form-item label="金额">
-                <el-input v-model="data.money"/>
-              </el-form-item>
-              <el-form-item label="金额校验">
-                <el-input v-model="data.moneySign"/>
+                <bbg-dict-select v-model:value="data.type" :tag="'user_type'" placeholder="用户类型"/>
               </el-form-item>
               <el-form-item label="昵称">
                 <el-input v-model="data.nickName"/>

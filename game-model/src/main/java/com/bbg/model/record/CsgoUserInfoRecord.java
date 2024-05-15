@@ -18,7 +18,7 @@ import java.io.Serial;
  * CSGO用户信息 实体类。
  *
  * @author bbg
- * @since 2024-05-14
+ * @since 2024-05-15
  */
 @Data
 @NoArgsConstructor
@@ -44,12 +44,6 @@ public class CsgoUserInfoRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "用户编号")
     private Long userId;
-
-    /**
-     * 用户类型
-     */
-    @Schema(description = "用户类型")
-    private String userType;
 
     /**
      * 推广码

@@ -7,6 +7,9 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
             </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="userTypeRef" :tag="'user_type'" placeholder="用户类型"/>
+            </div>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
@@ -39,7 +42,11 @@
         <el-table-column prop="mobile" label="手机号" width="120"/>
         <el-table-column prop="account" label="登录账号"/>
         <el-table-column prop="password" label="密码"/>
-        <el-table-column prop="type" label="类型"/>
+        <el-table-column prop="type" label="类型">
+          <template #default="scope">
+            {{userTypeRef.getLabel(scope.row.type)}}
+          </template>
+        </el-table-column>
         <el-table-column prop="money" label="金额"/>
 <!--        <el-table-column prop="moneySign" label="金额校验"/>-->
 <!--        <el-table-column prop="photo" label="头像"/>-->
@@ -58,7 +65,7 @@
           <template #default="scope">
             <el-button link type="primary" size="small" @click="openUpdateBizUserMoney(scope.row)">充值</el-button>
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
-            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
+<!--            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -85,6 +92,7 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
 
+const userTypeRef = ref(null)
 const header = ref(null);
 const tableDynamicHeight = ref(0)
 
