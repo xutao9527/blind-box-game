@@ -11,10 +11,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SessionInterceptor implements HandlerInterceptor {
+
     public final RedisService redisService;
 
     @Override
@@ -22,10 +25,12 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
         if (token != null) {
-            redisService.expireAdmin(token);
+            if (!redisService.expireAdmin(token)) {
+                noLogin(response);
+                return false;
+            }
         } else{
-            response.setContentType("application/json; charset=utf-8");
-            response.getWriter().print(JSON.toJSON(ApiRet.buildNo("用户没有登录")));
+            noLogin(response);
             return false;
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
@@ -43,5 +48,10 @@ public class SessionInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
+    }
+
+    public void noLogin(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json; charset=utf-8");
+        response.getWriter().print(JSON.toJSON(ApiRet.buildNo("用户没有登录")));
     }
 }

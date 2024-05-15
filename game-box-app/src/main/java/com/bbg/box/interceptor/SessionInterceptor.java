@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -23,22 +24,18 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor {
 
     public final RedisService redisService;
-    @Autowired
-    private DiscoveryClient discoveryClient;
-
-
 
     @Override
     // 在请求处理之前进行拦截逻辑，返回 true 表示继续执行，返回 false 表示终止执行
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        List<ServiceInstance> serviceInstances = discoveryClient.getInstances("admin-server");
-        System.out.println(serviceInstances);
         String token = request.getHeader("token");
         if (token != null) {
-            redisService.expireUser(token);
-        } else{
-            response.setContentType("application/json; charset=utf-8");
-            response.getWriter().print(JSON.toJSON(ApiRet.buildNo("用户没有登录")));
+            if (!redisService.expireUser(token)) {
+                noLogin(response);
+                return false;
+            }
+        } else {
+            noLogin(response);
             return false;
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
@@ -54,5 +51,10 @@ public class SessionInterceptor implements HandlerInterceptor {
     // 请求完成后的拦截逻辑，可以用于资源清理等操作
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
+    }
+
+    public void noLogin(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json; charset=utf-8");
+        response.getWriter().print(JSON.toJSON(ApiRet.buildNo("用户没有登录")));
     }
 }
