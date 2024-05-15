@@ -1,7 +1,6 @@
 package com.bbg.box.service.impl.csgo;
 
 import cn.hutool.core.lang.Pair;
-import cn.hutool.core.util.IdUtil;
 import com.bbg.box.service.biz.BizDictService;
 import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.*;
@@ -9,7 +8,6 @@ import com.bbg.box.utils.IdTool;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BattleRoomDto;
 import com.bbg.core.constants.KeyConst;
-import com.bbg.core.constants.ServicesConst;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.model.biz.BizDict;
