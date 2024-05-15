@@ -215,6 +215,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         }
         csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());                         // 更新用户
         // --------------------------------------保存数据e--------------------------------------
+        battleRoomRes.setCsgoBattleRoom(battleRoom);
         return ApiRet.buildOk(battleRoomRes);
     }
 
@@ -227,7 +228,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         BizDict userTypeDict = bizDictService.getDictByTag("user_type");
         csgoBattleRoom.getRoomGoods().forEach(roomGood -> {
             csgoBattleRoom.getRoomUsers().stream()
-                    .filter(roomUser -> roomGood.getLuckUserId().equals(roomUser.getUserId()))
+                    .filter(roomUser -> roomGood.getLuckUserId()!=null && roomGood.getLuckUserId().equals(roomUser.getUserId()))
                     .findFirst().ifPresent(
                             user -> {
                                 // 当用户等于真实用户和测试用户的时候,才进行装备派发
