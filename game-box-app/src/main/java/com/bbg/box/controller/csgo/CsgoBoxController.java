@@ -68,7 +68,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
 
     @PostMapping("dreamList")
     @Operation(description = "获得追梦商品列表")
-    public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody  DreamDto.DreamListReq model) {
+    public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody DreamDto.DreamListReq model) {
         Page<CsgoBoxGoods> page = null;
         BizDict bizDict = bizDictService.getDictByTag("csgo_box_type");
         BizDictDetail bizDictDetail = bizDict.getBizDictDetails().stream().filter(detail -> detail.getLabelAlias().equals("dream_box")).findFirst().orElse(null);
@@ -89,9 +89,9 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
 
     @PostMapping("dreamGood")
     @Operation(description = "进行追梦")
-    public ApiRet<DreamDto.DreamGoodRes> dreamGood(@RequestBody DreamDto.DreamGoodReq model){
+    public ApiRet<DreamDto.DreamGoodRes> dreamGood(@RequestBody DreamDto.DreamGoodReq model) {
         BizUser bizUser = getCurrentUser();
-        DreamDto.DreamGoodRes dreamGoodRes =csgoBoxService.dreamGood(bizUser,model);
+        DreamDto.DreamGoodRes dreamGoodRes = csgoBoxService.dreamGood(bizUser, model);
         return ApiRet.buildOk(dreamGoodRes);
     }
 }

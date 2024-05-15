@@ -8,10 +8,7 @@ import com.bbg.core.entity.ApiRet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Csgo游戏模拟 控制层。
@@ -25,6 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoxGameMockController {
     @Autowired
     BoxGameMockService boxGameMockService;
+
+    @GetMapping("getInfo")
+    @Operation(description = "获得用户信息")
+    public ApiRet<LoginDto.LoginRes> getInfo() {
+        return boxGameMockService.getInfo();
+    }
 
     @PostMapping("login")
     @Operation(description = "用户登录")

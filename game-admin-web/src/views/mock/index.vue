@@ -57,6 +57,9 @@ import {mockGlobal} from "./js/mockGlobal.js";
 import box from "@/views/mock/box.vue";
 import Dream from "@/views/mock/dream.vue";
 
+onMounted(()=>{
+  loginMock.getInfo();
+})
 </script>
 <style lang="less" scoped>
 .mock {

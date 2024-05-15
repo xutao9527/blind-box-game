@@ -24,6 +24,9 @@ public interface BoxGameMockService {
     @GetMapping("/bizUser/logout")
     ApiRet<String> logout();
 
+    @GetMapping("/bizUser/getInfo")
+    ApiRet<LoginDto.LoginRes> getInfo();
+
     @PostMapping("/csgoBox/list")
     ApiRet<BoxDto.GetBoxRes> list(@RequestBody BoxDto.GetBoxReq model);
 
