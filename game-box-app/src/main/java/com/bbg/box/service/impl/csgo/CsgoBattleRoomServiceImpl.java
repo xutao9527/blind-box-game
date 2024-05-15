@@ -3,6 +3,7 @@ package com.bbg.box.service.impl.csgo;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.IdUtil;
 import com.bbg.box.service.biz.BizDictService;
+import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.*;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BattleRoomDto;
@@ -47,6 +48,10 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     CsgoBattleRoomBoxService csgoBattleRoomBoxService;
     @Autowired
     CsgoBattleRoomGoodService csgoBattleRoomGoodService;
+    @Autowired
+    BizUserService bizUserService;
+    @Autowired
+    CsgoStorehouseService csgoStorehouseService;
 
     /**
      * 创建对战房间
@@ -57,7 +62,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         BattleRoomDto.CreateRoomRes createRoomRes = new BattleRoomDto.CreateRoomRes();      // 返回结果
         List<CsgoRobot> robotList = null;                                                   // 机器人
         Long roomId = IdUtil.getSnowflake(ServicesConst.BOX_APP.ordinal()).nextId();        // 房间编号
-        BigDecimal roomPrice = BigDecimal.ZERO;                                             // 房间价格
+        BigDecimal roomPrice;                                                               // 房间价格
         // --------------------------------------检查s--------------------------------------
         // 箱子检查
         BizDict boxTypeDict = bizDictService.getDictByTag("csgo_box_type");
@@ -126,13 +131,58 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
                 return ApiRet.buildNo("对战计算异常");
             }
         }
-        createRoomRes.setCsgoBattleRoom(battleRoom);
         // --------------------------------------设置数据e--------------------------------------
-        // this.save(battleRoom);
-        // csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
-        // csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
-        // csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
+        // --------------------------------------保存数据s--------------------------------------
+        // 构造流水记录
+        CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
+        capitalRecord.setUserId(bizUser.getId())
+                .setSourceId(battleRoom.getId().toString())
+                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("battle"))  //流水类型
+                .setChangeMoney(battleRoom.getRoomPrice().negate());    // 扣钱,转为负数
+        // 更新用户金额
+        bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
+        createRoomRes.setBizUser(bizUser);
+        // 判断房间状态等于[对战结束],进行 [对战结果保存] 和 [装备派发]
+        if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
+            csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
+            dispatchBattleGoods(battleRoom);
+        }
+        this.save(battleRoom);
+        csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
+        csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
+        // --------------------------------------保存数据e--------------------------------------
+        createRoomRes.setCsgoBattleRoom(battleRoom);
         return ApiRet.buildOk(createRoomRes);
+    }
+
+    /**
+     * 对战结果派发装备
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void dispatchBattleGoods(CsgoBattleRoom csgoBattleRoom){
+        List<CsgoStorehouse> storehouseList = new ArrayList<>();
+        BizDict userTypeDict = bizDictService.getDictByTag("user_type");
+        csgoBattleRoom.getRoomGoods().forEach(roomGood -> {
+            csgoBattleRoom.getRoomUsers().stream()
+                    .filter(roomUser -> roomGood.getLuckUserId().equals(roomUser.getUserId()))
+                    .findFirst().ifPresent(
+                            user -> {
+                                // 当用户等于真实用户和测试用户的时候,才进行装备派发
+                                if (user.getUserType().equals(userTypeDict.getValueByAlias("real_user"))
+                                        || user.getUserType().equals(userTypeDict.getValueByAlias("test_user"))) {
+                                    CsgoStorehouse storehouse = new CsgoStorehouse();
+                                    storehouse.setUserId(roomGood.getLuckUserId())
+                                            .setName(roomGood.getName())
+                                            .setNameAlias(roomGood.getNameAlias())
+                                            .setGoodId(roomGood.getGoodId())
+                                            .setImageUrl(roomGood.getGoodImage())
+                                            .setPrice(roomGood.getGoodPrice());
+                                    storehouseList.add(storehouse);
+                                }
+                            }
+                    );
+        });
+        csgoStorehouseService.saveBatch(storehouseList);
     }
 
     /**

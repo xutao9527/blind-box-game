@@ -1,5 +1,6 @@
 package com.bbg.core.box.dto;
 
+import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBattleRoom;
 import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -62,6 +63,8 @@ public class BattleRoomDto {
     public static class CreateRoomRes implements Serializable {
         @Schema(description = "对战房间信息")
         private CsgoBattleRoom csgoBattleRoom;
+        @Schema(description = "新用户信息")
+        private BizUser bizUser;
     }
 
     @Data
