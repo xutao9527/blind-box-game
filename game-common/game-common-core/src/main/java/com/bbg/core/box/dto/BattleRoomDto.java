@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class BattleRoomDto {
     @Data
     @Accessors(chain = true)
-    @Schema(description = "获得对战房间列表")
+    @Schema(description = "对战房间列表")
     public static class GetRoomListReq implements Serializable {
         @Schema(description = "页数")
         private Number pageNumber;
@@ -25,7 +25,7 @@ public class BattleRoomDto {
 
     @Data
     @Accessors(chain = true)
-    @Schema(description = "获得对战房间结果")
+    @Schema(description = "对战房间列表结果")
     public static class GetRoomListRes implements Serializable {
         @Schema(description = "房间列表")
         private Page<CsgoBattleRoom> csgoBattleRoomPage;
@@ -59,28 +59,12 @@ public class BattleRoomDto {
 
     @Data
     @Accessors(chain = true)
-    @Schema(description = "创建对战房间结果")
-    public static class CreateRoomRes implements Serializable {
+    @Schema(description = "对战房间结果")
+    public static class BattleRoomRes implements Serializable {
         @Schema(description = "对战房间信息")
         private CsgoBattleRoom csgoBattleRoom;
         @Schema(description = "新用户信息")
         private BizUser bizUser;
-    }
-
-    @Data
-    @Accessors(chain = true)
-    @Schema(description = "获得对战房间")
-    public static class GetRoomReq implements Serializable {
-        @Schema(description = "对战房间编号")
-        private long roomId;
-    }
-
-    @Data
-    @Accessors(chain = true)
-    @Schema(description = "获得对战房间结果")
-    public static class GetRoomRes implements Serializable {
-        @Schema(description = "对战房间信息")
-        private CsgoBattleRoom csgoBattleRoom;
     }
 
 }

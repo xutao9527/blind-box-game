@@ -58,8 +58,8 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
      */
     @Transactional(rollbackFor = Exception.class)
     @RedisLock(value = "#bizUser.id", key = KeyConst.METHOD_CREATE_ROOM_LOCK)
-    public ApiRet<BattleRoomDto.CreateRoomRes> createRoom(BizUser bizUser, BattleRoomDto.CreateRoomReq createRoomReq) {
-        BattleRoomDto.CreateRoomRes createRoomRes = new BattleRoomDto.CreateRoomRes();      // 返回结果
+    public ApiRet<BattleRoomDto.BattleRoomRes> createRoom(BizUser bizUser, BattleRoomDto.CreateRoomReq createRoomReq) {
+        BattleRoomDto.BattleRoomRes createRoomRes = new BattleRoomDto.BattleRoomRes();      // 返回结果
         List<CsgoRobot> robotList = null;                                                   // 机器人
         Long roomId = IdUtil.getSnowflake(ServicesConst.BOX_APP.ordinal()).nextId();        // 房间编号
         BigDecimal roomPrice;                                                               // 房间价格
@@ -137,7 +137,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
         capitalRecord.setUserId(bizUser.getId())
                 .setSourceId(battleRoom.getId().toString())
-                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("battle"))  //流水类型
+                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("battle"))  // 流水类型
                 .setChangeMoney(battleRoom.getRoomPrice().negate());    // 扣钱,转为负数
         // 更新用户金额
         bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
@@ -159,7 +159,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
      * 对战结果派发装备
      */
     @Transactional(rollbackFor = Exception.class)
-    public void dispatchBattleGoods(CsgoBattleRoom csgoBattleRoom){
+    public void dispatchBattleGoods(CsgoBattleRoom csgoBattleRoom) {
         List<CsgoStorehouse> storehouseList = new ArrayList<>();
         BizDict userTypeDict = bizDictService.getDictByTag("user_type");
         csgoBattleRoom.getRoomGoods().forEach(roomGood -> {
@@ -283,5 +283,11 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");
         csgoBattleRoom.setStatus(battleStatusDict.getValueByAlias("battle_end"));                       // 房间状态(对战结束)
         return true;
+    }
+
+
+    public ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizuser, Long roomId) {
+        BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();
+        return ApiRet.buildOk(battleRoomRes);
     }
 }
