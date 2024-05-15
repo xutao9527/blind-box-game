@@ -15,7 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/csgoBattleRoom/joinByUserId")
+                .excludePathPatterns("/csgoBattleRoom/joinByUserId")        //测试接口,后面屏蔽
                 .excludePathPatterns("/bizUser/login");
 
     }

@@ -17,4 +17,6 @@ public interface CsgoBattleRoomService extends IService<CsgoBattleRoom> {
     ApiRet<BattleRoomDto.BattleRoomRes> createRoom(BizUser bizuser, BattleRoomDto.CreateRoomReq createRoomReq);
 
     ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizuser, Long roomId);
+
+    CsgoBattleRoom getInfo(Long roomId);
 }

@@ -19,17 +19,21 @@ public class KeyConst {
     public final static String BOX_ID = "box::id";
     // 所有机器人
     public final static String ROBOT_LIST = "robot::list";
+    // 单独的房间信息
+    public final static String ROOM_INFO_ID = "battleRoom::info::roomId";
 
     // 方法锁  同步数据
     public final static String METHOD_SYNC_DATA_LOCK = "method::syncData";
     // 方法锁  开盲盒
-    public final static String METHOD_OPEN_BOX_LOCK = "method::openBox";
+    public final static String METHOD_OPEN_BOX_LOCK = "method::openBox::uid";
     // 方法锁  追梦
-    public final static String METHOD_DREAM_GOOD_LOCK = "method::dreamGood";
+    public final static String METHOD_DREAM_GOOD_LOCK = "method::dreamGood::uid";
     // 方法锁  创建房间
-    public final static String METHOD_CREATE_ROOM_LOCK = "method::createRoom::userId";
-    // 方法锁  创建房间
+    public final static String METHOD_CREATE_ROOM_LOCK = "method::createRoom::uid";
+    // 方法锁  加入房间
     public final static String METHOD_JOIN_ROOM_LOCK = "method::joinRoom::roomId";
+
+
 
     public static String build(String prefix, String key) {
         return "%s::%s".formatted(prefix, key);

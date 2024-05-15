@@ -5,8 +5,10 @@ import com.bbg.box.service.biz.BizDictService;
 import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.*;
 import com.bbg.box.utils.IdTool;
+import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BattleRoomDto;
+import com.bbg.core.box.service.RedisService;
 import com.bbg.core.constants.KeyConst;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.utils.FairFactory;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -53,6 +56,10 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     BizUserService bizUserService;
     @Autowired
     CsgoStorehouseService csgoStorehouseService;
+    @Autowired
+    RedisService redisService;
+    // 单独的房间信息-存活时长
+    public final static long ROOM_INFO_LIVE_TIME = 120;
 
     /**
      * 创建对战房间
@@ -138,8 +145,8 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         CsgoCapitalRecord userCapitalRecord = new CsgoCapitalRecord();
         userCapitalRecord.setUserId(bizUser.getId())
                 .setSourceId(battleRoom.getId().toString())
-                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("battle"))  // 流水类型
-                .setChangeMoney(battleRoom.getRoomPrice().negate());    // 扣钱,转为负数
+                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("battle"))    // 流水类型
+                .setChangeMoney(battleRoom.getRoomPrice().negate());                                    // 扣钱,转为负数
         // 更新用户金额
         bizUser = bizUserService.updateUserMoney(bizUser, userCapitalRecord);
         battleRoomRes.setBizUser(bizUser);
@@ -147,6 +154,9 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
             csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
             dispatchBattleGoods(battleRoom);
+        } else {
+            // 如果房间还在等待用户加入,更新 [房间缓存]
+            redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
         }
         this.save(battleRoom);
         csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
@@ -163,7 +173,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     @RedisLock(value = "#roomId", key = KeyConst.METHOD_JOIN_ROOM_LOCK)
     public ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizUser, Long roomId) {
         BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();
-        CsgoBattleRoom battleRoom = getById(roomId);
+        CsgoBattleRoom battleRoom = getInfo(roomId);
         // --------------------------------------检查s--------------------------------------
         if (battleRoom == null) {
             return ApiRet.buildNo("房间不存在");
@@ -212,11 +222,34 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
             csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());                     // 保存房间中奖商品
             dispatchBattleGoods(battleRoom);                                                            // 发放商品
             this.saveOrUpdate(battleRoom);                                                              // 更新房间状态
+        } else {
+            // 如果房间还在等待用户加入,更新 [房间缓存]
+            redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
         }
         csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());                         // 更新用户
         // --------------------------------------保存数据e--------------------------------------
         battleRoomRes.setCsgoBattleRoom(battleRoom);
         return ApiRet.buildOk(battleRoomRes);
+    }
+
+    /**
+     * 获得对战房间信息
+     * 缓存信息默认存储120秒(根据内存实时调整),房间结束后,清除一次缓存
+     */
+    @RedisCache(value = "#roomId", key = KeyConst.ROOM_INFO_ID, liveTime = ROOM_INFO_LIVE_TIME, timeUnit = TimeUnit.SECONDS)
+    public CsgoBattleRoom getInfo(Long roomId) {
+        CsgoBattleRoom battleRoom = getById(roomId);
+        if (battleRoom == null) {
+            return null;
+        }
+        battleRoom.setRoomBoxes(csgoBattleRoomBoxService.list(QueryWrapper.create(new CsgoBattleRoomBox().setRoomId(roomId))));
+        battleRoom.setRoomUsers(csgoBattleRoomUserService.list(QueryWrapper.create(new CsgoBattleRoomUser().setRoomId(roomId))));
+        BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");
+        if (battleRoom.getStatus().equals(battleStatusDict.getValueByAlias("battle_end"))) {
+            battleRoom.setRoomGoods(csgoBattleRoomGoodService.list(QueryWrapper.create(new CsgoBattleRoomGood().setRoomId(roomId))));
+
+        }
+        return battleRoom;
     }
 
     /**
@@ -228,7 +261,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         BizDict userTypeDict = bizDictService.getDictByTag("user_type");
         csgoBattleRoom.getRoomGoods().forEach(roomGood -> {
             csgoBattleRoom.getRoomUsers().stream()
-                    .filter(roomUser -> roomGood.getLuckUserId()!=null && roomGood.getLuckUserId().equals(roomUser.getUserId()))
+                    .filter(roomUser -> roomGood.getLuckUserId() != null && roomGood.getLuckUserId().equals(roomUser.getUserId()))
                     .findFirst().ifPresent(
                             user -> {
                                 // 当用户等于真实用户和测试用户的时候,才进行装备派发

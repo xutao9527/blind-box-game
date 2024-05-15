@@ -58,8 +58,8 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
     }
 
     @PostMapping("getInfo")
-    @Operation(description = "获得对战房间")
-    public ApiRet<BattleRoomDto.BattleRoomRes> getInfo() {
+    @Operation(description = "获得对战房间信息")
+    public ApiRet<BattleRoomDto.BattleRoomRes> getInfo(@NotNull @RequestParam("roomId") Long roomId) {
         BizUser bizUser = getCurrentUser();
         BattleRoomDto.BattleRoomRes createBattleRoomRes = new BattleRoomDto.BattleRoomRes();
         return ApiRet.buildOk(createBattleRoomRes);
