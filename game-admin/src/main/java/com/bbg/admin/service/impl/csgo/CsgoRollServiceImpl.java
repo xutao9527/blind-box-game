@@ -1,9 +1,12 @@
 package com.bbg.admin.service.impl.csgo;
 
+import com.bbg.admin.service.biz.BizDictService;
+import com.bbg.model.biz.BizDict;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.csgo.CsgoRoll;
 import com.bbg.admin.mapper.csgo.CsgoRollMapper;
 import com.bbg.admin.service.csgo.CsgoRollService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,4 +18,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> implements CsgoRollService {
 
+    @Autowired
+    BizDictService bizDictService;
+
+    @Override
+    public boolean save(CsgoRoll entity) {
+        BizDict rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
+        entity.setStatus(rollStatusDict.getValueByAlias("roll_wait_online"));
+        return super.save(entity);
+    }
 }

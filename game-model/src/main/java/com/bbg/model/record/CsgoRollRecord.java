@@ -70,15 +70,15 @@ public class CsgoRollRecord extends BaseModel implements Serializable {
     private String rollRemark;
 
     /**
-     * roll房类型
+     * 撸房类型
      */
-    @Schema(description = "roll房类型")
+    @Schema(description = "撸房类型")
     private String rollType;
 
     /**
-     * roll模式
+     * 撸房模式
      */
-    @Schema(description = "roll模式")
+    @Schema(description = "撸房模式")
     private String rollModel;
 
     /**

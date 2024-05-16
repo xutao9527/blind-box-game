@@ -138,7 +138,7 @@ const tableProps = reactive({
   reqParams: {
     page: {
       pageNumber: 1,
-      pageSize: 15,
+      pageSize: 50,
     },
     queryEntity: {
       "expandProps":{}

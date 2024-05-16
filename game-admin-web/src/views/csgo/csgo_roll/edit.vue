@@ -10,51 +10,56 @@
         <el-row>
           <el-col :offset="7" :span="8">
             <el-form label-position="right" label-width="120">
-              <el-form-item label="创建用户编号">
-                <el-input v-model="data.createUserId"/>
-              </el-form-item>
-              <el-form-item label="创建用户名称">
-                <el-input v-model="data.createUserName"/>
-              </el-form-item>
-              <el-form-item label="创建用户头像">
-                <el-input v-model="data.createUserPhoto"/>
-              </el-form-item>
+<!--              <el-form-item label="创建用户编号">-->
+<!--                <el-input v-model="data.createUserId"/>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="创建用户名称">-->
+<!--                <el-input v-model="data.createUserName"/>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="创建用户头像">-->
+<!--                <el-input v-model="data.createUserPhoto"/>-->
+<!--              </el-form-item>-->
               <el-form-item label="房间标题">
-                <el-input v-model="data.rollTitle"/>
+                <el-input v-model="data.rollTitle" />
               </el-form-item>
               <el-form-item label="房间描述">
-                <el-input v-model="data.rollRemark"/>
+                <el-input v-model="data.rollRemark" autosize style="width: 600px;" type="textarea" show-word-limit maxlength="200"/>
               </el-form-item>
-              <el-form-item label="roll房类型">
-                <el-input v-model="data.rollType"/>
+              <el-form-item label="撸房类型">
+                <bbg-dict-select v-model:value="data.rollType" :tag="'csgo_roll_type'"/>
               </el-form-item>
-              <el-form-item label="roll模式">
-                <el-input v-model="data.rollModel"/>
+              <el-form-item label="撸房模式">
+                <bbg-dict-select v-model:value="data.rollModel" :tag="'csgo_roll_model'"/>
               </el-form-item>
-              <el-form-item label="房间开始时间">
-                <el-input v-model="data.startTime"/>
+              <el-form-item label="开始时间">
+                <el-date-picker
+                    v-model="data.startTime"
+                    type="datetime"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                />
               </el-form-item>
-              <el-form-item label="房间结束时间">
-                <el-input v-model="data.endTime"/>
+              <el-form-item label="结束时间">
+                <el-date-picker
+                    v-model="data.endTime"
+                    type="datetime"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                />
               </el-form-item>
               <el-form-item label="房间人数">
-                <el-input v-model="data.peopleNumber"/>
+                <el-input-number v-model="data.peopleNumber"/>
               </el-form-item>
-              <el-form-item label="加入房间条件">
-                <el-input v-model="data.joinCondition"/>
-              </el-form-item>
-              <el-form-item label="加入房间密码">
+<!--              <el-form-item label="加入房间条件">-->
+<!--                <el-input v-model="data.joinCondition"/>-->
+<!--              </el-form-item>-->
+              <el-form-item label="房间密码">
                 <el-input v-model="data.joinCode"/>
               </el-form-item>
               <el-form-item label="房间排序">
                 <el-input v-model="data.sort"/>
               </el-form-item>
-              <el-form-item label="房间状态">
-                <el-input v-model="data.status"/>
-              </el-form-item>
-              <el-form-item label="状态">
-                <el-switch v-model="data.enable"/>
-              </el-form-item>
+<!--              <el-form-item label="状态">-->
+<!--                <el-switch v-model="data.enable"/>-->
+<!--              </el-form-item>-->
             </el-form>
           </el-col>
         </el-row>

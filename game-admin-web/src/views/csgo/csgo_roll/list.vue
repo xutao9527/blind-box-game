@@ -5,17 +5,27 @@
         <el-col :span="18">
           <el-row>
             <div class="bbg-table-header-input">
-              <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
+              <el-input v-model="tableProps.reqParams.queryEntity.rollTitle" placeholder="房间标题"/>
             </div>
-            <div class="bbg-table-header-input" style="width: 420px">
-              <el-date-picker
-                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
-                  type="datetimerange"
-                  start-placeholder="Start date"
-                  end-placeholder="End date"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-              />
+
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.rollType" ref="rollTypeRef" :tag="'csgo_roll_type'" placeholder="撸房类型"/>
             </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.rollModel" ref="rollModelRef" :tag="'csgo_roll_model'" placeholder="撸房模式"/>
+            </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.status" ref="rollStatusRef" :tag="'csgo_roll_status'" placeholder="撸房状态"/>
+            </div>
+<!--            <div class="bbg-table-header-input" style="width: 420px">-->
+<!--              <el-date-picker-->
+<!--                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"-->
+<!--                  type="datetimerange"-->
+<!--                  start-placeholder="Start date"-->
+<!--                  end-placeholder="End date"-->
+<!--                  value-format="YYYY-MM-DD HH:mm:ss"-->
+<!--              />-->
+<!--            </div>-->
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -35,30 +45,42 @@
                   table-layout="auto"
                   @sortChange="tableProps.sortChange"
                   border show-overflow-tooltip>
-        <el-table-column prop="id" label="编号"/>
-        <el-table-column prop="createUserId" label="创建用户编号"/>
-        <el-table-column prop="createUserName" label="创建用户名称"/>
-        <el-table-column prop="createUserPhoto" label="创建用户头像"/>
-        <el-table-column prop="rollTitle" label="房间标题"/>
-        <el-table-column prop="rollRemark" label="房间描述"/>
-        <el-table-column prop="rollType" label="roll房类型"/>
-        <el-table-column prop="rollModel" label="roll模式"/>
-        <el-table-column prop="startTime" label="房间开始时间"/>
-        <el-table-column prop="endTime" label="房间结束时间"/>
-        <el-table-column prop="peopleNumber" label="房间人数"/>
-        <el-table-column prop="joinCondition" label="加入房间条件"/>
-        <el-table-column prop="joinCode" label="加入房间密码"/>
-        <el-table-column prop="sort" label="房间排序"/>
-        <el-table-column prop="status" label="房间状态"/>
-        <el-table-column prop="enable" label="状态">
+        <el-table-column prop="id" label="编号" width="185"/>
+<!--        <el-table-column prop="createUserId" label="创建用户编号"/>-->
+<!--        <el-table-column prop="createUserName" label="创建用户名称"/>-->
+<!--        <el-table-column prop="createUserPhoto" label="创建用户头像"/>-->
+        <el-table-column prop="rollTitle" label="房间标题" width="150"/>
+        <el-table-column prop="rollRemark" label="描述" width="200"/>
+        <el-table-column prop="rollType" label="撸房类型" width="90">
+          <template #default="scope">
+            {{rollTypeRef.getLabel(scope.row.rollType)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="rollModel" label="撸房模式" width="90">
+          <template #default="scope">
+            {{rollModelRef.getLabel(scope.row.rollModel)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="startTime" label="房间开始时间" width="165"/>
+        <el-table-column prop="endTime" label="房间结束时间" width="165"/>
+        <el-table-column prop="peopleNumber" label="房间人数" width="90"/>
+<!--        <el-table-column prop="joinCondition" label="加入房间条件"/>-->
+<!--        <el-table-column prop="joinCode" label="加入房间密码"/>-->
+        <el-table-column prop="sort" label="排序" width="60"/>
+        <el-table-column prop="status" label="房间状态" width="85">
+          <template #default="scope">
+            {{rollStatusRef.getLabel(scope.row.status)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="enable" label="状态" width="60">
         <template #default="scope">
             {{scope.row.enable?'启用':'停用'}}
         </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column prop="updateTime" label="修改时间"/>
-        <el-table-column fixed="right" label="操作">
-          <template #default="scope">
+        <el-table-column prop="createTime" label="创建时间" width="165"/>
+<!--        <el-table-column prop="updateTime" label="修改时间"/>-->
+        <el-table-column fixed="right" label="操作" width="100">
+          <template #default="scope" >
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
             <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
           </template>
@@ -86,6 +108,10 @@
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
+
+const rollTypeRef = ref(null)
+const rollModelRef = ref(null)
+const rollStatusRef = ref(null)
 
 const header = ref(null);
 const tableDynamicHeight = ref(0)
