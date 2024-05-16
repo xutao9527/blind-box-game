@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class BattleRoomDto {
     @Data
     @Accessors(chain = true)
-    @Schema(description = "对战房间列表")
+    @Schema(description = "获得对战房间列表")
     public static class GetRoomListReq implements Serializable {
         @Schema(description = "页数")
         private int pageNumber = 1;

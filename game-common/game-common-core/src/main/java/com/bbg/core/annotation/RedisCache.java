@@ -26,5 +26,5 @@ public @interface RedisCache {
     /**
      * 时间单位，默认为秒
      */
-    TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
+    TimeUnit timeUnit() default TimeUnit.SECONDS;
 }

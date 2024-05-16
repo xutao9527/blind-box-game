@@ -3,6 +3,7 @@ package com.bbg.box.service.csgo;
 import com.bbg.core.box.dto.BattleRoomDto;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.biz.BizUser;
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.service.IService;
 import com.bbg.model.csgo.CsgoBattleRoom;
 
@@ -22,5 +23,5 @@ public interface CsgoBattleRoomService extends IService<CsgoBattleRoom> {
 
     CsgoBattleRoom getInfo(Long roomId);
 
-    List<CsgoBattleRoom> getRoomList(BattleRoomDto.GetRoomListReq getRoomListReq);
+    Page<CsgoBattleRoom> getRoomList(BattleRoomDto.GetRoomListReq getRoomListReq);
 }

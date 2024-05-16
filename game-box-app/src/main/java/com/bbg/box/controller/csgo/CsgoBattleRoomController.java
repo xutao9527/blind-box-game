@@ -10,6 +10,7 @@ import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBattleRoom;
 import com.bbg.box.service.csgo.CsgoBattleRoomService;
 import com.bbg.core.entity.ApiRet;
+import com.mybatisflex.core.paginate.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,8 +96,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
 
     @PostMapping("getRooms")
     @Operation(description = "获取对战房间列表")
-    public ApiRet<List<CsgoBattleRoom>> getRooms(@RequestBody BattleRoomDto.GetRoomListReq model) {
-        List<CsgoBattleRoom> roomList = csgoBattleRoomService.getRoomList(model);
-        return ApiRet.buildOk(roomList);
+    public ApiRet<Page<CsgoBattleRoom>> getRooms(@RequestBody BattleRoomDto.GetRoomListReq model) {
+        return ApiRet.buildOk(csgoBattleRoomService.getRoomList(model));
     }
 }
