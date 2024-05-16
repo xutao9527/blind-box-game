@@ -2,7 +2,6 @@ package com.bbg.model.record;
 
 import com.bbg.model.base.BaseModel;
 import com.mybatisflex.annotation.Id;
-import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,7 +19,7 @@ import java.io.Serial;
  * CSGO商品表 实体类。
  *
  * @author bbg
- * @since 2024-05-15
+ * @since 2024-05-16
  */
 @Data
 @NoArgsConstructor
@@ -37,7 +36,7 @@ public class CsgoGoodsRecord extends BaseModel implements Serializable {
     /**
      * 主键id
      */
-    @Id(keyType = KeyType.Auto)
+    @Id
     @Schema(description = "主键id")
     private Long id;
 

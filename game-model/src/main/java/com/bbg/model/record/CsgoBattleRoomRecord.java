@@ -19,7 +19,7 @@ import java.io.Serial;
  * 对战房间 实体类。
  *
  * @author bbg
- * @since 2024-05-15
+ * @since 2024-05-16
  */
 @Data
 @NoArgsConstructor

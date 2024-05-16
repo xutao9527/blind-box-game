@@ -143,7 +143,6 @@ const tableProps = reactive({
     }
   },
   sortChange: async (column)=>{
-      console.log(column)
       if(column.order === "descending"){
         tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
       }else if(column.order === "ascending"){
