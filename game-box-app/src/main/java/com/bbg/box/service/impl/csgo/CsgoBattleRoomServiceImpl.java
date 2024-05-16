@@ -162,9 +162,6 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         battleRoomRes.setCsgoBattleRoom(battleRoom);
         // 更新 [房间缓存]
         redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
-
-        int a = 1231/0;
-
         return ApiRet.buildOk(battleRoomRes);
     }
 
