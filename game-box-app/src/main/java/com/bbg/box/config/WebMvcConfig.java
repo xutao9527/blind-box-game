@@ -15,8 +15,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/csgoBattleRoom/joinByUserId")        //测试接口,后面屏蔽
+                .excludePathPatterns("/csgoBattleRoom/joinByUserId")        // 测试接口,后面屏蔽
+                .excludePathPatterns("/doc")                                // 在线接口文档
+                .excludePathPatterns("/api-doc")                            // 在线接口文档
+                .excludePathPatterns("/swagger-ui/**")                      // 在线接口文档
+                .excludePathPatterns("/api-doc/swagger-config")             // 在线接口文档
                 .excludePathPatterns("/bizUser/login");
-
     }
 }

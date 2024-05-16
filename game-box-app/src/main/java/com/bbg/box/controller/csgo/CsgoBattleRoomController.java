@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2024-05-13
  */
 @RestController
-@Tag(name = "对战房间接口")
+@Tag(name = "CS:GO对战接口")
 @RequestMapping("/csgoBattleRoom")
 public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, CsgoBattleRoomService> {
     @Autowired
@@ -85,7 +85,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
         return ApiRet.buildNo("用户不存在!");
     }
 
-    @PostMapping("getInfo")
+    @PostMapping("getRoom")
     @Operation(description = "获得对战房间信息")
     public ApiRet<BattleRoomDto.BattleRoomRes> getInfo(@NotNull @RequestParam("roomId") Long roomId) {
         BattleRoomDto.BattleRoomRes createBattleRoomRes = new BattleRoomDto.BattleRoomRes();
@@ -94,7 +94,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
         return ApiRet.buildOk(createBattleRoomRes);
     }
 
-    @PostMapping("getRooms")
+    @PostMapping("getRoomList")
     @Operation(description = "获取对战房间列表")
     public ApiRet<Page<CsgoBattleRoom>> getRooms(@RequestBody BattleRoomDto.GetRoomListReq model) {
         return ApiRet.buildOk(csgoBattleRoomService.getRoomList(model));

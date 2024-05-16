@@ -41,7 +41,6 @@ import io.swagger.v3.oas.annotations.Parameter;
  * @since 2024-05-03
  */
 @RestController
-@Tag(name = "CSGO箱子接口")
 @RequestMapping("/csgoBox")
 public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     @Autowired
@@ -52,6 +51,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     protected BizDictService bizDictService;
 
     @PostMapping("list")
+    @Tag(name = "CS:GO盲盒接口")
     @Operation(description = "获得盲盒列表")
     public ApiRet<BoxDto.GetBoxRes> list(@RequestBody @Validated BoxDto.GetBoxReq model) {
         List<CsgoBox> csgoBoxes = csgoBoxService.getBoxesByType(model.getType());
@@ -59,6 +59,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     }
 
     @PostMapping("open")
+    @Tag(name = "CS:GO盲盒接口")
     @Operation(description = "打开盲盒")
     public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model) {
         BizUser bizUser = getCurrentUser();
@@ -67,6 +68,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     }
 
     @PostMapping("dreamList")
+    @Tag(name = "CS:GO追梦接口")
     @Operation(description = "获得追梦商品列表")
     public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody DreamDto.DreamListReq model) {
         Page<CsgoBoxGoods> page = null;
@@ -88,6 +90,7 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     }
 
     @PostMapping("dreamGood")
+    @Tag(name = "CS:GO追梦接口")
     @Operation(description = "进行追梦")
     public ApiRet<DreamDto.DreamGoodRes> dreamGood(@RequestBody DreamDto.DreamGoodReq model) {
         BizUser bizUser = getCurrentUser();
