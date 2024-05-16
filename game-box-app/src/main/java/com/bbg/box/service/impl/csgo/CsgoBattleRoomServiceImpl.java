@@ -59,17 +59,16 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     @Autowired
     RedisService redisService;
     // 单独的房间信息-存活时长
-    public final static long ROOM_INFO_LIVE_TIME = 120;
+    public final static long ROOM_INFO_LIVE_TIME = 180;
 
     /**
      * 创建对战房间
      */
     @Transactional(rollbackFor = Exception.class)
     @RedisLock(value = "#bizUser.id", key = KeyConst.METHOD_CREATE_ROOM_LOCK)
-    public ApiRet<BattleRoomDto.BattleRoomRes> createRoom(BizUser bizUser, BattleRoomDto.CreateRoomReq createRoomReq) {
+    public ApiRet<BattleRoomDto.BattleRoomRes> createRoom(BizUser bizUser, BattleRoomDto.CreateRoomReq createRoomReq, long roomId) {
         BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();      // 返回结果
         List<CsgoRobot> robotList = null;                                                   // 机器人
-        Long roomId = IdTool.nextId();                                                      // 房间编号
         BigDecimal roomPrice;                                                               // 房间价格
         // --------------------------------------检查s--------------------------------------
         // 箱子检查
@@ -154,15 +153,18 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
             csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
             dispatchBattleGoods(battleRoom);
-        } else {
-            // 如果房间还在等待用户加入,更新 [房间缓存]
-            redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
+
         }
         this.save(battleRoom);
         csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
         csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
         // --------------------------------------保存数据e--------------------------------------
         battleRoomRes.setCsgoBattleRoom(battleRoom);
+        // 更新 [房间缓存]
+        redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
+
+        int a = 1231/0;
+
         return ApiRet.buildOk(battleRoomRes);
     }
 
@@ -222,19 +224,18 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
             csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());                     // 保存房间中奖商品
             dispatchBattleGoods(battleRoom);                                                            // 发放商品
             this.saveOrUpdate(battleRoom);                                                              // 更新房间状态
-        } else {
-            // 如果房间还在等待用户加入,更新 [房间缓存]
-            redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
         }
         csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());                         // 更新用户
         // --------------------------------------保存数据e--------------------------------------
         battleRoomRes.setCsgoBattleRoom(battleRoom);
+        // 更新 [房间缓存]
+        redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
         return ApiRet.buildOk(battleRoomRes);
     }
 
     /**
      * 获得对战房间信息
-     * 缓存信息默认存储120秒(根据内存实时调整),房间结束后,清除一次缓存
+     * 缓存信息默认存储180秒(根据内存实时调整),房间结束后,清除一次缓存
      */
     @RedisCache(value = "#roomId", key = KeyConst.ROOM_INFO_ID, liveTime = ROOM_INFO_LIVE_TIME, timeUnit = TimeUnit.SECONDS)
     public CsgoBattleRoom getInfo(Long roomId) {

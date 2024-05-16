@@ -14,7 +14,7 @@ import com.bbg.model.csgo.CsgoBattleRoom;
  */
 public interface CsgoBattleRoomService extends IService<CsgoBattleRoom> {
 
-    ApiRet<BattleRoomDto.BattleRoomRes> createRoom(BizUser bizuser, BattleRoomDto.CreateRoomReq createRoomReq);
+    ApiRet<BattleRoomDto.BattleRoomRes> createRoom(BizUser bizuser, BattleRoomDto.CreateRoomReq createRoomReq,long roomId);
 
     ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizuser, Long roomId);
 

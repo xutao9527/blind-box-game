@@ -3,7 +3,9 @@ package com.bbg.box.controller.csgo;
 import com.bbg.box.base.BaseController;
 
 import com.bbg.box.service.biz.BizUserService;
+import com.bbg.box.utils.IdTool;
 import com.bbg.core.box.dto.BattleRoomDto;
+import com.bbg.core.constants.KeyConst;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBattleRoom;
 import com.bbg.box.service.csgo.CsgoBattleRoomService;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 对战房间 控制层。
@@ -37,22 +41,44 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
     @Operation(description = "创建对战房间")
     public ApiRet<BattleRoomDto.BattleRoomRes> create(@Validated @RequestBody BattleRoomDto.CreateRoomReq model) {
         BizUser bizUser = getCurrentUser();
-        return csgoBattleRoomService.createRoom(bizUser, model);
+        long roomId = IdTool.nextId();
+        ApiRet<BattleRoomDto.BattleRoomRes> apiRet;
+        try {
+            apiRet = csgoBattleRoomService.createRoom(bizUser, model, roomId);
+        } catch (Exception e) {
+            redisService.delete(KeyConst.build(KeyConst.ROOM_INFO_ID, String.valueOf(roomId)));
+            apiRet = ApiRet.buildNo("创建房间异常");
+        }
+        return apiRet;
     }
 
     @GetMapping("join")
     @Operation(description = "加入对战房间")
     public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId") Long roomId) {
         BizUser bizUser = getCurrentUser();
-        return csgoBattleRoomService.joinRoom(bizUser, roomId);
+        ApiRet<BattleRoomDto.BattleRoomRes> apiRet;
+        try {
+            apiRet = csgoBattleRoomService.joinRoom(bizUser, roomId);
+        } catch (Exception e) {
+            redisService.delete(KeyConst.build(KeyConst.ROOM_INFO_ID, String.valueOf(roomId)));
+            apiRet = ApiRet.buildNo("加入房间异常");
+        }
+        return apiRet;
     }
 
     @GetMapping("joinByUserId")
     @Operation(description = "加入对战房间(用户Id-测试)")
     public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId") Long roomId, @NotNull @RequestParam("userId") Long userId) {
         BizUser bizUser = bizUserService.getById(userId);
+        ApiRet<BattleRoomDto.BattleRoomRes> apiRet;
         if (bizUser != null) {
-            return csgoBattleRoomService.joinRoom(bizUser, roomId);
+            try {
+                apiRet = csgoBattleRoomService.joinRoom(bizUser, roomId);
+            } catch (Exception e) {
+                redisService.delete(KeyConst.build(KeyConst.ROOM_INFO_ID, String.valueOf(roomId)));
+                apiRet = ApiRet.buildNo("加入房间异常");
+            }
+            return apiRet;
         }
         return ApiRet.buildNo("用户不存在!");
     }
@@ -60,8 +86,9 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
     @PostMapping("getInfo")
     @Operation(description = "获得对战房间信息")
     public ApiRet<BattleRoomDto.BattleRoomRes> getInfo(@NotNull @RequestParam("roomId") Long roomId) {
-        BizUser bizUser = getCurrentUser();
         BattleRoomDto.BattleRoomRes createBattleRoomRes = new BattleRoomDto.BattleRoomRes();
+        CsgoBattleRoom battleRoom = csgoBattleRoomService.getInfo(roomId);
+        createBattleRoomRes.setCsgoBattleRoom(battleRoom);
         return ApiRet.buildOk(createBattleRoomRes);
     }
 
