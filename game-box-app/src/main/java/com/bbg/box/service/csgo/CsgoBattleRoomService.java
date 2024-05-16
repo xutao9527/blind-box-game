@@ -6,6 +6,8 @@ import com.bbg.model.biz.BizUser;
 import com.mybatisflex.core.service.IService;
 import com.bbg.model.csgo.CsgoBattleRoom;
 
+import java.util.List;
+
 /**
  * 对战房间 服务层。
  *
@@ -19,4 +21,6 @@ public interface CsgoBattleRoomService extends IService<CsgoBattleRoom> {
     ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizuser, Long roomId);
 
     CsgoBattleRoom getInfo(Long roomId);
+
+    List<CsgoBattleRoom> getRoomList(BattleRoomDto.GetRoomListReq getRoomListReq);
 }

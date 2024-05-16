@@ -232,7 +232,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
 
     /**
      * 获得对战房间信息
-     * 缓存信息默认存储180秒(根据内存实时调整),房间结束后,清除一次缓存
+     * 缓存信息默认存储180秒(根据内存实时调整)
      */
     @RedisCache(value = "#roomId", key = KeyConst.ROOM_INFO_ID, liveTime = ROOM_INFO_LIVE_TIME, timeUnit = TimeUnit.SECONDS)
     public CsgoBattleRoom getInfo(Long roomId) {
@@ -379,5 +379,13 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         return true;
     }
 
-
+    /**
+     * 获得对战房间信息
+     * 缓存信息默认存储500毫秒,避免高并发,缓解数据库压力
+     */
+    @RedisCache(value = "#getRoomListReq.battleModel",key = KeyConst.ROOM_LIST_INFO_BATTLE_MODEL,liveTime = 500,timeUnit = TimeUnit.MILLISECONDS)
+    public List<CsgoBattleRoom> getRoomList(BattleRoomDto.GetRoomListReq getRoomListReq){
+        List<CsgoBattleRoom> battleRoomList = new ArrayList<>();
+        return battleRoomList;
+    }
 }

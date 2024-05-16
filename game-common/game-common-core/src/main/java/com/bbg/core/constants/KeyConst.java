@@ -21,6 +21,8 @@ public class KeyConst {
     public final static String ROBOT_LIST = "robot::list";
     // 单独的房间信息
     public final static String ROOM_INFO_ID = "battleRoom::info::roomId";
+    // 单独的房间信息
+    public final static String ROOM_LIST_INFO_BATTLE_MODEL = "battleRoom::list::battleModel";
 
     // 方法锁  同步数据
     public final static String METHOD_SYNC_DATA_LOCK = "method::syncData";

@@ -16,19 +16,14 @@ public class BattleRoomDto {
     @Schema(description = "对战房间列表")
     public static class GetRoomListReq implements Serializable {
         @Schema(description = "页数")
-        private Number pageNumber;
+        private int pageNumber = 1;
         @Schema(description = "页大小")
-        private Number pageSize;
-        @Schema(description = "对战模式")
+        private int pageSize = 10;
+        @NotNull(message = "对战模式不能为空")
+        @Min(value = 1, message = "对战模式1~2之间")
+        @Max(value = 2, message = "对战模式1~2之间")
+        @Schema(description = "对战模式:1=欧皇,2=非酋")
         private String battleModel;
-    }
-
-    @Data
-    @Accessors(chain = true)
-    @Schema(description = "对战房间列表结果")
-    public static class GetRoomListRes implements Serializable {
-        @Schema(description = "房间列表")
-        private Page<CsgoBattleRoom> csgoBattleRoomPage;
     }
 
     @Data

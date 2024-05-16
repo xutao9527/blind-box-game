@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -94,9 +95,8 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
 
     @PostMapping("getRooms")
     @Operation(description = "获取对战房间列表")
-    public ApiRet<BattleRoomDto.GetRoomListRes> getRooms(@RequestBody BattleRoomDto.GetRoomListReq model) {
-        BizUser bizUser = getCurrentUser();
-        BattleRoomDto.GetRoomListRes createBattleRoomRes = new BattleRoomDto.GetRoomListRes();
-        return ApiRet.buildOk(createBattleRoomRes);
+    public ApiRet<List<CsgoBattleRoom>> getRooms(@RequestBody BattleRoomDto.GetRoomListReq model) {
+        List<CsgoBattleRoom> roomList = csgoBattleRoomService.getRoomList(model);
+        return ApiRet.buildOk(roomList);
     }
 }
