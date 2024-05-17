@@ -1,8 +1,5 @@
 <template>
   <div class="bbg_sub_table">
-<!--    <pre>-->
-<!--      {{JSON.stringify(submitData,null,2)}}-->
-<!--    </pre>-->
     <el-form label-position="right" :inline="true" size="small">
       <el-form-item label="名称">
         <el-input v-model="tableProps.editData.name" placeholder="商品名称"/>
@@ -13,15 +10,17 @@
       <el-form-item label="价格">
         <el-input v-model="tableProps.editData.price" placeholder="商品价格"/>
       </el-form-item>
-      <template v-if="props.rowOjb.type === '3'">
-        <el-form-item label="费用">
-          <el-input v-model="tableProps.editData.rate" placeholder="手续费比率"/>
-        </el-form-item>
-      </template>
-      <template v-else>
-        <el-form-item label="概率">
-          <el-input v-model="tableProps.editData.rate" placeholder="获得概率"/>
-        </el-form-item>
+      <template v-if="boxTypeDictObject">
+        <template v-if="props.rowOjb.type === boxTypeDictObject.dictMap['ordinary_box'] || props.rowOjb.type === boxTypeDictObject.dictMap['battle_box']">
+          <el-form-item label="概率">
+            <el-input v-model="tableProps.editData.rate" placeholder="获得概率"/>
+          </el-form-item>
+        </template>
+        <template v-if="props.rowOjb.type === boxTypeDictObject.dictMap['dream_box']">
+          <el-form-item label="费用">
+            <el-input v-model="tableProps.editData.rate" placeholder="手续费比率"/>
+          </el-form-item>
+        </template>
       </template>
       <el-form-item label="排序">
         <el-input v-model="tableProps.editData.sort" placeholder="排序"/>
@@ -48,11 +47,13 @@
         </template>
       </el-table-column>
       <el-table-column prop="price" label="商品价格"/>
-      <template v-if="props.rowOjb.type === '3'">
-        <el-table-column prop="rate" label="手续费"/>
-      </template>
-      <template v-else>
-        <el-table-column prop="rate" label="获得概率"/>
+      <template v-if="boxTypeDictObject">
+        <template v-if="props.rowOjb.type === boxTypeDictObject.dictMap['ordinary_box'] || props.rowOjb.type === boxTypeDictObject.dictMap['battle_box']">
+          <el-table-column prop="rate" label="获得概率"/>
+        </template>
+        <template v-if="props.rowOjb.type === boxTypeDictObject.dictMap['dream_box']">
+          <el-table-column prop="rate" label="手续费"/>
+        </template>
       </template>
       <el-table-column prop="sort" label="排序"/>
       <el-table-column prop="enable" label="状态">
@@ -74,6 +75,7 @@
 <script setup>
 
 import {http} from "@/core/axios/index.js";
+import {DictObject} from "@/core/dict/index.js";
 
 const enableButtonType = computed(() => {
   if (props.rowOjb.type === '1' || props.rowOjb.type === '2') {
@@ -109,8 +111,8 @@ const enableBox = async () => {
       ElMessage({type: 'success', message: '停用成功!'})
     }
   } else {
-    if (props.rowOjb.type === '1' || props.rowOjb.type === '2') {
-      console.log(sumRate.value)
+    // 普通与对战开启状态,需要计算概率之和
+    if (props.rowOjb.type === boxTypeDictObject.value.dictMap['ordinary_box'] || props.rowOjb.type === boxTypeDictObject.value.dictMap['ordinary_box']) {
       if (sumRate.value === 100) {
         data.enable = true;
         props.rowOjb.enable = true;
@@ -153,20 +155,20 @@ const tableProps = reactive({
   }
 })
 
-const submitData = computed(()=>{
+const submitData = computed(() => {
   return {
-    id:tableProps.editData.id,
+    id: tableProps.editData.id,
     boxId: tableProps.editData.boxId,
-    goodId:tableProps.editData.goodId,
-    name:tableProps.editData.name,
-    nameAlias:tableProps.editData.nameAlias,
-    type:tableProps.editData.type,
-    typeName:tableProps.editData.typeName,
-    imageUrl:tableProps.editData.imageUrl,
-    price:tableProps.editData.price,
-    rate:tableProps.editData.rate,
-    sort:tableProps.editData.sort,
-    enable:tableProps.editData.enable,
+    goodId: tableProps.editData.goodId,
+    name: tableProps.editData.name,
+    nameAlias: tableProps.editData.nameAlias,
+    type: tableProps.editData.type,
+    typeName: tableProps.editData.typeName,
+    imageUrl: tableProps.editData.imageUrl,
+    price: tableProps.editData.price,
+    rate: tableProps.editData.rate,
+    sort: tableProps.editData.sort,
+    enable: tableProps.editData.enable,
   }
 })
 
@@ -181,10 +183,21 @@ const toEdit = async (row) => {
 }
 
 const submit = async () => {
-  if (!submitData.value.name || !submitData.value.nameAlias || !submitData.value.price || !submitData.value.rate) {
-    ElMessage({type: 'error', message: '参数不能为空!'})
-    return
+  if (props.rowOjb.type === boxTypeDictObject.value.dictMap['ordinary_box']
+      || props.rowOjb.type === boxTypeDictObject.value.dictMap['battle_box']
+      || props.rowOjb.type === boxTypeDictObject.value.dictMap['dream_box']) {
+    if (!submitData.value.goodId || !submitData.value.name || !submitData.value.nameAlias || !submitData.value.price || !submitData.value.rate || !submitData.value.sort) {
+      ElMessage({type: 'error', message: '参数不能为空!'})
+      return
+    }
+  } else {
+    if (!submitData.value.goodId || !submitData.value.name || !submitData.value.nameAlias || !submitData.value.price || !submitData.value.sort) {
+      ElMessage({type: 'error', message: '参数不能为空!'})
+      return
+    }
   }
+
+
   if (tableProps.editData.id) {
     const apiRet = await http.post('/csgoBoxGoods/update', submitData.value)
     if (apiRet.ok) {
@@ -200,6 +213,7 @@ const submit = async () => {
   }
 }
 
+
 const remove = async (row) => {
   const apiRet = await http.get(`/csgoBoxGoods/remove/${row.id}`)
   if (apiRet.ok) {
@@ -208,10 +222,13 @@ const remove = async (row) => {
   }
 }
 
-onMounted(() => {
+const boxTypeDictObject = ref(null);
+onMounted(async () => {
+  boxTypeDictObject.value = await DictObject.create('csgo_box_type');
+  console.log()
   tableProps.editData.boxId = props.rowOjb.id.toString()
   tableProps.queryEntity.boxId = props.rowOjb.id.toString()
-  tableProps.fetchData()
+  await tableProps.fetchData()
 })
 
 const emit = defineEmits(['update:rowOjb'])

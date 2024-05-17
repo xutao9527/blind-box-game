@@ -21,8 +21,8 @@ const props = defineProps(
       value: {
         type: String,
       },
-      tag:{
-        required:true
+      tag: {
+        required: true
       }
     }
 )
@@ -30,17 +30,17 @@ const props = defineProps(
 const bizDict = ref({})
 const bizDictDetails = ref([])
 
-const fetchData = async () =>{
+const fetchData = async () => {
   let apiRet = await http.get(`/bizDict/getDict/${props.tag}`)
-  if(apiRet.ok){
+  if (apiRet.ok) {
     bizDict.value = apiRet.data
-    if(bizDict.value && bizDict.value.bizDictDetails){
+    if (bizDict.value && bizDict.value.bizDictDetails) {
       bizDictDetails.value = bizDict.value.bizDictDetails
     }
   }
 }
 
-onMounted(()=>{
+onMounted(() => {
   fetchData()
 })
 
@@ -53,11 +53,20 @@ const handleChange = (value) => {
   emit('update:value', value)
 }
 
-const getLabel = (value)=>{
+const getLabel = (value) => {
   const foundElement = bizDictDetails.value.find(obj => obj.value === value)
-  if(foundElement){
+  if (foundElement) {
     return foundElement.label
-  }else{
+  } else {
+    return ""
+  }
+}
+
+const getValue = (label) => {
+  const foundElement = bizDictDetails.value.find(obj => obj.label === label)
+  if (foundElement) {
+    return foundElement.value
+  } else {
     return ""
   }
 }
