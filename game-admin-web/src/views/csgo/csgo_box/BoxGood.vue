@@ -1,5 +1,8 @@
 <template>
   <div class="bbg_sub_table">
+<!--    <pre>-->
+<!--      {{JSON.stringify(submitData,null,2)}}-->
+<!--    </pre>-->
     <el-form label-position="right" :inline="true" size="small">
       <el-form-item label="名称">
         <el-input v-model="tableProps.editData.name" placeholder="商品名称"/>
@@ -36,6 +39,7 @@
       </el-form-item>
     </el-form>
     <el-table :data="tableProps.apiRet.data" size="small">
+      <el-table-column prop="goodId" label="商品编号"/>
       <el-table-column prop="name" label="商品名称"/>
       <el-table-column prop="nameAlias" label="商品别名"/>
       <el-table-column prop="imageUrl" label="图片" width="60">
@@ -70,7 +74,6 @@
 <script setup>
 
 import {http} from "@/core/axios/index.js";
-import GoodsSelect from "@/views/csgo/csgo_box/GoodsSelect.vue";
 
 const enableButtonType = computed(() => {
   if (props.rowOjb.type === '1' || props.rowOjb.type === '2') {
@@ -150,6 +153,23 @@ const tableProps = reactive({
   }
 })
 
+const submitData = computed(()=>{
+  return {
+    id:tableProps.editData.id,
+    boxId: tableProps.editData.boxId,
+    goodId:tableProps.editData.goodId,
+    name:tableProps.editData.name,
+    nameAlias:tableProps.editData.nameAlias,
+    type:tableProps.editData.type,
+    typeName:tableProps.editData.typeName,
+    imageUrl:tableProps.editData.imageUrl,
+    price:tableProps.editData.price,
+    rate:tableProps.editData.rate,
+    sort:tableProps.editData.sort,
+    enable:tableProps.editData.enable,
+  }
+})
+
 const toEdit = async (row) => {
   if (row) {
     Object.assign(tableProps.editData, row);
@@ -161,18 +181,18 @@ const toEdit = async (row) => {
 }
 
 const submit = async () => {
-  if (!tableProps.editData.price || !tableProps.editData.rate) {
+  if (!submitData.value.name || !submitData.value.nameAlias || !submitData.value.price || !submitData.value.rate) {
     ElMessage({type: 'error', message: '参数不能为空!'})
     return
   }
   if (tableProps.editData.id) {
-    const apiRet = await http.post('/csgoBoxGoods/update', tableProps.editData)
+    const apiRet = await http.post('/csgoBoxGoods/update', submitData.value)
     if (apiRet.ok) {
       ElMessage({type: 'success', message: apiRet.msg})
       await tableProps.fetchData()
     }
   } else {
-    const apiRet = await http.post('/csgoBoxGoods/save', tableProps.editData)
+    const apiRet = await http.post('/csgoBoxGoods/save', submitData.value)
     if (apiRet.ok) {
       ElMessage({type: 'success', message: apiRet.msg})
       await tableProps.fetchData()
@@ -189,7 +209,6 @@ const remove = async (row) => {
 }
 
 onMounted(() => {
-  console.log(props.rowOjb)
   tableProps.editData.boxId = props.rowOjb.id.toString()
   tableProps.queryEntity.boxId = props.rowOjb.id.toString()
   tableProps.fetchData()

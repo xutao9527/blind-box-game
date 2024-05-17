@@ -32,11 +32,11 @@
                   table-layout="auto"
                   @sortChange="tableProps.sortChange"
                   border show-overflow-tooltip>
-          <el-table-column type="expand" label="#">
-            <template #default="props">
-              <BoxGood v-model:row-ojb="props.row"/>
-            </template>
-          </el-table-column>
+        <el-table-column type="expand" label="#">
+          <template #default="props">
+            <BoxGood v-model:row-ojb="props.row"/>
+          </template>
+        </el-table-column>
         <el-table-column prop="id" label="主键"/>
         <el-table-column prop="name" label="箱子名称"/>
         <el-table-column prop="nameAlias" label="箱子别名"/>

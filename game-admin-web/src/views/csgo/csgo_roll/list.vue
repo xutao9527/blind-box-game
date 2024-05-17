@@ -45,6 +45,11 @@
                   table-layout="auto"
                   @sortChange="tableProps.sortChange"
                   border show-overflow-tooltip>
+        <el-table-column type="expand" label="#">
+          <template #default="props">
+            <RollGood v-model:row-ojb="props.row"/>
+          </template>
+        </el-table-column>
         <el-table-column prop="id" label="编号" width="185"/>
 <!--        <el-table-column prop="createUserId" label="创建用户编号"/>-->
 <!--        <el-table-column prop="createUserName" label="创建用户名称"/>-->
@@ -108,6 +113,7 @@
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
+import RollGood from "./RollGood.vue";
 
 const rollTypeRef = ref(null)
 const rollModelRef = ref(null)

@@ -11,6 +11,9 @@
           <el-col :span="18">
             <el-row>
               <div class="bbg-table-header-input">
+                <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="商品编号"/>
+              </div>
+              <div class="bbg-table-header-input">
                 <el-input v-model="tableProps.reqParams.queryEntity.itemName" placeholder="皮肤名称"/>
               </div>
               <div class="bbg-table-header-input">
@@ -91,13 +94,14 @@ const props = defineProps({
   }
 })
 
-
 const select = async (row) => {
   props.good.goodId = row.id
   props.good.name = row.itemName
   props.good.nameAlias = row.marketHashName
   props.good.imageUrl = row.imageUrl
+  props.good.goodImage = row.imageUrl
   props.good.price = row.cnyPrice
+  props.good.goodPrice = row.cnyPrice
   props.good.type = row.type
   props.good.typeName = row.typeName
   ElMessage({type: 'success', message: '选择完成'})
