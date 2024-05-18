@@ -37,8 +37,8 @@ import java.util.stream.Collectors;
  * @author bbg
  * @since 2024-05-13
  */
-@Service
 @Slf4j
+@Service
 public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper, CsgoBattleRoom> implements CsgoBattleRoomService {
 
     @Autowired
@@ -59,7 +59,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     CsgoStorehouseService csgoStorehouseService;
     @Autowired
     RedisService redisService;
-    // 单独的房间信息-存活时长
+    // 单独的房间信息-缓存存活时长
     public final static long ROOM_INFO_LIVE_TIME = 180;
 
     /**

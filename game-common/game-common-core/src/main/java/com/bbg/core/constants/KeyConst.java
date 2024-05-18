@@ -19,10 +19,15 @@ public class KeyConst {
     public final static String BOX_ID = "box::id";
     // 所有机器人
     public final static String ROBOT_LIST = "robot::list";
-    // 单独的房间信息
+    // 对战房间信息
     public final static String ROOM_INFO_ID = "battleRoom::info::roomId";
-    // 单独的房间信息
+    // 对战房间信息列表
     public final static String ROOM_LIST_INFO_BATTLE_MODEL = "battleRoom::list::battleModel";
+    // 撸房信息
+    public final static String ROLL_INFO_ID = "roll::info::rollId";
+    // 撸房信息列表
+    public final static String ROLL_LIST_INFO = "roll::info::list";
+
 
     // 方法锁  同步数据
     public final static String METHOD_SYNC_DATA_LOCK = "method::syncData";
@@ -30,11 +35,12 @@ public class KeyConst {
     public final static String METHOD_OPEN_BOX_LOCK = "method::openBox::uid";
     // 方法锁  追梦
     public final static String METHOD_DREAM_GOOD_LOCK = "method::dreamGood::uid";
-    // 方法锁  创建房间
+    // 方法锁  创建对战房间
     public final static String METHOD_CREATE_ROOM_LOCK = "method::createRoom::uid";
-    // 方法锁  加入房间
+    // 方法锁  加入对战房间
     public final static String METHOD_JOIN_ROOM_LOCK = "method::joinRoom::roomId";
-
+    // 方法锁 加入撸房
+    public final static String METHOD_JOIN_ROLL_LOCK = "method::joinRoll::rollId";
 
 
     public static String build(String prefix, String key) {
