@@ -71,19 +71,20 @@
         <el-table-column prop="peopleNumber" label="房间人数" width="90"/>
 <!--        <el-table-column prop="joinCondition" label="加入房间条件"/>-->
 <!--        <el-table-column prop="joinCode" label="加入房间密码"/>-->
-        <el-table-column prop="sort" label="排序" width="60"/>
+
         <el-table-column prop="status" label="房间状态" width="85">
           <template #default="scope">
             {{rollStatusRef.getLabel(scope.row.status)}}
           </template>
         </el-table-column>
         <el-table-column prop="enable" label="状态" width="60">
-        <template #default="scope">
-            {{scope.row.enable?'启用':'停用'}}
-        </template>
+          <template #default="scope">
+              {{scope.row.enable?'启用':'停用'}}
+          </template>
         </el-table-column>
+          <el-table-column prop="sort" label="排序" width="60"/>
         <el-table-column prop="createTime" label="创建时间" width="165"/>
-<!--        <el-table-column prop="updateTime" label="修改时间"/>-->
+        <el-table-column prop="updateTime" label="修改时间" width="165"/>
         <el-table-column fixed="right" label="操作" width="100">
           <template #default="scope" >
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
