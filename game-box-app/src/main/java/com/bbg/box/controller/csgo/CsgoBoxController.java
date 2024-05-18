@@ -53,9 +53,9 @@ public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
     @PostMapping("list")
     @Tag(name = "CS:GO盲盒接口")
     @Operation(description = "获得盲盒列表")
-    public ApiRet<BoxDto.GetBoxRes> list(@RequestBody @Validated BoxDto.GetBoxReq model) {
+    public ApiRet<List<CsgoBox>> list(@RequestBody @Validated BoxDto.GetBoxReq model) {
         List<CsgoBox> csgoBoxes = csgoBoxService.getBoxesByType(model.getType());
-        return ApiRet.buildOk(new BoxDto.GetBoxRes().setCsgoBoxes(csgoBoxes));
+        return ApiRet.buildOk(csgoBoxes);
     }
 
     @PostMapping("open")

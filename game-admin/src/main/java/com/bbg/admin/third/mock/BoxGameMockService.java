@@ -6,6 +6,7 @@ import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.DreamDto;
 import com.bbg.core.box.dto.LoginDto;
 import com.bbg.core.entity.ApiRet;
+import com.bbg.model.csgo.CsgoBox;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.Data;
@@ -14,6 +15,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 @FeignClient(name = "box-app-server", configuration = BoxGameMockService.GameMockInterceptor.class)
 public interface BoxGameMockService {
@@ -28,7 +31,7 @@ public interface BoxGameMockService {
     ApiRet<LoginDto.LoginRes> getInfo();
 
     @PostMapping("/csgoBox/list")
-    ApiRet<BoxDto.GetBoxRes> list(@RequestBody BoxDto.GetBoxReq model);
+    ApiRet<List<CsgoBox>> list(@RequestBody BoxDto.GetBoxReq model);
 
     @PostMapping("/csgoBox/open")
     ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model);
