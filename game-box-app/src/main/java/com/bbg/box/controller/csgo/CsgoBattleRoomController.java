@@ -96,7 +96,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, Csg
 
     @PostMapping("getRoomList")
     @Operation(description = "获取对战房间列表")
-    public ApiRet<Page<CsgoBattleRoom>> getRooms(@RequestBody BattleRoomDto.GetRoomListReq model) {
+    public ApiRet<Page<CsgoBattleRoom>> getRoomList(@RequestBody BattleRoomDto.GetRoomListReq model) {
         return ApiRet.buildOk(csgoBattleRoomService.getRoomList(model));
     }
 }
