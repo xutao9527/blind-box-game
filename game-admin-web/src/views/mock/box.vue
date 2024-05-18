@@ -3,7 +3,7 @@
     <el-main class="box-main">
       <el-scrollbar>
         <el-space wrap>
-          <el-card style="width: 300px;height: 300px" v-for="box in boxMock.getBoxRes.csgoBoxes">
+          <el-card style="width: 300px;height: 300px" v-for="box in boxMock.boxList">
             <template #header>
               <span>{{ box.name }}</span>
             </template>
@@ -53,7 +53,7 @@ import {boxMock} from "@/views/mock/js/boxDto.js";
 import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 onMounted(() => {
-  boxMock.boxList();
+  boxMock.getBoxList();
 })
 </script>
 <style lang="less" scoped>

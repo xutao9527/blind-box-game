@@ -196,8 +196,6 @@ const submit = async () => {
       return
     }
   }
-
-
   if (tableProps.editData.id) {
     const apiRet = await http.post('/csgoBoxGoods/update', submitData.value)
     if (apiRet.ok) {
@@ -225,7 +223,6 @@ const remove = async (row) => {
 const boxTypeDictObject = ref(null);
 onMounted(async () => {
   boxTypeDictObject.value = await DictObject.create('csgo_box_type');
-  console.log()
   tableProps.editData.boxId = props.rowOjb.id.toString()
   tableProps.queryEntity.boxId = props.rowOjb.id.toString()
   await tableProps.fetchData()

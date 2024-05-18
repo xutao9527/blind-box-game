@@ -5,10 +5,13 @@ import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.DreamDto;
 import com.bbg.core.box.dto.LoginDto;
 import com.bbg.core.entity.ApiRet;
+import com.bbg.model.csgo.CsgoBox;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Csgo游戏模拟 控制层。
@@ -51,7 +54,7 @@ public class BoxGameMockController {
 
     @PostMapping("list")
     @Operation(description = "盲盒列表")
-    public ApiRet<BoxDto.GetBoxRes> list(@RequestBody BoxDto.GetBoxReq model){
+    public ApiRet<List<CsgoBox>> list(@RequestBody BoxDto.GetBoxReq model){
         return boxGameMockService.list(model);
     }
 

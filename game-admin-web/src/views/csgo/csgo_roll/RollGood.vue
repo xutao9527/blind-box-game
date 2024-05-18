@@ -17,7 +17,7 @@
         <el-button icon="Position" @click="goodsSelectRef.selectData()">选择</el-button>
         <el-button icon="Plus" @click="submit">{{ submitText }}</el-button>
         <el-button icon="Close" @click="toEdit(undefined)">取消</el-button>
-        <el-button :type="enableButtonType" icon="Open" @click="enableBox">
+        <el-button :type="enableButtonType" icon="Open" @click="enableRoll">
           {{ props.rowOjb.enable ? '停用' : '启用' }}
         </el-button>
       </el-form-item>
@@ -54,7 +54,25 @@ const enableButtonType = computed(() => {
   }
 })
 
-const enableBox = async () => {
+const enableRoll = async () => {
+  const data = {
+    id: props.rowOjb.id.toString(),
+  }
+  if (props.rowOjb.enable) {
+    data.enable = false;
+    const apiRet = await http.post('/csgoRoll/update', data)
+    if (apiRet.ok) {
+      props.rowOjb.enable = false;
+      ElMessage({type: 'success', message: '停用成功!'})
+    }
+  }else {
+    data.enable = true;
+    const apiRet = await http.post('/csgoRoll/update', data)
+    if (apiRet.ok) {
+      props.rowOjb.enable = true;
+      ElMessage({type: 'success', message: '启动成功!'})
+    }
+  }
 
 }
 
