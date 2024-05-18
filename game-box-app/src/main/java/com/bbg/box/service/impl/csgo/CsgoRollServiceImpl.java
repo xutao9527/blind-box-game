@@ -6,6 +6,7 @@ import com.bbg.box.service.csgo.CsgoRollUserService;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.RollDto;
+import com.bbg.core.box.service.RedisService;
 import com.bbg.core.constants.KeyConst;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.biz.BizDict;
@@ -44,6 +45,8 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     CsgoRollGoodService csgoRollGoodService;
     @Autowired
     CsgoRollUserService csgoRollUserService;
+    @Autowired
+    RedisService redisService;
     // 单独的房间信息-缓存存活时长
     public final static long ROLL_INFO_LIVE_TIME = 180;
 
@@ -79,12 +82,12 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
             return ApiRet.buildNo("房间没上架");
         }
         LocalDateTime currentTime = LocalDateTime.now();
-        if(roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model"))){
-            if(roll.getRollUsers().size()>=roll.getPeopleNumber()){
+        if (roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model"))) {
+            if (roll.getRollUsers().size() >= roll.getPeopleNumber()) {
                 ApiRet.buildNo("房间已满员");
             }
-        }else if(roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model"))){
-            if(roll.getEndTime().isBefore(currentTime)){
+        } else if (roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model"))) {
+            if (roll.getEndTime().isBefore(currentTime)) {
                 ApiRet.buildNo("房间已结束");
             }
         }
@@ -93,12 +96,50 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
         }
         // --------------------------------------检查e--------------------------------------
         // --------------------------------------设置数据s--------------------------------------
-
+        CsgoRollUser csgoRollUser = new CsgoRollUser();
+        csgoRollUser.setRollId(rollId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
+        roll.getRollUsers().add(csgoRollUser);
+        // [人数模式] 满员,并状态为 上架中
+        if (roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model")) && rollStatusDict.getValueByAlias("roll_online").equals(roll.getStatus())) {
+            if (roll.getRollUsers().size() >= roll.getPeopleNumber()) {
+                // todo 结算房间
+                runRoll(roll);
+            }
+            // [人数模式] 超时,并状态为 上架中
+        } else if (roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model")) && rollStatusDict.getValueByAlias("roll_online").equals(roll.getStatus())) {
+            if (roll.getEndTime().isBefore(currentTime)) {
+                // todo 结算房间
+                runRoll(roll);
+            }
+        }
         // --------------------------------------设置数据e--------------------------------------
         // --------------------------------------保存数据s--------------------------------------
-
+        // 判断房间状态等于[已结束],进行 [结果保存] 和 [装备派发]
+        if (!rollStatusDict.getValueByAlias("roll_offline").equals(roll.getStatus())) {
+            // todo 发放商品
+            dispatchRollGoods(roll);                                                                // 发放商品
+            this.saveOrUpdate(roll);                                                                // 更新房间状态
+        }
+        csgoRollUserService.saveOrUpdateBatch(roll.getRollUsers());                                 // 更新房间用户
+        // 更新 [撸房缓存]
+        redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, roll.getId().toString()), roll, ROLL_INFO_LIVE_TIME, TimeUnit.SECONDS);
         // --------------------------------------保存数据e--------------------------------------
-        return null;
+        return ApiRet.buildOk(roll);
+    }
+
+
+    /**
+     * 撸房装备派发
+     */
+    private void dispatchRollGoods(CsgoRoll roll) {
+
+    }
+
+    /**
+     * 撸房具体逻辑
+     */
+    public boolean runRoll(CsgoRoll roll) {
+        return false;
     }
 
     /**
