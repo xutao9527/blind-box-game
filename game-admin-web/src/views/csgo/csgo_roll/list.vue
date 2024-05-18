@@ -66,12 +66,11 @@
             {{rollModelRef.getLabel(scope.row.rollModel)}}
           </template>
         </el-table-column>
-        <el-table-column prop="startTime" label="房间开始时间" width="165"/>
-        <el-table-column prop="endTime" label="房间结束时间" width="165"/>
+        <el-table-column prop="startTime" label="房间开始" width="165"/>
+        <el-table-column prop="endTime" label="房间结束" width="165"/>
         <el-table-column prop="peopleNumber" label="房间人数" width="90"/>
 <!--        <el-table-column prop="joinCondition" label="加入房间条件"/>-->
 <!--        <el-table-column prop="joinCode" label="加入房间密码"/>-->
-
         <el-table-column prop="status" label="房间状态" width="85">
           <template #default="scope">
             {{rollStatusRef.getLabel(scope.row.status)}}
