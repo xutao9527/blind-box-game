@@ -28,13 +28,17 @@ public class CsgoRollController extends BaseCsgoRollController {
     public ApiRet<Boolean> update(CsgoRoll model) {
         var currentTime = LocalDateTime.now();
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
-        if (model.getEnable()
-                && currentTime.isAfter(model.getStartTime())
-                && currentTime.isBefore(model.getEndTime())
-                && model.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))
+        CsgoRoll roll = csgoRollService.getById(model.getId());
+        if (roll != null && model.getEnable()
+                && currentTime.isAfter(roll.getStartTime())
+                && currentTime.isBefore(roll.getEndTime())
+                && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))
         ) {
             model.setStatus(rollStatusDict.getValueByAlias("roll_online"));
+            return ApiRet.buildOk(csgoRollService.updateById(model));
+        } else if (roll != null) {
+            return ApiRet.buildOk(csgoRollService.updateById(model));
         }
-        return ApiRet.buildOk(csgoRollService.updateById(model));
+        return ApiRet.buildNo("房间号不存在");
     }
 }

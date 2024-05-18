@@ -7,6 +7,12 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
             </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dictBattleModelRef" :tag="'csgo_battle_model'" placeholder="对战模式"/>
+            </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.group" ref="dictBattleStatusRef" :tag="'csgo_battle_status'" placeholder="房间状态"/>
+            </div>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
@@ -37,13 +43,17 @@
                   border show-overflow-tooltip>
         <el-table-column prop="id" label=""/>
         <el-table-column prop="createUserId" label=""/>
-        <el-table-column prop="battleModel" label="对战模式"/>
         <el-table-column prop="roomPrice" label="房间价格"/>
-        <el-table-column prop="status" label="房间状态"/>
-        <el-table-column prop="secretHash" label="秘密哈希"/>
-        <el-table-column prop="secretSalt" label="秘密盐值"/>
-        <el-table-column prop="publicHash" label="公共哈希"/>
-        <el-table-column prop="clientSeed" label="客户端种子"/>
+        <el-table-column prop="type" label="对战模式"  >
+          <template #default="scope">
+            {{dictBattleModelRef.getLabel(scope.row.battleModel)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="房间状态"  >
+          <template #default="scope">
+            {{dictBattleStatusRef.getLabel(scope.row.status)}}
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作">
@@ -76,6 +86,8 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
 
+const dictBattleModelRef = ref(null)
+const dictBattleStatusRef = ref(null)
 const header = ref(null);
 const tableDynamicHeight = ref(0)
 
