@@ -28,20 +28,20 @@ public class CsgoRollController extends BaseCsgoRollController {
     public ApiRet<Boolean> update(CsgoRoll model) {
         var currentTime = LocalDateTime.now();
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
-        var rollModleDict = bizDictService.getDictByTag("csgo_roll_model");
+        var rollModelDict = bizDictService.getDictByTag("csgo_roll_model");
         CsgoRoll roll = csgoRollService.getById(model.getId());
         if (roll != null && model.getEnable()
                 && currentTime.isAfter(roll.getStartTime())
                 && currentTime.isBefore(roll.getEndTime())
                 && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))
-                && roll.getRollModel().equals(rollModleDict.getValueByAlias("end_time_model"))      // 时间模式
+                && roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model"))      // 时间模式
         ) {
             model.setStatus(rollStatusDict.getValueByAlias("roll_online"));
             return ApiRet.buildOk(csgoRollService.updateById(model));
         } else if (roll != null && model.getEnable()
                 && currentTime.isAfter(roll.getStartTime())
                 && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))
-                && roll.getRollModel().equals(rollModleDict.getValueByAlias("people_number_model")) // 人数模式
+                && roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model")) // 人数模式
 
         ) {
             model.setStatus(rollStatusDict.getValueByAlias("roll_online"));
