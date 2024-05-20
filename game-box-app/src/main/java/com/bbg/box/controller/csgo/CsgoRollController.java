@@ -1,6 +1,7 @@
 package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
+import com.bbg.box.service.csgo.CsgoRollUserService;
 import com.bbg.core.box.dto.BattleRoomDto;
 import com.bbg.core.box.dto.RollDto;
 import com.bbg.core.constants.KeyConst;
@@ -10,6 +11,7 @@ import com.bbg.model.csgo.CsgoRoll;
 import com.bbg.box.service.csgo.CsgoRollService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
+import com.bbg.model.csgo.CsgoRollUser;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.constant.SqlOperator;
@@ -40,6 +42,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService> {
 
     public final CsgoRollService csgoRollService;
+    public final CsgoRollUserService csgoRollUserService;
 
     @PostMapping("getRollList")
     @Operation(description = "获取撸房列表")
@@ -70,4 +73,10 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
         return ApiRet.buildOk(csgoRollService.getInfo(rollId));
     }
 
+    @PostMapping("getRollUsers")
+    @Operation(description = "获得撸房用户列表")
+    public ApiRet<Page<CsgoRollUser>> getRollUsers(@NotNull @RequestParam("rollId") RollDto.GetRollUsersReq model) {
+        Page<CsgoRollUser> page = csgoRollUserService.page(Page.of(model.getPageNumber(),model.getPageSize()),QueryWrapper.create(new CsgoRollUser().setRollId(model.getRollId())))
+        return ApiRet.buildOk(page);
+    }
 }

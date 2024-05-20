@@ -20,8 +20,10 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.csgo.CsgoRoll;
 import com.bbg.box.mapper.csgo.CsgoRollMapper;
 import com.bbg.box.service.csgo.CsgoRollService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,15 +40,21 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> implements CsgoRollService {
+
+    public final BizDictService bizDictService;
+
+    public final CsgoRollGoodService csgoRollGoodService;
+
+    public final CsgoRollUserService csgoRollUserService;
+
+    public final RedisService redisService;
+
+    @Lazy
     @Autowired
-    BizDictService bizDictService;
-    @Autowired
-    CsgoRollGoodService csgoRollGoodService;
-    @Autowired
-    CsgoRollUserService csgoRollUserService;
-    @Autowired
-    RedisService redisService;
+    private CsgoRollService selfProxy;
+
     // 单独的房间信息-缓存存活时长
     public final static long ROLL_INFO_LIVE_TIME = 180;
 
@@ -61,7 +69,6 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
             return null;
         }
         csgoRoll.setRollGoods(csgoRollGoodService.list(QueryWrapper.create(new CsgoRollGood().setRollId(rollId))));
-        csgoRoll.setRollUsers(csgoRollUserService.list(QueryWrapper.create(new CsgoRollUser().setRollId(rollId))));
         return csgoRoll;
     }
 
@@ -71,7 +78,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     @Transactional(rollbackFor = Exception.class)
     @RedisLock(value = "#rollId", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
     public ApiRet<CsgoRoll> joinRoll(BizUser bizUser, Long rollId) {
-        CsgoRoll roll = getInfo(rollId);
+        CsgoRoll roll = selfProxy.getInfo(rollId);
         // --------------------------------------检查s--------------------------------------
         if (roll == null || !roll.getEnable()) {
             return ApiRet.buildNo("房间不存在");
@@ -127,13 +134,10 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
         return ApiRet.buildOk(roll);
     }
 
-
     /**
      * 撸房装备派发
      */
-    private void dispatchRollGoods(CsgoRoll roll) {
-
-    }
+    private void dispatchRollGoods(CsgoRoll roll) {}
 
     /**
      * 撸房具体逻辑
@@ -149,8 +153,6 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     @RedisCache(key = KeyConst.ROLL_LIST_INFO, liveTime = 500, timeUnit = TimeUnit.MILLISECONDS)
     public Page<CsgoRoll> getRollList(RollDto.GetRollListReq getRollListReq) {
         BizDict rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
-        rollStatusDict.getValueByAlias("roll_online");
-        rollStatusDict.getValueByAlias("roll_offline");
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .in(CsgoRoll::getStatus, rollStatusDict.getValueByAlias("roll_online"), rollStatusDict.getValueByAlias("roll_offline"))
                 .eq(CsgoRoll::getEnable, true);
@@ -158,7 +160,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
         // 如果redis中有撸房缓存: redis撸房替换结果集,否则数据库查询
         List<CsgoRoll> rollList = rollPage.getRecords().stream().map(
                 roll -> {
-                    roll = getInfo(roll.getId());
+                    roll = selfProxy.getInfo(roll.getId());
                     return roll;
                 }
         ).toList();

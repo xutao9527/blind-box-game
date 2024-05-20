@@ -8,8 +8,20 @@ import java.io.Serializable;
 public class RollDto {
     @Data
     @Accessors(chain = true)
-    @Schema(description = "获得对战房间列表")
+    @Schema(description = "获得撸房列表")
     public static class GetRollListReq implements Serializable {
+        @Schema(description = "页数")
+        private int pageNumber = 1;
+        @Schema(description = "页大小")
+        private int pageSize = 10;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @Schema(description = "获得撸房用户列表")
+    public static class GetRollUsersReq implements Serializable {
+        @Schema(description = "撸房编号")
+        private long rollId;
         @Schema(description = "页数")
         private int pageNumber = 1;
         @Schema(description = "页大小")
