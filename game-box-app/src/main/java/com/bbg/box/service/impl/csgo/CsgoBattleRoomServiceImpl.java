@@ -263,8 +263,10 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
                                 if (user.getUserType().equals(userTypeDict.getValueByAlias("real_user"))
                                         || user.getUserType().equals(userTypeDict.getValueByAlias("test_user"))) {
                                     BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
+                                    BizDict goodStatusDict = bizDictService.getDictByTag("csgo_good_status");
                                     CsgoStorehouse storehouse = new CsgoStorehouse();
                                     storehouse.setUserId(roomGood.getLuckUserId())
+                                            .setStatus(goodStatusDict.getValueByAlias("normal"))
                                             .setSourceId(csgoBattleRoom.getId())
                                             .setSourceType(goodSourceTypeDict.getValueByAlias("source_battle_room"))
                                             .setName(roomGood.getName())

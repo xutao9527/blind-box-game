@@ -4,12 +4,16 @@
       <el-row :gutter="10">
         <el-col :span="18">
           <el-row>
-            <!--            <div class="bbg-table-header-input">-->
-            <!--              <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>-->
-            <!--            </div>-->
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.userId" placeholder="用户编号"/>
             </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.sourceType" ref="goodSourceTypeRef" :tag="'csgo_good_source_type'" placeholder="装备来源"/>
+            </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.sourceType" ref="goodStatusRef" :tag="'csgo_good_status'" placeholder="装备来源"/>
+            </div>
+
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
@@ -33,11 +37,14 @@
     </el-header>
     <el-main class="bbg-table-main">
       <el-table class="bbg-table-main"
+                size="small"
                 :data="tableProps.apiRet.data.records"
                 :height="tableDynamicHeight"
                 table-layout="auto"
+                @sortChange="tableProps.sortChange"
+                :default-sort="{ prop: 'id', order: 'descending' }"
                 border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
+        <el-table-column prop="id" label="主键" sortable="custom"/>
         <el-table-column prop="userId" label="用户编号"/>
         <el-table-column prop="goodId" label="商品编号"/>
         <el-table-column prop="name" label="商品名称"/>
@@ -47,15 +54,23 @@
             <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
           </template>
         </el-table-column>
-        <el-table-column prop="price" label="价格"/>
-        <el-table-column prop="sourceType" label="来源类型"/>
-        <el-table-column prop="sourceId" label="来源编号"/>
-        <el-table-column prop="status" label="商品状态"/>
-        <el-table-column prop="enable" label="状态">
+        <el-table-column prop="price" label="价格" sortable="custom"/>
+        <el-table-column prop="sourceType" label="来源类型">
           <template #default="scope">
-            {{ scope.row.enable ? '启用' : '停用' }}
+            {{ goodSourceTypeRef.getLabel(scope.row.sourceType) }}
           </template>
         </el-table-column>
+        <el-table-column prop="sourceId" label="来源编号"/>
+        <el-table-column prop="status" label="商品状态">
+          <template #default="scope">
+            {{ goodStatusRef.getLabel(scope.row.status) }}
+          </template>
+        </el-table-column>
+<!--        <el-table-column prop="enable" label="状态">-->
+<!--          <template #default="scope">-->
+<!--            {{ scope.row.enable ? '启用' : '停用' }}-->
+<!--          </template>-->
+<!--        </el-table-column>-->
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作">
@@ -88,7 +103,9 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
 
-const header = ref(null);
+const goodStatusRef = ref(null)
+const goodSourceTypeRef = ref(null)
+const header = ref(null)
 const tableDynamicHeight = ref(0)
 
 const scope = effectScope()
@@ -133,7 +150,9 @@ const tableProps = reactive({
       pageSize: 15,
     },
     queryEntity: {
-      "expandProps": {}
+      "expandProps": {
+        orderField:{'id' : 'descending'}
+      }
     }
   },
   apiRet: {
@@ -145,13 +164,22 @@ const tableProps = reactive({
     tableProps.reqParams.page.pageSize = pageSize;
     tableProps.fetchData()
   },
-
   fetchData: async () => {
     const apiRet = await http.post('/csgoStorehouse/page', tableProps.reqParams)
     if (apiRet.ok) {
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
+  },
+  sortChange: async (column) => {
+    if (column.order === "descending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'descending'}
+    } else if (column.order === "ascending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'ascending'}
+    } else {
+      delete tableProps.reqParams.queryEntity.expandProps.orderField;
+    }
+    await tableProps.fetchData()
   }
 });
 

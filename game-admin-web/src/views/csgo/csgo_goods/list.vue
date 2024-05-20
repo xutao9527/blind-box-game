@@ -8,7 +8,7 @@
               <el-input v-model="tableProps.reqParams.queryEntity.itemName" placeholder="皮肤名称"/>
             </div>
             <div class="bbg-table-header-input">
-              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" :tag="'csgo_good_type'" placeholder="武器类型"/>
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dictGoodTypeRef" :tag="'csgo_good_type'" placeholder="武器类型"/>
             </div>
           </el-row>
         </el-col>
@@ -69,6 +69,7 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
 
+const dictGoodTypeRef = ref(null)
 const header = ref(null);
 const tableDynamicHeight = ref(0)
 

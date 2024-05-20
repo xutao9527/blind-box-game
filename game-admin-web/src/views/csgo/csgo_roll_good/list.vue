@@ -137,16 +137,16 @@ const tableProps = reactive({
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
   },
-  sortChange: async (column)=>{
-      if(column.order === "descending"){
-        tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
-      }else if(column.order === "ascending"){
-        tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'ascending'}
-      }else{
-        delete tableProps.reqParams.queryEntity.expandProps.orderField;
-      }
-      await tableProps.fetchData()
+  sortChange: async (column) => {
+    if (column.order === "descending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'descending'}
+    } else if (column.order === "ascending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'ascending'}
+    } else {
+      delete tableProps.reqParams.queryEntity.expandProps.orderField;
     }
+    await tableProps.fetchData()
+  }
 });
 
 const emits = defineEmits(['activeRightTabs']);

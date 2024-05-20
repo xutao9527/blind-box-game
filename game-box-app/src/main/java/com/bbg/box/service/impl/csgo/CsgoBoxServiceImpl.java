@@ -96,8 +96,10 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         if (luckGood != null) {
             // 添加商品到用户背包
             BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
+            BizDict goodStatusDict = bizDictService.getDictByTag("csgo_good_status");
             CsgoStorehouse storehouse = new CsgoStorehouse();
             storehouse.setUserId(bizUser.getId())
+                    .setStatus(goodStatusDict.getValueByAlias("normal"))
                     .setSourceId(boxId)
                     .setSourceType(goodSourceTypeDict.getValueByAlias("source_open_box"))
                     .setGoodId(luckGood.getGoodId())
@@ -158,8 +160,10 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         if (isWinGood) {
             // 保存背包
             BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
+            BizDict goodStatusDict = bizDictService.getDictByTag("csgo_good_status");
             CsgoStorehouse storehouse = new CsgoStorehouse();
             storehouse.setUserId(bizUser.getId())
+                    .setStatus(goodStatusDict.getValueByAlias("normal"))
                     .setSourceId(model.getBoxGoodId())
                     .setSourceType(goodSourceTypeDict.getValueByAlias("source_dream_good"))
                     .setGoodId(csgoBoxGoods.getGoodId())
