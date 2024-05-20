@@ -1,8 +1,10 @@
 package com.bbg.box.service.impl.csgo;
 
+import cn.hutool.core.util.IdUtil;
 import com.bbg.box.service.biz.BizDictService;
 import com.bbg.box.service.csgo.CsgoRollGoodService;
 import com.bbg.box.service.csgo.CsgoRollUserService;
+import com.bbg.box.utils.IdTool;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.RollDto;
@@ -79,6 +81,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     @RedisLock(value = "#rollId", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
     public ApiRet<CsgoRoll> joinRoll(BizUser bizUser, Long rollId) {
         CsgoRoll roll = selfProxy.getInfo(rollId);
+        long joinerCount = csgoRollUserService.count(QueryWrapper.create(new CsgoRollUser().setRollId(rollId)));
         // --------------------------------------检查s--------------------------------------
         if (roll == null || !roll.getEnable()) {
             return ApiRet.buildNo("房间不存在");
@@ -90,7 +93,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
         }
         LocalDateTime currentTime = LocalDateTime.now();
         if (roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model"))) {
-            if (roll.getRollUsers().size() >= roll.getPeopleNumber()) {
+            if (joinerCount >= roll.getPeopleNumber()) {
                 ApiRet.buildNo("房间已满员");
             }
         } else if (roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model"))) {
@@ -98,17 +101,17 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
                 ApiRet.buildNo("房间已结束");
             }
         }
-        if (roll.getRollUsers().stream().anyMatch(rollUser -> rollUser.getUserId().equals(bizUser.getId()))) {
+        if (csgoRollUserService.getOne(QueryWrapper.create(new CsgoRollUser().setRollId(rollId).setUserId(bizUser.getId()))) != null) {
             return ApiRet.buildNo("用户已加入房间");
         }
         // --------------------------------------检查e--------------------------------------
         // --------------------------------------设置数据s--------------------------------------
         CsgoRollUser csgoRollUser = new CsgoRollUser();
-        csgoRollUser.setRollId(rollId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
+        csgoRollUser.setId(IdTool.nextId()).setRollId(rollId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
         roll.getRollUsers().add(csgoRollUser);
         // [人数模式] 满员,并状态为 上架中
         if (roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model")) && rollStatusDict.getValueByAlias("roll_online").equals(roll.getStatus())) {
-            if (roll.getRollUsers().size() >= roll.getPeopleNumber()) {
+            if (joinerCount >= roll.getPeopleNumber()) {
                 // todo 结算房间
                 runRoll(roll);
             }
@@ -127,7 +130,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
             dispatchRollGoods(roll);                                                                // 发放商品
             this.saveOrUpdate(roll);                                                                // 更新房间状态
         }
-        csgoRollUserService.saveOrUpdateBatch(roll.getRollUsers());                                 // 更新房间用户
+        csgoRollUserService.save(csgoRollUser);                                                     // 加入房间用户
         // 更新 [撸房缓存]
         redisService.set(KeyConst.build(KeyConst.ROLL_INFO_ID, roll.getId().toString()), roll, ROLL_INFO_LIVE_TIME, TimeUnit.SECONDS);
         // --------------------------------------保存数据e--------------------------------------
@@ -137,7 +140,8 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     /**
      * 撸房装备派发
      */
-    private void dispatchRollGoods(CsgoRoll roll) {}
+    private void dispatchRollGoods(CsgoRoll roll) {
+    }
 
     /**
      * 撸房具体逻辑

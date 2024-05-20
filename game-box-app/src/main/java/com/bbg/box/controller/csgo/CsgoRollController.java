@@ -82,7 +82,7 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
         return apiRet;
     }
 
-    @GetMapping("join")
+    @GetMapping("joinByUserId")
     @Operation(description = "加入撸房(用户Id-测试)")
     public ApiRet<CsgoRoll> join(@NotNull @RequestParam("rollId") Long rollId, @NotNull @RequestParam("userId") Long userId) {
         ApiRet<CsgoRoll> apiRet;
