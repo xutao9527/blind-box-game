@@ -2,8 +2,10 @@ package com.bbg.box.service.impl.csgo;
 
 import cn.hutool.core.util.IdUtil;
 import com.bbg.box.service.biz.BizDictService;
+import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.CsgoRollGoodService;
 import com.bbg.box.service.csgo.CsgoRollUserService;
+import com.bbg.box.service.csgo.CsgoStorehouseService;
 import com.bbg.box.utils.IdTool;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisLock;
@@ -13,13 +15,10 @@ import com.bbg.core.constants.KeyConst;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizUser;
-import com.bbg.model.csgo.CsgoBattleRoom;
-import com.bbg.model.csgo.CsgoRollGood;
-import com.bbg.model.csgo.CsgoRollUser;
+import com.bbg.model.csgo.*;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import com.bbg.model.csgo.CsgoRoll;
 import com.bbg.box.mapper.csgo.CsgoRollMapper;
 import com.bbg.box.service.csgo.CsgoRollService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -52,6 +53,10 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     public final CsgoRollUserService csgoRollUserService;
 
     public final RedisService redisService;
+
+    public final CsgoStorehouseService csgoStorehouseService;
+
+    public final BizUserService bizUserService;
 
     @Lazy
     @Autowired
@@ -81,7 +86,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     @RedisLock(value = "#rollId", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
     public ApiRet<CsgoRoll> joinRoll(BizUser bizUser, Long rollId) {
         CsgoRoll roll = selfProxy.getInfo(rollId);
-        long joinerCount = csgoRollUserService.count(QueryWrapper.create(new CsgoRollUser().setRollId(rollId)));
+        long joinerCount = 0;
         // --------------------------------------检查s--------------------------------------
         if (roll == null || !roll.getEnable()) {
             return ApiRet.buildNo("房间不存在");
@@ -93,7 +98,8 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
         }
         LocalDateTime currentTime = LocalDateTime.now();
         if (roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model"))) {
-            if (joinerCount >= roll.getPeopleNumber()) {
+            joinerCount = csgoRollUserService.count(QueryWrapper.create(new CsgoRollUser().setRollId(rollId)));
+            if (joinerCount > roll.getPeopleNumber()) {
                 ApiRet.buildNo("房间已满员");
             }
         } else if (roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model"))) {
@@ -101,36 +107,37 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
                 ApiRet.buildNo("房间已结束");
             }
         }
-        if (csgoRollUserService.getOne(QueryWrapper.create(new CsgoRollUser().setRollId(rollId).setUserId(bizUser.getId()))) != null) {
+        if (csgoRollUserService.count(QueryWrapper.create(new CsgoRollUser().setRollId(rollId).setUserId(bizUser.getId()))) > 0) {
             return ApiRet.buildNo("用户已加入房间");
         }
         // --------------------------------------检查e--------------------------------------
         // --------------------------------------设置数据s--------------------------------------
         CsgoRollUser csgoRollUser = new CsgoRollUser();
         csgoRollUser.setId(IdTool.nextId()).setRollId(rollId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
-        roll.getRollUsers().add(csgoRollUser);
+        csgoRollUserService.save(csgoRollUser);                                                     // 加入房间用户
         // [人数模式] 满员,并状态为 上架中
         if (roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model")) && rollStatusDict.getValueByAlias("roll_online").equals(roll.getStatus())) {
-            if (joinerCount >= roll.getPeopleNumber()) {
-                // todo 结算房间
-                runRoll(roll);
+            if (joinerCount >= (roll.getPeopleNumber() - 1)) {
+                if (!this.runRoll(roll)) {
+                    return ApiRet.buildNo("撸房计算异常");
+                }
             }
-            // [人数模式] 超时,并状态为 上架中
+        // [时间模式] 超时,并状态为 上架中
         } else if (roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model")) && rollStatusDict.getValueByAlias("roll_online").equals(roll.getStatus())) {
             if (roll.getEndTime().isBefore(currentTime)) {
-                // todo 结算房间
-                runRoll(roll);
+                if (!this.runRoll(roll)) {
+                    return ApiRet.buildNo("撸房计算异常");
+                }
             }
         }
         // --------------------------------------设置数据e--------------------------------------
         // --------------------------------------保存数据s--------------------------------------
         // 判断房间状态等于[已结束],进行 [结果保存] 和 [装备派发]
-        if (!rollStatusDict.getValueByAlias("roll_offline").equals(roll.getStatus())) {
-            // todo 发放商品
+        if (rollStatusDict.getValueByAlias("roll_offline").equals(roll.getStatus())) {
             dispatchRollGoods(roll);                                                                // 发放商品
+            csgoRollGoodService.saveOrUpdateBatch(roll.getRollGoods());                             // 更新商品中奖信息
             this.saveOrUpdate(roll);                                                                // 更新房间状态
         }
-        csgoRollUserService.save(csgoRollUser);                                                     // 加入房间用户
         // 更新 [撸房缓存]
         redisService.set(KeyConst.build(KeyConst.ROLL_INFO_ID, roll.getId().toString()), roll, ROLL_INFO_LIVE_TIME, TimeUnit.SECONDS);
         // --------------------------------------保存数据e--------------------------------------
@@ -141,14 +148,49 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
      * 撸房装备派发
      */
     private void dispatchRollGoods(CsgoRoll roll) {
+        List<CsgoStorehouse> storehouseList = new ArrayList<>();
+        BizDict userTypeDict = bizDictService.getDictByTag("user_type");
+        roll.getRollGoods().forEach(rollGood->{
+            if(rollGood.getLuckUserId()!=null){
+                BizUser user = bizUserService.getById(rollGood.getLuckUserId());
+                if (user.getType().equals(userTypeDict.getValueByAlias("real_user"))
+                        || user.getType().equals(userTypeDict.getValueByAlias("test_user"))) {
+                    CsgoStorehouse storehouse = new CsgoStorehouse();
+                    storehouse.setUserId(rollGood.getLuckUserId())
+                            .setName(rollGood.getName())
+                            .setNameAlias(rollGood.getNameAlias())
+                            .setGoodId(rollGood.getGoodId())
+                            .setImageUrl(rollGood.getGoodImage())
+                            .setPrice(rollGood.getGoodPrice());
+                    storehouseList.add(storehouse);
+                }
+            }
+        });
+        csgoStorehouseService.saveBatch(storehouseList);
     }
 
     /**
      * 撸房具体逻辑
      */
-    public boolean runRoll(CsgoRoll roll) {
-        return false;
+    private boolean runRoll(CsgoRoll roll) {
+        SecureRandom random = new SecureRandom();
+        BizDict rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
+        List<CsgoRollUser> rollUsers = csgoRollUserService.list(QueryWrapper.create(new CsgoRollUser().setRollId(roll.getId())));
+        List<CsgoRollGood> rollGoods = new ArrayList<>(roll.getRollGoods());
+        long randomCount = Math.min(rollUsers.size(), roll.getRollGoods().size());                  // 抽奖次数
+        for (int i = 0; i < randomCount; i++) {
+            int luckUserIndex = random.nextInt(rollUsers.size());
+            int luckGoodIndex = random.nextInt(roll.getRollGoods().size());
+            var luckUser = rollUsers.get(luckUserIndex);
+            var luckGood = rollGoods.get(luckGoodIndex);
+            luckGood.setLuckUserId(luckUser.getUserId());                                           // 设置抽中商品的用户
+            rollUsers.remove(luckUserIndex);
+            rollGoods.remove(luckGoodIndex);
+        }
+        roll.setStatus(rollStatusDict.getValueByAlias("roll_offline"));                             // 房间状态(对战结束)
+        return true;
     }
+
 
     /**
      * 获得撸房信息

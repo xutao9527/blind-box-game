@@ -4,9 +4,9 @@
       <el-row :gutter="10">
         <el-col :span="18">
           <el-row>
-<!--            <div class="bbg-table-header-input">-->
-<!--              <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>-->
-<!--            </div>-->
+            <!--            <div class="bbg-table-header-input">-->
+            <!--              <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>-->
+            <!--            </div>-->
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.userId" placeholder="用户编号"/>
             </div>
@@ -32,29 +32,29 @@
       </el-row>
     </el-header>
     <el-main class="bbg-table-main">
-        <el-table class="bbg-table-main"
-                  :data="tableProps.apiRet.data.records"
-                  :height="tableDynamicHeight"
-                  table-layout="auto"
-                  border show-overflow-tooltip>
+      <el-table class="bbg-table-main"
+                :data="tableProps.apiRet.data.records"
+                :height="tableDynamicHeight"
+                table-layout="auto"
+                border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"/>
         <el-table-column prop="userId" label="用户编号"/>
         <el-table-column prop="goodId" label="商品编号"/>
         <el-table-column prop="name" label="商品名称"/>
         <el-table-column prop="nameAlias" label="商品别名"/>
-          <el-table-column prop="imageUrl" label="图片" width="80">
-            <template #default="scope">
-              <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
-            </template>
-          </el-table-column>
+        <el-table-column prop="imageUrl" label="图片" width="80">
+          <template #default="scope">
+            <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
+          </template>
+        </el-table-column>
         <el-table-column prop="price" label="价格"/>
         <el-table-column prop="sourceType" label="来源类型"/>
         <el-table-column prop="sourceId" label="来源编号"/>
         <el-table-column prop="status" label="商品状态"/>
         <el-table-column prop="enable" label="状态">
-        <template #default="scope">
-            {{scope.row.enable?'启用':'停用'}}
-        </template>
+          <template #default="scope">
+            {{ scope.row.enable ? '启用' : '停用' }}
+          </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
@@ -133,7 +133,7 @@ const tableProps = reactive({
       pageSize: 15,
     },
     queryEntity: {
-      "expandProps":{}
+      "expandProps": {}
     }
   },
   apiRet: {
