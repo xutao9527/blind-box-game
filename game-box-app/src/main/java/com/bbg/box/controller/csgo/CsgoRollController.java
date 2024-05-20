@@ -50,6 +50,19 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
         return ApiRet.buildOk(csgoRollService.getRollList(model));
     }
 
+    @GetMapping("getRoll")
+    @Operation(description = "获得撸房")
+    public ApiRet<CsgoRoll> getRoll(@NotNull @RequestParam("rollId") Long rollId) {
+        return ApiRet.buildOk(csgoRollService.getInfo(rollId));
+    }
+
+    @PostMapping("getRollUsers")
+    @Operation(description = "获得撸房用户列表")
+    public ApiRet<Page<CsgoRollUser>> getRollUsers(@NotNull @RequestParam("rollId") RollDto.GetRollUsersReq model) {
+        Page<CsgoRollUser> page = csgoRollUserService.page(Page.of(model.getPageNumber(),model.getPageSize()),QueryWrapper.create(new CsgoRollUser().setRollId(model.getRollId())));
+        return ApiRet.buildOk(page);
+    }
+
     @GetMapping("join")
     @Operation(description = "加入撸房")
     public ApiRet<CsgoRoll> join(@NotNull @RequestParam("rollId") Long rollId) {
@@ -65,18 +78,5 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
             apiRet = ApiRet.buildNo("加入房间异常");
         }
         return apiRet;
-    }
-
-    @GetMapping("getRoll")
-    @Operation(description = "获得撸房")
-    public ApiRet<CsgoRoll> getRoll(@NotNull @RequestParam("rollId") Long rollId) {
-        return ApiRet.buildOk(csgoRollService.getInfo(rollId));
-    }
-
-    @PostMapping("getRollUsers")
-    @Operation(description = "获得撸房用户列表")
-    public ApiRet<Page<CsgoRollUser>> getRollUsers(@NotNull @RequestParam("rollId") RollDto.GetRollUsersReq model) {
-        Page<CsgoRollUser> page = csgoRollUserService.page(Page.of(model.getPageNumber(),model.getPageSize()),QueryWrapper.create(new CsgoRollUser().setRollId(model.getRollId())))
-        return ApiRet.buildOk(page);
     }
 }
