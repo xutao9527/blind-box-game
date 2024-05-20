@@ -9,6 +9,7 @@ import com.bbg.model.csgo.CsgoCapitalRecord;
 import com.bbg.model.sys.SysUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,10 +27,10 @@ import java.math.BigDecimal;
 @RestController
 @Tag(name = "业务用户接口")
 @RequestMapping("/bizUser")
+@RequiredArgsConstructor
 public class BizUserController extends BaseBizUserController {
 
-    @Autowired
-    BizDictService bizDictService;
+    public final BizDictService bizDictService;
 
     @Operation(description = "业务用户后台充值")
     @GetMapping("updateBizUserMoney/{id}/{money}")

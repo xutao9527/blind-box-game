@@ -42,13 +42,14 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @RestController
 @RequestMapping("/csgoBox")
+@RequiredArgsConstructor
 public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
-    @Autowired
-    protected CsgoBoxService csgoBoxService;
-    @Autowired
-    protected CsgoBoxGoodsService csgoBoxGoodsService;
-    @Autowired
-    protected BizDictService bizDictService;
+
+    public final CsgoBoxService csgoBoxService;
+
+    public final CsgoBoxGoodsService csgoBoxGoodsService;
+
+    public final BizDictService bizDictService;
 
     @PostMapping("list")
     @Tag(name = "CS:GO盲盒接口")

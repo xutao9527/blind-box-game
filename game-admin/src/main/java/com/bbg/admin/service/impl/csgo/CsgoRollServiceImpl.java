@@ -6,6 +6,7 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.csgo.CsgoRoll;
 import com.bbg.admin.mapper.csgo.CsgoRollMapper;
 import com.bbg.admin.service.csgo.CsgoRollService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,10 @@ import org.springframework.stereotype.Service;
  * @since 2024-05-16
  */
 @Service
+@RequiredArgsConstructor
 public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> implements CsgoRollService {
 
-    @Autowired
-    BizDictService bizDictService;
+    public final BizDictService bizDictService;
 
     @Override
     public boolean save(CsgoRoll entity) {

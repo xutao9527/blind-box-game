@@ -28,9 +28,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @Tag(name = "对战房间用户接口")
 @RequestMapping("/csgoBattleRoomBox")
+@RequiredArgsConstructor
 public class CsgoBattleRoomBoxController extends BaseController<CsgoBattleRoomBox, CsgoBattleRoomBoxService> {
-    @Autowired
-    protected  CsgoBattleRoomBoxService csgoBattleRoomBoxService;
+
+    public final CsgoBattleRoomBoxService csgoBattleRoomBoxService;
 
 
 }

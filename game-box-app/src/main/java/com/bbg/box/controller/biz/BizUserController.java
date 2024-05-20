@@ -12,6 +12,7 @@ import com.mybatisflex.core.constant.SqlOperator;
 import com.mybatisflex.core.mask.MaskManager;
 import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryWrapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ import java.util.UUID;
 @RestController
 @Tag(name = "业务用户接口")
 @RequestMapping("/bizUser")
+@RequiredArgsConstructor
 public class BizUserController extends BaseController<BizUser, BizUserService> {
     @Autowired
     protected BizUserService bizUserService;

@@ -28,9 +28,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @Tag(name = "系统字典详情接口")
 @RequestMapping("/bizDictDetail")
+@RequiredArgsConstructor
 public class BizDictDetailController extends BaseController<BizDictDetail, BizDictDetailService> {
-    @Autowired
-    protected  BizDictDetailService bizDictDetailService;
 
-
+    public final BizDictDetailService bizDictDetailService;
 }

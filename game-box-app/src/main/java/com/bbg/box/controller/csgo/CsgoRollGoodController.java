@@ -28,9 +28,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @Tag(name = "Roll房间装备接口")
 @RequestMapping("/csgoRollGood")
+@RequiredArgsConstructor
 public class CsgoRollGoodController extends BaseController<CsgoRollGood, CsgoRollGoodService> {
-    @Autowired
-    protected  CsgoRollGoodService csgoRollGoodService;
+
+    public final CsgoRollGoodService csgoRollGoodService;
 
 
 }

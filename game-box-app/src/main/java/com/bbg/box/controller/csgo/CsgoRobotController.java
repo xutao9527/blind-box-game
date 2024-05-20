@@ -28,9 +28,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @Tag(name = "机器人接口")
 @RequestMapping("/csgoRobot")
+@RequiredArgsConstructor
 public class CsgoRobotController extends BaseController<CsgoRobot, CsgoRobotService> {
-    @Autowired
-    protected  CsgoRobotService csgoRobotService;
+
+    public final CsgoRobotService csgoRobotService;
 
     @GetMapping("list")
     @Operation(description = "获得所有机器人")

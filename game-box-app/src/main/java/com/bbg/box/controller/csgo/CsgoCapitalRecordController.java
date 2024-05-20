@@ -28,9 +28,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @Tag(name = "资金流水接口")
 @RequestMapping("/csgoCapitalRecord")
+@RequiredArgsConstructor
 public class CsgoCapitalRecordController extends BaseController<CsgoCapitalRecord, CsgoCapitalRecordService> {
-    @Autowired
-    protected  CsgoCapitalRecordService csgoCapitalRecordService;
+
+    public final CsgoCapitalRecordService csgoCapitalRecordService;
 
 
 }

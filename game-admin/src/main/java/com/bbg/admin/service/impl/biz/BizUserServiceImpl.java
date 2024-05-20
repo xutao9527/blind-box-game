@@ -14,6 +14,7 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.biz.BizUser;
 import com.bbg.admin.mapper.biz.BizUserMapper;
 import com.bbg.admin.service.biz.BizUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2024-04-25
  */
 @Service
+@RequiredArgsConstructor
 public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> implements BizUserService {
 
-    @Autowired
-    CsgoCapitalRecordService csgoCapitalRecordService;
-    @Autowired
-    CsgoUserInfoService csgoUserInfoService;
+    public final CsgoCapitalRecordService csgoCapitalRecordService;
+    public final CsgoUserInfoService csgoUserInfoService;
 
     @Transactional(rollbackFor = Exception.class)
     public BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord) {

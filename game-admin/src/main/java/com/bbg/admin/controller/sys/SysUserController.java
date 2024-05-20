@@ -11,6 +11,7 @@ import com.bbg.model.sys.*;
 import com.mybatisflex.core.mask.MaskManager;
 import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,15 +28,13 @@ import java.util.List;
 @RestController
 @Tag(name = "系统用户接口")
 @RequestMapping("/sysUser")
+@RequiredArgsConstructor
 public class SysUserController extends BaseSysUserController {
-    @Autowired
-    SysMenuService sysMenuService;
-    @Autowired
-    SysUserRoleService sysUserRoleService;
-    @Autowired
-    SysRoleMenuService sysRoleMenuService;
-    @Autowired
-    SysRoleService sysRoleService;
+
+    public final SysMenuService sysMenuService;
+    public final SysUserRoleService sysUserRoleService;
+    public final SysRoleMenuService sysRoleMenuService;
+    public final SysRoleService sysRoleService;
 
     @PostMapping("login")
     @Operation(description = "管理员登录")

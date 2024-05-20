@@ -13,6 +13,7 @@ import com.bbg.core.entity.ApiRet;
 import com.mybatisflex.core.paginate.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +34,11 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @Tag(name = "CS:GO对战接口")
 @RequestMapping("/csgoBattleRoom")
+@RequiredArgsConstructor
 public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom, CsgoBattleRoomService> {
-    @Autowired
-    CsgoBattleRoomService csgoBattleRoomService;
-    @Autowired
-    BizUserService bizUserService;
+
+    public final CsgoBattleRoomService csgoBattleRoomService;
+    public final BizUserService bizUserService;
 
     @PostMapping("create")
     @Operation(description = "创建对战房间")

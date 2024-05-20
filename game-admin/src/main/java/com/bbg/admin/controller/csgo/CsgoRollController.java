@@ -4,6 +4,7 @@ import com.bbg.admin.base.controller.csgo.BaseCsgoRollController;
 import com.bbg.admin.service.biz.BizDictService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.csgo.CsgoRoll;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,9 +21,10 @@ import java.time.LocalDateTime;
 @RestController
 @Tag(name = "Roll房间接口")
 @RequestMapping("/csgoRoll")
+@RequiredArgsConstructor
 public class CsgoRollController extends BaseCsgoRollController {
-    @Autowired
-    BizDictService bizDictService;
+
+    public final BizDictService bizDictService;
 
     @Override
     public ApiRet<Boolean> update(CsgoRoll model) {

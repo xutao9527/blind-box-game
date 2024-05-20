@@ -5,6 +5,7 @@ import com.bbg.admin.third.zbt.ZBTDataSyncService;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.entity.ApiRet;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +20,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @Tag(name = "Csgo商品表接口")
 @RequestMapping("/csgoGoods")
+@RequiredArgsConstructor
 public class CsgoGoodsController extends BaseCsgoGoodsController {
-    @Autowired
-    ZBTDataSyncService zbtDataSyncService;
+
+    public final ZBTDataSyncService zbtDataSyncService;
 
     @GetMapping("syncData")
     @Operation(description = "同步ZBT商品")

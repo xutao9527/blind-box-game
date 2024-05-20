@@ -10,8 +10,10 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.constant.SqlOperator;
 import com.mybatisflex.core.query.SqlOperators;
 import lombok.RequiredArgsConstructor;
+
 import java.io.Serializable;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,9 +30,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @Tag(name = "个人装备仓库接口")
 @RequestMapping("/csgoStorehouse")
+@RequiredArgsConstructor
 public class CsgoStorehouseController extends BaseController<CsgoStorehouse, CsgoStorehouseService> {
-    @Autowired
-    protected  CsgoStorehouseService csgoStorehouseService;
+
+    public final CsgoStorehouseService csgoStorehouseService;
 
 
 }

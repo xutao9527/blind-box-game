@@ -53,9 +53,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 @Tag(name = "#(tableComment)接口")
 #end
 @RequestMapping("/#(firstCharToLowerCase(entityClassName))")
+@RequiredArgsConstructor
 public class #(table.buildControllerClassName()) extends BaseController<#(entityClassName), #(table.buildServiceClassName())> {
-    @Autowired
-    protected  #(table.buildServiceClassName()) #(serviceVarName);
+
+    public final #(table.buildServiceClassName()) #(serviceVarName);
 
 
 }

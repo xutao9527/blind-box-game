@@ -28,9 +28,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @Tag(name = "CSGO商品表接口")
 @RequestMapping("/csgoGoods")
+@RequiredArgsConstructor
 public class CsgoGoodsController extends BaseController<CsgoGoods, CsgoGoodsService> {
-    @Autowired
-    protected  CsgoGoodsService csgoGoodsService;
+
+    public final CsgoGoodsService csgoGoodsService;
 
 
 }
