@@ -21,6 +21,7 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.box.mapper.csgo.CsgoBattleRoomMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,9 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     CsgoStorehouseService csgoStorehouseService;
     @Autowired
     RedisService redisService;
+    @Autowired
+    @Lazy
+    private CsgoBattleRoomService selfProxy;
     // 单独的房间信息-缓存存活时长
     public final static long ROOM_INFO_LIVE_TIME = 180;
 
@@ -129,7 +133,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
             BizDict userTypeDict = bizDictService.getDictByTag("user_type");
             robotList.forEach(robot -> {
                 CsgoBattleRoomUser roomUser = new CsgoBattleRoomUser();
-                roomUser.setRoomId(roomId).setUserId(robot.getId()).setUserType(userTypeDict.getValueByAlias("robot")).setNickName(robot.getName()).setImageUrl(robot.getImageUrl());
+                roomUser.setId(IdTool.nextId()).setRoomId(roomId).setUserId(robot.getId()).setUserType(userTypeDict.getValueByAlias("robot")).setNickName(robot.getName()).setImageUrl(robot.getImageUrl());
                 battleRoom.getRoomUsers().add(roomUser);                                    // 添加参战用户(机器人)
             });
         }
@@ -154,7 +158,6 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
             csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());
             dispatchBattleGoods(battleRoom);
-
         }
         this.save(battleRoom);
         csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
@@ -173,7 +176,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     @RedisLock(value = "#roomId", key = KeyConst.METHOD_JOIN_ROOM_LOCK)
     public ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizUser, Long roomId) {
         BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();
-        CsgoBattleRoom battleRoom = getInfo(roomId);
+        CsgoBattleRoom battleRoom = selfProxy.getInfo(roomId);
         // --------------------------------------检查s--------------------------------------
         if (battleRoom == null) {
             return ApiRet.buildNo("房间不存在");
@@ -218,12 +221,11 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         // 判断房间状态等于[对战结束],进行 [对战结果保存] 和 [装备派发]
         if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
             csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());                     // 保存房间中奖商品
-            dispatchBattleGoods(battleRoom);                                                            // 发放商品
             csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());                     // 更新用户
+            dispatchBattleGoods(battleRoom);                                                            // 发放中奖商品
             this.saveOrUpdate(battleRoom);                                                              // 更新房间状态
         }
-        csgoBattleRoomUserService.saveOrUpdate(roomUser);                                               // 添加新加入用户
-
+        csgoBattleRoomUserService.save(roomUser);                                                       // 添加新加入用户
         // --------------------------------------保存数据e--------------------------------------
         battleRoomRes.setCsgoBattleRoom(battleRoom);
         // 更新 [房间缓存]
@@ -394,7 +396,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         // 如果redis中有房间缓存: redis房间信息替换结果集,否则数据库查询
         List<CsgoBattleRoom> battleRooms = roomPage.getRecords().stream().map(
                 room -> {
-                    room = getInfo(room.getId());
+                    room = selfProxy.getInfo(room.getId());
                     return room;
                 }
         ).toList();
