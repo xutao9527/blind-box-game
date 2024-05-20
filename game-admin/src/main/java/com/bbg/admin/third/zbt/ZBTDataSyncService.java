@@ -10,6 +10,7 @@ import com.bbg.model.csgo.CsgoGoods;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,13 +22,10 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 @Component
+@RequiredArgsConstructor
 public class ZBTDataSyncService {
-    @Autowired
-    CsgoGoodsService csgoGoodsService;
-
-    @Autowired(required = false)
-    ZBTHttpService zbtHttpService;
-
+    public final CsgoGoodsService csgoGoodsService;
+    public final ZBTHttpService zbtHttpService;
     private boolean isRunning = false;
 
     @RedisLock(value = "'zbtData'",key = KeyConst.METHOD_SYNC_DATA_LOCK)

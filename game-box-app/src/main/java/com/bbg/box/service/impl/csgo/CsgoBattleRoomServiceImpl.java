@@ -19,6 +19,7 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.box.mapper.csgo.CsgoBattleRoomMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -40,29 +41,23 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper, CsgoBattleRoom> implements CsgoBattleRoomService {
 
-    @Autowired
-    CsgoBoxService csgoBoxService;
-    @Autowired
-    BizDictService bizDictService;
-    @Autowired
-    CsgoRobotService csgoRobotService;
-    @Autowired
-    CsgoBattleRoomUserService csgoBattleRoomUserService;
-    @Autowired
-    CsgoBattleRoomBoxService csgoBattleRoomBoxService;
-    @Autowired
-    CsgoBattleRoomGoodService csgoBattleRoomGoodService;
-    @Autowired
-    BizUserService bizUserService;
-    @Autowired
-    CsgoStorehouseService csgoStorehouseService;
-    @Autowired
-    RedisService redisService;
-    @Autowired
+    public final BizDictService bizDictService;
+    public final CsgoBoxService csgoBoxService;
+    public final CsgoRobotService csgoRobotService;
+    public final CsgoBattleRoomUserService csgoBattleRoomUserService;
+    public final CsgoBattleRoomBoxService csgoBattleRoomBoxService;
+    public final CsgoBattleRoomGoodService csgoBattleRoomGoodService;
+    public final BizUserService bizUserService;
+    public final CsgoStorehouseService csgoStorehouseService;
+    public final RedisService redisService;
+
     @Lazy
+    @Autowired
     private CsgoBattleRoomService selfProxy;
+
     // 单独的房间信息-缓存存活时长
     public final static long ROOM_INFO_LIVE_TIME = 180;
 
@@ -248,7 +243,6 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");
         if (battleRoom.getStatus().equals(battleStatusDict.getValueByAlias("battle_end"))) {
             battleRoom.setRoomGoods(csgoBattleRoomGoodService.list(QueryWrapper.create(new CsgoBattleRoomGood().setRoomId(roomId))));
-
         }
         return battleRoom;
     }

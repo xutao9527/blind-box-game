@@ -37,20 +37,20 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> implements CsgoBoxService {
 
-    @Autowired
-    CsgoStorehouseService csgoStorehouseService;
-    @Autowired
-    CsgoCapitalRecordService csgoCapitalRecordService;
-    @Autowired
-    BizUserService bizUserService;
-    @Autowired
-    CsgoUserInfoService csgoUserInfoService;
-    @Autowired
-    RedisService redisService;
-    @Autowired
-    CsgoBoxGoodsService csgoBoxGoodsService;
-    @Autowired
-    BizDictService bizDictService;
+
+    public final CsgoStorehouseService csgoStorehouseService;
+
+    public final CsgoCapitalRecordService csgoCapitalRecordService;
+
+    public final BizUserService bizUserService;
+
+    public final CsgoUserInfoService csgoUserInfoService;
+
+    public final RedisService redisService;
+
+    public final CsgoBoxGoodsService csgoBoxGoodsService;
+
+    public final BizDictService bizDictService;
 
     /**
      * 根据编号获得盲盒

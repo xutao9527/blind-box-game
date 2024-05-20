@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RequestMapping("/bizDict")
 public class BaseBizDictController extends BaseController<BizDict, BizDictService> {
     @Autowired
-    protected  BizDictService bizDictService;
+    protected BizDictService bizDictService;
 
     @PostMapping("save")
     @Operation(description = "保存")
