@@ -10,6 +10,9 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 public class BaseAspect {
 
     public Object parserSpEL(String key, ProceedingJoinPoint point) {
+        if(key.trim().isEmpty()){
+            return "";
+        }
         MethodSignature methodSignature = (MethodSignature) point.getSignature();
         Expression expression = spelExpressionParser.parseExpression(key);
         EvaluationContext context = new StandardEvaluationContext();

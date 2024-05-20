@@ -59,7 +59,7 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
     @PostMapping("getRollUsers")
     @Operation(description = "获得撸房用户列表")
     public ApiRet<Page<CsgoRollUser>> getRollUsers(@NotNull @RequestParam("rollId") RollDto.GetRollUsersReq model) {
-        Page<CsgoRollUser> page = csgoRollUserService.page(Page.of(model.getPageNumber(),model.getPageSize()),QueryWrapper.create(new CsgoRollUser().setRollId(model.getRollId())));
+        Page<CsgoRollUser> page = csgoRollUserService.page(Page.of(model.getPageNumber(), model.getPageSize()), QueryWrapper.create(new CsgoRollUser().setRollId(model.getRollId())));
         return ApiRet.buildOk(page);
     }
 
