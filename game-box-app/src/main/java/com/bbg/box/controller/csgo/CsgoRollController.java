@@ -1,6 +1,7 @@
 package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
+import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.CsgoRollUserService;
 import com.bbg.core.box.dto.BattleRoomDto;
 import com.bbg.core.box.dto.RollDto;
@@ -43,6 +44,7 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
 
     public final CsgoRollService csgoRollService;
     public final CsgoRollUserService csgoRollUserService;
+    public final BizUserService bizUserService;
 
     @PostMapping("getRollList")
     @Operation(description = "获取撸房列表")
@@ -58,7 +60,7 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
 
     @PostMapping("getRollUsers")
     @Operation(description = "获得撸房用户列表")
-    public ApiRet<Page<CsgoRollUser>> getRollUsers(@NotNull @RequestParam("rollId") RollDto.GetRollUsersReq model) {
+    public ApiRet<Page<CsgoRollUser>> getRollUsers(@RequestBody RollDto.GetRollUsersReq model) {
         Page<CsgoRollUser> page = csgoRollUserService.page(Page.of(model.getPageNumber(), model.getPageSize()), QueryWrapper.create(new CsgoRollUser().setRollId(model.getRollId())));
         return ApiRet.buildOk(page);
     }
@@ -68,6 +70,23 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
     public ApiRet<CsgoRoll> join(@NotNull @RequestParam("rollId") Long rollId) {
         ApiRet<CsgoRoll> apiRet;
         BizUser bizUser = getCurrentUser();
+        if (bizUser == null) {
+            return ApiRet.buildNo("用户不存在");
+        }
+        try {
+            apiRet = csgoRollService.joinRoll(bizUser, rollId);
+        } catch (Exception e) {
+            redisService.delete(KeyConst.build(KeyConst.ROLL_INFO_ID, String.valueOf(rollId)));
+            apiRet = ApiRet.buildNo("加入房间异常");
+        }
+        return apiRet;
+    }
+
+    @GetMapping("join")
+    @Operation(description = "加入撸房(用户Id-测试)")
+    public ApiRet<CsgoRoll> join(@NotNull @RequestParam("rollId") Long rollId, @NotNull @RequestParam("userId") Long userId) {
+        ApiRet<CsgoRoll> apiRet;
+        BizUser bizUser = bizUserService.getById(userId);
         if (bizUser == null) {
             return ApiRet.buildNo("用户不存在");
         }

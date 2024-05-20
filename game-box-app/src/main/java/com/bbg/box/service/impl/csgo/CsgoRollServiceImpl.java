@@ -129,7 +129,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
         }
         csgoRollUserService.saveOrUpdateBatch(roll.getRollUsers());                                 // 更新房间用户
         // 更新 [撸房缓存]
-        redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, roll.getId().toString()), roll, ROLL_INFO_LIVE_TIME, TimeUnit.SECONDS);
+        redisService.set(KeyConst.build(KeyConst.ROLL_INFO_ID, roll.getId().toString()), roll, ROLL_INFO_LIVE_TIME, TimeUnit.SECONDS);
         // --------------------------------------保存数据e--------------------------------------
         return ApiRet.buildOk(roll);
     }

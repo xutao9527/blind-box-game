@@ -1,6 +1,7 @@
 package com.bbg.core.box.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class RollDto {
     @Accessors(chain = true)
     @Schema(description = "获得撸房用户列表")
     public static class GetRollUsersReq implements Serializable {
+        @NotNull
         @Schema(description = "撸房编号")
         private long rollId;
         @Schema(description = "页数")
