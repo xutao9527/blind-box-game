@@ -41,14 +41,15 @@
                   table-layout="auto"
                   @sortChange="tableProps.sortChange"
                   border show-overflow-tooltip>
-        <el-table-column prop="id" label=""/>
-        <el-table-column prop="createUserId" label=""/>
-        <el-table-column prop="roomPrice" label="房间价格"/>
-        <el-table-column prop="type" label="对战模式"  >
+        <el-table-column prop="id" label="房间编号" width="185"/>
+        <el-table-column prop="createUserId" label="创建者编号" width="185"/>
+        <el-table-column prop="type" label="对战模式" width="120" >
           <template #default="scope">
             {{dictBattleModelRef.getLabel(scope.row.battleModel)}}
           </template>
         </el-table-column>
+        <el-table-column prop="roomPrice" label="房间价格" width="100"/>
+        <el-table-column prop="peopleNumber" label="房间人数" width="100"/>
         <el-table-column prop="status" label="房间状态"  >
           <template #default="scope">
             {{dictBattleStatusRef.getLabel(scope.row.status)}}
@@ -56,7 +57,7 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
-        <el-table-column fixed="right" label="操作">
+        <el-table-column fixed="right" label="操作" width="120">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
             <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>

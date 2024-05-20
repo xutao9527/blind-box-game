@@ -118,12 +118,12 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         // 房间关联的箱子
         boxList.forEach(box -> {
             CsgoBattleRoomBox roomBox = new CsgoBattleRoomBox();
-            roomBox.setBoxId(box.getId()).setRoomId(roomId).setName(box.getName()).setNameAlias(box.getNameAlias()).setImageUrl(box.getImageUrl());
+            roomBox.setId(IdTool.nextId()).setBoxId(box.getId()).setRoomId(roomId).setName(box.getName()).setNameAlias(box.getNameAlias()).setImageUrl(box.getImageUrl());
             battleRoom.getRoomBoxes().add(roomBox);                                         // 添加参战箱子
         });
         // 房间关联的用户
         CsgoBattleRoomUser createUser = new CsgoBattleRoomUser();
-        createUser.setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
+        createUser.setId(IdTool.nextId()).setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
         battleRoom.getRoomUsers().add(createUser);                                          // 添加参战用户(创建人)
         if (null != robotList && !robotList.isEmpty()) {
             BizDict userTypeDict = bizDictService.getDictByTag("user_type");
@@ -187,8 +187,6 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         if (bizUser.getMoney().compareTo(battleRoom.getRoomPrice()) < 0) {
             return ApiRet.buildNo("金额不够");
         }
-        battleRoom.setRoomBoxes(csgoBattleRoomBoxService.list(QueryWrapper.create(new CsgoBattleRoomBox().setRoomId(roomId))));
-        battleRoom.setRoomUsers(csgoBattleRoomUserService.list(QueryWrapper.create(new CsgoBattleRoomUser().setRoomId(roomId))));
         // 已加入检查检查
         Long userId = bizUser.getId();
         if (battleRoom.getRoomUsers().stream().anyMatch(roomUser -> roomUser.getUserId().equals(userId))) {
@@ -198,7 +196,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         // --------------------------------------设置数据s--------------------------------------
         // 添加新加入房间的用户
         CsgoBattleRoomUser roomUser = new CsgoBattleRoomUser();
-        roomUser.setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
+        roomUser.setId(IdTool.nextId()).setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
         battleRoom.getRoomUsers().add(roomUser);
         // 判断房间状态等于 [等待中] 和 [人数已满] ,计算对战奖励
         if (battleRoom.getPeopleNumber() == battleRoom.getRoomUsers().size() && battleRoom.getStatus().equals(battleStatusDict.getValueByAlias("battle_wait"))) {
@@ -221,9 +219,11 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         if (!battleRoom.getRoomGoods().isEmpty() && battleStatusDict.getValueByAlias("battle_end").equals(battleRoom.getStatus())) {
             csgoBattleRoomGoodService.saveOrUpdateBatch(battleRoom.getRoomGoods());                     // 保存房间中奖商品
             dispatchBattleGoods(battleRoom);                                                            // 发放商品
+            csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());                     // 更新用户
             this.saveOrUpdate(battleRoom);                                                              // 更新房间状态
         }
-        csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());                         // 更新用户
+        csgoBattleRoomUserService.saveOrUpdate(roomUser);                                               // 添加新加入用户
+
         // --------------------------------------保存数据e--------------------------------------
         battleRoomRes.setCsgoBattleRoom(battleRoom);
         // 更新 [房间缓存]
