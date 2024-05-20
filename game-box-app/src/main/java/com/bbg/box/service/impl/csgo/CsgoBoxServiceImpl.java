@@ -11,6 +11,7 @@ import com.bbg.core.box.dto.DreamDto;
 import com.bbg.core.box.service.RedisService;
 import com.bbg.core.constants.KeyConst;
 import com.bbg.core.utils.FairFactory;
+import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.*;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -94,13 +95,17 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
 
         if (luckGood != null) {
             // 添加商品到用户背包
+            BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
             CsgoStorehouse storehouse = new CsgoStorehouse();
             storehouse.setUserId(bizUser.getId())
+                    .setSourceId(boxId)
+                    .setSourceType(goodSourceTypeDict.getValueByAlias("source_open_box"))
                     .setGoodId(luckGood.getGoodId())
                     .setName(luckGood.getName())
                     .setNameAlias(luckGood.getNameAlias())
                     .setImageUrl(luckGood.getImageUrl())
                     .setPrice(luckGood.getPrice());
+
             csgoStorehouseService.save(storehouse);
             boxRes.setLuckStorehouse(storehouse);
             // 更新递增后roll点回合数
@@ -110,8 +115,6 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                     .setCreateTime(null)
                     .setUpdateTime(null);
             csgoUserInfoService.updateById(csgoUserInfo);
-            System.out.println("扣钱之前:" + bizUser.getMoney());
-            System.out.println("回合数之前:" + bizUser.getCsgoUserInfo().getRoundNumber());
             // 构造流水记录
             CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
             capitalRecord.setUserId(bizUser.getId())
@@ -120,9 +123,6 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                     .setChangeMoney(csgoBox.getPrice().negate());    // 扣钱,转为负数
             // 更新用户金额
             bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
-            System.out.println("盲盒价格:" + csgoBox.getPrice() + "盲盒价格:" + csgoBox.getPrice());
-            System.out.println("扣钱之后:" + bizUser.getMoney());
-            System.out.println("回合数之后:" + bizUser.getCsgoUserInfo().getRoundNumber());
             System.out.println();
             // 跟新缓存
             redisService.updateUser(bizUser);
@@ -157,8 +157,11 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         boolean isWinGood = roundNumber < winningRange.intValue();
         if (isWinGood) {
             // 保存背包
+            BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
             CsgoStorehouse storehouse = new CsgoStorehouse();
             storehouse.setUserId(bizUser.getId())
+                    .setSourceId(model.getBoxGoodId())
+                    .setSourceType(goodSourceTypeDict.getValueByAlias("source_dream_good"))
                     .setGoodId(csgoBoxGoods.getGoodId())
                     .setName(csgoBoxGoods.getName())
                     .setNameAlias(csgoBoxGoods.getNameAlias())

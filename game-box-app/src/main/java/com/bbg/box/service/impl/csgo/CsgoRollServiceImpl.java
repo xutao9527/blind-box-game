@@ -156,7 +156,10 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
                 if (user.getType().equals(userTypeDict.getValueByAlias("real_user"))
                         || user.getType().equals(userTypeDict.getValueByAlias("test_user"))) {
                     CsgoStorehouse storehouse = new CsgoStorehouse();
+                    BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
                     storehouse.setUserId(rollGood.getLuckUserId())
+                            .setSourceId(roll.getId())
+                            .setSourceType(goodSourceTypeDict.getValueByAlias("source_roll_room"))
                             .setName(rollGood.getName())
                             .setNameAlias(rollGood.getNameAlias())
                             .setGoodId(rollGood.getGoodId())

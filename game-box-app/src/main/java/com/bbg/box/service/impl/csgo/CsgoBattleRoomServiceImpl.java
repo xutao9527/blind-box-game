@@ -262,8 +262,11 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
                                 // 当用户等于真实用户和测试用户的时候,才进行装备派发
                                 if (user.getUserType().equals(userTypeDict.getValueByAlias("real_user"))
                                         || user.getUserType().equals(userTypeDict.getValueByAlias("test_user"))) {
+                                    BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
                                     CsgoStorehouse storehouse = new CsgoStorehouse();
                                     storehouse.setUserId(roomGood.getLuckUserId())
+                                            .setSourceId(csgoBattleRoom.getId())
+                                            .setSourceType(goodSourceTypeDict.getValueByAlias("source_battle_room"))
                                             .setName(roomGood.getName())
                                             .setNameAlias(roomGood.getNameAlias())
                                             .setGoodId(roomGood.getGoodId())
