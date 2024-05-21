@@ -2,6 +2,8 @@ package com.bbg.admin.controller.csgo;
 
 import com.bbg.admin.base.controller.csgo.BaseCsgoRollController;
 import com.bbg.admin.service.biz.BizDictService;
+import com.bbg.core.annotation.RedisClear;
+import com.bbg.core.constants.KeyConst;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.csgo.CsgoRoll;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ public class CsgoRollController extends BaseCsgoRollController {
     public final BizDictService bizDictService;
 
     @Override
+    @PostMapping("update")
+    @RedisClear(value = "#model.id", key = KeyConst.ROLL_INFO_ID)
     public ApiRet<Boolean> update(CsgoRoll model) {
         var currentTime = LocalDateTime.now();
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
@@ -44,6 +48,7 @@ public class CsgoRollController extends BaseCsgoRollController {
                 && currentTime.isAfter(roll.getStartTime())
                 && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))
                 && roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model")) // 人数模式
+
         ) {
             model.setStatus(rollStatusDict.getValueByAlias("roll_online"));
             return ApiRet.buildOk(csgoRollService.updateById(model));

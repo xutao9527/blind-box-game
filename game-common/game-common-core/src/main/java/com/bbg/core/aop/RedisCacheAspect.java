@@ -43,7 +43,9 @@ public class RedisCacheAspect extends BaseAspect {
         String keyValue = parserSpEL(redisClear.value(), point).toString();
         String cacheKey = KeyConst.build(keyPrefix, keyValue);
         redisService.delete(cacheKey);
-        return point.proceed();
+        Object result = point.proceed();
+        redisService.delete(cacheKey);
+        return result;
     }
 
 }
