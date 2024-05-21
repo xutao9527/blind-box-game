@@ -224,8 +224,8 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     /**
      * 上线房间
      */
-    @RedisLock(value = "#csgoRoll.rollId", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
-    @RedisClear(value = "#csgoRoll.rollId", key = KeyConst.ROLL_INFO_ID)
+    @RedisLock(value = "#csgoRoll.id", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
+    @RedisClear(value = "#csgoRoll.id", key = KeyConst.ROLL_INFO_ID)
     public boolean onlineRoll(CsgoRoll csgoRoll) {
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
         csgoRoll.setStatus(rollStatusDict.getValueByAlias("roll_online"));
@@ -237,17 +237,17 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
      * 下线房间
      */
     @Transactional(rollbackFor = Exception.class)
-    @RedisLock(value = "#csgoRoll.rollId", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
-    @RedisClear(value = "#csgoRoll.rollId", key = KeyConst.ROLL_INFO_ID)
+    @RedisLock(value = "#csgoRoll.id", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
+    @RedisClear(value = "#csgoRoll.id", key = KeyConst.ROLL_INFO_ID)
     public boolean offlineRoll(CsgoRoll csgoRoll) {
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
         CsgoRoll roll = selfProxy.getInfo(csgoRoll.getId());
-        if (!this.runRoll(roll)) {
-             log.error("撸房计算异常:{}",roll.getId());
-             return false;
-        }
         if (!rollStatusDict.getValueByAlias("roll_online").equals(roll.getStatus())) {
-            log.error("房间没上架:{}",roll.getId());
+            log.error("房间没上架:{}", roll.getId());
+            return false;
+        }
+        if (!this.runRoll(roll)) {
+            log.error("撸房计算异常:{}", roll.getId());
             return false;
         }
         if (rollStatusDict.getValueByAlias("roll_offline").equals(roll.getStatus())) {

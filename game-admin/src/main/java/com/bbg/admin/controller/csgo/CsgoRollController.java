@@ -48,7 +48,6 @@ public class CsgoRollController extends BaseCsgoRollController {
                 && currentTime.isAfter(roll.getStartTime())
                 && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))
                 && roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model")) // 人数模式
-
         ) {
             model.setStatus(rollStatusDict.getValueByAlias("roll_online"));
             return ApiRet.buildOk(csgoRollService.updateById(model));

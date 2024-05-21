@@ -90,7 +90,8 @@ const toEdit = async (id) => {
     if (apiRet.ok) {
       Object.assign(data, apiRet.data);
       data.createTime = null
-      data.updateTime = null;
+      data.updateTime = null
+      data.enable = false
     }
   } else {
     data.id = null
