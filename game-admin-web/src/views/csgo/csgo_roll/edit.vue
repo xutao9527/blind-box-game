@@ -91,7 +91,6 @@ const toEdit = async (id) => {
       Object.assign(data, apiRet.data);
       data.createTime = null
       data.updateTime = null
-      data.enable = false
     }
   } else {
     data.id = null
@@ -105,6 +104,7 @@ const submit = async () => {
       backList(true)
     }
   } else {
+    data.enable = false
     const apiRet = await http.post('/csgoRoll/save', data)
     if (apiRet.ok) {
       ElMessage({type: 'success', message: apiRet.msg})
