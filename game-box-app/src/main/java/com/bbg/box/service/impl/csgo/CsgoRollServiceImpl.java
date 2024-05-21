@@ -8,6 +8,7 @@ import com.bbg.box.service.csgo.CsgoRollUserService;
 import com.bbg.box.service.csgo.CsgoStorehouseService;
 import com.bbg.box.utils.IdTool;
 import com.bbg.core.annotation.RedisCache;
+import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.RollDto;
 import com.bbg.core.box.service.RedisService;
@@ -65,6 +66,8 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     // 单独的房间信息-缓存存活时长
     public final static long ROLL_INFO_LIVE_TIME = 180;
 
+    public final static long ROLL_LIST_LIVE_TIME = 500;
+
     /**
      * 获得撸房信息
      * 缓存信息默认存储180秒(根据内存实时调整)
@@ -77,6 +80,28 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
         }
         csgoRoll.setRollGoods(csgoRollGoodService.list(QueryWrapper.create(new CsgoRollGood().setRollId(rollId))));
         return csgoRoll;
+    }
+
+    /**
+     * 获得撸房列表信息
+     * 缓存信息默认存储500毫秒,避免高并发,缓解数据库压力
+     */
+    @RedisCache(key = KeyConst.ROLL_LIST_INFO, liveTime = ROLL_LIST_LIVE_TIME, timeUnit = TimeUnit.MILLISECONDS)
+    public Page<CsgoRoll> getRollList(RollDto.GetRollListReq getRollListReq) {
+        BizDict rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .in(CsgoRoll::getStatus, rollStatusDict.getValueByAlias("roll_online"), rollStatusDict.getValueByAlias("roll_offline"))
+                .eq(CsgoRoll::getEnable, true);
+        Page<CsgoRoll> rollPage = page(Page.of(getRollListReq.getPageNumber(), getRollListReq.getPageSize()), queryWrapper);
+        // 如果redis中有撸房缓存: redis撸房替换结果集,否则数据库查询
+        List<CsgoRoll> rollList = rollPage.getRecords().stream().map(
+                roll -> {
+                    roll = selfProxy.getInfo(roll.getId());
+                    return roll;
+                }
+        ).toList();
+        rollPage.setRecords(rollList);
+        return rollPage;
     }
 
     /**
@@ -122,7 +147,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
                     return ApiRet.buildNo("撸房计算异常");
                 }
             }
-        // [时间模式] 超时,并状态为 上架中
+            // [时间模式] 超时,并状态为 上架中
         } else if (roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model")) && rollStatusDict.getValueByAlias("roll_online").equals(roll.getStatus())) {
             if (roll.getEndTime().isBefore(currentTime)) {
                 if (!this.runRoll(roll)) {
@@ -150,8 +175,8 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
     private void dispatchRollGoods(CsgoRoll roll) {
         List<CsgoStorehouse> storehouseList = new ArrayList<>();
         BizDict userTypeDict = bizDictService.getDictByTag("user_type");
-        roll.getRollGoods().forEach(rollGood->{
-            if(rollGood.getLuckUserId()!=null){
+        roll.getRollGoods().forEach(rollGood -> {
+            if (rollGood.getLuckUserId() != null) {
                 BizUser user = bizUserService.getById(rollGood.getLuckUserId());
                 if (user.getType().equals(userTypeDict.getValueByAlias("real_user"))
                         || user.getType().equals(userTypeDict.getValueByAlias("test_user"))) {
@@ -196,26 +221,27 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
         return true;
     }
 
+    /**
+     * 上线房间
+     */
+    @RedisLock(value = "#csgoRoll.rollId", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
+    @RedisClear(value = "#csgoRoll.rollId", key = KeyConst.ROLL_INFO_ID)
+    public boolean onlineRoll(CsgoRoll csgoRoll) {
+        var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
+        csgoRoll.setStatus(rollStatusDict.getValueByAlias("roll_online"));
+        updateById(csgoRoll);
+        return true;
+    }
 
     /**
-     * 获得撸房信息
-     * 缓存信息默认存储500毫秒,避免高并发,缓解数据库压力
+     * 下线房间
      */
-    @RedisCache(key = KeyConst.ROLL_LIST_INFO, liveTime = 500, timeUnit = TimeUnit.MILLISECONDS)
-    public Page<CsgoRoll> getRollList(RollDto.GetRollListReq getRollListReq) {
-        BizDict rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
-        QueryWrapper queryWrapper = QueryWrapper.create()
-                .in(CsgoRoll::getStatus, rollStatusDict.getValueByAlias("roll_online"), rollStatusDict.getValueByAlias("roll_offline"))
-                .eq(CsgoRoll::getEnable, true);
-        Page<CsgoRoll> rollPage = page(Page.of(getRollListReq.getPageNumber(), getRollListReq.getPageSize()), queryWrapper);
-        // 如果redis中有撸房缓存: redis撸房替换结果集,否则数据库查询
-        List<CsgoRoll> rollList = rollPage.getRecords().stream().map(
-                roll -> {
-                    roll = selfProxy.getInfo(roll.getId());
-                    return roll;
-                }
-        ).toList();
-        rollPage.setRecords(rollList);
-        return rollPage;
+    @RedisLock(value = "#csgoRoll.rollId", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
+    @RedisClear(value = "#csgoRoll.rollId", key = KeyConst.ROLL_INFO_ID)
+    public boolean offlineRoll(CsgoRoll csgoRoll) {
+        var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
+        csgoRoll.setStatus(rollStatusDict.getValueByAlias("roll_offline"));
+        updateById(csgoRoll);
+        return true;
     }
 }
