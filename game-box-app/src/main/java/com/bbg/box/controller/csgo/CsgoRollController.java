@@ -98,4 +98,15 @@ public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService
         }
         return apiRet;
     }
+
+    @GetMapping("offlineRoll")
+    @Operation(description = "加入撸房(用户Id-测试)")
+    public ApiRet<Boolean> offlineRoll(@NotNull @RequestParam("rollId") Long rollId) {
+        CsgoRoll roll = csgoRollService.getById(rollId);
+        if(roll!=null){
+            return ApiRet.buildOk(csgoRollService.offlineRoll(roll));
+        }
+        return ApiRet.buildNo("房间不存在");
+    }
+
 }
