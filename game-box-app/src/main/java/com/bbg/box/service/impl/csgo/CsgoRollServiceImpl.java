@@ -238,10 +238,19 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
      */
     @RedisLock(value = "#csgoRoll.rollId", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
     @RedisClear(value = "#csgoRoll.rollId", key = KeyConst.ROLL_INFO_ID)
+    @Transactional(rollbackFor = Exception.class)
     public boolean offlineRoll(CsgoRoll csgoRoll) {
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
-        csgoRoll.setStatus(rollStatusDict.getValueByAlias("roll_offline"));
-        updateById(csgoRoll);
+        CsgoRoll roll = selfProxy.getInfo(csgoRoll.getId());
+        if (!this.runRoll(roll)) {
+             log.error("撸房计算异常:{}",roll.getId());
+             return false;
+        }
+        if (rollStatusDict.getValueByAlias("roll_offline").equals(roll.getStatus())) {
+            dispatchRollGoods(roll);                                                                // 发放商品
+            csgoRollGoodService.saveOrUpdateBatch(roll.getRollGoods());                             // 更新商品中奖信息
+            this.saveOrUpdate(roll);                                                                // 更新房间状态
+        }
         return true;
     }
 }
