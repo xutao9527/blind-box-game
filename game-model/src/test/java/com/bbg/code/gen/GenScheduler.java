@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 public class GenScheduler {
     public static String[] bizTables = {
             // "biz_user",//账号
-            // "biz_dict",//业务字典
-            // "biz_dict_detail",//字典详情
+            "biz_dict",//业务字典
+            "biz_dict_detail",//字典详情
     };
 
     public static String[] csgoTables = {
