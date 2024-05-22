@@ -20,7 +20,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
-// @Configuration
+@Configuration
 @AutoConfigureBefore(JacksonAutoConfiguration.class)
 public class JacksonConfig {
 

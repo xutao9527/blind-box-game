@@ -40,4 +40,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         return jobInfoList;
     }
+
+    public boolean save(Trigger trigger, JobDetail jobDetail) {
+        return true;
+    }
 }

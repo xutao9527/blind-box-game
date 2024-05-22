@@ -1,5 +1,6 @@
 package com.bbg.schedule.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -19,7 +20,9 @@ public class JobInfo {
 
     String cronExpression;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     Date startTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     Date endTime;
 }
