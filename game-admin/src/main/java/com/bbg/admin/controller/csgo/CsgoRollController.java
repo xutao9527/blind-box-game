@@ -1,9 +1,9 @@
 package com.bbg.admin.controller.csgo;
 
 import com.bbg.admin.base.controller.csgo.BaseCsgoRollController;
-import com.bbg.admin.service.biz.BizDictService;
+import com.bbg.core.constrans.KeyConst;
+import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.annotation.RedisClear;
-import com.bbg.core.constants.KeyConst;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.csgo.CsgoRoll;
 import lombok.RequiredArgsConstructor;

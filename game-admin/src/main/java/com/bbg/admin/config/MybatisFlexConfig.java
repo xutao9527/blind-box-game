@@ -3,7 +3,7 @@ package com.bbg.admin.config;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.bbg.admin.utils.IdTool;
-import com.bbg.core.constants.ServicesConst;
+
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.core.audit.AuditManager;

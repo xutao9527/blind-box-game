@@ -1,8 +1,9 @@
 package com.bbg.admin.base.controller.biz;
 
 import com.bbg.admin.base.BaseController;
+import com.bbg.core.service.biz.BizDictDetailService;
 import com.bbg.model.biz.BizDictDetail;
-import com.bbg.admin.service.biz.BizDictDetailService;
+
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
 import com.bbg.model.sys.SysMenu;

@@ -1,8 +1,9 @@
 package com.bbg.admin.base.controller.biz;
 
 import com.bbg.admin.base.BaseController;
+import com.bbg.core.service.biz.BizUserService;
 import com.bbg.model.biz.BizUser;
-import com.bbg.admin.service.biz.BizUserService;
+
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
 import com.mybatisflex.core.paginate.Page;

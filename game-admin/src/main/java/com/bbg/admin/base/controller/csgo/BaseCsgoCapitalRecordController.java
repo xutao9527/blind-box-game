@@ -2,7 +2,7 @@ package com.bbg.admin.base.controller.csgo;
 
 import com.bbg.admin.base.BaseController;
 import com.bbg.model.csgo.CsgoCapitalRecord;
-import com.bbg.admin.service.csgo.CsgoCapitalRecordService;
+import com.bbg.core.service.csgo.CsgoCapitalRecordService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
 import com.mybatisflex.core.paginate.Page;

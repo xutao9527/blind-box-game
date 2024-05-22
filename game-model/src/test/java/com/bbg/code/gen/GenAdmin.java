@@ -58,9 +58,9 @@ public class GenAdmin {
                 .resolve("java")
                 .toString();
         CodeGenNormal codeGenNormal = new CodeGenNormal();
-        codeGenNormal.generateService(bizTables, "com.bbg.admin", ".biz", extPackagePath);
-        codeGenNormal.generateService(csgoTables, "com.bbg.admin", ".csgo", extPackagePath);
-        codeGenNormal.generateService(sysTables, "com.bbg.admin", ".sys", extPackagePath);
+        // codeGenNormal.generateService(bizTables, "com.bbg.admin", ".biz", extPackagePath);
+        // codeGenNormal.generateService(csgoTables, "com.bbg.admin", ".csgo", extPackagePath);
+        // codeGenNormal.generateService(sysTables, "com.bbg.admin", ".sys", extPackagePath);
         sysTables = Arrays.stream(sysTables).filter(
                 t -> !(t.equals("sys_role_menu") || t.equals("sys_user_role"))
         ).toList().toArray(new String[0]);

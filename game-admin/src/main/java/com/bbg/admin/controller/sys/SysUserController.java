@@ -1,10 +1,10 @@
 package com.bbg.admin.controller.sys;
 
 import com.bbg.admin.base.controller.sys.BaseSysUserController;
-import com.bbg.admin.service.sys.SysMenuService;
-import com.bbg.admin.service.sys.SysRoleMenuService;
-import com.bbg.admin.service.sys.SysRoleService;
-import com.bbg.admin.service.sys.SysUserRoleService;
+import com.bbg.core.service.sys.SysMenuService;
+import com.bbg.core.service.sys.SysRoleMenuService;
+import com.bbg.core.service.sys.SysRoleService;
+import com.bbg.core.service.sys.SysUserRoleService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.record.SysRoleMenuRecord;
 import com.bbg.model.sys.*;

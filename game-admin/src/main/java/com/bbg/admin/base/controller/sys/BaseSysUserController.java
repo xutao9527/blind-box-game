@@ -2,7 +2,7 @@ package com.bbg.admin.base.controller.sys;
 
 import com.bbg.admin.base.BaseController;
 import com.bbg.model.sys.SysUser;
-import com.bbg.admin.service.sys.SysUserService;
+import com.bbg.core.service.sys.SysUserService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
 import com.mybatisflex.core.paginate.Page;

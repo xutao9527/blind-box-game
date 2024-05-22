@@ -3,7 +3,7 @@ package com.bbg.admin.base.controller.csgo;
 import com.bbg.admin.base.BaseController;
 import com.bbg.model.biz.BizDictDetail;
 import com.bbg.model.csgo.CsgoBoxGoods;
-import com.bbg.admin.service.csgo.CsgoBoxGoodsService;
+import com.bbg.core.service.csgo.CsgoBoxGoodsService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
 import com.mybatisflex.core.paginate.Page;

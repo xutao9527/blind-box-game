@@ -1,8 +1,8 @@
 package com.bbg.admin.controller.biz;
 
 import com.bbg.admin.base.controller.biz.BaseBizUserController;
-import com.bbg.admin.service.biz.BizDictService;
-import com.bbg.admin.service.biz.BizUserService;
+import com.bbg.core.service.biz.BizDictService;
+import com.bbg.core.service.biz.BizUserService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoCapitalRecord;
