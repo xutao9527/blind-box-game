@@ -16,6 +16,7 @@
         <module>game-common</module>
         <module>game-admin</module>
         <module>game-scheduler</module>
+        <module>game-core</module>
     </modules>
 
     <properties>

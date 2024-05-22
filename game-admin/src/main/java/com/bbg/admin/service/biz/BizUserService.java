@@ -16,6 +16,4 @@ import org.springframework.beans.factory.annotation.Autowired;
 public interface BizUserService extends IService<BizUser> {
     // 更新用户金额
     BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord);
-
-
 }

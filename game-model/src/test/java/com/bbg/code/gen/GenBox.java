@@ -45,6 +45,5 @@ public class GenBox {
         codeGenNormal.generateService(csgoTables, "com.bbg.box", ".csgo", extPackagePath);
         codeGenNormal.generateController(bizTables, "com.bbg.box", ".biz", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
         codeGenNormal.generateController(csgoTables, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
-
     }
 }
