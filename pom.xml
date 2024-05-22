@@ -15,6 +15,7 @@
         <module>game-box-app</module>
         <module>game-common</module>
         <module>game-admin</module>
+        <module>game-scheduler</module>
     </modules>
 
     <properties>
@@ -34,4 +35,16 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
