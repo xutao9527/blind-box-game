@@ -1,9 +1,6 @@
 package com.bbg.admin.config;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
-import com.bbg.admin.utils.IdTool;
-
+import com.bbg.core.utils.IdTool;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.core.audit.AuditManager;
@@ -29,7 +26,6 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         keyConfig.setBefore(true);
         FlexGlobalConfig flexGlobalConfig = FlexGlobalConfig.getDefaultConfig();
         flexGlobalConfig.setKeyConfig(keyConfig);
-
         //开启审计功能
         AuditManager.setAuditEnable(true);
         //设置 SQL 审计收集器

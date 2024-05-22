@@ -4,8 +4,8 @@ import com.bbg.box.base.BaseController;
 
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.biz.BizUserService;
-import com.bbg.box.utils.IdTool;
 import com.bbg.core.box.dto.BattleRoomDto;
+import com.bbg.core.utils.IdTool;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBattleRoom;
 import com.bbg.core.service.csgo.CsgoBattleRoomService;

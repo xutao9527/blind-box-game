@@ -1,8 +1,6 @@
 package com.bbg.box.config;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
-import com.bbg.box.utils.IdTool;
+import com.bbg.core.utils.IdTool;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.core.audit.AuditManager;

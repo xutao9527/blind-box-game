@@ -1,6 +1,6 @@
 package com.bbg.schedule.config;
 
-import com.bbg.schedule.utils.IdTool;
+import com.bbg.core.utils.IdTool;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.core.audit.AuditManager;
