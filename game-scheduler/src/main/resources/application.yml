@@ -9,13 +9,6 @@ spring:
       server-addr: 127.0.0.1:8848
       discovery:
         namespace: be713592-842b-4885-9251-9fd0f3d0f770
-    openfeign:
-      client:
-        config:
-          default:
-            connect-timeout: 3000 # 连接超时时间
-            read-timeout: 3000 # 读取超时时间
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/gbb?characterEncoding=utf-8&useInformationSchema=true
@@ -39,6 +32,8 @@ spring:
           max-active: 100
           # 连接分配应该阻塞的最大时间
           max-wait: 2000
+  quartz:
+    job-store-type: memory
 
 springdoc:
   api-docs:
