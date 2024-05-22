@@ -3,6 +3,7 @@ package com.bbg.schedule.controller;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.schedule.base.BaseController;
 import com.bbg.schedule.entity.JobInfo;
+import com.bbg.schedule.job.SysJob;
 import com.bbg.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @RestController
@@ -28,5 +31,33 @@ public class ScheduleController extends BaseController {
     @Operation(description = "所有任务")
     public ApiRet<List<JobInfo>> list() throws Exception {
         return ApiRet.buildOk(scheduleService.getAll());
+    }
+
+    @GetMapping("save")
+    @Operation(description = "保存任务")
+    public ApiRet<Boolean> save() throws Exception {
+
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity("sys_trigger")
+                .withSchedule(CronScheduleBuilder
+                        .cronSchedule("0/10 * * * * ?"))
+                .endAt(Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                .build();
+
+        JobDetail jobDetail1 = JobBuilder.newJob(SysJob.class)
+                .withIdentity("SysJob")
+                .build();
+        return ApiRet.buildOk(scheduleService.save(trigger,jobDetail1));
+    }
+
+    @GetMapping("delete")
+    @Operation(description = "删除任务")
+    public ApiRet<Boolean> delete() throws Exception {
+
+        JobDetail jobDetail1 = JobBuilder.newJob(SysJob.class)
+                .withIdentity("SysJob")
+                .build();
+
+        return ApiRet.buildOk(scheduleService.delete(jobDetail1));
     }
 }

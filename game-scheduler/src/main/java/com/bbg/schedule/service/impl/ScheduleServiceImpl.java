@@ -41,7 +41,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         return jobInfoList;
     }
 
-    public boolean save(Trigger trigger, JobDetail jobDetail) {
+    public boolean save(Trigger trigger, JobDetail jobDetail) throws SchedulerException {
+        delete(jobDetail);
+        scheduler.scheduleJob(jobDetail,trigger);
         return true;
+    }
+
+    public boolean delete(JobDetail jobDetail) throws SchedulerException {
+        return scheduler.deleteJob(jobDetail.getKey());
     }
 }

@@ -25,22 +25,22 @@ public class SysLoader {
                 .endAt(Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .build();
 
-        JobDetail jobDetail1 = JobBuilder.newJob(SysJob.class)
-                .withIdentity("SysJob")
-                .build();
-
-        JobDetail jobDetail2 = JobBuilder.newJob(SysJob.class)
-                .withIdentity("SysJob2")
-                .build();
-
-        Trigger trigger2 = TriggerBuilder.newTrigger()
-                .withIdentity("sys_trigger1")
-                .withSchedule(CronScheduleBuilder
-                        .cronSchedule("0/20 * * * * ?"))
-                .build();
-
-
-        scheduler.scheduleJob(jobDetail1, trigger1);
-        scheduler.scheduleJob(jobDetail2, trigger2);
+        // JobDetail jobDetail1 = JobBuilder.newJob(SysJob.class)
+        //         .withIdentity("SysJob")
+        //         .build();
+        //
+        // JobDetail jobDetail2 = JobBuilder.newJob(SysJob.class)
+        //         .withIdentity("SysJob2")
+        //         .build();
+        //
+        // Trigger trigger2 = TriggerBuilder.newTrigger()
+        //         .withIdentity("sys_trigger1")
+        //         .withSchedule(CronScheduleBuilder
+        //                 .cronSchedule("0/20 * * * * ?"))
+        //         .build();
+        //
+        //
+        // scheduler.scheduleJob(jobDetail1, trigger1);
+        // scheduler.scheduleJob(jobDetail2, trigger2);
     }
 }
