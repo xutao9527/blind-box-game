@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @SpringBootApplication
 @ImportAutoConfiguration
-@MapperScan("com.bbg.schedule.mapper")
+@MapperScan("com.bbg.core.mapper")
 @ComponentScan(basePackages = {"com.bbg.core", "com.bbg.schedule"})
 @EnableTransactionManagement
 public class SchedulerServiceApplication {

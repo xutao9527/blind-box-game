@@ -14,17 +14,17 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * Roll房间用户 实体类。
+ * 撸房用户 实体类。
  *
  * @author bbg
- * @since 2024-05-16
+ * @since 2024-05-22
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "Roll房间用户")
+@Schema(description = "撸房用户")
 @Table("csgo_roll_user")
 public class CsgoRollUserRecord extends BaseModel implements Serializable {
 

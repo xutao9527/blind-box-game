@@ -41,9 +41,8 @@ public class GenBox {
                 .resolve("java")
                 .toString();
         CodeGenNormal codeGenNormal = new CodeGenNormal();
-        // codeGenNormal.generateService(bizTables, "com.bbg.box", ".biz", extPackagePath);
-        // codeGenNormal.generateService(csgoTables, "com.bbg.box", ".csgo", extPackagePath);
-        codeGenNormal.generateController(bizTables, "com.bbg.box", ".biz", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
-        codeGenNormal.generateController(csgoTables, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
+        // codeGenNormal.generateController(bizTables, "com.bbg.box", ".biz", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
+        // codeGenNormal.generateController(csgoTables, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
+        codeGenNormal.generateController(new String[]{"csgo_robot_test"}, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
     }
 }

@@ -15,17 +15,17 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * Roll房间装备 实体类。
+ * 撸房装备 实体类。
  *
  * @author bbg
- * @since 2024-05-16
+ * @since 2024-05-22
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "Roll房间装备")
+@Schema(description = "撸房装备")
 @Table("csgo_roll_good")
 public class CsgoRollGoodRecord extends BaseModel implements Serializable {
 

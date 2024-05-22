@@ -99,7 +99,7 @@ public class CodeGenNormal extends CodeGenBase {
                 .setGenerateTable(generateTables);
         // 设置包路径
         globalConfig.getPackageConfig()
-                .setServicePackage(basePackagePath + ".service" + extPackagePath)
+                .setServicePackage("com.bbg.core" + ".service" + extPackagePath)
                 .setEntityPackage("com.bbg" + ".model" + extPackagePath)
                 .setControllerPackage(basePackagePath + ".base.controller" + extPackagePath);
         // this.setPackageConfig(globalConfig.getPackageConfig(), basePackagePath, extPackagePath);

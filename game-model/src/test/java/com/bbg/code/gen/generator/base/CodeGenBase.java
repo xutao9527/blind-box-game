@@ -22,7 +22,7 @@ public class CodeGenBase {
                 // .setEntityPackage(entityPackagePath + ".model" + extPackagePath)
                 .setEntityPackage("com.bbg" + ".model" + extPackagePath)
                 .setMapperPackage(basePackagePath + ".mapper" + extPackagePath)
-                .setServicePackage(basePackagePath + ".service" + extPackagePath)
+                .setServicePackage("com.bbg.core" +  ".service" + extPackagePath)
                 .setServiceImplPackage(basePackagePath + ".service.impl" + extPackagePath)
                 .setControllerPackage(basePackagePath + ".controller" + extPackagePath);
 

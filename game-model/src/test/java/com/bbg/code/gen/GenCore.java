@@ -1,5 +1,6 @@
 package com.bbg.code.gen;
 
+import com.bbg.code.gen.generator.CodeGenEntity;
 import com.bbg.code.gen.generator.CodeGenNormal;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,17 @@ public class GenCore {
             "csgo_roll", //roll房
             "csgo_roll_user",//roll房的用户
             "csgo_roll_good",//roll房的商品
+            "csgo_robot_test",//测试
     };
+
+    @Test
+    // 生成 model -> Entity
+    public void generateEntity(){
+        CodeGenEntity codeGenEntity = new CodeGenEntity();
+        codeGenEntity.generate(bizTables, "com.bbg", ".biz");
+        codeGenEntity.generate(sysTables, "com.bbg", ".sys");
+        codeGenEntity.generate(csgoTables, "com.bbg", ".csgo");
+    }
 
     @Test
     // 生成 core -> Mapper Service ServiceImpl
@@ -51,7 +62,5 @@ public class GenCore {
         codeGenNormal.generateService(bizTables, "com.bbg.core", ".biz", extPackagePath);
         codeGenNormal.generateService(csgoTables, "com.bbg.core", ".csgo", extPackagePath);
         codeGenNormal.generateService(sysTables, "com.bbg.core", ".sys", extPackagePath);
-        // codeGenNormal.generateController(bizTables, "com.bbg.core", ".biz", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
-        // codeGenNormal.generateController(csgoTables, "com.bbg.core", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
     }
 }

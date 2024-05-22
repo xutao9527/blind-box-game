@@ -13,7 +13,6 @@
 
     <modules>
         <module>game-common-bom</module>
-        <module>game-common-core</module>
     </modules>
 
     <properties>

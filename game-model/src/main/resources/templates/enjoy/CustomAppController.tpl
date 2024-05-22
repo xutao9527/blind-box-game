@@ -54,7 +54,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 #end
 @RequestMapping("/#(firstCharToLowerCase(entityClassName))")
 @RequiredArgsConstructor
-public class #(table.buildControllerClassName()) extends BaseController<#(entityClassName), #(table.buildServiceClassName())> {
+public class #(table.buildControllerClassName()) extends BaseController {
 
     public final #(table.buildServiceClassName()) #(serviceVarName);
 

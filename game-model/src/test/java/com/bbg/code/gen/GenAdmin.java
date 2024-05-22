@@ -37,16 +37,10 @@ public class GenAdmin {
             "csgo_roll", //roll房
             "csgo_roll_user",//roll房的用户
             "csgo_roll_good",//roll房的商品
+            "csgo_robot_test",//测试
     };
 
-    @Test
-    // 生成 model -> Entity
-    public void generateEntity(){
-         CodeGenEntity codeGenEntity = new CodeGenEntity();
-         codeGenEntity.generate(bizTables, "com.bbg", ".biz");
-         codeGenEntity.generate(sysTables, "com.bbg", ".sys");
-         codeGenEntity.generate(csgoTables, "com.bbg", ".csgo");
-    }
+
 
     @Test
     // 生成 admin -> Mapper Service ServiceImpl Controller
@@ -58,18 +52,17 @@ public class GenAdmin {
                 .resolve("java")
                 .toString();
         CodeGenNormal codeGenNormal = new CodeGenNormal();
-        // codeGenNormal.generateService(bizTables, "com.bbg.admin", ".biz", extPackagePath);
-        // codeGenNormal.generateService(csgoTables, "com.bbg.admin", ".csgo", extPackagePath);
-        // codeGenNormal.generateService(sysTables, "com.bbg.admin", ".sys", extPackagePath);
         sysTables = Arrays.stream(sysTables).filter(
                 t -> !(t.equals("sys_role_menu") || t.equals("sys_user_role"))
         ).toList().toArray(new String[0]);
-        codeGenNormal.generateBaseController(bizTables, "com.bbg.admin", ".biz", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
-        codeGenNormal.generateBaseController(csgoTables, "com.bbg.admin", ".csgo", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
-        codeGenNormal.generateBaseController(sysTables, "com.bbg.admin", ".sys", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
-        codeGenNormal.generateController(bizTables, "com.bbg.admin", ".biz", extPackagePath, "/templates/enjoy/CustomAdminController.tpl");
-        codeGenNormal.generateController(csgoTables, "com.bbg.admin", ".csgo", extPackagePath, "/templates/enjoy/CustomAdminController.tpl");
-        codeGenNormal.generateController(sysTables, "com.bbg.admin", ".sys", extPackagePath, "/templates/enjoy/CustomAdminController.tpl");
+        // codeGenNormal.generateBaseController(bizTables, "com.bbg.admin", ".biz", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
+        // codeGenNormal.generateBaseController(csgoTables, "com.bbg.admin", ".csgo", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
+        // codeGenNormal.generateBaseController(sysTables, "com.bbg.admin", ".sys", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
+        // codeGenNormal.generateController(bizTables, "com.bbg.admin", ".biz", extPackagePath, "/templates/enjoy/CustomAdminController.tpl");
+        // codeGenNormal.generateController(csgoTables, "com.bbg.admin", ".csgo", extPackagePath, "/templates/enjoy/CustomAdminController.tpl");
+        // codeGenNormal.generateController(sysTables, "com.bbg.admin", ".sys", extPackagePath, "/templates/enjoy/CustomAdminController.tpl");
+        codeGenNormal.generateBaseController(new String[]{"csgo_robot_test"}, "com.bbg.admin", ".csgo", extPackagePath, "/templates/enjoy/CustomAdminBaseController.tpl");
+        codeGenNormal.generateController(new String[]{"csgo_robot_test"}, "com.bbg.admin", ".csgo", extPackagePath, "/templates/enjoy/CustomAdminController.tpl");
     }
 
     @Test

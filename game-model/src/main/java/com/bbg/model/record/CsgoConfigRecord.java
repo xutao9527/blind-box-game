@@ -18,7 +18,7 @@ import java.io.Serial;
  * 游戏配置 实体类。
  *
  * @author bbg
- * @since 2024-05-16
+ * @since 2024-05-22
  */
 @Data
 @NoArgsConstructor
