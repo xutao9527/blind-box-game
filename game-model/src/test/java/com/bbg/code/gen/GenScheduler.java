@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class GenScheduler {
     public static String[] bizTables = {
-            // "biz_user",//账号
+            "biz_user",//账号
             "biz_dict",//业务字典
             "biz_dict_detail",//字典详情
     };
@@ -18,7 +18,7 @@ public class GenScheduler {
             // "csgo_goods",//商品信息
             // "csgo_box",//盲盒
             // "csgo_box_goods",//盲盒商品
-            // "csgo_storehouse",//装备仓库
+            "csgo_storehouse",//装备仓库
             // "csgo_capital_record",//资金流水
             // "csgo_battle_room",//对战房间
             // "csgo_battle_room_box",//房间的箱子
