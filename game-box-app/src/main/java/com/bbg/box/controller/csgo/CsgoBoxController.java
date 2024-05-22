@@ -3,7 +3,6 @@ package com.bbg.box.controller.csgo;
 import com.bbg.box.base.BaseController;
 import com.bbg.box.service.biz.BizDictService;
 import com.bbg.box.service.csgo.CsgoBoxGoodsService;
-import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.DreamDto;
 import com.bbg.model.biz.BizDict;
@@ -12,27 +11,19 @@ import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBox;
 import com.bbg.box.service.csgo.CsgoBoxService;
 import com.bbg.core.entity.ApiRet;
-import com.bbg.core.entity.ReqParams;
 import com.bbg.model.csgo.CsgoBoxGoods;
-import com.bbg.model.csgo.CsgoGoods;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.constant.SqlOperator;
-import com.mybatisflex.core.query.SqlOperators;
 import lombok.RequiredArgsConstructor;
 
-import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 
 /**
  * CSGO箱子 控制层。
@@ -43,7 +34,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @RequestMapping("/csgoBox")
 @RequiredArgsConstructor
-public class CsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
+public class CsgoBoxController extends BaseController<CsgoBox> {
 
     public final CsgoBoxService csgoBoxService;
 

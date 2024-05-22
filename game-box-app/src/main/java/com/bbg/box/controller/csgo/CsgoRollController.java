@@ -3,32 +3,22 @@ package com.bbg.box.controller.csgo;
 import com.bbg.box.base.BaseController;
 import com.bbg.box.service.biz.BizUserService;
 import com.bbg.box.service.csgo.CsgoRollUserService;
-import com.bbg.core.box.dto.BattleRoomDto;
 import com.bbg.core.box.dto.RollDto;
 import com.bbg.core.constants.KeyConst;
 import com.bbg.model.biz.BizUser;
-import com.bbg.model.csgo.CsgoBattleRoom;
 import com.bbg.model.csgo.CsgoRoll;
 import com.bbg.box.service.csgo.CsgoRollService;
 import com.bbg.core.entity.ApiRet;
-import com.bbg.core.entity.ReqParams;
 import com.bbg.model.csgo.CsgoRollUser;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.constant.SqlOperator;
-import com.mybatisflex.core.query.SqlOperators;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
-import java.io.Serializable;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 
 /**
  * Roll房间 控制层。
@@ -40,7 +30,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 @Tag(name = "CS:GO撸房接口")
 @RequestMapping("/csgoRoll")
 @RequiredArgsConstructor
-public class CsgoRollController extends BaseController<CsgoRoll, CsgoRollService> {
+public class CsgoRollController extends BaseController<CsgoRoll> {
 
     public final CsgoRollService csgoRollService;
     public final CsgoRollUserService csgoRollUserService;

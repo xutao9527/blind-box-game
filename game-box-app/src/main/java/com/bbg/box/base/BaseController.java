@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 
-public class BaseController<T, S extends IService<T>> {
+public class BaseController<T> {
     @Autowired
     protected HttpServletRequest request;
 

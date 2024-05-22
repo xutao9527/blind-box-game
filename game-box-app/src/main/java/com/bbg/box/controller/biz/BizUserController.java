@@ -1,27 +1,16 @@
 package com.bbg.box.controller.biz;
 
 import com.bbg.box.base.BaseController;
-import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.LoginDto;
 import com.bbg.model.biz.BizUser;
 import com.bbg.box.service.biz.BizUserService;
 import com.bbg.core.entity.ApiRet;
-import com.bbg.model.csgo.CsgoBox;
-import com.bbg.model.sys.SysUser;
-import com.mybatisflex.core.constant.SqlOperator;
-import com.mybatisflex.core.mask.MaskManager;
-import com.mybatisflex.core.query.QueryCondition;
-import com.mybatisflex.core.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
-
-import java.util.List;
-import java.util.UUID;
 
 /**
  * 业务用户 控制层。
@@ -33,7 +22,7 @@ import java.util.UUID;
 @Tag(name = "业务用户接口")
 @RequestMapping("/bizUser")
 @RequiredArgsConstructor
-public class BizUserController extends BaseController<BizUser, BizUserService> {
+public class BizUserController extends BaseController<BizUser> {
     @Autowired
     protected BizUserService bizUserService;
 
