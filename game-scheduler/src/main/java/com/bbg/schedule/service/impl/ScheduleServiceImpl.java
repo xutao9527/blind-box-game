@@ -25,13 +25,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         Set<TriggerKey> triggerKeys = scheduler.getTriggerKeys(matcher);
         for (TriggerKey triggerKey : triggerKeys) {
             Trigger trigger = scheduler.getTrigger(triggerKey);
-            JobDetailImpl jobDetail = (JobDetailImpl) scheduler.getJobDetail(JobKey.jobKey(triggerKey.getName(), triggerKey.getGroup()));
+            JobDetailImpl jobDetail = (JobDetailImpl) scheduler.getJobDetail(JobKey.jobKey(trigger.getJobKey().getName(), trigger.getJobKey().getGroup()));
             JobInfo jobInfo = new JobInfo()
                     .setJobName(triggerKey.getName())
                     .setJobGroup(triggerKey.getGroup())
-                    .setDescription(jobDetail.getDescription());
+                    .setDescription(jobDetail.getDescription())
+                    .setJobClassName(jobDetail.getJobClass().getName());
             if (trigger instanceof CronTrigger cronTrigger) {
                 jobInfo.setCronExpression(cronTrigger.getCronExpression());
+                jobInfo.setStartTime(cronTrigger.getStartTime());
+                jobInfo.setEndTime(cronTrigger.getEndTime());
             }
             jobInfoList.add(jobInfo);
         }
