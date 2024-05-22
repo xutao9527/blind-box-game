@@ -3,7 +3,7 @@ package com.bbg.box.controller.biz;
 import com.bbg.box.base.BaseController;
 import com.bbg.core.box.dto.LoginDto;
 import com.bbg.model.biz.BizUser;
-import com.bbg.box.service.biz.BizUserService;
+import com.bbg.core.service.biz.BizUserService;
 import com.bbg.core.entity.ApiRet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

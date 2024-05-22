@@ -1,15 +1,15 @@
 package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
-import com.bbg.box.service.biz.BizDictService;
-import com.bbg.box.service.csgo.CsgoBoxGoodsService;
+import com.bbg.core.service.biz.BizDictService;
+import com.bbg.core.service.csgo.CsgoBoxGoodsService;
 import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.DreamDto;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizDictDetail;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBox;
-import com.bbg.box.service.csgo.CsgoBoxService;
+import com.bbg.core.service.csgo.CsgoBoxService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.csgo.CsgoBoxGoods;
 import com.mybatisflex.core.paginate.Page;

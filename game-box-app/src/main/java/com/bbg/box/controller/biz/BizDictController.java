@@ -2,7 +2,7 @@ package com.bbg.box.controller.biz;
 
 import com.bbg.box.base.BaseController;
 import com.bbg.model.biz.BizDict;
-import com.bbg.box.service.biz.BizDictService;
+import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.entity.ApiRet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

@@ -2,7 +2,7 @@ package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
 import com.bbg.model.csgo.CsgoRobot;
-import com.bbg.box.service.csgo.CsgoRobotService;
+import com.bbg.core.service.csgo.CsgoRobotService;
 import com.bbg.core.entity.ApiRet;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;

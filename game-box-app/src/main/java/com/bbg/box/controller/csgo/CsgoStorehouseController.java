@@ -2,7 +2,7 @@ package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
 import com.bbg.model.csgo.CsgoStorehouse;
-import com.bbg.box.service.csgo.CsgoStorehouseService;
+import com.bbg.core.service.csgo.CsgoStorehouseService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;

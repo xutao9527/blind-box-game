@@ -8,7 +8,9 @@ import com.bbg.core.utils.FairFactory;
 import com.bbg.core.utils.IdTool;
 import com.bbg.model.csgo.CsgoCapitalRecord;
 import com.bbg.model.csgo.CsgoUserInfo;
+import com.mybatisflex.core.mask.MaskManager;
 import com.mybatisflex.core.query.QueryMethods;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateWrapper;
 import com.mybatisflex.core.util.UpdateEntity;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
@@ -18,6 +20,8 @@ import com.bbg.core.service.biz.BizUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
 
 /**
  * 业务用户 服务层实现。
@@ -30,6 +34,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> implements BizUserService {
     public final CsgoCapitalRecordService csgoCapitalRecordService;
     public final CsgoUserInfoService csgoUserInfoService;
+
+    @Override
+    public BizUser getById(Serializable id) {
+        return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsById(id));
+    }
+
+    public BizUser getOneByMobile(String mobile) {
+        QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setMobile(mobile));
+        return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsByQuery(queryWrapper));
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord) {
