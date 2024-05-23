@@ -2,6 +2,7 @@ package com.bbg.schedule.service;
 
 import com.bbg.schedule.entity.JobInfo;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 
@@ -12,5 +13,5 @@ public interface ScheduleService {
 
     boolean save(JobDetail jobDetail, Trigger trigger);
 
-    boolean delete(JobDetail jobDetail) throws SchedulerException;
+    boolean delete(JobKey jobKey) ;
 }

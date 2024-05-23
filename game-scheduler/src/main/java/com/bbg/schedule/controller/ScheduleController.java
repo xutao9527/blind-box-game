@@ -5,6 +5,7 @@ import com.bbg.schedule.base.BaseController;
 import com.bbg.schedule.entity.JobInfo;
 import com.bbg.schedule.job.SysJob;
 import com.bbg.schedule.service.ScheduleService;
+import com.bbg.schedule.util.CronTool;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -38,26 +40,25 @@ public class ScheduleController extends BaseController {
     public ApiRet<Boolean> save() throws Exception {
 
         Trigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity("sys_trigger")
+                .withIdentity("SysJobtrigger")
                 .withSchedule(CronScheduleBuilder
-                        .cronSchedule("0/10 * * * * ?"))
+                        .cronSchedule(CronTool.convertToCron(LocalDateTime.now())))
                 .endAt(Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .build();
 
-        JobDetail jobDetail1 = JobBuilder.newJob(SysJob.class)
-                .withIdentity("SysJob")
+        JobDetail jobDetail = JobBuilder.newJob(SysJob.class)
+                .withIdentity("SysJobDetail")
                 .build();
-        return ApiRet.buildOk(scheduleService.save(jobDetail1,trigger));
+
+        return ApiRet.buildOk(scheduleService.save(jobDetail,trigger));
     }
 
     @GetMapping("delete")
     @Operation(description = "删除任务")
     public ApiRet<Boolean> delete() throws Exception {
 
-        JobDetail jobDetail1 = JobBuilder.newJob(SysJob.class)
-                .withIdentity("SysJob")
-                .build();
 
-        return ApiRet.buildOk(scheduleService.delete(jobDetail1));
+
+        return ApiRet.buildOk(scheduleService.delete(JobKey.jobKey("SysJobDetail")));
     }
 }

@@ -36,44 +36,54 @@ public class RollLoader {
         BizDict rollModelDict = bizDictService.getDictByTag("csgo_roll_model");
         BizDict rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .eq(CsgoRoll::getEnable, true)
-                .ne(CsgoRoll::getStatus, rollStatusDict.getValueByAlias("roll_offline"));
+                .ne(CsgoRoll::getStatus, rollStatusDict.getValueByAlias("roll_offline"));                               // 查询没有下架的撸房
         List<CsgoRoll> csgoRollList = csgoRollService.list(queryWrapper);
 
         var currentTime = LocalDateTime.now();
         csgoRollList.forEach(roll -> {
-            if (currentTime.isAfter(roll.getStartTime())                                                // 开始时间(大于)
-                    && currentTime.isBefore(roll.getEndTime())                                          // 结束时间(小于)
-                    && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))      // 状态(待上架)
-                    && roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model"))      // 时间模式
-            ) {
-                log.info("onlineRoll");
-                // csgoRollService.onlineRoll(roll);
-            } else if (currentTime.isAfter(roll.getEndTime())                                           // 结束时间(超过)
-                    && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_online"))           // 状态(已上架)
-                    && roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model"))      // 时间模式
-            ) {
-                log.info("offlineRoll");
-                // csgoRollService.offlineRoll(roll);
-            } else if (currentTime.isBefore(roll.getStartTime())                                         // 开始时间(大于)
-                    && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))      // 状态(待上架)
-                    && roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model")) // 人数模式
-            ) {
-                Trigger trigger = TriggerBuilder.newTrigger()
-                        .withIdentity(roll.getId().toString())
-                        .withSchedule(CronScheduleBuilder
-                                .cronSchedule(CronTool.convertToCron(roll.getStartTime())))
-                        .build();
+            if(roll.getEnable()){                                                                                       // 启用状态
+                if (roll.getRollModel().equals(rollModelDict.getValueByAlias("end_time_model"))) {                      // 时间模式
 
-                JobDetail jobDetail = JobBuilder.newJob(RollJob.Online.class)
-                        .withIdentity(roll.getId().toString())
-                        .build();
-                scheduleService.save(jobDetail, trigger);
-                log.info("onlineRoll people_number_model");
-                // csgoRollService.onlineRoll(roll);
+
+                } else if (roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model"))) {          // 人数模式
+
+                }
+            }else {                                                                                                     // 停用状态
+                scheduleService.delete(JobKey.jobKey(roll.getId().toString()));                                         // 删除任务
             }
         });
     }
 
+    /**
+     * 上架任务
+     * @param roll
+     */
+    public void addOnlineJob(CsgoRoll roll){
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(roll.getId().toString())
+                .withSchedule(CronScheduleBuilder
+                        .cronSchedule(CronTool.convertToCron(roll.getStartTime())))
+                .build();
+        JobDetail jobDetail = JobBuilder.newJob(RollJob.Online.class)
+                .withIdentity(roll.getId().toString())
+                .build();
+        scheduleService.save(jobDetail, trigger);
+    }
+
+    /**
+     * 下架任务
+     * @param roll
+     */
+    public void addOfflineJob(CsgoRoll roll){
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(roll.getId().toString())
+                .withSchedule(CronScheduleBuilder
+                        .cronSchedule(CronTool.convertToCron(roll.getStartTime())))
+                .build();
+        JobDetail jobDetail = JobBuilder.newJob(RollJob.Online.class)
+                .withIdentity(roll.getId().toString())
+                .build();
+        scheduleService.save(jobDetail, trigger);
+    }
 
 }

@@ -46,7 +46,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     public boolean save(JobDetail jobDetail, Trigger trigger) {
         try {
-            delete(jobDetail);
+            delete(jobDetail.getKey());
             scheduler.scheduleJob(jobDetail,trigger);
             return true;
         }catch (Exception e){
@@ -55,7 +55,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         return false;
     }
 
-    public boolean delete(JobDetail jobDetail) throws SchedulerException {
-        return scheduler.deleteJob(jobDetail.getKey());
+    public boolean delete(JobKey jobKey) {
+        try {
+             scheduler.deleteJob(jobKey);
+            return true;
+        } catch (SchedulerException e) {
+            log.error(e.getMessage());
+        }
+        return false;
     }
 }
