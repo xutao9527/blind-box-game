@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -46,10 +47,24 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     public boolean save(JobDetail jobDetail, Trigger trigger) {
         try {
-            delete(jobDetail.getKey());
-            scheduler.scheduleJob(jobDetail,trigger);
+            Trigger existTrigger = scheduler.getTrigger(trigger.getKey());
+            if (existTrigger != null) {
+                if (trigger instanceof CronTrigger cronTrigger && existTrigger instanceof CronTrigger existCronTrigger) {
+                    var cronExpression = cronTrigger.getCronExpression();
+                    var existCronExpression = existCronTrigger.getCronExpression();
+                    if (cronExpression.equals(existCronExpression)) {
+                        log.info("trigger exist:{}.{}", trigger.getKey().getName(), trigger.getKey().getGroup());
+                        return true;
+                    } else {
+                        delete(existTrigger.getJobKey());
+                    }
+                } else {
+                    delete(existTrigger.getJobKey());
+                }
+            }
+            scheduler.scheduleJob(jobDetail, trigger);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
         return false;
@@ -57,7 +72,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     public boolean delete(JobKey jobKey) {
         try {
-             scheduler.deleteJob(jobKey);
+            scheduler.deleteJob(jobKey);
             return true;
         } catch (SchedulerException e) {
             log.error(e.getMessage());
