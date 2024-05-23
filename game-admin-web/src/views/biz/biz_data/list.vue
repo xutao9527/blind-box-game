@@ -7,15 +7,19 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
             </div>
-            <div class="bbg-table-header-input" style="width: 420px">
-              <el-date-picker
-                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
-                  type="datetimerange"
-                  start-placeholder="Start date"
-                  end-placeholder="End date"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-              />
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dataTypeRef"
+                               :tag="'biz_data_type'" placeholder="数据类型"/>
             </div>
+            <!--            <div class="bbg-table-header-input" style="width: 420px">-->
+            <!--              <el-date-picker-->
+            <!--                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"-->
+            <!--                  type="datetimerange"-->
+            <!--                  start-placeholder="Start date"-->
+            <!--                  end-placeholder="End date"-->
+            <!--                  value-format="YYYY-MM-DD HH:mm:ss"-->
+            <!--              />-->
+            <!--            </div>-->
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -36,7 +40,11 @@
                 @sortChange="tableProps.sortChange"
                 border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="type" label="数据类型"/>
+        <el-table-column prop="type" label="数据类型">
+          <template #default="scope">
+            {{ dataTypeRef.getLabel(scope.row.type) }}
+          </template>
+        </el-table-column>
         <el-table-column prop="value" label="数据值"/>
         <el-table-column prop="remark" label="数据描述"/>
         <el-table-column prop="enable" label="状态">
@@ -76,6 +84,7 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
 
+const dataTypeRef = ref(null)
 const header = ref(null);
 const tableDynamicHeight = ref(0)
 

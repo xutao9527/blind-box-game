@@ -11,7 +11,7 @@
           <el-col :offset="7" :span="8">
             <el-form label-position="right" label-width="120">
               <el-form-item label="数据类型">
-                <el-input v-model="data.type"/>
+                  <bbg-dict-select v-model:value="data.type" :tag="'biz_data_type'" placeholder="数据类型"/>
               </el-form-item>
               <el-form-item label="数据值">
                 <el-input v-model="data.value"/>
