@@ -11,7 +11,7 @@
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.sourceType" ref="goodSourceTypeRef" :tag="'csgo_good_source_type'" placeholder="装备来源"/>
             </div>
             <div class="bbg-table-header-input">
-              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.sourceType" ref="goodStatusRef" :tag="'csgo_good_status'" placeholder="装备来源"/>
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.status" ref="goodStatusRef" :tag="'csgo_good_status'" placeholder="装备状态"/>
             </div>
 
             <div class="bbg-table-header-input" style="width: 420px">
