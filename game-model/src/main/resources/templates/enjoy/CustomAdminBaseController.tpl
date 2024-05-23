@@ -50,7 +50,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RequestMapping("/#(firstCharToLowerCase(entityClassName))")
 public class #(table.buildControllerClassName()) extends BaseController<#(entityClassName), #(table.buildServiceClassName())> {
     @Autowired
-    protected  #(table.buildServiceClassName()) #(serviceVarName);
+    protected #(table.buildServiceClassName()) #(serviceVarName);
 
     @PostMapping("save")
     @Operation(description = "保存")

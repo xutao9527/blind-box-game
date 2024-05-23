@@ -18,7 +18,7 @@ import java.io.Serial;
  * CSGO用户信息 实体类。
  *
  * @author bbg
- * @since 2024-05-22
+ * @since 2024-05-23
  */
 @Data
 @NoArgsConstructor

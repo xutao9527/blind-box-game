@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 系统角色 实体类。
+ * 业务数据 实体类。
  *
  * @author bbg
  * @since 2024-05-23
@@ -25,9 +25,9 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "系统角色")
-@Table("sys_role")
-public class SysRoleRecord extends BaseModel implements Serializable {
+@Schema(description = "业务数据")
+@Table("biz_data")
+public class BizDataRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -40,15 +40,21 @@ public class SysRoleRecord extends BaseModel implements Serializable {
     private Long id;
 
     /**
-     * 角色名
+     * 数据类型
      */
-    @Schema(description = "角色名")
-    private String name;
+    @Schema(description = "数据类型")
+    private String type;
 
     /**
-     * 角色描述
+     * 数据值
      */
-    @Schema(description = "角色描述")
+    @Schema(description = "数据值")
+    private String value;
+
+    /**
+     * 数据描述
+     */
+    @Schema(description = "数据描述")
     private String remark;
 
     /**

@@ -19,6 +19,7 @@ public class GenCore {
             "biz_user",//账号
             "biz_dict",//业务字典
             "biz_dict_detail",//字典详情
+            "biz_data",//业务数据
     };
 
     public static String[] csgoTables = {
@@ -37,7 +38,7 @@ public class GenCore {
             "csgo_roll", //roll房
             "csgo_roll_user",//roll房的用户
             "csgo_roll_good",//roll房的商品
-            "csgo_robot_test",//测试
+
     };
 
     @Test

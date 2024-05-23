@@ -18,7 +18,7 @@ import java.io.Serial;
  * 对战奖励装备记录 实体类。
  *
  * @author bbg
- * @since 2024-05-22
+ * @since 2024-05-23
  */
 @Data
 @NoArgsConstructor
