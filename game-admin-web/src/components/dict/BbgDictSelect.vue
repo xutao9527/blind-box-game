@@ -72,6 +72,6 @@ const getValue = (label) => {
 }
 
 defineExpose({
-  getLabel
+  getLabel, getValue
 })
 </script>

@@ -73,7 +73,6 @@
   </div>
 </template>
 <script setup>
-
 import {http} from "@/core/axios/index.js";
 import {DictObject} from "@/core/dict/index.js";
 

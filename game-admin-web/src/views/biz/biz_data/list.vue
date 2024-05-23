@@ -25,6 +25,7 @@
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
             <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
+            <el-button class="bbg-table-header-control" icon="DocumentAdd" @click="importRef.importData()">导入昵称</el-button>
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
@@ -46,7 +47,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="value" label="数据值"/>
-        <el-table-column prop="remark" label="数据描述"/>
+<!--        <el-table-column prop="remark" label="数据描述"/>-->
         <el-table-column prop="enable" label="状态">
           <template #default="scope">
             {{ scope.row.enable ? '启用' : '停用' }}
@@ -77,13 +78,16 @@
       </el-row>
     </el-footer>
   </el-container>
+  <import ref="importRef"/>
 </template>
 
 <script setup>
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
+import Import from "@/views/biz/biz_data/import.vue";
 
+const importRef = ref(null)
 const dataTypeRef = ref(null)
 const header = ref(null);
 const tableDynamicHeight = ref(0)
@@ -105,6 +109,9 @@ scope.run(() => {
 
 onMounted(() => {
   tableProps.fetchData()
+  emitter.on('bizDataFetchData', () => {
+    tableProps.fetchData()
+  })
 })
 
 const add = () => {
