@@ -1,26 +1,19 @@
 package com.bbg.schedule.loader;
 
-import cn.hutool.cron.CronTimer;
-import cn.hutool.cron.CronUtil;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.csgo.CsgoRollService;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.csgo.CsgoRoll;
 import com.bbg.schedule.job.RollJob;
-import com.bbg.schedule.job.SysJob;
 import com.bbg.schedule.service.ScheduleService;
 import com.bbg.schedule.util.CronTool;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -32,12 +25,11 @@ public class RollLoader {
     public final BizDictService bizDictService;
     public final ScheduleService scheduleService;
 
-
     public void loadJob() {
         Trigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity("Roll-Check")
                 .withSchedule(CronScheduleBuilder
-                        .cronSchedule("0/1 * * * * ?"))
+                        .cronSchedule("0/5 * * * * ?"))
                 .build();
         JobDetail jobDetail = JobBuilder.newJob(RollJob.Check.class)
                 .withIdentity("Roll-Check")
