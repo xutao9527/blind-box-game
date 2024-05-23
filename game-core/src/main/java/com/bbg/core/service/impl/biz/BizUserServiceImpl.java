@@ -69,7 +69,6 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     @Transactional(rollbackFor = Exception.class)
     public boolean save(BizUser entity) {
         entity.setId(IdTool.nextId());
-        entity.setMoney(null);
         getMapper().insert(entity, true);
         FairFactory.FairEntity fairEntity = FairFactory.build();
         CsgoUserInfo csgoUserInfo = new CsgoUserInfo();

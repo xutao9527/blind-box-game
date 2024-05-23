@@ -32,11 +32,11 @@ public class BaseBizUserController extends BaseController<BizUser, BizUserServic
     @Autowired
     protected  BizUserService bizUserService;
 
-    @PostMapping("save")
-    @Operation(description = "保存")
-    public ApiRet<Boolean> save(@RequestBody BizUser model) {
-        return ApiRet.buildOk(bizUserService.save(model));
-    }
+    // @PostMapping("save")
+    // @Operation(description = "保存")
+    // public ApiRet<Boolean> save(@RequestBody BizUser model) {
+    //     return ApiRet.buildOk(bizUserService.save(model));
+    // }
 
     @GetMapping("remove/{id}")
     @Operation(description = "根据主键删除")
@@ -44,11 +44,11 @@ public class BaseBizUserController extends BaseController<BizUser, BizUserServic
         return ApiRet.buildOk(bizUserService.removeById(id));
     }
 
-    @PostMapping("update")
-    @Operation(description = "根据主键更新")
-    public ApiRet<Boolean> update(@RequestBody @Parameter(description = "业务主键") BizUser model) {
-        return ApiRet.buildOk(bizUserService.updateById(model));
-    }
+    // @PostMapping("update")
+    // @Operation(description = "根据主键更新")
+    // public ApiRet<Boolean> update(@RequestBody @Parameter(description = "业务主键") BizUser model) {
+    //     return ApiRet.buildOk(bizUserService.updateById(model));
+    // }
 
     @GetMapping("getInfo/{id}")
     @Operation(description = "根据主键获取")
