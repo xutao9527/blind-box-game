@@ -32,16 +32,16 @@
     </el-header>
     <el-main class="bbg-table-main">
       <el-table class="bbg-table-main"
-                  :data="tableProps.apiRet.data.records"
-                  :height="tableDynamicHeight"
-                  table-layout="auto"
-                  @sortChange="tableProps.sortChange"
-                  border show-overflow-tooltip>
+                :data="tableProps.apiRet.data.records"
+                :height="tableDynamicHeight"
+                table-layout="auto"
+                @sortChange="tableProps.sortChange"
+                border show-overflow-tooltip>
         #for(column : table.columns)
         #if(column.propertySimpleType == "Boolean")
         <el-table-column prop="#(column.property)" label="#(column.comment)">
           <template #[[#default="scope"]]#>
-            {{scope.row.#(column.property)?'启用':'停用'}}
+            {{ scope.row.enable ? '启用' : '停用' }}
           </template>
         </el-table-column>
         #else
@@ -123,7 +123,7 @@ const tableProps = reactive({
       pageSize: 15,
     },
     queryEntity: {
-      "expandProps":{}
+      "expandProps": {}
     }
   },
   apiRet: {

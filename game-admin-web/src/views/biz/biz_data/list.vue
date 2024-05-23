@@ -30,18 +30,18 @@
     </el-header>
     <el-main class="bbg-table-main">
       <el-table class="bbg-table-main"
-                  :data="tableProps.apiRet.data.records"
-                  :height="tableDynamicHeight"
-                  table-layout="auto"
-                  @sortChange="tableProps.sortChange"
-                  border show-overflow-tooltip>
+                :data="tableProps.apiRet.data.records"
+                :height="tableDynamicHeight"
+                table-layout="auto"
+                @sortChange="tableProps.sortChange"
+                border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"/>
         <el-table-column prop="type" label="数据类型"/>
         <el-table-column prop="value" label="数据值"/>
         <el-table-column prop="remark" label="数据描述"/>
         <el-table-column prop="enable" label="状态">
           <template #default="scope">
-            {{scope.row.enable?'启用':'停用'}}
+            {{ scope.row.enable ? '启用' : '停用' }}
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
@@ -121,7 +121,7 @@ const tableProps = reactive({
       pageSize: 15,
     },
     queryEntity: {
-      "expandProps":{}
+      "expandProps": {}
     }
   },
   apiRet: {

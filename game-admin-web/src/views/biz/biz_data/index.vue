@@ -17,10 +17,9 @@ const listRef = ref(null);
 const editRef = ref(null)
 const activeTabs = (tabs, refresh = false, id) => {
   activeName.value = tabs
-  if (tabs === 'form' ) {
+  if (tabs === 'form') {
     editRef.value.toEdit(id)
-  }
-  else if (tabs === 'list' && refresh) {
+  } else if (tabs === 'list' && refresh) {
     listRef.value.tableProps.fetchData()
   }
 };
