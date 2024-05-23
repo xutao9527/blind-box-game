@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface ScheduleService {
     List<JobInfo> getAll() throws SchedulerException;
-    boolean save(Trigger trigger, JobDetail jobDetail) throws SchedulerException;
+
+    boolean save(JobDetail jobDetail, Trigger trigger);
+
     boolean delete(JobDetail jobDetail) throws SchedulerException;
 }

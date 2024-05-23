@@ -3,6 +3,7 @@ package com.bbg.schedule.service.impl;
 import com.bbg.schedule.entity.JobInfo;
 import com.bbg.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ScheduleServiceImpl implements ScheduleService {
 
     public final Scheduler scheduler;
@@ -32,6 +34,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                     .setDescription(jobDetail.getDescription())
                     .setJobClassName(jobDetail.getJobClass().getName());
             if (trigger instanceof CronTrigger cronTrigger) {
+                jobInfo.setNextExecuteTime(cronTrigger.getNextFireTime());
                 jobInfo.setCronExpression(cronTrigger.getCronExpression());
                 jobInfo.setStartTime(cronTrigger.getStartTime());
                 jobInfo.setEndTime(cronTrigger.getEndTime());
@@ -41,10 +44,15 @@ public class ScheduleServiceImpl implements ScheduleService {
         return jobInfoList;
     }
 
-    public boolean save(Trigger trigger, JobDetail jobDetail) throws SchedulerException {
-        delete(jobDetail);
-        scheduler.scheduleJob(jobDetail,trigger);
-        return true;
+    public boolean save(JobDetail jobDetail, Trigger trigger) {
+        try {
+            delete(jobDetail);
+            scheduler.scheduleJob(jobDetail,trigger);
+            return true;
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+        return false;
     }
 
     public boolean delete(JobDetail jobDetail) throws SchedulerException {

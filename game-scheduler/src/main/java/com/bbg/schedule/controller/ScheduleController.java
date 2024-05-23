@@ -47,7 +47,7 @@ public class ScheduleController extends BaseController {
         JobDetail jobDetail1 = JobBuilder.newJob(SysJob.class)
                 .withIdentity("SysJob")
                 .build();
-        return ApiRet.buildOk(scheduleService.save(trigger,jobDetail1));
+        return ApiRet.buildOk(scheduleService.save(jobDetail1,trigger));
     }
 
     @GetMapping("delete")

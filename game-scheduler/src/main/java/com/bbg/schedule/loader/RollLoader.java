@@ -6,13 +6,21 @@ import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.csgo.CsgoRollService;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.csgo.CsgoRoll;
+import com.bbg.schedule.job.RollJob;
+import com.bbg.schedule.job.SysJob;
+import com.bbg.schedule.service.ScheduleService;
+import com.bbg.schedule.util.CronTool;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -22,9 +30,9 @@ public class RollLoader {
 
     public final CsgoRollService csgoRollService;
     public final BizDictService bizDictService;
+    public final ScheduleService scheduleService;
 
-    public void loadJob(){
-        log.info("{}", System.currentTimeMillis());
+    public void loadJob() {
         BizDict rollModelDict = bizDictService.getDictByTag("csgo_roll_model");
         BizDict rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
         QueryWrapper queryWrapper = QueryWrapper.create()
@@ -51,6 +59,16 @@ public class RollLoader {
                     && roll.getStatus().equals(rollStatusDict.getValueByAlias("roll_wait_online"))      // 状态(待上架)
                     && roll.getRollModel().equals(rollModelDict.getValueByAlias("people_number_model")) // 人数模式
             ) {
+                Trigger trigger = TriggerBuilder.newTrigger()
+                        .withIdentity(roll.getId().toString())
+                        .withSchedule(CronScheduleBuilder
+                                .cronSchedule(CronTool.convertToCron(roll.getStartTime())))
+                        .build();
+
+                JobDetail jobDetail = JobBuilder.newJob(RollJob.Online.class)
+                        .withIdentity(roll.getId().toString())
+                        .build();
+                scheduleService.save(jobDetail, trigger);
                 log.info("onlineRoll people_number_model");
                 // csgoRollService.onlineRoll(roll);
             }
