@@ -23,7 +23,7 @@
                 <el-form-item label="数据值">
                   <el-input v-model="data.value"
                             type="textarea"
-                            show-word-limit maxlength="5000"
+                            show-word-limit maxlength="50000"
                             :autosize="{ minRows: 15, maxRows: 15 }"
                   />
                 </el-form-item>
@@ -31,7 +31,6 @@
             </el-col>
           </el-row>
         </el-scrollbar>
-<!--        {{ JSON.stringify(finalData) }}-->
       </el-main>
       <el-footer class="bbg-form-footer">
         <el-button @click="submit">
@@ -56,7 +55,7 @@ const finalData = computed(() => {
         type: data.type,
         value: item.trim()
       }
-    });
+    }).filter(d => d.value && d.value!=='');
   }
   return []
 })
@@ -73,10 +72,14 @@ onMounted(async () => {
 })
 
 const submit = async () => {
-
   if (data.value && finalData.value && finalData.value.length > 0) {
     const apiRet = await http.post('/bizData/saveBatch', finalData.value)
     if (apiRet.ok) {
+      if(apiRet.data){
+        ElMessage({type: 'success', message: '操作成功'})
+      }else{
+        ElMessage({type: 'success', message: '操作过于频繁'})
+      }
       backList()
       emitter.emit('bizDataFetchData');
     }
@@ -84,7 +87,6 @@ const submit = async () => {
 }
 
 const backList = () => {
-  data.value = ""
   visible.value = false;
 }
 
