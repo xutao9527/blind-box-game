@@ -42,7 +42,7 @@ public class BizUserController extends BaseController<BizUser> {
         LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
         BizUser bizUser = bizUserService.getOneByMobile(loginReq.getMobile());
         if (null != bizUser && bizUser.getEnable() && bizUser.getPassword().equals(loginReq.getPassword())) {
-            bizUser.setPassword(null);
+            bizUser = bizUserService.getById(bizUser.getId());
             String token = redisService.userLogin(bizUser);
             loginRes.setBizUser(bizUser).setToken(token);
             return ApiRet.buildOk(loginRes);

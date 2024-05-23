@@ -37,7 +37,8 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
 
     @Override
     public BizUser getById(Serializable id) {
-        return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsById(id));
+        return getMapper().selectOneWithRelationsById(id);
+        //return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsById(id));
     }
 
     public BizUser getOneByMobile(String mobile) {
@@ -56,7 +57,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         updateWrapper.setRaw(BizUser::getMoney, updateMoney);
         getMapper().update(updateUser);
         // 查询最新的用户信息
-        BizUser newUser =  getMapper().selectOneWithRelationsById(updateUser.getId());
+        BizUser newUser = getMapper().selectOneWithRelationsById(updateUser.getId());
         // 补资金流水
         capitalRecord.setAfterMoney(newUser.getMoney());
         capitalRecord.setBeforeMoney(bizUser.getMoney());
@@ -69,7 +70,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public boolean save(BizUser entity) {
         entity.setId(IdTool.nextId());
         entity.setMoney(null);
-        getMapper().insert(entity,true);
+        getMapper().insert(entity, true);
         FairFactory.FairEntity fairEntity = FairFactory.build();
         CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
         csgoUserInfo.setUserId(entity.getId())

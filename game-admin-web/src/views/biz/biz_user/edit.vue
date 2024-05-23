@@ -49,9 +49,9 @@
       </el-scrollbar>
     </el-main>
     <el-footer class="bbg-form-footer">
-      <el-button @click="submit">
-        {{ submitText }}
-      </el-button>
+<!--      <el-button @click="submit">-->
+<!--        {{ submitText }}-->
+<!--      </el-button>-->
       <el-button @click="backList()">
         返回
       </el-button>

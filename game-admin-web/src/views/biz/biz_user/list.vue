@@ -8,17 +8,20 @@
               <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
             </div>
             <div class="bbg-table-header-input">
+              <el-input v-model="tableProps.reqParams.queryEntity.mobile" placeholder="手机号"/>
+            </div>
+            <div class="bbg-table-header-input">
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="userTypeRef" :tag="'user_type'" placeholder="用户类型"/>
             </div>
-            <div class="bbg-table-header-input" style="width: 420px">
-              <el-date-picker
-                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
-                  type="datetimerange"
-                  start-placeholder="Start date"
-                  end-placeholder="End date"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-              />
-            </div>
+<!--            <div class="bbg-table-header-input" style="width: 420px">-->
+<!--              <el-date-picker-->
+<!--                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"-->
+<!--                  type="datetimerange"-->
+<!--                  start-placeholder="Start date"-->
+<!--                  end-placeholder="End date"-->
+<!--                  value-format="YYYY-MM-DD HH:mm:ss"-->
+<!--              />-->
+<!--            </div>-->
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -64,7 +67,7 @@
         <el-table-column fixed="right" label="操作" width="140">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="openUpdateBizUserMoney(scope.row)">充值</el-button>
-            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
+            <el-button link type="primary" size="small" @click="edit(scope.row)">详情</el-button>
 <!--            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>-->
           </template>
         </el-table-column>
@@ -170,7 +173,7 @@ const openUpdateBizUserMoney = (row) => {
   })
       .then(async ({value}) => {
         const apiRet = await http.get(`/bizUser/updateBizUserMoney/${row.id}/${value}`)
-        if(apiRet.ok){
+        if (apiRet.ok) {
           ElMessage({
             type: 'success',
             message: `充值成功!`,
