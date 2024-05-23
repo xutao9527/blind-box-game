@@ -37,28 +37,22 @@ public class ScheduleController extends BaseController {
 
     @GetMapping("save")
     @Operation(description = "保存任务")
-    public ApiRet<Boolean> save() throws Exception {
-
+    public ApiRet<Boolean> save()  {
         Trigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity("SysJobtrigger")
                 .withSchedule(CronScheduleBuilder
                         .cronSchedule(CronTool.convertToCron(LocalDateTime.now())))
                 .endAt(Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .build();
-
         JobDetail jobDetail = JobBuilder.newJob(SysJob.class)
                 .withIdentity("SysJobDetail")
                 .build();
-
         return ApiRet.buildOk(scheduleService.save(jobDetail,trigger));
     }
 
     @GetMapping("delete")
     @Operation(description = "删除任务")
-    public ApiRet<Boolean> delete() throws Exception {
-
-
-
+    public ApiRet<Boolean> delete()  {
         return ApiRet.buildOk(scheduleService.delete(JobKey.jobKey("SysJobDetail")));
     }
 }

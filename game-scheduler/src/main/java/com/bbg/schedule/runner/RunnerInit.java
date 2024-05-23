@@ -24,7 +24,7 @@ public class RunnerInit implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         scheduler.start();
-        sysLoader.loadJob();
-        // rollLoader.loadJob();
+        // sysLoader.loadJob();
+        rollLoader.loadJob();
     }
 }
