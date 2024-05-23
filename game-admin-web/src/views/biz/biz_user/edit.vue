@@ -1,8 +1,8 @@
 <template>
   <el-container class="bbg-form">
-    <pre>
-      {{JSON.stringify(data,null,2)}}
-    </pre>
+<!--    <pre>-->
+<!--      {{JSON.stringify(data,null,2)}}-->
+<!--    </pre>-->
     <el-header class="bbg-form-header">
       <el-text tag="b" size="large" type="primary">
         <h3>{{ submitText }}-业务用户</h3>
