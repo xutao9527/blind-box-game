@@ -24,5 +24,5 @@ public interface BizUserService extends IService<BizUser> {
     /**
      * 批量新增虚拟用户
      */
-    boolean batchSave();
+    boolean addVirtualUser(int count);
 }

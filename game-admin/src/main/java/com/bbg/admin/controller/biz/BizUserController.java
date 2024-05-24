@@ -68,7 +68,6 @@ public class BizUserController extends BaseBizUserController {
             @Max(value = 1000,message = "新增数量1~1000之间")
             @Schema(description = "新增数量")
             int count){
-        System.out.println(count);
-        return ApiRet.buildOk(true);
+        return ApiRet.buildOk(bizUserService.addVirtualUser(count));
     }
 }

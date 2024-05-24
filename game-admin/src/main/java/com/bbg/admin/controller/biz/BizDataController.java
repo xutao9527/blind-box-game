@@ -52,11 +52,11 @@ public class BizDataController extends BaseBizDataController {
                 CompletableFuture.runAsync(() -> {
                     try {
                         long start = System.currentTimeMillis();
-                        bizDataService.saveBatch(distinctModelList, 5000);
-                        log.info("执行时间:{}ms",System.currentTimeMillis()-start);
-                    } catch (Exception e){
+                        bizDataService.saveBatch(distinctModelList);
+                        log.info("执行时间:{}ms", System.currentTimeMillis() - start);
+                    } catch (Exception e) {
                         e.printStackTrace();
-                    }finally {
+                    } finally {
                         isRunning = false;
                     }
 

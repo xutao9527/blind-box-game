@@ -2,15 +2,22 @@ package com.bbg.core.service.impl.biz;
 
 import cn.hutool.core.util.IdUtil;
 import com.bbg.core.constrans.ServicesConst;
+import com.bbg.core.mapper.csgo.CsgoUserInfoMapper;
+import com.bbg.core.service.biz.BizDataService;
+import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.csgo.CsgoCapitalRecordService;
 import com.bbg.core.service.csgo.CsgoUserInfoService;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.core.utils.IdTool;
+import com.bbg.model.biz.BizData;
+import com.bbg.model.csgo.CsgoBox;
 import com.bbg.model.csgo.CsgoCapitalRecord;
 import com.bbg.model.csgo.CsgoUserInfo;
+import com.mybatisflex.core.BaseMapper;
 import com.mybatisflex.core.mask.MaskManager;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.row.Db;
 import com.mybatisflex.core.update.UpdateWrapper;
 import com.mybatisflex.core.util.UpdateEntity;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
@@ -22,6 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * 业务用户 服务层实现。
@@ -34,6 +45,8 @@ import java.io.Serializable;
 public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> implements BizUserService {
     public final CsgoCapitalRecordService csgoCapitalRecordService;
     public final CsgoUserInfoService csgoUserInfoService;
+    public final BizDictService bizDictService;
+    public final BizDataService dataService;
 
     @Override
     public BizUser getById(Serializable id) {
@@ -91,7 +104,44 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     /**
      * 批量新增虚拟用户
      */
-    public boolean batchSave() {
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addVirtualUser(int count) {
+        var userTypeDict = bizDictService.getDictByTag("user_type");
+        var dataTypeDict = bizDictService.getDictByTag("biz_data_type");
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(QueryMethods.column(BizData::getValue))
+                .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("nick_name"));
+        List<String> nickNameList = dataService.listAs(queryWrapper, String.class);
+        List<BizUser> userList = new ArrayList<>();
+        List<CsgoUserInfo> userInfoList = new ArrayList<>();
+        if (!nickNameList.isEmpty()) {
+            final var secureRandom = new SecureRandom();
+            for (int i = 0; i < count; i++) {
+                BizUser bizUser = new BizUser();
+                bizUser.setId(IdTool.nextId());
+                bizUser.setNickName(nickNameList.get(secureRandom.nextInt(nickNameList.size())));
+                bizUser.setType(userTypeDict.getValueByAlias("virtual_user"));
+                bizUser.setEnable(true);
+                userList.add(bizUser);
+                FairFactory.FairEntity fairEntity = FairFactory.build();
+                CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
+                csgoUserInfo.setId(IdTool.nextId()).setUserId(bizUser.getId())
+                        .setSecretHash(fairEntity.getSecretHash())
+                        .setSecretSalt(fairEntity.getSecretSalt())
+                        .setPublicHash(fairEntity.getPublicHash())
+                        .setClientSeed(fairEntity.getClientSeed())
+                        .setRoundNumber(1);
+                userInfoList.add(csgoUserInfo);
+            }
+        }
+        Db.executeBatch(userList, BizUserMapper.class,
+                (mapper, user) -> {
+                    mapper.insertWithPk(user, true);
+                });
+        Db.executeBatch(userInfoList, CsgoUserInfoMapper.class,
+                (mapper, userInfo) -> {
+                    mapper.insertWithPk(userInfo, true);
+                });
         return true;
     }
 }
