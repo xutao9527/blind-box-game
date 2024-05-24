@@ -1,4 +1,4 @@
-package com.bbg.core.box.service;
+package com.bbg.core.service;
 
 import com.bbg.core.base.RedisBase;
 import com.bbg.model.biz.BizUser;

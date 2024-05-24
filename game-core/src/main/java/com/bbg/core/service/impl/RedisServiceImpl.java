@@ -1,7 +1,7 @@
-package com.bbg.core.box.service.impl;
+package com.bbg.core.service.impl;
 
 import com.bbg.core.base.RedisBaseImpl;
-import com.bbg.core.box.service.RedisService;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.sys.SysUser;

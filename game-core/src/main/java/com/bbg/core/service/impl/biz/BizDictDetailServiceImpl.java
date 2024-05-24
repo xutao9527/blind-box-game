@@ -1,6 +1,6 @@
 package com.bbg.core.service.impl.biz;
 
-import com.bbg.core.box.service.RedisService;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.model.biz.BizDict;

@@ -1,21 +1,17 @@
 package com.bbg.box.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.bbg.core.box.service.RedisService;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.entity.ApiRet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.List;
 
 @Slf4j
 @Component

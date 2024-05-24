@@ -5,6 +5,7 @@ import com.bbg.core.entity.ApiRet;
 import com.bbg.model.biz.BizData;
 import com.esotericsoftware.minlog.Log;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 @Tag(name = "业务数据接口")
 @RequestMapping("/bizData")
+@Slf4j
 public class BizDataController extends BaseBizDataController {
 
     private boolean isRunning = false;
@@ -49,8 +51,12 @@ public class BizDataController extends BaseBizDataController {
                 isRunning = true;
                 CompletableFuture.runAsync(() -> {
                     try {
+                        long start = System.currentTimeMillis();
                         bizDataService.saveBatch(distinctModelList, 5000);
-                    } finally {
+                        log.info("执行时间:{}ms",System.currentTimeMillis()-start);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }finally {
                         isRunning = false;
                     }
 

@@ -5,7 +5,7 @@ import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.DreamDto;
-import com.bbg.core.box.service.RedisService;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.biz.BizUserService;

@@ -2,7 +2,7 @@ package com.bbg.core.service.impl.biz;
 
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisClear;
-import com.bbg.core.box.service.RedisService;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.model.biz.BizDictDetail;
 import com.mybatisflex.core.query.QueryWrapper;

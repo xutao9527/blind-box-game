@@ -1,9 +1,8 @@
 package com.bbg.admin.base;
 
 import cn.hutool.core.util.StrUtil;
-import com.bbg.core.box.service.RedisService;
+import com.bbg.core.service.RedisService;
 import com.bbg.model.base.BaseModel;
-import com.bbg.model.biz.BizUser;
 import com.bbg.model.sys.SysUser;
 import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryMethods;

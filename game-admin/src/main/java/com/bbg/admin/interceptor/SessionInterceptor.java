@@ -1,7 +1,7 @@
 package com.bbg.admin.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.bbg.core.box.service.RedisService;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.entity.ApiRet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
