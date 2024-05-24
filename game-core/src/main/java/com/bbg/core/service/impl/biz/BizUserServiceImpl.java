@@ -38,14 +38,20 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     @Override
     public BizUser getById(Serializable id) {
         return getMapper().selectOneWithRelationsById(id);
-        //return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsById(id));
+        // return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsById(id));
     }
 
+    /**
+     * 根据手机查询用户信息,取消脱敏
+     */
     public BizUser getOneByMobile(String mobile) {
         QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setMobile(mobile));
         return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsByQuery(queryWrapper));
     }
 
+    /**
+     * 更新用户金额
+     */
     @Transactional(rollbackFor = Exception.class)
     public BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord) {
         // 变更用户金额
@@ -79,6 +85,13 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
                 .setClientSeed(fairEntity.getClientSeed())
                 .setRoundNumber(1);
         csgoUserInfoService.save(csgoUserInfo);
+        return true;
+    }
+
+    /**
+     * 批量新增虚拟用户
+     */
+    public boolean batchSave() {
         return true;
     }
 }

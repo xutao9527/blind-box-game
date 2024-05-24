@@ -9,8 +9,16 @@ import com.bbg.model.csgo.CsgoCapitalRecord;
 import com.bbg.model.sys.SysUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +36,7 @@ import java.math.BigDecimal;
 @Tag(name = "业务用户接口")
 @RequestMapping("/bizUser")
 @RequiredArgsConstructor
+@Validated
 public class BizUserController extends BaseBizUserController {
 
     public final BizDictService bizDictService;
@@ -51,4 +60,15 @@ public class BizUserController extends BaseBizUserController {
         return ApiRet.buildOk(true);
     }
 
+    @Operation(description = "批量新增虚拟用户")
+    @GetMapping("addVirtualUser")
+    public ApiRet<Boolean> addVirtualUser(
+            @RequestParam("count")
+            @Min(value = 1,message = "新增数量1~1000之间")
+            @Max(value = 1000,message = "新增数量1~1000之间")
+            @Schema(description = "新增数量")
+            int count){
+        System.out.println(count);
+        return ApiRet.buildOk(true);
+    }
 }
