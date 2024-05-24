@@ -27,6 +27,7 @@
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
             <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
+            <el-button class="bbg-table-header-control" icon="DocumentAdd" @click="addVirtualUser">生成假人</el-button>
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
@@ -163,13 +164,40 @@ const tableProps = reactive({
   }
 });
 
+const addVirtualUser = () => {
+  ElMessageBox.prompt('请输入虚拟用户数量', '批量添加假人', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    inputPattern:
+        /^(?:[1-9]|[1-9][0-9]|[1-9][0-9]{2}|1000)$/,
+    inputErrorMessage: 'Invalid Number',
+  })
+      .then(async ({value}) => {
+        const apiRet = await http.get(`/bizUser/addVirtualUser?count=1000${value}`)
+        if (apiRet.ok) {
+          ElMessage({
+            type: 'success',
+            message: `生成完成!`,
+          })
+          await tableProps.fetchData()
+        }
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: 'Input canceled',
+        })
+      })
+}
+
+
 const openUpdateBizUserMoney = (row) => {
   ElMessageBox.prompt('请输入充值金额', '充值', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
     inputPattern:
         /^-?\d+(\.\d{1,2})?$/,
-    inputErrorMessage: 'Invalid Email',
+    inputErrorMessage: 'Invalid Money',
   })
       .then(async ({value}) => {
         const apiRet = await http.get(`/bizUser/updateBizUserMoney/${row.id}/${value}`)
