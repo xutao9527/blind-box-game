@@ -173,7 +173,7 @@ const addVirtualUser = () => {
     inputErrorMessage: 'Invalid Number',
   })
       .then(async ({value}) => {
-        const apiRet = await http.get(`/bizUser/addVirtualUser?count=1000${value}`)
+        const apiRet = await http.get(`/bizUser/addVirtualUser?count=${value}`)
         if (apiRet.ok) {
           ElMessage({
             type: 'success',
