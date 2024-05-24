@@ -13,7 +13,6 @@
         <module>game-gateway</module>
         <module>game-model</module>
         <module>game-box-app</module>
-
         <module>game-admin</module>
         <module>game-scheduler</module>
         <module>game-core</module>
