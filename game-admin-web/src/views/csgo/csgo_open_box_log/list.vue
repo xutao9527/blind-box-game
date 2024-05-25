@@ -1,5 +1,3 @@
-#set(entityClassName = table.buildEntityClassName())
-#set(entityVarName = firstCharToLowerCase(entityClassName))
 <template>
   <el-container class="bbg-table">
     <el-header ref="header" class="bbg-table-header" height="auto">
@@ -22,7 +20,7 @@
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
-            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
+<!--            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>-->
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
@@ -37,23 +35,27 @@
                 table-layout="auto"
                 @sortChange="tableProps.sortChange"
                 border show-overflow-tooltip>
-        #for(column : table.columns)
-        #if(column.propertySimpleType == "Boolean")
-        <el-table-column prop="#(column.property)" label="#(column.comment)">
-          <template #[[#default="scope"]]#>
-            {{ scope.row.#(column.property) ? '启用' : '停用' }}
-          </template>
-        </el-table-column>
-        #else
-        <el-table-column prop="#(column.property)" label="#(column.comment)"/>
-        #end
-        #end
-        <el-table-column fixed="right" label="操作">
-          <template #[[#default="scope"]]#>
-            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
-            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
+        <el-table-column prop="id" label="主键"/>
+        <el-table-column prop="userId" label="用户编号"/>
+        <el-table-column prop="userNickName" label="用户昵称"/>
+        <el-table-column prop="userPhoto" label="用户头像"/>
+        <el-table-column prop="openBoxTime" label="开箱时间"/>
+        <el-table-column prop="boxId" label="箱子编号"/>
+        <el-table-column prop="boxName" label="箱子名称"/>
+        <el-table-column prop="boxNameAlias" label="箱子别名"/>
+        <el-table-column prop="boxImageUrl" label="箱子图片"/>
+        <el-table-column prop="boxPrice" label="箱子价格"/>
+        <el-table-column prop="goodId" label="商品类型"/>
+        <el-table-column prop="goodName" label="商品分组"/>
+        <el-table-column prop="goodNameAlias" label="商品别名"/>
+        <el-table-column prop="goodImageUrl" label="商品图片"/>
+        <el-table-column prop="goodPrice" label="商品价格"/>
+<!--        <el-table-column fixed="right" label="操作">-->
+<!--          <template #default="scope">-->
+<!--            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>-->
+<!--            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
       </el-table>
     </el-main>
     <el-footer class="bbg-table-footer">
@@ -109,7 +111,7 @@ const edit = (row) => {
 }
 
 const remove = async (row) => {
-  const apiRet = await http.get(`/#(entityVarName)/remove/${row.id}`)
+  const apiRet = await http.get(`/csgoOpenBoxLog/remove/${row.id}`)
   if (apiRet.ok) {
     ElMessage({type: 'success', message: apiRet.msg})
     await tableProps.fetchData()
@@ -136,7 +138,7 @@ const tableProps = reactive({
     tableProps.fetchData()
   },
   fetchData: async () => {
-    const apiRet = await http.post('/#(entityVarName)/page', tableProps.reqParams)
+    const apiRet = await http.post('/csgoOpenBoxLog/page', tableProps.reqParams)
     if (apiRet.ok) {
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow

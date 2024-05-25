@@ -17,7 +17,7 @@ import java.io.Serial;
  * 对战房间用户 实体类。
  *
  * @author bbg
- * @since 2024-05-23
+ * @since 2024-05-25
  */
 @Data
 @NoArgsConstructor

@@ -19,7 +19,7 @@ import java.io.Serial;
  * 业务用户 实体类。
  *
  * @author bbg
- * @since 2024-05-23
+ * @since 2024-05-25
  */
 @Data
 @NoArgsConstructor
@@ -95,9 +95,9 @@ public class BizUserRecord extends BaseModel implements Serializable {
     private LocalDateTime birthday;
 
     /**
-     * 类型:1-普通,2-测试
+     * 类型
      */
-    @Schema(description = "类型:1-普通,2-测试")
+    @Schema(description = "类型")
     private String type;
 
     /**

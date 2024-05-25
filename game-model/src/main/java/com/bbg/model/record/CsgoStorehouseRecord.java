@@ -19,7 +19,7 @@ import java.io.Serial;
  * 装备仓库 实体类。
  *
  * @author bbg
- * @since 2024-05-23
+ * @since 2024-05-25
  */
 @Data
 @NoArgsConstructor

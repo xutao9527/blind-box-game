@@ -29,6 +29,8 @@ public class GenBox {
             "csgo_roll", //roll房
             "csgo_roll_user",//roll房的用户
             "csgo_roll_good",//roll房的商品
+            "csgo_open_box_log",// 开箱记录
+            "csgo_dream_good_log"// 追梦记录
     };
 
     @Test
