@@ -25,14 +25,18 @@ public class RollLoader {
     public final BizDictService bizDictService;
     public final ScheduleService scheduleService;
 
+    public static final String ROLL_CHECK = "撸房-实时检查";
+    public static final String ROLL_ONLINE = "撸房-上架-";
+    public static final String ROLL_OFFLINE = "撸房-下架-";
+
     public void loadJob() {
         Trigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity("Roll-Check")
+                .withIdentity(ROLL_CHECK)
                 .withSchedule(CronScheduleBuilder
                         .cronSchedule("0/5 * * * * ?"))
                 .build();
         JobDetail jobDetail = JobBuilder.newJob(RollJob.Check.class)
-                .withIdentity("Roll-Check")
+                .withIdentity(ROLL_CHECK)
                 .build();
         scheduleService.save(jobDetail, trigger);
     }
@@ -58,8 +62,8 @@ public class RollLoader {
                     }
                 }
             } else {                                                                                                    // 停用状态
-                scheduleService.delete(JobKey.jobKey("Roll-Online-" + roll.getId().toString()));                  // 删除任务
-                scheduleService.delete(JobKey.jobKey("Roll-Offline-" + roll.getId().toString()));                 // 删除任务
+                scheduleService.delete(JobKey.jobKey(ROLL_ONLINE + roll.getId().toString()));                     // 删除任务
+                scheduleService.delete(JobKey.jobKey(ROLL_ONLINE + roll.getId().toString()));                     // 删除任务
             }
         }
     }
@@ -71,12 +75,12 @@ public class RollLoader {
         var currentTime = LocalDateTime.now();
         if (currentTime.isBefore(roll.getStartTime())) {                                                                // 当前时间 < 开始时间
             Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity("Roll-Online-" + roll.getId().toString())
+                    .withIdentity(ROLL_ONLINE + roll.getId().toString())
                     .withSchedule(CronScheduleBuilder
                             .cronSchedule(CronTool.convertToCron(roll.getStartTime())))
                     .build();
             JobDetail jobDetail = JobBuilder.newJob(RollJob.Online.class)
-                    .withIdentity("Roll-Online-" + roll.getId().toString())
+                    .withIdentity(ROLL_ONLINE + roll.getId().toString())
                     .usingJobData("rollId",roll.getId())
                     .build();
             scheduleService.save(jobDetail, trigger);
@@ -92,12 +96,12 @@ public class RollLoader {
         var currentTime = LocalDateTime.now();
         if (currentTime.isBefore(roll.getEndTime())) {                                                                  // 当前时间 < 结束时间
             Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity("Roll-Offline-" + roll.getId().toString())
+                    .withIdentity(ROLL_OFFLINE + roll.getId().toString())
                     .withSchedule(CronScheduleBuilder
                             .cronSchedule(CronTool.convertToCron(roll.getEndTime())))
                     .build();
             JobDetail jobDetail = JobBuilder.newJob(RollJob.Offline.class)
-                    .withIdentity("Roll-Offline-"+roll.getId().toString())
+                    .withIdentity(ROLL_OFFLINE+roll.getId().toString())
                     .usingJobData("rollId",roll.getId())
                     .build();
             scheduleService.save(jobDetail, trigger);

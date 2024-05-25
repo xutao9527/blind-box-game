@@ -1,17 +1,15 @@
 package com.bbg.schedule.service.impl;
 
-import com.bbg.schedule.entity.JobInfo;
+import com.bbg.core.entity.JobInfo;
 import com.bbg.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.matchers.GroupMatcher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 

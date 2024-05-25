@@ -1,32 +1,27 @@
-package com.bbg.schedule.controller;
+package com.bbg.admin.controller.schedule;
 
+import com.bbg.admin.third.scheduler.ScheduleService;
 import com.bbg.core.entity.ApiRet;
-import com.bbg.schedule.base.BaseController;
 import com.bbg.core.entity.JobInfo;
-import com.bbg.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.quartz.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @Tag(name = "调度任务接口")
-@RequestMapping("/task")
+@RequestMapping("/schedule")
 @RequiredArgsConstructor
-public class ScheduleController extends BaseController {
-    public final Scheduler scheduler;
+public class ScheduleController {
     public final ScheduleService scheduleService;
 
+    @Operation(description = "调度任务列表")
     @GetMapping("list")
-    @Operation(description = "所有任务")
-    public ApiRet<List<JobInfo>> list() throws Exception {
-        return ApiRet.buildOk(scheduleService.getAll());
+    public ApiRet<List<JobInfo>> list(){
+        return scheduleService.list();
     }
-
-
 }

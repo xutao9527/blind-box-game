@@ -1,4 +1,4 @@
-package com.bbg.schedule.entity;
+package com.bbg.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
