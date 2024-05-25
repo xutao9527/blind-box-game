@@ -11,6 +11,7 @@ import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.biz.BizUserService;
 import com.bbg.core.service.csgo.*;
 import com.bbg.core.utils.FairFactory;
+import com.bbg.core.utils.IdTool;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.*;
@@ -18,6 +19,8 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.core.mapper.csgo.CsgoBoxMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +45,14 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
     public final RedisService redisService;
     public final CsgoBoxGoodsService csgoBoxGoodsService;
     public final BizDictService bizDictService;
+    @Lazy
+    @Autowired
+    private CsgoBoxService selfProxy;
 
     /**
      * 根据编号获得盲盒
      */
-    @RedisCache(value = "#id",key = KeyConst.BOX_ID)
+    @RedisCache(value = "#id", key = KeyConst.BOX_ID)
     public CsgoBox getBoxById(Long id) {
         CsgoBox box = getMapper().selectOneWithRelationsByQuery(
                 QueryWrapper.create(new CsgoBox()
@@ -77,28 +83,16 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         FairFactory.FairEntity fairEntity = FairFactory.build(bizUser);
         int roundNumber = fairEntity.roll(bizUser.getCsgoUserInfo().getRoundNumber());
         // 获得盲盒对象,并抽饰品
-        CsgoBox csgoBox = this.getBoxById(boxId);
+        CsgoBox csgoBox = selfProxy.getBoxById(boxId);
         CsgoBoxGoods luckGood = csgoBox.getCsgoBoxGoods().stream()
                 .filter(boxGood -> boxGood.getStartRoundNumber().compareTo(BigDecimal.valueOf(roundNumber)) <= 0
                         && boxGood.getEndRoundNumber().compareTo(BigDecimal.valueOf(roundNumber)) >= 0)
                 .findFirst().orElse(null);
 
         if (luckGood != null) {
-            // 添加商品到用户背包
+            // 派发装备(添加商品到用户背包)
             BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
-            BizDict goodStatusDict = bizDictService.getDictByTag("csgo_good_status");
-            CsgoStorehouse storehouse = new CsgoStorehouse();
-            storehouse.setUserId(bizUser.getId())
-                    .setStatus(goodStatusDict.getValueByAlias("normal"))
-                    .setSourceId(boxId)
-                    .setSourceType(goodSourceTypeDict.getValueByAlias("source_open_box"))
-                    .setGoodId(luckGood.getGoodId())
-                    .setName(luckGood.getName())
-                    .setNameAlias(luckGood.getNameAlias())
-                    .setImageUrl(luckGood.getImageUrl())
-                    .setPrice(luckGood.getPrice());
-
-            csgoStorehouseService.save(storehouse);
+            CsgoStorehouse storehouse = dispatchGood(bizUser, luckGood, goodSourceTypeDict.getValueByAlias("source_open_box"));
             boxRes.setLuckStorehouse(storehouse);
             // 更新递增后roll点回合数
             CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
@@ -111,7 +105,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
             CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
             capitalRecord.setUserId(bizUser.getId())
                     .setSourceId(boxId.toString())
-                    .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("open_box"))  //流水类型
+                    .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("open_box"))  // 流水类型
                     .setChangeMoney(csgoBox.getPrice().negate());    // 扣钱,转为负数
             // 更新用户金额
             bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
@@ -148,27 +142,16 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         // 判断是否中奖
         boolean isWinGood = roundNumber < winningRange.intValue();
         if (isWinGood) {
-            // 保存背包
+            // 派发装备(添加商品到用户背包)
             BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
-            BizDict goodStatusDict = bizDictService.getDictByTag("csgo_good_status");
-            CsgoStorehouse storehouse = new CsgoStorehouse();
-            storehouse.setUserId(bizUser.getId())
-                    .setStatus(goodStatusDict.getValueByAlias("normal"))
-                    .setSourceId(model.getBoxGoodId())
-                    .setSourceType(goodSourceTypeDict.getValueByAlias("source_dream_good"))
-                    .setGoodId(csgoBoxGoods.getGoodId())
-                    .setName(csgoBoxGoods.getName())
-                    .setNameAlias(csgoBoxGoods.getNameAlias())
-                    .setImageUrl(csgoBoxGoods.getImageUrl())
-                    .setPrice(csgoBoxGoods.getPrice());
-            csgoStorehouseService.save(storehouse);
+            dispatchGood(bizUser, csgoBoxGoods, goodSourceTypeDict.getValueByAlias("source_dream_good"));
             dreamGoodRes.setCsgoBoxGood(csgoBoxGoods);
         }
         // 构造流水记录
         CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
         capitalRecord.setUserId(bizUser.getId())
                 .setSourceId(model.getBoxGoodId().toString())
-                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("dream"))  //流水类型
+                .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("dream"))  // 流水类型
                 .setChangeMoney(consumeMoney.negate());    // 扣钱,转为负数
         // 更新用户金额
         bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
@@ -176,6 +159,28 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         redisService.updateUser(bizUser);
         dreamGoodRes.setBizUser(bizUser);
         return dreamGoodRes;
+    }
+
+    /**
+     * 派发装备(添加商品到用户背包)
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public CsgoStorehouse dispatchGood(BizUser bizUser, CsgoBoxGoods luckGood, String sourceType) {
+        BizDict goodStatusDict = bizDictService.getDictByTag("csgo_good_status");
+        CsgoStorehouse storehouse = new CsgoStorehouse();
+        storehouse
+                .setId(IdTool.nextId())
+                .setUserId(bizUser.getId())
+                .setStatus(goodStatusDict.getValueByAlias("normal"))
+                .setSourceId(luckGood.getBoxId())
+                .setSourceType(sourceType)
+                .setGoodId(luckGood.getGoodId())
+                .setName(luckGood.getName())
+                .setNameAlias(luckGood.getNameAlias())
+                .setImageUrl(luckGood.getImageUrl())
+                .setPrice(luckGood.getPrice());
+        csgoStorehouseService.save(storehouse);
+        return storehouse;
     }
 
     /**
