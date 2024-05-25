@@ -15,7 +15,10 @@ import com.bbg.core.utils.IdTool;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.*;
+import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateWrapper;
+import com.mybatisflex.core.util.UpdateEntity;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.core.mapper.csgo.CsgoBoxMapper;
 import lombok.RequiredArgsConstructor;
@@ -95,18 +98,17 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
             CsgoStorehouse storehouse = dispatchGood(bizUser, luckGood, goodSourceTypeDict.getValueByAlias("source_open_box"));
             boxRes.setLuckStorehouse(storehouse);
             // 更新递增后roll点回合数
-            CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
-            csgoUserInfo.setId(bizUser.getCsgoUserInfo().getId())
-                    .setRoundNumber(bizUser.getCsgoUserInfo().getRoundNumber() + 1)
-                    .setCreateTime(null)
-                    .setUpdateTime(null);
-            csgoUserInfoService.updateById(csgoUserInfo);
+            CsgoUserInfo updateUserInfo = UpdateEntity.of(CsgoUserInfo.class, bizUser.getCsgoUserInfo().getId());
+            UpdateWrapper<CsgoUserInfo> updateWrapper = UpdateWrapper.of(updateUserInfo);
+            String updateRoundNumber = "%s %s %s".formatted(QueryMethods.column(CsgoUserInfo::getRoundNumber).getName(), "+", "1");
+            updateWrapper.setRaw(CsgoUserInfo::getRoundNumber,updateRoundNumber);
+            csgoUserInfoService.updateById(updateUserInfo);
             // 构造流水记录
             CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
             capitalRecord.setUserId(bizUser.getId())
                     .setSourceId(boxId.toString())
-                    .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("open_box"))  // 流水类型
-                    .setChangeMoney(csgoBox.getPrice().negate());    // 扣钱,转为负数
+                    .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("open_box"))      // 流水类型
+                    .setChangeMoney(csgoBox.getPrice().negate());                                               // 扣钱,转为负数
             // 更新用户金额
             bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
             System.out.println();
