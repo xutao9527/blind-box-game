@@ -8,10 +8,10 @@
               <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
             </div>
             <div class="bbg-table-header-input">
-              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dictBattleModelRef" :tag="'csgo_battle_model'" placeholder="对战模式"/>
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.battleModel" ref="dictBattleModelRef" :tag="'csgo_battle_model'" placeholder="对战模式"/>
             </div>
             <div class="bbg-table-header-input">
-              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.group" ref="dictBattleStatusRef" :tag="'csgo_battle_status'" placeholder="房间状态"/>
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.status" ref="dictBattleStatusRef" :tag="'csgo_battle_status'" placeholder="房间状态"/>
             </div>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
