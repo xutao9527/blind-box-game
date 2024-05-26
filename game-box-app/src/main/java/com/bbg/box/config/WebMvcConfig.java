@@ -9,12 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
-public class WebMvcConfig implements WebMvcConfigurer {
+public class  WebMvcConfig implements WebMvcConfigurer {
     public final SessionInterceptor sessionInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor)
                 .addPathPatterns("/**")
+                .excludePathPatterns("/csgoRobot/list")                     // 机器人
                 .excludePathPatterns("/csgoRoll/getRollList")               // 获取撸房列表
                 .excludePathPatterns("/csgoRoll/getRoll")                   // 获得撸房
                 .excludePathPatterns("/csgoBox/list")                       // 获得盲盒列表

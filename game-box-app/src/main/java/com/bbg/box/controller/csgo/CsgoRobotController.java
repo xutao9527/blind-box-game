@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @Tag(name = "机器人接口")
 @RequestMapping("/csgoRobot")
 @RequiredArgsConstructor
+@Slf4j
 public class CsgoRobotController extends BaseController<CsgoRobot> {
 
     public final CsgoRobotService csgoRobotService;
@@ -31,6 +33,7 @@ public class CsgoRobotController extends BaseController<CsgoRobot> {
     @GetMapping("list")
     @Operation(description = "获得所有机器人")
     public ApiRet<List<CsgoRobot>> list() {
+        log.info("获得所有机器人");
         return ApiRet.buildOk(csgoRobotService.list(QueryWrapper.create().eq(CsgoRobot::getEnable,true)));
     }
 }
