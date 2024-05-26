@@ -71,7 +71,7 @@
         </el-table>
       </el-scrollbar>
     </el-main>
-    <el-aside class="box-aside" width="400px">
+    <el-aside class="box-aside" width="400px" style="padding-left: 10px">
       <el-row style="margin-top: 10px">
         <el-text type="info" size="small">对战盲盒：</el-text>
       </el-row>
