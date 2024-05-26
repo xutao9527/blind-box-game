@@ -2,19 +2,38 @@
   <el-container class="box">
     <el-main class="box-main">
       <el-scrollbar>
-        <el-table :data="battleMock.roomList">
-          <el-table-column prop="id" label="房间编号"/>
-          <el-table-column prop="battleModel" label="模式">
+        <el-table :data="battleMock.roomList" size="small">
+          <el-table-column prop="peopleNumber" label="#" width="40px">
             <template #default="scope">
+              {{ scope.row.roomUsers.length }}/{{ scope.row.peopleNumber }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="id" label="编号" width="150px"/>
+          <el-table-column prop="roomPrice" label="房价" width="45px"/>
+          <el-table-column prop="battleModel" label="模式" width="60px">
+            <template #default="scope" >
               {{ scope.row.battleModel === '1' ? '欧皇' : '非酋' }}
             </template>
           </el-table-column>
-          <el-table-column prop="peopleNumber" label="房间人数">
+          <el-table-column prop="peopleNumber" label="箱子" >
             <template #default="scope">
-              {{ scope.row.roomUsers.length }}/{{ scope.row.peopleNumber }}人
+              <el-row>
+                <el-col v-for="box in scope.row.roomBoxes" :key="box.id">
+                  <el-tooltip placement="top">
+                    <template #content>
+                      <el-row>
+                        <el-col>
+                          <el-text>boxId:{{ box.boxId }}</el-text>
+                        </el-col>
+                      </el-row>
+                    </template>
+                    <el-avatar size="large">{{ box.name }}</el-avatar>
+                  </el-tooltip>
+                </el-col>
+              </el-row>
             </template>
           </el-table-column>
-          <el-table-column prop="peopleNumber" label="玩家">
+          <el-table-column prop="peopleNumber" label="玩家" width="200px">
             <template #default="scope">
               <el-row>
                 <el-col v-for="user in scope.row.roomUsers" :key="user.id">
@@ -26,10 +45,27 @@
                         </el-col>
                       </el-row>
                     </template>
-                    <el-avatar size="large">{{user.nickName}}</el-avatar>
+                    <el-avatar size="large">{{ user.nickName }}</el-avatar>
                   </el-tooltip>
                 </el-col>
               </el-row>
+            </template>
+          </el-table-column>
+          <el-table-column prop="peopleNumber" label="操作" width="120px">
+            <template #default="scope">
+              <el-tooltip placement="top">
+                <template #content>
+                  查看详情
+                </template>
+                <el-button type="warning" icon="View" circle size="large"/>
+              </el-tooltip>
+              <el-tooltip placement="top">
+                <template #content>
+                  加入战斗
+                </template>
+                <el-button type="success" icon="Place" circle size="large"/>
+              </el-tooltip>
+
             </template>
           </el-table-column>
         </el-table>
