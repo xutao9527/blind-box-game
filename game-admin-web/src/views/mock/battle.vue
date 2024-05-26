@@ -39,7 +39,8 @@
       </el-row>
       <el-row style="margin-top: 10px">
         <el-checkbox-group v-model="battleMock.createRoomReq.robotsId">
-          <el-checkbox-button style="margin-left: 5px;margin-top: 5px" v-for="robot in battleMock.robotList" :value="robot.id">
+          <el-checkbox-button style="margin-left: 5px;margin-top: 5px" v-for="robot in battleMock.robotList"
+                              :value="robot.id">
             <template #default>
               <el-text size="small">{{ robot.name }}</el-text>
             </template>
@@ -73,10 +74,13 @@ import {battleMock} from "@/views/mock/js/battleDto.js";
 
 
 onMounted(() => {
-      battleMock.getBoxList()
-      battleMock.getRobotList()
-    }
-)
+  battleMock.getBoxList()
+  battleMock.getRobotList()
+  // 每秒钟获得一次房间列表
+  setInterval(() => {
+    battleMock.getRoomList()
+  }, 1000)
+})
 </script>
 
 <style lang="less" scoped>

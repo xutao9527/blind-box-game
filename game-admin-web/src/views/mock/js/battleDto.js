@@ -39,23 +39,20 @@ export const battleMock = reactive({
             ElMessage({type: 'success', message: '创建成功'})
         }
     },
-
-    // openBoxReq: {
-    //     boxId: null,
-    // },
-    // openBoxRes: {
-    //     money: null,
-    //     csgoOpenBoxLog: null,
-    // },
-    // openBoxRecord: [],
-    // openBox: async (boxId) => {
-    //     boxMock.openBoxReq.boxId = boxId;
-    //     const apiRet = await appHttp.post('csgoBox/open', boxMock.openBoxReq)
-    //     if (apiRet.ok) {
-    //         boxMock.openBoxRes = apiRet.data
-    //         mockGlobal.bizUser.money = boxMock.openBoxRes.money
-    //         boxMock.openBoxRecord.push(boxMock.openBoxRes.csgoOpenBoxLog)
-    //         ElMessage({type: 'success', message: `中奖:${boxMock.openBoxRes.csgoOpenBoxLog.goodName}`})
-    //     }
-    // }
+    roomList: [],
+    getRoomList: async () => {
+        const apiRet = await appHttp.post('csgoBattleRoom/getRoomList')
+        if (apiRet.ok) {
+            battleMock.roomList = apiRet.data
+        }
+    },
+    joinRoomReq: {
+        roomId: ""
+    },
+    joinRoom: async () => {
+        const apiRet = await appHttp.post('csgoBattleRoom/join', battleMock.joinRoomReq)
+        if (apiRet.ok) {
+            ElMessage({type: 'success', message: '加入成功'})
+        }
+    },
 })

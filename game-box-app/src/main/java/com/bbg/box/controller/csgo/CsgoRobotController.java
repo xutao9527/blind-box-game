@@ -1,6 +1,8 @@
 package com.bbg.box.controller.csgo;
 
 import com.bbg.box.base.BaseController;
+import com.bbg.core.annotation.RedisCache;
+import com.bbg.core.constrans.KeyConst;
 import com.bbg.model.csgo.CsgoRobot;
 import com.bbg.core.service.csgo.CsgoRobotService;
 import com.bbg.core.entity.ApiRet;
@@ -32,6 +34,7 @@ public class CsgoRobotController extends BaseController<CsgoRobot> {
 
     @GetMapping("list")
     @Operation(description = "获得所有机器人")
+    @RedisCache(key = KeyConst.ROBOT_LIST)
     public ApiRet<List<CsgoRobot>> list() {
         log.info("获得所有机器人");
         return ApiRet.buildOk(csgoRobotService.list(QueryWrapper.create().eq(CsgoRobot::getEnable,true)));

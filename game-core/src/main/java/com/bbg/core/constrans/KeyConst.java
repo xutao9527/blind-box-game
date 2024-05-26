@@ -22,6 +22,8 @@ public class KeyConst {
     // 对战房间信息
     public final static String ROOM_INFO_ID = "battleRoom::info::roomId";
     // 对战房间信息列表
+    public final static String ROOM_LIST_INFO = "battleRoom::list";
+    // 对战房间信息列表-战斗模式
     public final static String ROOM_LIST_INFO_BATTLE_MODEL = "battleRoom::list::battleModel";
     // 撸房信息
     public final static String ROLL_INFO_ID = "roll::info::rollId";
