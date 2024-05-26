@@ -98,11 +98,11 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
 
         if (luckGood != null) {
             // 开箱记录
-            openBoxLog(bizUser,csgoBox,luckGood);
+            CsgoOpenBoxLog csgoOpenBoxLog = openBoxLog(bizUser,csgoBox,luckGood);
+            boxRes.setCsgoOpenBoxLog(csgoOpenBoxLog);
             // 派发装备(添加商品到用户背包)
             BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
-            CsgoStorehouse storehouse = dispatchGood(bizUser, luckGood, goodSourceTypeDict.getValueByAlias("source_open_box"));
-            boxRes.setLuckStorehouse(storehouse);
+            dispatchGood(bizUser, luckGood, goodSourceTypeDict.getValueByAlias("source_open_box"));
             // 更新递增后roll点回合数
             CsgoUserInfo updateUserInfo = UpdateEntity.of(CsgoUserInfo.class, bizUser.getCsgoUserInfo().getId());
             UpdateWrapper<CsgoUserInfo> updateWrapper = UpdateWrapper.of(updateUserInfo);
@@ -117,10 +117,9 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                     .setChangeMoney(csgoBox.getPrice().negate());                                               // 扣钱,转为负数
             // 更新用户金额
             bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
-            System.out.println();
             // 跟新缓存
             redisService.updateUser(bizUser);
-            boxRes.setBizUser(bizUser);
+            boxRes.setMoney(bizUser.getMoney());
         }
         return boxRes;
     }
@@ -171,14 +170,16 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         return dreamGoodRes;
     }
 
-    public void openBoxLog(BizUser bizUser, CsgoBox box, CsgoBoxGoods boxGood) {
+    public CsgoOpenBoxLog openBoxLog(BizUser bizUser, CsgoBox box, CsgoBoxGoods boxGood) {
         CsgoOpenBoxLog csgoOpenBoxLog = new CsgoOpenBoxLog();
         csgoOpenBoxLog
+                .setId(IdTool.nextId())
                 .setOpenBoxTime(LocalDateTime.now())
                 .setUserId(bizUser.getId()).setUserNickName(bizUser.getNickName()).setUserPhoto(bizUser.getPhoto())
                 .setBoxId(boxGood.getBoxId()).setBoxName(box.getName()).setBoxNameAlias(box.getNameAlias()).setBoxImageUrl(box.getImageUrl()).setBoxPrice(box.getPrice())
                 .setGoodId(boxGood.getGoodId()).setGoodName(boxGood.getName()).setGoodNameAlias(boxGood.getNameAlias()).setGoodImageUrl(boxGood.getImageUrl()).setGoodPrice(boxGood.getPrice());
         csgoOpenBoxLogService.save(csgoOpenBoxLog);
+        return csgoOpenBoxLog;
     }
 
     public void dreamGoodLog(BizUser bizUser,  CsgoBoxGoods boxGood,BigDecimal dreamPrice,BigDecimal dreamGoodProbability,boolean dreamIsWin) {

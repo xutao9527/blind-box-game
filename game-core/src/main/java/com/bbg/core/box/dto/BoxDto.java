@@ -2,6 +2,7 @@ package com.bbg.core.box.dto;
 
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBox;
+import com.bbg.model.csgo.CsgoOpenBoxLog;
 import com.bbg.model.csgo.CsgoStorehouse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class BoxDto {
@@ -45,9 +47,9 @@ public class BoxDto {
     @Accessors(chain = true)
     @Schema(description = "打开盲盒结果")
     public static class OpenBoxRes implements Serializable {
-        @Schema(description = "新用户信息")
-        private BizUser bizUser;
+        @Schema(description = "余额")
+        private BigDecimal money;
         @Schema(description = "获得的装备")
-        private CsgoStorehouse luckStorehouse;
+        CsgoOpenBoxLog csgoOpenBoxLog;
     }
 }

@@ -16,8 +16,8 @@ export const boxMock = reactive({
         boxId:null,
     },
     openBoxRes:{
-        bizUser:null,
-        luckStorehouse:null,
+        money:null,
+        csgoOpenBoxLog:null,
     },
     openBoxRecord:[],
     openBox: async (boxId) => {
@@ -25,9 +25,9 @@ export const boxMock = reactive({
         const apiRet = await appHttp.post('csgoBox/open', boxMock.openBoxReq)
         if (apiRet.ok) {
             boxMock.openBoxRes = apiRet.data
-            mockGlobal.bizUser.money = boxMock.openBoxRes.bizUser.money
-            boxMock.openBoxRecord.push(boxMock.openBoxRes.luckStorehouse)
-            ElMessage({type: 'success', message: `中奖:${boxMock.openBoxRes.luckStorehouse.name}`})
+            mockGlobal.bizUser.money = boxMock.openBoxRes.money
+            boxMock.openBoxRecord.push(boxMock.openBoxRes.csgoOpenBoxLog)
+            ElMessage({type: 'success', message: `中奖:${boxMock.openBoxRes.csgoOpenBoxLog.goodName}`})
         }
     }
 })
