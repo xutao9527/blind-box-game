@@ -1,9 +1,9 @@
 import axios from "axios";
 import {bbgConf} from "@/config";
 import JSONbig from "json-bigint";
-import {useUserStore} from "@/store/userStore.js";
+import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
-export class BbgAxiosHttp {
+export class AppAxiosHttp {
     constructor() {
         this.axiosRequestConfig = {};
         this.requestConfig()
@@ -27,7 +27,7 @@ export class BbgAxiosHttp {
     // 请求配置
     requestConfig() {
         this.axiosRequestConfig = {
-            baseURL: bbgConf.env.apiBaseUrl,
+            baseURL: bbgConf.env.appBaseUrl,
             timeout: 5000,
             //  这是核心
             transformResponse: [function (data) {
@@ -47,11 +47,11 @@ export class BbgAxiosHttp {
     // 请求拦截
     interceptorsRequest() {
         this.axiosInstance.interceptors.request.use((config) => {
-            if(!this.userStore){
-                this.userStore = useUserStore()
-            }
-            if (this.userStore.token != null) {
-                config.headers['token'] = this.userStore.token
+            // if(!this.userStore){
+            //     this.userStore = useUserStore()
+            // }
+            if (mockGlobal.bizToken != null) {
+                config.headers['token'] = mockGlobal.bizToken
             }
             config.data = config.data ? config.data : {}
             config.params = config.params ? config.params : {}
@@ -66,3 +66,5 @@ export class BbgAxiosHttp {
         })
     }
 }
+
+export const appHttp = new AppAxiosHttp()

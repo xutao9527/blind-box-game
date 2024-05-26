@@ -1,4 +1,4 @@
-import {http} from "@/core/axios/index.js";
+import {appHttp} from "./mockHttp.js";
 import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 export const boxMock = reactive({
@@ -7,7 +7,7 @@ export const boxMock = reactive({
     },
     boxList: [],
     getBoxList: async () => {
-        const apiRet = await http.post('boxGameMock/list', boxMock.getBoxReq)
+        const apiRet = await appHttp.post('csgoBox/list', boxMock.getBoxReq)
         if (apiRet.ok) {
             boxMock.boxList = apiRet.data
         }
@@ -22,7 +22,7 @@ export const boxMock = reactive({
     openBoxRecord:[],
     openBox: async (boxId) => {
         boxMock.openBoxReq.boxId = boxId;
-        const apiRet = await http.post('boxGameMock/open', boxMock.openBoxReq)
+        const apiRet = await appHttp.post('csgoBox/open', boxMock.openBoxReq)
         if (apiRet.ok) {
             boxMock.openBoxRes = apiRet.data
             mockGlobal.bizUser.money = boxMock.openBoxRes.bizUser.money

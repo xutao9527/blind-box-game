@@ -1,4 +1,4 @@
-import {http} from "@/core/axios/index.js";
+import {appHttp} from "./mockHttp.js";
 import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 export const dreamMock = reactive({
@@ -13,7 +13,7 @@ export const dreamMock = reactive({
         dreamGoodsPage: {}
     },
     dreamList: async () => {
-        const apiRet = await http.post('/boxGameMock/dreamList', dreamMock.dreamListReq)
+        const apiRet = await appHttp.post('/csgoBox/dreamList', dreamMock.dreamListReq)
         if (apiRet.ok) {
             dreamMock.dreamListRes.dreamGoodsPage = apiRet.data.dreamGoodsPage
         }
@@ -28,7 +28,7 @@ export const dreamMock = reactive({
     },
     dreamGoodRecord: [],
     dreamGood: async () => {
-        const apiRet = await http.post('/boxGameMock/dreamGood', dreamMock.dreamGoodReq)
+        const apiRet = await appHttp.post('/csgoBox/dreamGood', dreamMock.dreamGoodReq)
         if (apiRet.ok) {
             dreamMock.dreamGoodRes = apiRet.data
             if (dreamMock.dreamGoodRes.csgoBoxGood != null) {
@@ -37,7 +37,7 @@ export const dreamMock = reactive({
             }else{
                 ElMessage({type: 'error', message: '没有中奖'})
             }
-            console.log(dreamMock.dreamGoodRes)
+            // console.log(dreamMock.dreamGoodRes)
             mockGlobal.bizUser.money = dreamMock.dreamGoodRes.bizUser.money
         }
     },

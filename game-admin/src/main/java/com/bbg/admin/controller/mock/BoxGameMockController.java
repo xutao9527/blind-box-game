@@ -25,55 +25,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoxGameMockController {
 
-    public final BoxGameMockService boxGameMockService;
+   public String token = null;
 
-    @GetMapping("getInfo")
-    @Operation(description = "获得用户信息")
-    public ApiRet<LoginDto.LoginRes> getInfo() {
-        return boxGameMockService.getInfo();
-    }
-
-    @PostMapping("login")
-    @Operation(description = "用户登录")
-    public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginReq loginReq) {
-        ApiRet<LoginDto.LoginRes> apiRet = boxGameMockService.login(loginReq);
-        if (apiRet.isOk()) {
-            BoxGameMockService.GameMockInterceptor.token = apiRet.getData().getToken();
+    @GetMapping("getToken")
+    @Operation(description = "获得Token")
+    public ApiRet<String> getToken() {
+        if(token == null) {
+            return ApiRet.buildNo(null, "token为空");
         }
-        return apiRet;
+        return ApiRet.buildOk(token);
     }
 
-    @PostMapping("logout")
-    @Operation(description = "用户登出")
-    public ApiRet<String> logout() {
-        ApiRet<String> apiRet = boxGameMockService.logout();
-        if (apiRet.isOk()) {
-            BoxGameMockService.GameMockInterceptor.token = null;
-        }
-        return apiRet;
-    }
 
-    @PostMapping("list")
-    @Operation(description = "盲盒列表")
-    public ApiRet<List<CsgoBox>> list(@RequestBody BoxDto.GetBoxReq model) {
-        return boxGameMockService.list(model);
-    }
-
-    @PostMapping("open")
-    @Operation(description = "开盲盒")
-    public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model) {
-        return boxGameMockService.openBox(model);
-    }
-
-    @PostMapping("dreamList")
-    @Operation(description = "追梦列表")
-    public ApiRet<DreamDto.DreamListRes> list(@RequestBody DreamDto.DreamListReq model) {
-        return boxGameMockService.dreamList(model);
-    }
-
-    @PostMapping("dreamGood")
-    @Operation(description = "进行追梦")
-    public ApiRet<DreamDto.DreamGoodRes> dreamGood(@RequestBody DreamDto.DreamGoodReq model) {
-        return boxGameMockService.dreamGood(model);
+    @GetMapping("setToken")
+    @Operation(description = "设置Token")
+    public void setToken(@RequestParam String token) {
+        this.token = token;
     }
 }
