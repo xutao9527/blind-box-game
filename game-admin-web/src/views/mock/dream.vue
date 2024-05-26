@@ -118,6 +118,7 @@ const startDreamGood =() =>{
   }
 
   .box-aside {
+    margin-top: 20px;
     height: calc(100vh - 322px);
     border: 1px solid var(--el-border-color);
 

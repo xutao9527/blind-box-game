@@ -25,13 +25,13 @@
         <el-col :span="3">
           <el-text>余额: {{ mockGlobal.bizUser.money }}</el-text>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="7">
           <el-text>token: {{ mockGlobal.bizToken }}</el-text>
         </el-col>
       </el-row>
     </el-header>
     <el-main class="mock-main">
-      <el-tabs tab-position="right" model-value="box">
+      <el-tabs tab-position="right" model-value="battle">
         <el-tab-pane label="盲盒" name="box">
           <box></box>
         </el-tab-pane>
@@ -39,7 +39,7 @@
           <dream></dream>
         </el-tab-pane>
         <el-tab-pane label="竞技场" name="battle">
-          竞技场
+          <battle></battle>
         </el-tab-pane>
         <el-tab-pane label="Roll房" name="roll">
           Roll房
@@ -56,6 +56,7 @@ import {loginMock} from "@/views/mock/js/LoginDto.js";
 import {mockGlobal} from "./js/mockGlobal.js";
 import box from "@/views/mock/box.vue";
 import Dream from "@/views/mock/dream.vue";
+import Battle from "@/views/mock/battle.vue";
 
 onMounted(()=>{
   loginMock.getInfo();
@@ -69,6 +70,7 @@ onMounted(()=>{
     border: 1px solid var(--el-border-color);
   }
   .mock-main {
+    padding: 0;
     height: calc(100vh - 281px);
     border-left: 1px solid var(--el-border-color);
     border-right: 1px solid var(--el-border-color);

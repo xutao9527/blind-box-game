@@ -26,7 +26,7 @@
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
-            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
+<!--            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>-->
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
@@ -57,12 +57,12 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
-        <el-table-column fixed="right" label="操作" width="120">
-          <template #default="scope">
-            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
-            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
+<!--        <el-table-column fixed="right" label="操作" width="120">-->
+<!--          <template #default="scope">-->
+<!--            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>-->
+<!--            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
       </el-table>
     </el-main>
     <el-footer class="bbg-table-footer">

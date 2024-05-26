@@ -62,6 +62,7 @@ onMounted(() => {
     height: calc(100vh - 322px);
   }
   .box-aside {
+    margin-top: 20px;
     height: calc(100vh - 322px);
     border: 1px solid var(--el-border-color);
     .record_scrollbar {
