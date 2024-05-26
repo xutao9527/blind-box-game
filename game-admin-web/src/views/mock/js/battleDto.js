@@ -43,7 +43,7 @@ export const battleMock = reactive({
     getRoomList: async () => {
         const apiRet = await appHttp.post('csgoBattleRoom/getRoomList')
         if (apiRet.ok) {
-            battleMock.roomList = apiRet.data
+            battleMock.roomList = apiRet.data.records
         }
     },
     joinRoomReq: {

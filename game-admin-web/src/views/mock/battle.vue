@@ -2,7 +2,37 @@
   <el-container class="box">
     <el-main class="box-main">
       <el-scrollbar>
-
+        <el-table :data="battleMock.roomList">
+          <el-table-column prop="id" label="房间编号"/>
+          <el-table-column prop="battleModel" label="模式">
+            <template #default="scope">
+              {{ scope.row.battleModel === '1' ? '欧皇' : '非酋' }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="peopleNumber" label="房间人数">
+            <template #default="scope">
+              {{ scope.row.roomUsers.length }}/{{ scope.row.peopleNumber }}人
+            </template>
+          </el-table-column>
+          <el-table-column prop="peopleNumber" label="玩家">
+            <template #default="scope">
+              <el-row>
+                <el-col v-for="user in scope.row.roomUsers" :key="user.id">
+                  <el-tooltip placement="top">
+                    <template #content>
+                      <el-row>
+                        <el-col>
+                          <el-text>id:{{ user.userId }},type:{{ user.userType }}</el-text>
+                        </el-col>
+                      </el-row>
+                    </template>
+                    <el-avatar size="large">{{user.nickName}}</el-avatar>
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-scrollbar>
     </el-main>
     <el-aside class="box-aside" width="400px">
@@ -48,8 +78,7 @@
         </el-checkbox-group>
       </el-row>
       <el-row style="margin-top: 10px">
-        <el-text type="info" size="small">模式：
-        </el-text>
+        <el-text type="info" size="small">模式：</el-text>
         <el-radio-group v-model="battleMock.createRoomReq.battleModel">
           <el-radio value="1">欧皇</el-radio>
           <el-radio value="2">非酋</el-radio>
@@ -76,10 +105,12 @@ import {battleMock} from "@/views/mock/js/battleDto.js";
 onMounted(() => {
   battleMock.getBoxList()
   battleMock.getRobotList()
-  // 每秒钟获得一次房间列表
+  // 每10秒钟获得一次房间列表,首次立即获得
+  battleMock.getRoomList()
   setInterval(() => {
     battleMock.getRoomList()
-  }, 1000)
+  }, 10000)
+
 })
 </script>
 
