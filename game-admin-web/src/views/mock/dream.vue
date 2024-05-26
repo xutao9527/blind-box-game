@@ -72,7 +72,7 @@
       </el-row>
       <el-scrollbar class="record_scrollbar">
         <p v-for="r in dreamMock.dreamGoodRecord">
-          获得=> [{{ r.name }}] , [{{ r.price }}]
+          获得=> [{{ r.goodName }}] , [{{ r.goodPrice }}]
         </p>
       </el-scrollbar>
     </el-aside>

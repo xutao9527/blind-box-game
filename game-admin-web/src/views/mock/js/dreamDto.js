@@ -23,22 +23,22 @@ export const dreamMock = reactive({
         probability: null,
     },
     dreamGoodRes: {
-        bizUser: null,
-        csgoBoxGood: null,
+        money: null,
+        csgoDreamGoodLog: null,
     },
     dreamGoodRecord: [],
     dreamGood: async () => {
         const apiRet = await appHttp.post('/csgoBox/dreamGood', dreamMock.dreamGoodReq)
         if (apiRet.ok) {
+            console.log(apiRet.data)
             dreamMock.dreamGoodRes = apiRet.data
-            if (dreamMock.dreamGoodRes.csgoBoxGood != null) {
-                ElMessage({type: 'success', message: `中奖:${dreamMock.dreamGoodRes.csgoBoxGood.name}`})
-                dreamMock.dreamGoodRecord.push(dreamMock.dreamGoodRes.csgoBoxGood)
+            if (dreamMock.dreamGoodRes.csgoDreamGoodLog.dreamIsWin) {
+                ElMessage({type: 'success', message: `中奖:${dreamMock.dreamGoodRes.csgoDreamGoodLog.goodName}`})
+                dreamMock.dreamGoodRecord.push(dreamMock.dreamGoodRes.csgoDreamGoodLog)
             }else{
                 ElMessage({type: 'error', message: '没有中奖'})
             }
-            // console.log(dreamMock.dreamGoodRes)
-            mockGlobal.bizUser.money = dreamMock.dreamGoodRes.bizUser.money
+            mockGlobal.bizUser.money = dreamMock.dreamGoodRes.money
         }
     },
 

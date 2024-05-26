@@ -49,7 +49,7 @@ public class BoxDto {
     public static class OpenBoxRes implements Serializable {
         @Schema(description = "余额")
         private BigDecimal money;
-        @Schema(description = "获得的装备")
+        @Schema(description = "开箱记录")
         CsgoOpenBoxLog csgoOpenBoxLog;
     }
 }

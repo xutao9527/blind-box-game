@@ -12,14 +12,14 @@ export const boxMock = reactive({
             boxMock.boxList = apiRet.data
         }
     },
-    openBoxReq:{
-        boxId:null,
+    openBoxReq: {
+        boxId: null,
     },
-    openBoxRes:{
-        money:null,
-        csgoOpenBoxLog:null,
+    openBoxRes: {
+        money: null,
+        csgoOpenBoxLog: null,
     },
-    openBoxRecord:[],
+    openBoxRecord: [],
     openBox: async (boxId) => {
         boxMock.openBoxReq.boxId = boxId;
         const apiRet = await appHttp.post('csgoBox/open', boxMock.openBoxReq)

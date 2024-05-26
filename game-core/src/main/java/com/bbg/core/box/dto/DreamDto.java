@@ -3,6 +3,7 @@ package com.bbg.core.box.dto;
 import com.bbg.model.base.BaseModel;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoBoxGoods;
+import com.bbg.model.csgo.CsgoDreamGoodLog;
 import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -51,10 +52,10 @@ public class DreamDto {
     @Accessors(chain = true)
     @Schema(description = "追梦商品结果")
     public static class DreamGoodRes implements Serializable {
-        @Schema(description = "新用户信息")
-        private BizUser bizUser;
-        @Schema(description = "追梦获奖结果")
-        private CsgoBoxGoods csgoBoxGood;
+        @Schema(description = "余额")
+        private BigDecimal money;
+        @Schema(description = "追梦记录")
+        private CsgoDreamGoodLog csgoDreamGoodLog;
     }
 
 }

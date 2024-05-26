@@ -98,7 +98,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
 
         if (luckGood != null) {
             // 开箱记录
-            CsgoOpenBoxLog csgoOpenBoxLog = openBoxLog(bizUser,csgoBox,luckGood);
+            CsgoOpenBoxLog csgoOpenBoxLog = openBoxLog(bizUser, csgoBox, luckGood);
             boxRes.setCsgoOpenBoxLog(csgoOpenBoxLog);
             // 派发装备(添加商品到用户背包)
             BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
@@ -152,10 +152,10 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
             // 派发装备(添加商品到用户背包)
             BizDict goodSourceTypeDict = bizDictService.getDictByTag("csgo_good_source_type");
             dispatchGood(bizUser, csgoBoxGoods, goodSourceTypeDict.getValueByAlias("source_dream_good"));
-            dreamGoodRes.setCsgoBoxGood(csgoBoxGoods);
         }
         // 追梦记录
-        dreamGoodLog(bizUser,csgoBoxGoods,consumeMoney,model.getProbability(),isWinGood);
+        CsgoDreamGoodLog csgoDreamGoodLog = dreamGoodLog(bizUser, csgoBoxGoods, consumeMoney, model.getProbability(), isWinGood);
+        dreamGoodRes.setCsgoDreamGoodLog(csgoDreamGoodLog);
         // 构造流水记录
         CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
         capitalRecord.setUserId(bizUser.getId())
@@ -166,7 +166,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
         // 跟新缓存
         redisService.updateUser(bizUser);
-        dreamGoodRes.setBizUser(bizUser);
+        dreamGoodRes.setMoney(bizUser.getMoney());
         return dreamGoodRes;
     }
 
@@ -182,9 +182,10 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         return csgoOpenBoxLog;
     }
 
-    public void dreamGoodLog(BizUser bizUser,  CsgoBoxGoods boxGood,BigDecimal dreamPrice,BigDecimal dreamGoodProbability,boolean dreamIsWin) {
+    public CsgoDreamGoodLog dreamGoodLog(BizUser bizUser, CsgoBoxGoods boxGood, BigDecimal dreamPrice, BigDecimal dreamGoodProbability, boolean dreamIsWin) {
         CsgoDreamGoodLog csgoDreamGoodLog = new CsgoDreamGoodLog();
         csgoDreamGoodLog
+                .setId(IdTool.nextId())
                 .setDreamIsWin(dreamIsWin)
                 .setDreamPrice(dreamPrice)
                 .setDreamGoodProbability(dreamGoodProbability)
@@ -193,6 +194,7 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                 .setBoxId(boxGood.getBoxId())
                 .setGoodId(boxGood.getGoodId()).setGoodName(boxGood.getName()).setGoodNameAlias(boxGood.getNameAlias()).setGoodImageUrl(boxGood.getImageUrl()).setGoodPrice(boxGood.getPrice());
         csgoDreamGoodLogService.save(csgoDreamGoodLog);
+        return csgoDreamGoodLog;
     }
 
     /**
