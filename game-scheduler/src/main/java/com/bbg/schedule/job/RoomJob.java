@@ -98,17 +98,17 @@ public class RoomJob {
             // 随机对战模式
             createRoomReq.setBattleModel(battleModels.get(random.nextInt(battleModels.size())));
             // 随机2~4人
-            createRoomReq.setPeopleNumber(random.nextInt(3)+2);
+            createRoomReq.setPeopleNumber(random.nextInt(3) + 2);
             // 随机获得若干箱子
             CsgoBoxService csgoBoxService = SpringUtil.getBean(CsgoBoxService.class);
             List<CsgoBox> csgoBoxes = csgoBoxService.getBoxesByType(boxType);
-            long[] boxesId = new long[random.nextInt(6)+1];
+            long[] boxesId = new long[random.nextInt(6) + 1];
             for (int i = 0; i < boxesId.length; i++) {
                 boxesId[i] = csgoBoxes.get(random.nextInt(csgoBoxes.size())).getId();
             }
             createRoomReq.setBoxesId(boxesId);
             // 创建房间
-            csgoBattleRoomService.createRoom(bizUser,createRoomReq, IdTool.nextId());
+            csgoBattleRoomService.createRoom(bizUser, createRoomReq, IdTool.nextId());
         }
     }
 
@@ -131,15 +131,17 @@ public class RoomJob {
             // 随机获取一个房间
             CsgoBattleRoomService csgoBattleRoomService = SpringUtil.getBean(CsgoBattleRoomService.class);
             List<CsgoBattleRoom> roomList = csgoBattleRoomService.getRoomList(new BattleRoomDto.GetRoomListReq().setPageSize(100)).getRecords();
-            CsgoBattleRoom csgoBattleRoom = roomList.get(random.nextInt(roomList.size()));
-            // 随机获取一个虚拟用户
-            long userId = userIds.get(random.nextInt(userIds.size()));
-            BizUser bizUser = bizUserService.getById(userId);
-            // 加入房间
-            if(bizUser != null&& csgoBattleRoom != null){
-                csgoBattleRoomService.joinRoom(bizUser,csgoBattleRoom.getId());
+            // 有带加入的房间
+            if (!roomList.isEmpty()) {
+                CsgoBattleRoom csgoBattleRoom = roomList.get(random.nextInt(roomList.size()));
+                // 随机获取一个虚拟用户
+                long userId = userIds.get(random.nextInt(userIds.size()));
+                BizUser bizUser = bizUserService.getById(userId);
+                // 加入房间
+                if (bizUser != null && csgoBattleRoom != null) {
+                    csgoBattleRoomService.joinRoom(bizUser, csgoBattleRoom.getId());
+                }
             }
-
         }
     }
 }
