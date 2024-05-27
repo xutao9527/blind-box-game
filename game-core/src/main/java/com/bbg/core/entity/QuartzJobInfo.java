@@ -8,24 +8,38 @@ import java.util.Date;
 
 @Data
 @Accessors(chain = true)
-public class JobInfo {
+public class QuartzJobInfo {
 
+    // 任务类名
     String jobClassName;
 
+    // 任务名称
     String jobName;
 
+    // 任务分组
     String jobGroup;
 
-    String description;
+    // 触发器类型: [SimpleTrigger] [CronTrigger]
+    String triggerType;
 
+    // Cron表达式: CronTrigger
     String cronExpression;
 
+    // 执行频率[SimpleTrigger]
+    long repeatInterval;
+
+    // 任务描述
+    String description;
+
+    // 下次执行时间
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     Date nextExecuteTime;
 
+    // 开始时间
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     Date startTime;
 
+    // 结束时间
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     Date endTime;
 }

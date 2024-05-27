@@ -2,7 +2,7 @@ package com.bbg.schedule.controller;
 
 import com.bbg.core.entity.ApiRet;
 import com.bbg.schedule.base.BaseController;
-import com.bbg.core.entity.JobInfo;
+import com.bbg.core.entity.QuartzJobInfo;
 import com.bbg.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +24,7 @@ public class ScheduleController extends BaseController {
 
     @GetMapping("list")
     @Operation(description = "所有任务")
-    public ApiRet<List<JobInfo>> list() throws Exception {
+    public ApiRet<List<QuartzJobInfo>> list() throws Exception {
         return ApiRet.buildOk(scheduleService.getAll());
     }
 

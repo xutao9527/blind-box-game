@@ -1,6 +1,6 @@
 package com.bbg.schedule.service.impl;
 
-import com.bbg.core.entity.JobInfo;
+import com.bbg.core.entity.QuartzJobInfo;
 import com.bbg.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,23 +20,30 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     public final Scheduler scheduler;
 
-    public List<JobInfo> getAll() throws SchedulerException {
-        List<JobInfo> jobInfoList = new ArrayList<>();
+    public List<QuartzJobInfo> getAll() throws SchedulerException {
+        List<QuartzJobInfo> jobInfoList = new ArrayList<>();
         GroupMatcher<TriggerKey> matcher = GroupMatcher.anyTriggerGroup();
         Set<TriggerKey> triggerKeys = scheduler.getTriggerKeys(matcher);
         for (TriggerKey triggerKey : triggerKeys) {
             Trigger trigger = scheduler.getTrigger(triggerKey);
             JobDetailImpl jobDetail = (JobDetailImpl) scheduler.getJobDetail(JobKey.jobKey(trigger.getJobKey().getName(), trigger.getJobKey().getGroup()));
-            JobInfo jobInfo = new JobInfo()
+            QuartzJobInfo jobInfo = new QuartzJobInfo()
                     .setJobName(triggerKey.getName())
                     .setJobGroup(triggerKey.getGroup())
                     .setDescription(jobDetail.getDescription())
                     .setJobClassName(jobDetail.getJobClass().getName());
             if (trigger instanceof CronTrigger cronTrigger) {
                 jobInfo.setNextExecuteTime(cronTrigger.getNextFireTime());
-                jobInfo.setCronExpression(cronTrigger.getCronExpression());
                 jobInfo.setStartTime(cronTrigger.getStartTime());
                 jobInfo.setEndTime(cronTrigger.getEndTime());
+                jobInfo.setTriggerType("CronTrigger");
+                jobInfo.setCronExpression(cronTrigger.getCronExpression());
+            }else if (trigger instanceof SimpleTrigger simpleTrigger){
+                jobInfo.setNextExecuteTime(simpleTrigger.getNextFireTime());
+                jobInfo.setStartTime(simpleTrigger.getStartTime());
+                jobInfo.setEndTime(simpleTrigger.getEndTime());
+                jobInfo.setTriggerType("SimpleTrigger");
+                jobInfo.setRepeatInterval(simpleTrigger.getRepeatInterval());
             }
             jobInfoList.add(jobInfo);
         }

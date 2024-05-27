@@ -23,7 +23,12 @@
         <el-table-column prop="jobName" label="任务名称"/>
         <el-table-column prop="jobGroup" label="任务分组"/>
         <el-table-column prop="jobClassName" label="任务类详情"/>
-        <el-table-column prop="cronExpression" label="Cron表达式"/>
+        <el-table-column prop="triggerType" label="触发器"/>
+        <el-table-column prop="triggerType" label="执行频率">
+          <template #default="scope">
+            {{ scope.row.triggerType === 'SimpleTrigger' ? scope.row.repeatInterval + '/毫秒' : scope.row.cronExpression }}
+          </template>
+        </el-table-column>
         <el-table-column prop="nextExecuteTime" label="下次执行时间"/>
       </el-table>
     </el-main>
@@ -31,8 +36,8 @@
       <el-row style="padding: 5px">
         <el-col style="display: grid;justify-content: right;">
           <el-pagination style="margin-top: 5px;margin-right: 10px"
-              layout="total"
-              :total="tableProps.apiRet.data.length"
+                         layout="total"
+                         :total="tableProps.apiRet.data.length"
           />
         </el-col>
       </el-row>

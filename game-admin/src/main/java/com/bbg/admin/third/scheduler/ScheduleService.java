@@ -1,7 +1,7 @@
 package com.bbg.admin.third.scheduler;
 
 import com.bbg.core.entity.ApiRet;
-import com.bbg.core.entity.JobInfo;
+import com.bbg.core.entity.QuartzJobInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -11,6 +11,6 @@ import java.util.List;
 public interface ScheduleService {
 
     @GetMapping("/task/list")
-    ApiRet<List<JobInfo>> list();
+    ApiRet<List<QuartzJobInfo>> list();
 
 }
