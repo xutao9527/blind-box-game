@@ -43,15 +43,11 @@ public class RoomLoader {
     }
 
     public void reLoadJob() {
-        QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(QueryMethods.column(CsgoConfig::getValue))
-                .eq(CsgoConfig::getEnable, true)
-                .eq(CsgoConfig::getNameAlias, "auto_battle_config");
-        String autoBattleConfig = csgoConfigService.getOneAs(queryWrapper, String.class);
+        CsgoConfig csgoConfig = csgoConfigService.getConfigByNameAlias("auto_battle_config");
         AutoBattleConfig battleConfig = null;
-        if (autoBattleConfig != null) {
+        if (csgoConfig != null) {
             try {
-                battleConfig = JSONObject.parseObject(autoBattleConfig, AutoBattleConfig.class);
+                battleConfig = JSONObject.parseObject(csgoConfig.getValue(), AutoBattleConfig.class);
             } catch (Exception e) {
                 log.error("autoBattleConfig parse error", e);
             }

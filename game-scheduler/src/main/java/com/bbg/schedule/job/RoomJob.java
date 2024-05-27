@@ -24,8 +24,6 @@ public class RoomJob {
         }
     }
 
-
-
     public static class CreateRoom implements Job {
         @Override
         public void execute(JobExecutionContext jobExecutionContext) {

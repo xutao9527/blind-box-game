@@ -13,6 +13,8 @@ public class KeyConst {
     // user token
     public final static String USER_INFO_TOKEN = "user::info::token";
 
+    // 游戏配置
+    public final static String GAME_CONFIG_NAMEALIAS = "game::config::nameAlias";
     // 字典标签缓存
     public final static String DICT_TAG = "dict::tag";
     // 箱子缓存
@@ -43,7 +45,6 @@ public class KeyConst {
     public final static String METHOD_JOIN_ROOM_LOCK = "method::joinRoom::roomId";
     // 方法锁 加入撸房
     public final static String METHOD_JOIN_ROLL_LOCK = "method::joinRoll::rollId";
-
 
     public static String build(String prefix, String key) {
         return "%s::%s".formatted(prefix, key);
