@@ -64,8 +64,8 @@ public class RollLoader {
                     }
                 }
             } else {                                                                                                    // 停用状态
-                scheduleService.delete(JobKey.jobKey(ROLL_ONLINE + roll.getId().toString()));                     // 删除任务
-                scheduleService.delete(JobKey.jobKey(ROLL_OFFLINE + roll.getId().toString()));                     // 删除任务
+                scheduleService.delete(JobKey.jobKey(ROLL_ONLINE + roll.getId().toString(), ROll_GROUP));         // 删除任务
+                scheduleService.delete(JobKey.jobKey(ROLL_OFFLINE + roll.getId().toString(), ROll_GROUP));        // 删除任务
             }
         }
     }

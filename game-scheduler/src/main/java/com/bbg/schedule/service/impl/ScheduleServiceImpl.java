@@ -46,17 +46,29 @@ public class ScheduleServiceImpl implements ScheduleService {
     public boolean save(JobDetail jobDetail, Trigger trigger) {
         try {
             Trigger existTrigger = scheduler.getTrigger(trigger.getKey());
+            // 判断是否存在
             if (existTrigger != null) {
+                // 判断CronTrigger表达式是否一致
                 if (trigger instanceof CronTrigger cronTrigger && existTrigger instanceof CronTrigger existCronTrigger) {
                     var cronExpression = cronTrigger.getCronExpression();
                     var existCronExpression = existCronTrigger.getCronExpression();
                     if (cronExpression.equals(existCronExpression)) {
-                        log.info("trigger exist:{}.{}", trigger.getKey().getName(), trigger.getKey().getGroup());
+                        log.info("CronTrigger exist: {}.{}", trigger.getKey().getName(), trigger.getKey().getGroup());
                         return true;
                     } else {
                         delete(existTrigger.getJobKey());
                     }
-                } else {
+                // 判断SimpleTrigger是否一致
+                } else if(trigger instanceof SimpleTrigger simpleTrigger && existTrigger instanceof SimpleTrigger existsimpleTrigger) {
+                    if (simpleTrigger.getRepeatInterval() == existsimpleTrigger.getRepeatInterval()) {
+                        log.info("SimpleTrigger exist: {}.{}", trigger.getKey().getName(), trigger.getKey().getGroup());
+                        return true;
+                    }
+                    else {
+                        delete(existTrigger.getJobKey());
+                    }
+                }
+                else {
                     delete(existTrigger.getJobKey());
                 }
             }
