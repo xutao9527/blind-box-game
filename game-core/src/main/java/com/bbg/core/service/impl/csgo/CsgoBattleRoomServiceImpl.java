@@ -69,6 +69,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();      // 返回结果
         List<CsgoRobot> robotList = null;                                                   // 机器人
         BigDecimal roomPrice;                                                               // 房间价格
+        BizDict userTypeDict = bizDictService.getDictByTag("user_type");
         // --------------------------------------检查s--------------------------------------
         // 箱子检查
         BizDict boxTypeDict = bizDictService.getDictByTag("csgo_box_type");
@@ -84,11 +85,13 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         }
         // 余额检查
         roomPrice = boxList.stream().map(CsgoBox::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-        if (bizUser.getMoney().compareTo(roomPrice) < 0) {
+        if ((bizUser.getType().equals(userTypeDict.getValueByAlias("real_user")) ||                                 // 检查真实用户余额
+                bizUser.getType().equals(userTypeDict.getValueByAlias("test_user")))                                // 检查测试用户余额
+                && bizUser.getMoney().compareTo(roomPrice) < 0) {
             return ApiRet.buildNo("金额不够");
         }
         // 机器人设置
-        if (createRoomReq.getBoxesId().length > 0) {
+        if (createRoomReq.getRobotsId() != null && createRoomReq.getRobotsId().length > 0) {
             Map<Long, CsgoRobot> allRobotMap = csgoRobotService.list()
                     .stream().collect(Collectors.toMap(CsgoRobot::getId, csgoRobot -> csgoRobot));
             robotList = Arrays.stream(createRoomReq.getRobotsId())
@@ -124,7 +127,6 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         createUser.setId(IdTool.nextId()).setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
         battleRoom.getRoomUsers().add(createUser);                                          // 添加参战用户(创建人)
         if (null != robotList && !robotList.isEmpty()) {
-            BizDict userTypeDict = bizDictService.getDictByTag("user_type");
             robotList.forEach(robot -> {
                 CsgoBattleRoomUser roomUser = new CsgoBattleRoomUser();
                 roomUser.setId(IdTool.nextId()).setRoomId(roomId).setUserId(robot.getId()).setUserType(userTypeDict.getValueByAlias("robot")).setNickName(robot.getName()).setImageUrl(robot.getImageUrl());
@@ -385,7 +387,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
      * 缓存信息默认存储500毫秒,避免高并发,缓解数据库压力
      */
     // @RedisCache(value = "#getRoomListReq.battleModel", key = KeyConst.ROOM_LIST_INFO_BATTLE_MODEL, liveTime = 500, timeUnit = TimeUnit.MILLISECONDS)
-    @RedisCache( key = KeyConst.ROOM_LIST_INFO, liveTime = 500, timeUnit = TimeUnit.MILLISECONDS)
+    @RedisCache(key = KeyConst.ROOM_LIST_INFO, liveTime = 500, timeUnit = TimeUnit.MILLISECONDS)
     public Page<CsgoBattleRoom> getRoomList(BattleRoomDto.GetRoomListReq getRoomListReq) {
         BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");
         QueryWrapper queryWrapper = QueryWrapper.create(new CsgoBattleRoom()

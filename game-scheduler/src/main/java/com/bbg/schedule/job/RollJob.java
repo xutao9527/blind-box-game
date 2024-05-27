@@ -15,7 +15,7 @@ public class RollJob  {
 
     public static class Check implements Job{
         @Override
-        public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        public void execute(JobExecutionContext jobExecutionContext)  {
             RollLoader rollLoader = SpringUtil.getBean(RollLoader.class);
             rollLoader.reLoadJob();
         }
@@ -23,7 +23,7 @@ public class RollJob  {
 
     public static class Online implements Job{
         @Override
-        public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        public void execute(JobExecutionContext jobExecutionContext)  {
             JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
             CsgoRoll csgoRoll = new CsgoRoll();
             csgoRoll.setId(jobDataMap.getLongValue("rollId"));
@@ -34,7 +34,7 @@ public class RollJob  {
 
     public static class Offline implements Job{
         @Override
-        public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        public void execute(JobExecutionContext jobExecutionContext)  {
             JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
             CsgoRoll csgoRoll = new CsgoRoll();
             csgoRoll.setId(jobDataMap.getLongValue("rollId"));

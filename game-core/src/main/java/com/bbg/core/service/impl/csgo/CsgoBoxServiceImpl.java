@@ -117,8 +117,6 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                     .setChangeMoney(csgoBox.getPrice().negate());                                               // 扣钱,转为负数
             // 更新用户金额
             bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
-            // 跟新缓存
-            redisService.updateUser(bizUser);
             boxRes.setMoney(bizUser.getMoney());
         }
         return boxRes;
@@ -164,8 +162,6 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
                 .setChangeMoney(consumeMoney.negate());    // 扣钱,转为负数
         // 更新用户金额
         bizUser = bizUserService.updateUserMoney(bizUser, capitalRecord);
-        // 跟新缓存
-        redisService.updateUser(bizUser);
         dreamGoodRes.setMoney(bizUser.getMoney());
         return dreamGoodRes;
     }

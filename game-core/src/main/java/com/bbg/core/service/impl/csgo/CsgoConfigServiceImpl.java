@@ -29,7 +29,7 @@ public class CsgoConfigServiceImpl extends ServiceImpl<CsgoConfigMapper, CsgoCon
     public final RedisService redisService;
 
     @Override
-    @RedisCache(value = "#nameAlias", key = KeyConst.GAME_CONFIG_NAMEALIAS)
+    @RedisCache(value = "#nameAlias", key = KeyConst.GAME_CONFIG_NAME_ALIAS)
     public CsgoConfig getConfigByNameAlias(String nameAlias) {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .eq(CsgoConfig::getEnable, true)
@@ -41,18 +41,18 @@ public class CsgoConfigServiceImpl extends ServiceImpl<CsgoConfigMapper, CsgoCon
     public boolean removeById(Serializable id) {
         CsgoConfig csgoConfig = getMapper().selectOneById(id);
         if (csgoConfig != null) {
-            redisService.delete(KeyConst.build(KeyConst.GAME_CONFIG_NAMEALIAS, csgoConfig.getNameAlias()));
+            redisService.delete(KeyConst.build(KeyConst.GAME_CONFIG_NAME_ALIAS, csgoConfig.getNameAlias()));
             return getMapper().deleteById(id) > 0;
         }
         return false;
     }
 
     @Override
-    @RedisClear(value = "#entity.nameAlias", key = KeyConst.GAME_CONFIG_NAMEALIAS)
+    @RedisClear(value = "#entity.nameAlias", key = KeyConst.GAME_CONFIG_NAME_ALIAS)
     public boolean updateById(CsgoConfig entity) {
         CsgoConfig csgoConfig = getMapper().selectOneById(entity.getId());
         if (csgoConfig != null) {
-            redisService.delete(KeyConst.build(KeyConst.GAME_CONFIG_NAMEALIAS, csgoConfig.getNameAlias()));
+            redisService.delete(KeyConst.build(KeyConst.GAME_CONFIG_NAME_ALIAS, csgoConfig.getNameAlias()));
             return this.updateById(entity, true);
         }
         return false;

@@ -69,7 +69,7 @@ public class RoomLoader {
                 .withIdentity(ROOM_CREATE, ROOM_GROUP)
                 .withSchedule(SimpleScheduleBuilder
                         .simpleSchedule()
-                        .withIntervalInMilliseconds(battleConfig.getJoinRoomInterval())
+                        .withIntervalInMilliseconds(battleConfig.getCreateRoomInterval())
                         .repeatForever())
                 .build();
         JobDetail jobDetail = JobBuilder.newJob(RoomJob.CreateRoom.class)

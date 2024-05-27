@@ -2,8 +2,6 @@ package com.bbg.core.constrans;
 
 public class KeyConst {
 
-
-
     // admin uid 指向 token
     public final static String ADMIN_TOKEN_UID = "admin::token::uid";
     // admin token
@@ -12,9 +10,11 @@ public class KeyConst {
     public final static String USER_TOKEN_UID = "user::token::uid";
     // user token
     public final static String USER_INFO_TOKEN = "user::info::token";
+    // 不同用户类型的人数
+    public final static String USER_TYPE_COUNT = "user::type::count";
 
     // 游戏配置
-    public final static String GAME_CONFIG_NAMEALIAS = "game::config::nameAlias";
+    public final static String GAME_CONFIG_NAME_ALIAS = "game::config::nameAlias";
     // 字典标签缓存
     public final static String DICT_TAG = "dict::tag";
     // 箱子缓存

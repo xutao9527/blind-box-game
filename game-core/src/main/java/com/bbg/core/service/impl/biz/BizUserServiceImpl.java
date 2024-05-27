@@ -1,8 +1,11 @@
 package com.bbg.core.service.impl.biz;
 
 import cn.hutool.core.util.IdUtil;
+import com.bbg.core.annotation.RedisCache;
+import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.constrans.ServicesConst;
 import com.bbg.core.mapper.csgo.CsgoUserInfoMapper;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.service.biz.BizDataService;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.csgo.CsgoCapitalRecordService;
@@ -10,6 +13,7 @@ import com.bbg.core.service.csgo.CsgoUserInfoService;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.core.utils.IdTool;
 import com.bbg.model.biz.BizData;
+import com.bbg.model.biz.BizDict;
 import com.bbg.model.csgo.CsgoBox;
 import com.bbg.model.csgo.CsgoCapitalRecord;
 import com.bbg.model.csgo.CsgoUserInfo;
@@ -33,6 +37,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 业务用户 服务层实现。
@@ -47,6 +52,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public final CsgoUserInfoService csgoUserInfoService;
     public final BizDictService bizDictService;
     public final BizDataService dataService;
+    public final RedisService redisService;
 
     @Override
     public BizUser getById(Serializable id) {
@@ -67,6 +73,11 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
      */
     @Transactional(rollbackFor = Exception.class)
     public BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord) {
+        BizDict userTypeDict = bizDictService.getDictByTag("user_type");
+        // 如果不是真实用户或者测试用户，直接返回,不扣钱
+        if(!bizUser.getType().equals(userTypeDict.getValueByAlias("real_user")) || !bizUser.getType().equals(userTypeDict.getValueByAlias("test_user"))){
+           return bizUser;
+        }
         // 变更用户金额
         BizUser updateUser = UpdateEntity.of(BizUser.class, bizUser.getId());
         UpdateWrapper<BizUser> updateWrapper = UpdateWrapper.of(updateUser);
@@ -81,7 +92,26 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         capitalRecord.setAfterMoney(newUser.getMoney());
         capitalRecord.setBeforeMoney(bizUser.getMoney());
         csgoCapitalRecordService.save(capitalRecord);
+        // 跟新redis缓存
+        redisService.updateUser(bizUser);
         return newUser;
+    }
+
+    /**
+     * 不同用户类型的人数
+     */
+    @RedisCache(value = "#userType", key = KeyConst.USER_TYPE_COUNT, liveTime = 5 * 60, timeUnit = TimeUnit.SECONDS)
+    public long getUserTypeCount(String userType) {
+        QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setType(userType));
+        return getMapper().selectCountByQuery(queryWrapper);
+    }
+
+    /**
+     * 不同用户类型的用户Id集合
+     */
+    public List<Long> getUserIdsByType(String userType) {
+        QueryWrapper queryWrapper = QueryWrapper.create().select(QueryMethods.column(BizUser::getId)).eq(BizUser::getType, userType);
+        return getMapper().selectListByQueryAs(queryWrapper, Long.class);
     }
 
     @Override
