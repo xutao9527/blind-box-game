@@ -119,17 +119,17 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         // 房间关联的箱子
         boxList.forEach(box -> {
             CsgoBattleRoomBox roomBox = new CsgoBattleRoomBox();
-            roomBox.setId(IdTool.nextId()).setBoxId(box.getId()).setRoomId(roomId).setName(box.getName()).setNameAlias(box.getNameAlias()).setImageUrl(box.getImageUrl());
+            roomBox.setBoxId(box.getId()).setRoomId(roomId).setName(box.getName()).setNameAlias(box.getNameAlias()).setImageUrl(box.getImageUrl());
             battleRoom.getRoomBoxes().add(roomBox);                                         // 添加参战箱子
         });
         // 房间关联的用户
         CsgoBattleRoomUser createUser = new CsgoBattleRoomUser();
-        createUser.setId(IdTool.nextId()).setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
+        createUser.setRoomId(roomId).setUserId(bizUser.getId()).setUserType(bizUser.getType()).setNickName(bizUser.getNickName()).setImageUrl(bizUser.getPhoto());
         battleRoom.getRoomUsers().add(createUser);                                          // 添加参战用户(创建人)
         if (null != robotList && !robotList.isEmpty()) {
             robotList.forEach(robot -> {
                 CsgoBattleRoomUser roomUser = new CsgoBattleRoomUser();
-                roomUser.setId(IdTool.nextId()).setRoomId(roomId).setUserId(robot.getId()).setUserType(userTypeDict.getValueByAlias("robot")).setNickName(robot.getName()).setImageUrl(robot.getImageUrl());
+                roomUser.setRoomId(roomId).setUserId(robot.getId()).setUserType(userTypeDict.getValueByAlias("robot")).setNickName(robot.getName()).setImageUrl(robot.getImageUrl());
                 battleRoom.getRoomUsers().add(roomUser);                                    // 添加参战用户(机器人)
             });
         }
@@ -156,8 +156,8 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
             dispatchBattleGoods(battleRoom);
         }
         this.save(battleRoom);
-        csgoBattleRoomBoxService.saveBatch(battleRoom.getRoomBoxes());
-        csgoBattleRoomUserService.saveBatch(battleRoom.getRoomUsers());
+        csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
+        csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
         // --------------------------------------保存数据e--------------------------------------
         battleRoomRes.setCsgoBattleRoom(battleRoom);
         // 更新 [房间缓存]
