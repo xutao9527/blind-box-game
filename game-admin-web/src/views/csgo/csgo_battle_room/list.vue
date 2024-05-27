@@ -36,6 +36,7 @@
     </el-header>
     <el-main class="bbg-table-main">
         <el-table class="bbg-table-main"
+                  size="small"
                   :data="tableProps.apiRet.data.records"
                   :height="tableDynamicHeight"
                   table-layout="auto"

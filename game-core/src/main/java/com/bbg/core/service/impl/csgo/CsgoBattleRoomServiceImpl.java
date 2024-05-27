@@ -66,13 +66,14 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     @Transactional(rollbackFor = Exception.class)
     @RedisLock(value = "#bizUser.id", key = KeyConst.METHOD_CREATE_ROOM_LOCK)
     public ApiRet<BattleRoomDto.BattleRoomRes> createRoom(BizUser bizUser, BattleRoomDto.CreateRoomReq createRoomReq, long roomId) {
-        BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();      // 返回结果
-        List<CsgoRobot> robotList = null;                                                   // 机器人
-        BigDecimal roomPrice;                                                               // 房间价格
-        BizDict userTypeDict = bizDictService.getDictByTag("user_type");
+        BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();          // 返回结果
+        List<CsgoRobot> robotList = null;                                                       // 机器人
+        BigDecimal roomPrice;                                                                   // 房间价格
+        BizDict userTypeDict = bizDictService.getDictByTag("user_type");                        // 用户类型
+        BizDict boxTypeDict = bizDictService.getDictByTag("csgo_box_type");                     // 箱子类型
+        BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");           // 房间状态
         // --------------------------------------检查s--------------------------------------
         // 箱子检查
-        BizDict boxTypeDict = bizDictService.getDictByTag("csgo_box_type");
         Map<Long, CsgoBox> allBoxMap = csgoBoxService.getBoxesByType(boxTypeDict.getValueByAlias("battle_box"))
                 .stream().collect(Collectors.toMap(CsgoBox::getId, csgoBox -> csgoBox));
         List<CsgoBox> boxList = Arrays.stream(createRoomReq.getBoxesId())
@@ -102,7 +103,6 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         }
         // --------------------------------------检查e--------------------------------------
         // --------------------------------------设置数据s--------------------------------------
-        BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");
         FairFactory.FairEntity fairEntity = FairFactory.build();
         // 房间
         CsgoBattleRoom battleRoom = new CsgoBattleRoom();
@@ -156,8 +156,8 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
             dispatchBattleGoods(battleRoom);
         }
         this.save(battleRoom);
-        csgoBattleRoomBoxService.saveOrUpdateBatch(battleRoom.getRoomBoxes());
-        csgoBattleRoomUserService.saveOrUpdateBatch(battleRoom.getRoomUsers());
+        csgoBattleRoomBoxService.saveBatch(battleRoom.getRoomBoxes());
+        csgoBattleRoomUserService.saveBatch(battleRoom.getRoomUsers());
         // --------------------------------------保存数据e--------------------------------------
         battleRoomRes.setCsgoBattleRoom(battleRoom);
         // 更新 [房间缓存]
@@ -173,6 +173,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     public ApiRet<BattleRoomDto.BattleRoomRes> joinRoom(BizUser bizUser, Long roomId) {
         BattleRoomDto.BattleRoomRes battleRoomRes = new BattleRoomDto.BattleRoomRes();
         CsgoBattleRoom battleRoom = selfProxy.getInfo(roomId);
+        BizDict userTypeDict = bizDictService.getDictByTag("user_type");                                            // 用户类型
         // --------------------------------------检查s--------------------------------------
         if (battleRoom == null) {
             return ApiRet.buildNo("房间不存在");
@@ -183,7 +184,9 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
             return ApiRet.buildNo("房间已结束");
         }
         // 余额检查
-        if (bizUser.getMoney().compareTo(battleRoom.getRoomPrice()) < 0) {
+        if ((bizUser.getType().equals(userTypeDict.getValueByAlias("real_user")) ||                                 // 检查真实用户余额
+                bizUser.getType().equals(userTypeDict.getValueByAlias("test_user")))                                // 检查测试用户余额
+                && bizUser.getMoney().compareTo(battleRoom.getRoomPrice()) < 0) {
             return ApiRet.buildNo("金额不够");
         }
         // 已加入检查检查

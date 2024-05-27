@@ -39,7 +39,7 @@ public class RoomJob {
     // 箱子类型
     public static volatile String boxType;
     // 对战模式
-    public static volatile List<String> ballteModels;
+    public static volatile List<String> battleModels;
 
 
     // 用户类型总数
@@ -66,15 +66,15 @@ public class RoomJob {
                 BizDictService bizDictService = SpringUtil.getBean(BizDictService.class);
                 userType = bizDictService.getDictByTag("user_type").getValueByAlias("virtual_user");
             }
-            // 加载虚拟用户类型
+            // 加载对战箱子类型
             if (boxType == null) {
                 BizDictService bizDictService = SpringUtil.getBean(BizDictService.class);
                 boxType = bizDictService.getDictByTag("csgo_box_type").getValueByAlias("battle_box");
             }
-            // 加载虚拟用户类型
-            if (ballteModels == null || ballteModels.isEmpty()) {
+            // 加载对战模式
+            if (battleModels == null || battleModels.isEmpty()) {
                 BizDictService bizDictService = SpringUtil.getBean(BizDictService.class);
-                ballteModels = bizDictService.getDictByTag("csgo_battle_model").getBizDictDetails().stream().map(BizDictDetail::getValue).collect(Collectors.toList());
+                battleModels = bizDictService.getDictByTag("csgo_battle_model").getBizDictDetails().stream().map(BizDictDetail::getValue).collect(Collectors.toList());
             }
             // 检查是否有足够的空闲房间
             CsgoBattleRoomService csgoBattleRoomService = SpringUtil.getBean(CsgoBattleRoomService.class);
@@ -96,7 +96,7 @@ public class RoomJob {
             BizUser bizUser = bizUserService.getById(userId);
             BattleRoomDto.CreateRoomReq createRoomReq = new BattleRoomDto.CreateRoomReq();
             // 随机对战模式
-            createRoomReq.setBattleModel(ballteModels.get(random.nextInt(ballteModels.size())));
+            createRoomReq.setBattleModel(battleModels.get(random.nextInt(battleModels.size())));
             // 随机2~4人
             createRoomReq.setPeopleNumber(random.nextInt(3)+2);
             // 随机获得若干箱子
@@ -107,6 +107,7 @@ public class RoomJob {
                 boxesId[i] = csgoBoxes.get(random.nextInt(csgoBoxes.size())).getId();
             }
             createRoomReq.setBoxesId(boxesId);
+            // 创建房间
             csgoBattleRoomService.createRoom(bizUser,createRoomReq, IdTool.nextId());
         }
     }
@@ -114,7 +115,31 @@ public class RoomJob {
     public static class JoinRoom implements Job {
         @Override
         public void execute(JobExecutionContext jobExecutionContext) {
-            log.info("JoinRoom");
+            // 加载虚拟用户类型
+            if (userType == null) {
+                BizDictService bizDictService = SpringUtil.getBean(BizDictService.class);
+                userType = bizDictService.getDictByTag("user_type").getValueByAlias("virtual_user");
+            }
+            // 检查虚拟用户列表数量是否需要更新
+            BizUserService bizUserService = SpringUtil.getBean(BizUserService.class);
+            long newUserTypeCount = bizUserService.getUserTypeCount(userType);
+            if (userTypeCount != newUserTypeCount) {
+                userTypeCount = newUserTypeCount;
+                userIds = bizUserService.getUserIdsByType(userType);
+            }
+            // -------------------------------------------------------------------------------------------------------------------
+            // 随机获取一个房间
+            CsgoBattleRoomService csgoBattleRoomService = SpringUtil.getBean(CsgoBattleRoomService.class);
+            List<CsgoBattleRoom> roomList = csgoBattleRoomService.getRoomList(new BattleRoomDto.GetRoomListReq().setPageSize(100)).getRecords();
+            CsgoBattleRoom csgoBattleRoom = roomList.get(random.nextInt(roomList.size()));
+            // 随机获取一个虚拟用户
+            long userId = userIds.get(random.nextInt(userIds.size()));
+            BizUser bizUser = bizUserService.getById(userId);
+            // 加入房间
+            if(bizUser != null&& csgoBattleRoom != null){
+                csgoBattleRoomService.joinRoom(bizUser,csgoBattleRoom.getId());
+            }
+
         }
     }
 }
