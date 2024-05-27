@@ -11,6 +11,18 @@
         :key="item.name"
         :label="item.title"
         :name="item.name">
+      <template #label>
+        <el-dropdown trigger="contextmenu" >
+          <span>{{ item.title }}</span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="handDropdown('current',item)">关闭当前</el-dropdown-item>
+              <el-dropdown-item @click="handDropdown('other',item)">关闭其他</el-dropdown-item>
+              <el-dropdown-item @click="handDropdown('all',item)">关闭所有</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </template>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -21,7 +33,6 @@ const store = useTabsStore()
 const router = useRouter()
 onMounted(() => {
   let route = router.getRoutes().find((r) => r.name === router.currentRoute.value.name);
-  // console.log(route.meta.title)
   if(route){
     store.activateTab(
         {
@@ -32,6 +43,32 @@ onMounted(() => {
     )
   }
 })
+
+const handDropdown = (action,data) => {
+  switch (action) {
+    case 'current':
+      if('welcome' !== data.name){
+        store.removeTab(data.name)
+      }
+      break
+    case 'other':
+      const tabs1 = store.tabs.slice()
+      tabs1.forEach((tab) => {
+        if (tab.name !== data.name && 'welcome' !== tab.name) {
+          store.removeTab(tab.name)
+        }
+      })
+      break
+    case 'all':
+      const tabs2 = store.tabs.slice()
+      tabs2.forEach((tab) => {
+        if ('welcome' !== tab.name) {
+          store.removeTab(tab.name)
+        }
+      })
+      break
+  }
+}
 
 const handleTabsChange = (tabName) =>{
   const tabInfo = store.getTab(tabName)
