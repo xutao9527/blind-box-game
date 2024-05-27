@@ -23,24 +23,24 @@
       </el-row>
     </el-header>
     <el-main class="bbg-table-main">
-        <el-table class="bbg-table-main"
-                  :data="tableProps.apiRet.data.records"
-                  :height="tableDynamicHeight"
-                  table-layout="auto"
-                  border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="name" label="配置名称"/>
-        <el-table-column prop="nameAlias" label="配置别名"/>
-        <el-table-column prop="value" label="配置值"/>
-<!--        <el-table-column prop="remark" label="配置描述"/>-->
-        <el-table-column prop="enable" label="状态">
-        <template #default="scope">
-            {{scope.row.enable?'启动':'停用'}}
-        </template>
+      <el-table class="bbg-table-main" size="small"
+                :data="tableProps.apiRet.data.records"
+                :height="tableDynamicHeight"
+                table-layout="auto"
+                border show-overflow-tooltip>
+        <el-table-column prop="id" label="主键" width="160px"/>
+        <el-table-column prop="name" label="配置名称" width="180px"/>
+        <el-table-column prop="nameAlias" label="配置别名" width="220px"/>
+        <el-table-column prop="value" label="配置值" width="220"/>
+        <el-table-column prop="remark" label="配置描述"/>
+        <el-table-column prop="updateTime" label="修改时间" width="140"/>
+        <el-table-column prop="enable" label="状态" width="60">
+          <template #default="scope">
+            {{ scope.row.enable ? '启动' : '停用' }}
+          </template>
         </el-table-column>
-<!--        <el-table-column prop="createTime" label="创建时间"/>-->
-<!--        <el-table-column prop="updateTime" label="修改时间"/>-->
-        <el-table-column fixed="right" label="操作">
+        <!--        <el-table-column prop="createTime" label="创建时间"/>-->
+        <el-table-column fixed="right" label="操作" width="100">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
             <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
@@ -115,7 +115,7 @@ const tableProps = reactive({
       pageSize: 15,
     },
     queryEntity: {
-      "expandProps":{}
+      "expandProps": {}
     }
   },
   apiRet: {

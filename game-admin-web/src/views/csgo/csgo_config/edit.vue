@@ -8,7 +8,7 @@
     <el-main class="bbg-form-main">
       <el-scrollbar :max-height="formDynamicHeight">
         <el-row>
-          <el-col :offset="7" :span="8">
+          <el-col :offset="5" :span="12">
             <el-form label-position="right" label-width="120">
               <el-form-item label="配置名称">
                 <el-input v-model="data.name"/>
@@ -17,10 +17,22 @@
                 <el-input v-model="data.nameAlias"/>
               </el-form-item>
               <el-form-item label="配置值">
-                <el-input v-model="data.value"/>
+                <el-input v-model="data.value" size="small"
+                          type="textarea"
+                          show-word-limit maxlength="255"
+                          :autosize="{ minRows: 7, maxRows: 10 }"
+                />
+                <el-row justify="end" style="width: 100%">
+                  <!-- 判断data.value,是不是一个json字符串,如果是则显示格式化按钮 -->
+
+                  <el-button v-if="isJsonStr" size="small" type="success" link @click="() => data.value = JSON.stringify(JSON.parse(data.value),null,2)">格式化</el-button>
+                </el-row>
               </el-form-item>
               <el-form-item label="配置描述">
-                <el-input v-model="data.remark"/>
+                <el-input v-model="data.remark"
+                          type="textarea"
+                          show-word-limit maxlength="255"
+                          :autosize="{ minRows: 3, maxRows: 7 }"/>
               </el-form-item>
               <el-form-item label="状态">
                 <el-switch v-model="data.enable"/>
@@ -43,6 +55,15 @@
 <script setup>
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
+
+const isJsonStr = computed(() => {
+  try {
+    JSON.parse(data.value);
+    return true;
+  } catch {
+    return false;
+  }
+});
 
 const data = reactive({});
 const submitText = computed(() => {
