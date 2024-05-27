@@ -21,7 +21,15 @@
                 table-layout="auto"
                 border show-overflow-tooltip>
         <el-table-column prop="jobName" label="任务名称"/>
-        <el-table-column prop="jobGroup" label="任务分组"/>
+        <el-table-column
+            prop="jobGroup"
+            label="任务分组"
+            :filters="[
+                { text: 'BATTLE', value: 'BATTLE' },
+                { text: 'ROLL', value: 'ROLL' }
+            ]"
+            :filter-method="(value, row, column) => row.jobGroup === value"
+        />
         <el-table-column prop="jobClassName" label="任务类详情"/>
         <el-table-column prop="triggerType" label="触发器"/>
         <el-table-column prop="triggerType" label="执行频率">
