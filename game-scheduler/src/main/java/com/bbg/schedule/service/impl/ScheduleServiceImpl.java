@@ -38,7 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 jobInfo.setEndTime(cronTrigger.getEndTime());
                 jobInfo.setTriggerType("CronTrigger");
                 jobInfo.setCronExpression(cronTrigger.getCronExpression());
-            }else if (trigger instanceof SimpleTrigger simpleTrigger){
+            } else if (trigger instanceof SimpleTrigger simpleTrigger) {
                 jobInfo.setNextExecuteTime(simpleTrigger.getNextFireTime());
                 jobInfo.setStartTime(simpleTrigger.getStartTime());
                 jobInfo.setEndTime(simpleTrigger.getEndTime());
@@ -60,22 +60,20 @@ public class ScheduleServiceImpl implements ScheduleService {
                     var cronExpression = cronTrigger.getCronExpression();
                     var existCronExpression = existCronTrigger.getCronExpression();
                     if (cronExpression.equals(existCronExpression)) {
-                        log.info("CronTrigger exist: {}.{}", trigger.getKey().getName(), trigger.getKey().getGroup());
+                        // log.info("CronTrigger exist: {}.{}", trigger.getKey().getName(), trigger.getKey().getGroup());
                         return true;
                     } else {
                         delete(existTrigger.getJobKey());
                     }
-                // 判断SimpleTrigger是否一致
-                } else if(trigger instanceof SimpleTrigger simpleTrigger && existTrigger instanceof SimpleTrigger existsimpleTrigger) {
+                    // 判断SimpleTrigger是否一致
+                } else if (trigger instanceof SimpleTrigger simpleTrigger && existTrigger instanceof SimpleTrigger existsimpleTrigger) {
                     if (simpleTrigger.getRepeatInterval() == existsimpleTrigger.getRepeatInterval()) {
-                        log.info("SimpleTrigger exist: {}.{}", trigger.getKey().getName(), trigger.getKey().getGroup());
+                        // log.info("SimpleTrigger exist: {}.{}", trigger.getKey().getName(), trigger.getKey().getGroup());
                         return true;
-                    }
-                    else {
+                    } else {
                         delete(existTrigger.getJobKey());
                     }
-                }
-                else {
+                } else {
                     delete(existTrigger.getJobKey());
                 }
             }
