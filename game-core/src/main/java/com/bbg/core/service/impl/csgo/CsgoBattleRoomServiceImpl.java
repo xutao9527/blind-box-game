@@ -313,8 +313,8 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
                             .setGoodImage(luckGood.getImageUrl()).setName(luckGood.getName())
                             .setNameAlias(luckGood.getNameAlias());
                     roomGoods.add(roomGood);
-                    System.out.printf("user:%s round:%s roundNumber:%s boxId:%s good:%s%n",
-                            user.getUserId(), round.get(), roundNumber, box.getBoxId(), luckGood.getGoodId());
+                    // System.out.printf("user:%s round:%s roundNumber:%s boxId:%s good:%s%n",
+                    //         user.getUserId(), round.get(), roundNumber, box.getBoxId(), luckGood.getGoodId());
                 }
             });
         });
