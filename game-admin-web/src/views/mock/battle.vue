@@ -140,7 +140,7 @@ onMounted(() => {
   battleMock.getRoomList()
   setInterval(() => {
     battleMock.getRoomList()
-  }, 500)
+  }, 120)
 
 })
 </script>
@@ -152,7 +152,7 @@ onMounted(() => {
   }
 
   .box-aside {
-    margin-top: 0px;
+    margin-top: 0;
     height: calc(100vh - 322px);
     border-left: 1px solid var(--el-border-color);
 
