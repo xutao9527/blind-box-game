@@ -36,13 +36,12 @@
                 @sortChange="tableProps.sortChange"
                 :default-sort="{ prop: 'id', order: 'descending' }"
                 border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"  sortable="custom"  width="190"/>
+        <el-table-column prop="id" label="主键" sortable="custom" width="190"/>
         <el-table-column prop="userId" label="用户编号"  width="190"/>
         <el-table-column prop="userNickName" label="用户昵称"/>
 <!--        <el-table-column prop="userPhoto" label="用户头像"/>-->
         <el-table-column prop="dreamPrice" label="追梦金额"/>
         <el-table-column prop="dreamGoodProbability" label="追梦概率"/>
-
         <el-table-column prop="dreamIsWin" label="追梦结果">
           <template #default="scope">
             {{ scope.row.dreamIsWin ? '成功' : '失败' }}

@@ -75,7 +75,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord) {
         BizDict userTypeDict = bizDictService.getDictByTag("user_type");
         // 如果不是真实用户或者测试用户，直接返回,不扣钱
-        if(!bizUser.getType().equals(userTypeDict.getValueByAlias("real_user")) || !bizUser.getType().equals(userTypeDict.getValueByAlias("test_user"))){
+        if(!bizUser.getType().equals(userTypeDict.getValueByAlias("real_user")) && !bizUser.getType().equals(userTypeDict.getValueByAlias("test_user"))){
            return bizUser;
         }
         // 变更用户金额

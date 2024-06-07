@@ -22,9 +22,9 @@
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
-          <el-row>
-            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
-          </el-row>
+<!--          <el-row>-->
+<!--            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>-->
+<!--          </el-row>-->
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
           </el-row>
@@ -36,9 +36,13 @@
                   :data="tableProps.apiRet.data.records"
                   :height="tableDynamicHeight"
                   table-layout="auto"
+                  @sortChange="tableProps.sortChange"
+                  :default-sort="{ prop: 'id', order: 'descending' }"
                   border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="userId" label="用户编号"/>
+        <el-table-column prop="id" label="主键" sortable="custom" width="185"/>
+        <el-table-column prop="userId" label="用户编号"  width="185"/>
+        <el-table-column prop="mobile" label="手机"/>
+        <el-table-column prop="nickName" label="昵称"/>
         <el-table-column prop="changeMoney" label="变更金额"/>
         <el-table-column prop="beforeMoney" label="变更前金额"/>
         <el-table-column prop="afterMoney" label="变更后金额"/>
@@ -47,15 +51,15 @@
             {{capitalTypeRef.getLabel(scope.row.type)}}
           </template>
         </el-table-column>
-        <el-table-column prop="sourceId" label="变更来源"/>
-        <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column prop="updateTime" label="修改时间"/>
-        <el-table-column fixed="right" label="操作">
-          <template #default="scope">
-            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
-            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
+        <el-table-column prop="sourceId" label="变更来源" width="185"/>
+        <el-table-column prop="createTime" label="创建时间" width="170"/>
+<!--        <el-table-column prop="updateTime" label="修改时间"/>-->
+<!--        <el-table-column fixed="right" label="操作">-->
+<!--          <template #default="scope">-->
+<!--            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>-->
+<!--            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
       </el-table>
     </el-main>
     <el-footer class="bbg-table-footer">
@@ -138,13 +142,22 @@ const tableProps = reactive({
     tableProps.reqParams.page.pageSize = pageSize;
     tableProps.fetchData()
   },
-
   fetchData: async () => {
     const apiRet = await http.post('/csgoCapitalRecord/page', tableProps.reqParams)
     if (apiRet.ok) {
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
+  },
+  sortChange: async (column) => {
+    if (column.order === "descending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'descending'}
+    } else if (column.order === "ascending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'ascending'}
+    } else {
+      delete tableProps.reqParams.queryEntity.expandProps.orderField;
+    }
+    await tableProps.fetchData()
   }
 });
 
