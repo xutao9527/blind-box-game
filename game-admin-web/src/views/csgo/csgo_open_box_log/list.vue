@@ -35,21 +35,22 @@
                 table-layout="auto"
                 @sortChange="tableProps.sortChange"
                 border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="userId" label="用户编号"/>
+        <el-table-column prop="id" label="主键" width="190"/>
+        <el-table-column prop="userId" label="用户编号"  width="190"/>
         <el-table-column prop="userNickName" label="用户昵称"/>
-        <el-table-column prop="userPhoto" label="用户头像"/>
-        <el-table-column prop="openBoxTime" label="开箱时间"/>
-        <el-table-column prop="boxId" label="箱子编号"/>
+<!--        <el-table-column prop="userPhoto" label="用户头像"/>-->
+
+        <el-table-column prop="boxId" label="箱子编号"  width="190"/>
         <el-table-column prop="boxName" label="箱子名称"/>
-        <el-table-column prop="boxNameAlias" label="箱子别名"/>
-        <el-table-column prop="boxImageUrl" label="箱子图片"/>
+<!--        <el-table-column prop="boxNameAlias" label="箱子别名"/>-->
+<!--        <el-table-column prop="boxImageUrl" label="箱子图片"/>-->
         <el-table-column prop="boxPrice" label="箱子价格"/>
-        <el-table-column prop="goodId" label="商品类型"/>
-        <el-table-column prop="goodName" label="商品分组"/>
-        <el-table-column prop="goodNameAlias" label="商品别名"/>
-        <el-table-column prop="goodImageUrl" label="商品图片"/>
+        <el-table-column prop="goodId" label="商品编号" width="100"/>
+        <el-table-column prop="goodName" label="商品名称" width="220"/>
+<!--        <el-table-column prop="goodNameAlias" label="商品别名"/>-->
+<!--        <el-table-column prop="goodImageUrl" label="商品图片"/>-->
         <el-table-column prop="goodPrice" label="商品价格"/>
+        <el-table-column prop="openBoxTime" label="开箱时间" width="170"/>
 <!--        <el-table-column fixed="right" label="操作">-->
 <!--          <template #default="scope">-->
 <!--            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>-->
