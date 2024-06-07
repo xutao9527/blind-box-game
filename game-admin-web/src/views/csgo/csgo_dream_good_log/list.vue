@@ -34,25 +34,27 @@
                 :height="tableDynamicHeight"
                 table-layout="auto"
                 @sortChange="tableProps.sortChange"
+                :default-sort="{ prop: 'id', order: 'descending' }"
                 border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="userId" label="用户编号"/>
+        <el-table-column prop="id" label="主键"  sortable="custom"  width="190"/>
+        <el-table-column prop="userId" label="用户编号"  width="190"/>
         <el-table-column prop="userNickName" label="用户昵称"/>
-        <el-table-column prop="userPhoto" label="用户头像"/>
+<!--        <el-table-column prop="userPhoto" label="用户头像"/>-->
         <el-table-column prop="dreamPrice" label="追梦金额"/>
         <el-table-column prop="dreamGoodProbability" label="追梦概率"/>
-        <el-table-column prop="dreamGoodTime" label="追梦时间"/>
-        <el-table-column prop="dreamIsWin" label="追梦成功">
+
+        <el-table-column prop="dreamIsWin" label="追梦结果">
           <template #default="scope">
             {{ scope.row.dreamIsWin ? '成功' : '失败' }}
           </template>
         </el-table-column>
-        <el-table-column prop="boxId" label="箱子编号"/>
-        <el-table-column prop="goodId" label="商品类型"/>
-        <el-table-column prop="goodName" label="商品分组"/>
-        <el-table-column prop="goodNameAlias" label="商品别名"/>
-        <el-table-column prop="goodImageUrl" label="商品图片"/>
+<!--        <el-table-column prop="boxId" label="箱子编号"/>-->
+<!--        <el-table-column prop="goodId" label="商品编号"/>-->
+        <el-table-column prop="goodName" label="商品名称"/>
+<!--        <el-table-column prop="goodNameAlias" label="商品别名"/>-->
+<!--        <el-table-column prop="goodImageUrl" label="商品图片"/>-->
         <el-table-column prop="goodPrice" label="商品价格"/>
+        <el-table-column prop="dreamGoodTime" label="追梦时间"  width="170"/>
 <!--        <el-table-column fixed="right" label="操作">-->
 <!--          <template #default="scope">-->
 <!--            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>-->

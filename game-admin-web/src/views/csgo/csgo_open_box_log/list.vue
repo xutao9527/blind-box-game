@@ -34,9 +34,10 @@
                 :height="tableDynamicHeight"
                 table-layout="auto"
                 @sortChange="tableProps.sortChange"
+                :default-sort="{ prop: 'id', order: 'descending' }"
                 border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键" width="190"/>
-        <el-table-column prop="userId" label="用户编号"  width="190"/>
+        <el-table-column prop="id" label="主键" width="190" sortable="custom"/>
+        <el-table-column prop="userId" label="用户编号" width="190"/>
         <el-table-column prop="userNickName" label="用户昵称"/>
 <!--        <el-table-column prop="userPhoto" label="用户头像"/>-->
         <el-table-column prop="boxId" label="箱子编号"  width="190"/>
@@ -67,6 +68,7 @@
               :page-sizes="[15,20,50,100]"
               :default-current-page="tableProps.reqParams.page.pageNumber"
               :default-page-size="tableProps.reqParams.page.pageSize"
+              :default-sort="{ prop: 'id', order: 'descending' }"
               @change="tableProps.pageChange"
           />
         </el-col>
@@ -125,7 +127,9 @@ const tableProps = reactive({
       pageSize: 15,
     },
     queryEntity: {
-      "expandProps": {}
+      "expandProps": {
+        orderField:{'id' : 'descending'}
+      }
     }
   },
   apiRet: {
