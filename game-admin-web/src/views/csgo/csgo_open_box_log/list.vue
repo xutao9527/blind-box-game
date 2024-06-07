@@ -39,7 +39,6 @@
         <el-table-column prop="userId" label="用户编号"  width="190"/>
         <el-table-column prop="userNickName" label="用户昵称"/>
 <!--        <el-table-column prop="userPhoto" label="用户头像"/>-->
-
         <el-table-column prop="boxId" label="箱子编号"  width="190"/>
         <el-table-column prop="boxName" label="箱子名称"/>
 <!--        <el-table-column prop="boxNameAlias" label="箱子别名"/>-->
