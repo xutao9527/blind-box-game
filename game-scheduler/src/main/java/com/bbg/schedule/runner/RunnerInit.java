@@ -1,5 +1,6 @@
 package com.bbg.schedule.runner;
 
+import com.bbg.schedule.loader.BoxLoader;
 import com.bbg.schedule.loader.RollLoader;
 import com.bbg.schedule.loader.RoomLoader;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,13 @@ public class RunnerInit implements ApplicationRunner {
 
     public final RollLoader rollLoader;
     public final RoomLoader roomLoader;
+    public final BoxLoader boxLoader;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         scheduler.start();
         rollLoader.loadJob();
         roomLoader.loadJob();
+        boxLoader.loadJob();
     }
 }

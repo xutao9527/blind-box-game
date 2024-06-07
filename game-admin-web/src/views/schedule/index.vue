@@ -26,7 +26,8 @@
             label="任务分组"
             :filters="[
                 { text: 'BATTLE', value: 'BATTLE' },
-                { text: 'ROLL', value: 'ROLL' }
+                { text: 'ROLL', value: 'ROLL' },
+                { text: 'BOX', value: 'BOX' }
             ]"
             :filter-method="(value, row, column) => row.jobGroup === value"
         />
