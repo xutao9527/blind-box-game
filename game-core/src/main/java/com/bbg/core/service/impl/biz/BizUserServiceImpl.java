@@ -89,6 +89,8 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         // 查询最新的用户信息
         BizUser newUser = getMapper().selectOneWithRelationsById(updateUser.getId());
         // 补资金流水
+        capitalRecord.setMobile(bizUser.getMobile());
+        capitalRecord.setNickName(bizUser.getNickName());
         capitalRecord.setAfterMoney(newUser.getMoney());
         capitalRecord.setBeforeMoney(bizUser.getMoney());
         csgoCapitalRecordService.save(capitalRecord);

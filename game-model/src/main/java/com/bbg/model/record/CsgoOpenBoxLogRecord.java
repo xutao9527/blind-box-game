@@ -19,7 +19,7 @@ import java.io.Serial;
  * CSGO开箱日志 实体类。
  *
  * @author bbg
- * @since 2024-05-25
+ * @since 2024-06-07
  */
 @Data
 @NoArgsConstructor
@@ -95,15 +95,15 @@ public class CsgoOpenBoxLogRecord extends BaseModel implements Serializable {
     private BigDecimal boxPrice;
 
     /**
-     * 商品类型
+     * 商品编号
      */
-    @Schema(description = "商品类型")
+    @Schema(description = "商品编号")
     private Long goodId;
 
     /**
-     * 商品分组
+     * 商品名称
      */
-    @Schema(description = "商品分组")
+    @Schema(description = "商品名称")
     private String goodName;
 
     /**

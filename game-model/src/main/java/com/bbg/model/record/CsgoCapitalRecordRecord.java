@@ -19,7 +19,7 @@ import java.io.Serial;
  * 资金流水 实体类。
  *
  * @author bbg
- * @since 2024-05-25
+ * @since 2024-06-07
  */
 @Data
 @NoArgsConstructor
@@ -45,6 +45,18 @@ public class CsgoCapitalRecordRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "用户编号")
     private Long userId;
+
+    /**
+     * 用户昵称
+     */
+    @Schema(description = "用户昵称")
+    private String nickName;
+
+    /**
+     * 用户手机
+     */
+    @Schema(description = "用户手机")
+    private String mobile;
 
     /**
      * 变更金额

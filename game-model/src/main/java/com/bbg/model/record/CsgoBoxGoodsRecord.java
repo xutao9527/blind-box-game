@@ -19,7 +19,7 @@ import java.io.Serial;
  * CSGO箱子商品 实体类。
  *
  * @author bbg
- * @since 2024-05-25
+ * @since 2024-06-07
  */
 @Data
 @NoArgsConstructor
