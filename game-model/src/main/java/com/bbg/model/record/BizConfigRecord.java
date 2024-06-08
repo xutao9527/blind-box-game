@@ -4,7 +4,6 @@ import com.bbg.model.base.BaseModel;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * CSGO箱子 实体类。
+ * 平台配置 实体类。
  *
  * @author bbg
  * @since 2024-06-08
@@ -26,9 +25,9 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "CSGO箱子")
-@Table("csgo_box")
-public class CsgoBoxRecord extends BaseModel implements Serializable {
+@Schema(description = "平台配置")
+@Table("biz_config")
+public class BizConfigRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -41,40 +40,28 @@ public class CsgoBoxRecord extends BaseModel implements Serializable {
     private Long id;
 
     /**
-     * 箱子名称
+     * 配置名称
      */
-    @Schema(description = "箱子名称")
+    @Schema(description = "配置名称")
     private String name;
 
     /**
-     * 箱子别名
+     * 配置别名
      */
-    @Schema(description = "箱子别名")
+    @Schema(description = "配置别名")
     private String nameAlias;
 
     /**
-     * 图片地址
+     * 配置值
      */
-    @Schema(description = "图片地址")
-    private String imageUrl;
+    @Schema(description = "配置值")
+    private String value;
 
     /**
-     * 箱子类型
+     * 配置描述
      */
-    @Schema(description = "箱子类型")
-    private String type;
-
-    /**
-     * 箱子分组
-     */
-    @Schema(description = "箱子分组")
-    private String group;
-
-    /**
-     * 箱子价格
-     */
-    @Schema(description = "箱子价格")
-    private BigDecimal price;
+    @Schema(description = "配置描述")
+    private String remark;
 
     /**
      * 状态:1=启动,0=禁用

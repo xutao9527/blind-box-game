@@ -20,6 +20,7 @@ public class GenCore {
             "biz_dict",//业务字典
             "biz_dict_detail",//字典详情
             "biz_data",//业务数据
+            "biz_config",//平台配置
     };
 
     public static String[] csgoTables = {

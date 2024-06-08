@@ -19,7 +19,7 @@ import java.io.Serial;
  * 资金流水 实体类。
  *
  * @author bbg
- * @since 2024-06-07
+ * @since 2024-06-08
  */
 @Data
 @NoArgsConstructor

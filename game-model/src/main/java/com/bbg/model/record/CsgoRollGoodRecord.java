@@ -18,7 +18,7 @@ import java.io.Serial;
  * 撸房装备 实体类。
  *
  * @author bbg
- * @since 2024-06-07
+ * @since 2024-06-08
  */
 @Data
 @NoArgsConstructor
