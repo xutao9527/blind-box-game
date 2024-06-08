@@ -11,11 +11,19 @@
           <el-col :offset="7" :span="8">
             <el-form label-position="right" label-width="120">
               <el-form-item label="数据类型">
-                  <bbg-dict-select v-model:value="data.type" :tag="'biz_data_type'" placeholder="数据类型"/>
+                  <bbg-dict-select v-model:value="data.type" ref="dataTypeRef" :tag="'biz_data_type'" placeholder="数据类型"/>
               </el-form-item>
-              <el-form-item label="数据值">
-                <el-input v-model="data.value"/>
-              </el-form-item>
+              {{data.value}}
+              <template v-if="dataType === '人物头像' || dataType === '首页图片'">
+                <el-form-item label="图片">
+                  <PicUpload v-model:value="data.value"/>
+                </el-form-item>
+              </template>
+              <template v-else>
+                <el-form-item label="数据值">
+                  <el-input v-model="data.value"/>
+                </el-form-item>
+              </template>
               <el-form-item label="数据描述">
                 <el-input v-model="data.remark"/>
               </el-form-item>
@@ -40,7 +48,16 @@
 <script setup>
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
+import {Plus} from "@element-plus/icons-vue";
+import PicUpload from "@/components/oss/PicUpload.vue";
 
+const dataTypeRef = ref(null)
+const dataType = computed(() => {
+  if(dataTypeRef.value) {
+    return dataTypeRef.value.getLabel(data.type)
+  }
+  return null
+})
 const data = reactive({});
 const submitText = computed(() => {
   return data.id ? '修改' : '添加'
@@ -94,5 +111,8 @@ onMounted(() => {
 })
 </script>
 <style scoped>
+
+</style>
+<style>
 
 </style>

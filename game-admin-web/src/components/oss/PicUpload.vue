@@ -1,6 +1,9 @@
 <template>
   <el-upload
       class="avatar-uploader"
+      :http-request="upLoadProps.upload"
+      ref="upLoadRef"
+      :show-file-list="false"
   >
     <img v-if="upLoadProps.imageUrl" :src="upLoadProps.imageUrl" class="avatar" alt="12"/>
     <el-icon v-else class="avatar-uploader-icon">
@@ -10,11 +13,52 @@
 </template>
 <script setup>
 import {Plus} from "@element-plus/icons-vue";
+import {http} from "@/core/axios/index.js";
+
+const upLoadRef = ref(null)
+
+const emit = defineEmits(['update:value'])
+const props = defineProps(
+    {
+      value: {
+        type: String,
+      }
+    }
+)
 
 const upLoadProps = reactive({
   imageUrl: '',
-
+  sign: async (dir) => {
+    const apiRet = await http.get(`/oss/sign?dir=${dir}`)
+    if (apiRet.ok) {
+      return apiRet.data
+    }
+    return null
+  },
+  getDataForm: (ossInfo, file) => {
+    const getSuffix = fileName => '.' + fileName.split('.').pop();
+    const filename = new Date().getTime() + getSuffix(file.name)
+    const formData = new FormData()
+    formData.append('key', ossInfo.ossDir + filename) // 存储在oss的文件路径
+    formData.append('OSSAccessKeyId', ossInfo.accessId) // accessKeyId
+    formData.append('policy', ossInfo.policy) // policy
+    formData.append('Signature', ossInfo.signature) // 签名
+    formData.append('file', file)
+    formData.append('fileName', filename)
+    return formData
+  },
+  upload: async (param) => {
+    let file = param.file
+    const fileDir = new Date().toLocaleDateString()
+    let ossInfo = await upLoadProps.sign(fileDir)
+    let dataForm = upLoadProps.getDataForm(ossInfo, file)
+    await http.post(ossInfo.baseUrlPath, dataForm)
+    let fileUrl = `${ossInfo.baseUrlPath}${fileDir}/${dataForm.get('fileName')}`
+    upLoadProps.imageUrl = fileUrl
+    emit('update:value', fileUrl)
+  }
 })
+
 
 </script>
 <style lang="less">
@@ -40,8 +84,8 @@ const upLoadProps = reactive({
 .el-icon.avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 168px;
-  height: 168px;
+  width: 178px;
+  height: 178px;
   text-align: center;
 }
 </style>

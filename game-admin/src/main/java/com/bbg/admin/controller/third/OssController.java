@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class OssController {
     public final OssService ossService;
 
-    @PostMapping("sign")
+    @GetMapping("sign")
     @Operation(description = "获取OSS签名")
     public ApiRet<OssSignInfo> sign(@RequestParam("dir") @NotNull(message = "上传目录不能为空") String dir) {
         OssSignInfo ossSignInfo = ossService.doSign(dir);

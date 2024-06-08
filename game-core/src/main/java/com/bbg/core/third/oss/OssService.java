@@ -38,6 +38,7 @@ public class OssService {
             }
         }
         if (ossConfig != null) {
+            ossDir = ossDir.endsWith("/") ? ossDir : ossDir + "/";
             OSSClient ossClient = new OSSClient(ossConfig.getEndpoint(), new DefaultCredentialProvider(ossConfig.getAccessId(), ossConfig.getAccessKey()), null);
             PolicyConditions policyConds = new PolicyConditions();
             policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
@@ -53,6 +54,5 @@ public class OssService {
                     .setOssDir(ossDir);
         }
         return ossSignInfo;
-
     }
 }
