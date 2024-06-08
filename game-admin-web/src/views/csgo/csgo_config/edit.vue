@@ -24,7 +24,6 @@
                 />
                 <el-row justify="end" style="width: 100%">
                   <!-- 判断data.value,是不是一个json字符串,如果是则显示格式化按钮 -->
-
                   <el-button v-if="isJsonStr" size="small" type="success" link @click="() => data.value = JSON.stringify(JSON.parse(data.value),null,2)">格式化</el-button>
                 </el-row>
               </el-form-item>
