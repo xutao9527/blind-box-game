@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 系统用户 控制层。
+ * 对象存储 控制层。
  *
  * @author bbg
  * @since 2024-04-25
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @Tag(name = "第三方对象存储")
-@RequestMapping("/oos")
+@RequestMapping("/oss")
 @RequiredArgsConstructor
 public class OssController {
     public final OssService ossService;
 
     @PostMapping("sign")
-    @Operation(description = "获取OOS签名")
+    @Operation(description = "获取OSS签名")
     public ApiRet<OssSignInfo> sign(@RequestParam("dir") @NotNull(message = "上传目录不能为空") String dir) {
         OssSignInfo ossSignInfo = ossService.doSign(dir);
         return ApiRet.buildOk(ossSignInfo);
