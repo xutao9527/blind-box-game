@@ -53,7 +53,7 @@ public class CsgoBoxController extends BaseController<CsgoBox> {
     @PostMapping("open")
     @Tag(name = "CS:GO盲盒接口")
     @Operation(description = "打开盲盒")
-    public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody BoxDto.OpenBoxReq model) {
+    public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody @Validated BoxDto.OpenBoxReq model) {
         BizUser bizUser = getCurrentUser();
         BoxDto.OpenBoxRes boxRes = csgoBoxService.openBox(bizUser, model.getBoxId());
         return ApiRet.buildOk(boxRes);

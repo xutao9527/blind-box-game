@@ -35,9 +35,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ApiRet<Object> validationExceptionHandler(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-        List<String> errors = new ArrayList<>();
         String message = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";"));
         return ApiRet.buildNo(null, message);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ApiRet<Object> exceptionHandler(Exception e) {
+        log.error("系统异常", e);
+        return ApiRet.buildNo(null, e.getMessage());
     }
 
 }

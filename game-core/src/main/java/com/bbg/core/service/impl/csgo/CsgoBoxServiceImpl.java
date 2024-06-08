@@ -91,6 +91,9 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
         int roundNumber = fairEntity.roll(bizUser.getCsgoUserInfo().getRoundNumber());
         // 获得盲盒对象,并抽饰品
         CsgoBox csgoBox = selfProxy.getBoxById(boxId);
+        if(csgoBox == null){
+            throw new RuntimeException("盲盒不存在");
+        }
         CsgoBoxGoods luckGood = csgoBox.getCsgoBoxGoods().stream()
                 .filter(boxGood -> boxGood.getStartRoundNumber().compareTo(BigDecimal.valueOf(roundNumber)) <= 0
                         && boxGood.getEndRoundNumber().compareTo(BigDecimal.valueOf(roundNumber)) >= 0)
@@ -219,15 +222,17 @@ public class CsgoBoxServiceImpl extends ServiceImpl<CsgoBoxMapper, CsgoBox> impl
      * 转化并设置盲盒中商品的roll点范围
      */
     private CsgoBox transformBoxGoods(CsgoBox csgoBox) {
-        AtomicReference<BigDecimal> startRound = new AtomicReference<>(BigDecimal.ZERO);
-        List<CsgoBoxGoods> boxGoods = csgoBox.getCsgoBoxGoods().stream().peek(boxGood -> {
-            BigDecimal roundWeight = boxGood.getRate()
-                    .multiply(BigDecimal.valueOf(FairFactory.FairEntity.SEED_MAX_ROLL))
-                    .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-            boxGood.setStartRoundNumber(startRound.get().add(BigDecimal.ONE)).setEndRoundNumber(startRound.get().add(roundWeight));
-            startRound.updateAndGet(currentValue -> currentValue.add(roundWeight));
-        }).toList();
-        csgoBox.setCsgoBoxGoods(boxGoods);
+        if (csgoBox != null) {
+            AtomicReference<BigDecimal> startRound = new AtomicReference<>(BigDecimal.ZERO);
+            List<CsgoBoxGoods> boxGoods = csgoBox.getCsgoBoxGoods().stream().peek(boxGood -> {
+                BigDecimal roundWeight = boxGood.getRate()
+                        .multiply(BigDecimal.valueOf(FairFactory.FairEntity.SEED_MAX_ROLL))
+                        .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+                boxGood.setStartRoundNumber(startRound.get().add(BigDecimal.ONE)).setEndRoundNumber(startRound.get().add(roundWeight));
+                startRound.updateAndGet(currentValue -> currentValue.add(roundWeight));
+            }).toList();
+            csgoBox.setCsgoBoxGoods(boxGoods);
+        }
         return csgoBox;
     }
 }

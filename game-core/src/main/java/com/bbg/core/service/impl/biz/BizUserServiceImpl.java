@@ -75,8 +75,13 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public BizUser updateUserMoney(BizUser bizUser, CsgoCapitalRecord capitalRecord) {
         BizDict userTypeDict = bizDictService.getDictByTag("user_type");
         // 如果不是真实用户或者测试用户，直接返回,不扣钱
-        if(!bizUser.getType().equals(userTypeDict.getValueByAlias("real_user")) && !bizUser.getType().equals(userTypeDict.getValueByAlias("test_user"))){
-           return bizUser;
+        if (!bizUser.getType().equals(userTypeDict.getValueByAlias("real_user")) && !bizUser.getType().equals(userTypeDict.getValueByAlias("test_user"))) {
+            return bizUser;
+        } else {
+            bizUser = getMapper().selectOneWithRelationsByQuery(QueryWrapper.create().eq(BizUser::getId,bizUser.getId()).forUpdate());
+            if(capitalRecord.getChangeMoney().signum() != 1 && bizUser.getMoney().compareTo(capitalRecord.getChangeMoney().abs()) < 0) {
+                throw new RuntimeException("用户余额不足");
+            }
         }
         // 变更用户金额
         BizUser updateUser = UpdateEntity.of(BizUser.class, bizUser.getId());

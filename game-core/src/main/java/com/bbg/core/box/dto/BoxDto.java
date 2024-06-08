@@ -40,6 +40,7 @@ public class BoxDto {
     @Schema(description = "打开盲盒参数")
     public static class OpenBoxReq implements Serializable {
         @Schema(description = "箱子编号")
+        @NotNull(message = "箱子编号不能为空")
         private Long boxId;
     }
 
