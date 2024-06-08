@@ -5,7 +5,7 @@
       ref="upLoadRef"
       :show-file-list="false"
   >
-    <img v-if="upLoadProps.imageUrl" :src="upLoadProps.imageUrl" class="avatar" alt="12"/>
+    <img v-if="props.value" :src="props.value" class="avatar"  alt=""/>
     <el-icon v-else class="avatar-uploader-icon">
       <Plus/>
     </el-icon>
@@ -27,7 +27,6 @@ const props = defineProps(
 )
 
 const upLoadProps = reactive({
-  imageUrl: '',
   sign: async (dir) => {
     const apiRet = await http.get(`/oss/sign?dir=${dir}`)
     if (apiRet.ok) {
@@ -54,7 +53,6 @@ const upLoadProps = reactive({
     let dataForm = upLoadProps.getDataForm(ossInfo, file)
     await http.post(ossInfo.baseUrlPath, dataForm)
     let fileUrl = `${ossInfo.baseUrlPath}${fileDir}/${dataForm.get('fileName')}`
-    upLoadProps.imageUrl = fileUrl
     emit('update:value', fileUrl)
   }
 })

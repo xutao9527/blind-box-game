@@ -13,7 +13,7 @@
               <el-form-item label="数据类型">
                   <bbg-dict-select v-model:value="data.type" ref="dataTypeRef" :tag="'biz_data_type'" placeholder="数据类型"/>
               </el-form-item>
-              {{data.value}}
+<!--              {{data.value}}-->
               <template v-if="dataType === '人物头像' || dataType === '首页图片'">
                 <el-form-item label="图片">
                   <PicUpload v-model:value="data.value"/>
