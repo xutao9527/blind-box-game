@@ -1,3 +1,31 @@
+<style lang="less">
+.avatar-uploader .avatar {
+  width: v-bind(uploadWidth);
+  height: v-bind(uploadHeight);
+  display: block;
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: v-bind(uploadWidth);
+  height: v-bind(uploadHeight);
+  text-align: center;
+}
+</style>
 <template>
   <el-upload
       class="avatar-uploader"
@@ -16,13 +44,22 @@ import {Plus} from "@element-plus/icons-vue";
 import {http} from "@/core/axios/index.js";
 
 const upLoadRef = ref(null)
-
+const uploadWidth = computed(() => props.width + 'px')
+const uploadHeight = computed(() => props.height + 'px')
 const emit = defineEmits(['update:value'])
 const props = defineProps(
     {
       value: {
         type: String,
-      }
+      },
+      width: {
+        type: Number,
+        default: 128
+      },
+      height: {
+        type: Number,
+        default: 128
+      },
     }
 )
 
@@ -58,31 +95,3 @@ const upLoadProps = reactive({
 })
 
 </script>
-<style lang="less">
-.avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-.avatar-uploader .el-upload {
-  border: 1px dashed var(--el-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: var(--el-color-primary);
-}
-
-.el-icon.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
-}
-</style>
