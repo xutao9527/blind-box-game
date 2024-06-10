@@ -8,7 +8,7 @@
     <el-container class="bbg-form">
       <el-header class="bbg-form-header">
         <el-text tag="b" size="large" type="primary">
-          <h3>导入数据</h3>
+          <h3>导入头像</h3>
         </el-text>
       </el-header>
       <el-main class="bbg-form-main">
