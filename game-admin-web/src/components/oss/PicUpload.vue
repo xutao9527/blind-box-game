@@ -57,7 +57,6 @@ const upLoadProps = reactive({
   }
 })
 
-
 </script>
 <style lang="less">
 .avatar-uploader .avatar {
