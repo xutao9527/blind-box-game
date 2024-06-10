@@ -41,7 +41,9 @@
         <el-table-column prop="value" label="数据值" width="240" >
           <template #default="scope">
             <template v-if="dataTypeRef.getLabel(scope.row.type) === '人物头像' || dataTypeRef.getLabel(scope.row.type) === '首页图片'">
-              <el-image :src="scope.row.value" :preview-src-list="[scope.row.value]" preview-teleported :fit="'contain'" style="width: 50px;height: 50px"/>
+              <el-tooltip :content="scope.row.value" placement="top">
+               <el-image :src="scope.row.value" :preview-src-list="[scope.row.value]" preview-teleported :fit="'contain'" style="width: 50px;height: 50px"/>
+              </el-tooltip>
             </template>
             <template v-else>
               {{ scope.row.value }}

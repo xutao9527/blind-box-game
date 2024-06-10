@@ -4,6 +4,7 @@
       draggable
       overflow
       append-to-body
+      :close-on-press-escape="false"
   >
     <el-container class="bbg-form">
       <el-header class="bbg-form-header">
@@ -13,23 +14,19 @@
       </el-header>
       <el-main class="bbg-form-main">
         <el-scrollbar>
-          <el-row>
-            <el-col :offset="4" :span="15">
-              <el-form label-position="right" label-width="120">
+          <el-form label-position="right" label-width="auto">
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="数据类型">
                   <bbg-dict-select v-model:value="data.type" ref="dataTypeRef" disabled="disabled"
                                    :tag="'biz_data_type'" placeholder="数据类型"/>
                 </el-form-item>
-                <el-form-item label="数据值">
-                  <el-input v-model="data.value"
-                            type="textarea"
-                            show-word-limit maxlength="50000"
-                            :autosize="{ minRows: 15, maxRows: 15 }"
-                  />
-                </el-form-item>
-              </el-form>
-            </el-col>
-          </el-row>
+              </el-col>
+            </el-row>
+            <el-form-item label="数据值">
+              <MultiFileUpload v-model:value="data.value" />
+            </el-form-item>
+          </el-form>
         </el-scrollbar>
       </el-main>
       <el-footer class="bbg-form-footer">
@@ -44,9 +41,10 @@
 import {DictObject} from "@/core/dict/index.js";
 import {http} from "@/core/axios/index.js";
 import emitter from "@/core/mitt/index.js";
+import MultiFileUpload from "@/components/oss/MultiFileUpload.vue";
+import FileUpload from "@/components/oss/FileUpload.vue";
 
-
-const visible = ref(false)
+const visible = ref(true)
 const data = reactive([]);
 const finalData = computed(() => {
   if (data.value) {
@@ -55,7 +53,7 @@ const finalData = computed(() => {
         type: data.type,
         value: item.trim()
       }
-    }).filter(d => d.value && d.value!=='');
+    }).filter(d => d.value && d.value !== '');
   }
   return []
 })
@@ -68,16 +66,16 @@ const importData = () => {
 const dataTypeDictObject = ref(null);
 onMounted(async () => {
   dataTypeDictObject.value = await DictObject.create('biz_data_type');
-  data.type = dataTypeDictObject.value.dictMap['nick_name']
+  data.type = dataTypeDictObject.value.dictMap['profile_photo']
 })
 
 const submit = async () => {
   if (data.value && finalData.value && finalData.value.length > 0) {
     const apiRet = await http.post('/bizData/saveBatch', finalData.value)
     if (apiRet.ok) {
-      if(apiRet.data){
+      if (apiRet.data) {
         ElMessage({type: 'success', message: '操作成功'})
-      }else{
+      } else {
         ElMessage({type: 'success', message: '操作过于频繁'})
       }
       backList()

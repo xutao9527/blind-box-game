@@ -33,7 +33,7 @@
       ref="upLoadRef"
       :show-file-list="false"
   >
-    <img v-if="props.value" :src="props.value" class="avatar"  alt=""/>
+    <img v-if="props.value" :src="props.value" class="avatar"/>
     <el-icon v-else class="avatar-uploader-icon">
       <Plus/>
     </el-icon>
