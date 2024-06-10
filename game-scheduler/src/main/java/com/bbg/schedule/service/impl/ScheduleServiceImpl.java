@@ -2,6 +2,7 @@ package com.bbg.schedule.service.impl;
 
 import com.bbg.core.entity.QuartzJobInfo;
 import com.bbg.schedule.service.ScheduleService;
+import com.esotericsoftware.minlog.Log;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -80,7 +81,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             scheduler.scheduleJob(jobDetail, trigger);
             return true;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            Log.error("scheduleJob",e);
         }
         return false;
     }
@@ -90,7 +91,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             scheduler.deleteJob(jobKey);
             return true;
         } catch (SchedulerException e) {
-            log.error(e.getMessage());
+            Log.error("deleteJob",e);
         }
         return false;
     }

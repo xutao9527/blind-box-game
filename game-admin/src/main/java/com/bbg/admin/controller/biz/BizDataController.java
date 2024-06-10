@@ -55,7 +55,7 @@ public class BizDataController extends BaseBizDataController {
                         bizDataService.saveBatch(distinctModelList);
                         log.info("执行时间:{}ms", System.currentTimeMillis() - start);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.error("saveBatch",e);
                     } finally {
                         isRunning = false;
                     }
@@ -63,7 +63,7 @@ public class BizDataController extends BaseBizDataController {
                 });
             }
         } catch (Exception e) {
-            Log.error(e.getMessage());
+            Log.error("saveBatch",e);
         }
         return ApiRet.buildOk(isOk);
     }

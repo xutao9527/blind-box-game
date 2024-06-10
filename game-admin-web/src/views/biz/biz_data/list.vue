@@ -16,7 +16,8 @@
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
             <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
-            <el-button class="bbg-table-header-control" icon="DocumentAdd" @click="importRef.importData()">导入昵称</el-button>
+            <el-button class="bbg-table-header-control" icon="DocumentAdd" @click="importNickNameRef.importData()">导入昵称</el-button>
+            <el-button class="bbg-table-header-control" icon="DocumentAdd" @click="importProfilePhotoRef.importData()">导入头像</el-button>
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
@@ -79,16 +80,20 @@
       </el-row>
     </el-footer>
   </el-container>
-  <import ref="importRef"/>
+  <ImportNickName ref="importNickNameRef"/>
+  <ImportProfilePhoto ref="importProfilePhotoRef"/>
 </template>
 
 <script setup>
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
-import Import from "@/views/biz/biz_data/import.vue";
+import ImportNickName from "@/views/biz/biz_data/ImportNickName.vue";
+import ImportProfilePhoto from "@/views/biz/biz_data/ImportProfilePhoto.vue";
 
-const importRef = ref(null)
+const importNickNameRef = ref(null)
+const importProfilePhotoRef = ref(null)
+
 const dataTypeRef = ref(null)
 const header = ref(null);
 const tableDynamicHeight = ref(0)
