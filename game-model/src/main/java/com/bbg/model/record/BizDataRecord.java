@@ -18,7 +18,7 @@ import java.io.Serial;
  * 业务数据 实体类。
  *
  * @author bbg
- * @since 2024-06-08
+ * @since 2024-06-10
  */
 @Data
 @NoArgsConstructor
@@ -50,6 +50,12 @@ public class BizDataRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "数据值")
     private String value;
+
+    /**
+     * 排序
+     */
+    @Schema(description = "排序")
+    private Integer sort;
 
     /**
      * 数据描述
