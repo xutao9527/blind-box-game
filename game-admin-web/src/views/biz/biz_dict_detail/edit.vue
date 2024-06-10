@@ -22,6 +22,9 @@
               <el-form-item label="具体值">
                 <el-input v-model="data.value"/>
               </el-form-item>
+              <el-form-item label="排序">
+                <el-input v-model="data.sort"/>
+              </el-form-item>
               <el-form-item label="状态">
                 <el-switch v-model="data.enable"/>
               </el-form-item>

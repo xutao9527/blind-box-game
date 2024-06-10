@@ -40,21 +40,22 @@
                 table-layout="auto"
                 @sortChange="tableProps.sortChange"
                 border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="type" label="数据类型">
+        <el-table-column prop="id" label="主键" width="190"/>
+        <el-table-column prop="type" label="数据类型" width="170">
           <template #default="scope">
             {{ dataTypeRef.getLabel(scope.row.type) }}
           </template>
         </el-table-column>
-        <el-table-column prop="value" label="数据值"/>
-<!--        <el-table-column prop="remark" label="数据描述"/>-->
-        <el-table-column prop="enable" label="状态">
+        <el-table-column prop="value" label="数据值" width="240"/>
+        <el-table-column prop="sort" label="排序"  width="60"/>
+        <el-table-column prop="remark" label="数据描述"  width="170"/>
+        <el-table-column prop="enable" label="状态" width="60">
           <template #default="scope">
             {{ scope.row.enable ? '启用' : '停用' }}
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column prop="updateTime" label="修改时间"/>
+        <el-table-column prop="createTime" label="创建时间" width="170"/>
+        <el-table-column prop="updateTime" label="修改时间" width="170"/>
         <el-table-column fixed="right" label="操作">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>

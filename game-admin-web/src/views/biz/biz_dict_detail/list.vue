@@ -29,20 +29,22 @@
       </el-row>
     </el-header>
     <el-main class="bbg-table-main">
-        <el-table class="bbg-table-main"
-                  :data="tableProps.apiRet.data.records"
-                  :height="tableDynamicHeight"
-                  table-layout="auto"
-                  border show-overflow-tooltip>
+      <el-table class="bbg-table-main"
+                :data="tableProps.apiRet.data.records"
+                :height="tableDynamicHeight"
+                table-layout="auto"
+                @sortChange="tableProps.sortChange"
+                border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"/>
         <el-table-column prop="dictId" label="字典编号"/>
         <el-table-column prop="label" label="名称"/>
         <el-table-column prop="labelAlias" label="别名"/>
         <el-table-column prop="value" label="具体值"/>
+        <el-table-column prop="sort" label="排序"/>
         <el-table-column prop="enable" label="状态">
-        <template #default="scope">
-            {{scope.row.enable?'启动':'停用'}}
-        </template>
+          <template #default="scope">
+            {{ scope.row.enable ? '启用' : '停用' }}
+          </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
@@ -121,7 +123,7 @@ const tableProps = reactive({
       pageSize: 15,
     },
     queryEntity: {
-      "expandProps":{}
+      "expandProps": {}
     }
   },
   apiRet: {
@@ -133,13 +135,22 @@ const tableProps = reactive({
     tableProps.reqParams.page.pageSize = pageSize;
     tableProps.fetchData()
   },
-
   fetchData: async () => {
     const apiRet = await http.post('/bizDictDetail/page', tableProps.reqParams)
     if (apiRet.ok) {
       tableProps.apiRet = apiRet
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
+  },
+  sortChange: async (column) => {
+    if (column.order === "descending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'descending'}
+    } else if (column.order === "ascending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'ascending'}
+    } else {
+      delete tableProps.reqParams.queryEntity.expandProps.orderField;
+    }
+    await tableProps.fetchData()
   }
 });
 

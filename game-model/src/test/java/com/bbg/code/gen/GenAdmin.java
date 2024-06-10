@@ -95,6 +95,6 @@ public class GenAdmin {
                 .resolve("views")
                 .toString();
         CodeGenVue codeGenVue = new CodeGenVue();
-        codeGenVue.generate(new String[]{"csgo_box_goods"}, sourceDir, "csgo", true);
+        codeGenVue.generate(new String[]{"biz_dict_detail"}, sourceDir, "biz", true);
     }
 }

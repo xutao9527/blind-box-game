@@ -24,6 +24,9 @@
                   <el-input v-model="data.value"/>
                 </el-form-item>
               </template>
+              <el-form-item label="排序">
+                <el-input v-model="data.sort"/>
+              </el-form-item>
               <el-form-item label="数据描述">
                 <el-input v-model="data.remark"/>
               </el-form-item>
