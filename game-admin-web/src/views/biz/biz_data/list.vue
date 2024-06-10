@@ -11,15 +11,6 @@
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dataTypeRef"
                                :tag="'biz_data_type'" placeholder="数据类型"/>
             </div>
-            <!--            <div class="bbg-table-header-input" style="width: 420px">-->
-            <!--              <el-date-picker-->
-            <!--                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"-->
-            <!--                  type="datetimerange"-->
-            <!--                  start-placeholder="Start date"-->
-            <!--                  end-placeholder="End date"-->
-            <!--                  value-format="YYYY-MM-DD HH:mm:ss"-->
-            <!--              />-->
-            <!--            </div>-->
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -46,7 +37,16 @@
             {{ dataTypeRef.getLabel(scope.row.type) }}
           </template>
         </el-table-column>
-        <el-table-column prop="value" label="数据值" width="240"/>
+        <el-table-column prop="value" label="数据值" width="240" >
+          <template #default="scope">
+            <template v-if="dataTypeRef.getLabel(scope.row.type) === '人物头像' || dataTypeRef.getLabel(scope.row.type) === '首页图片'">
+              <el-image :src="scope.row.value" :preview-src-list="[scope.row.value]" preview-teleported :fit="'contain'" style="width: 50px;height: 50px"/>
+            </template>
+            <template v-else>
+              {{ scope.row.value }}
+            </template>
+          </template>
+        </el-table-column>
         <el-table-column prop="sort" label="排序"  width="60"/>
         <el-table-column prop="remark" label="数据描述"  width="170"/>
         <el-table-column prop="enable" label="状态" width="60">
