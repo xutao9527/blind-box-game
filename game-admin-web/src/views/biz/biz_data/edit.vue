@@ -15,7 +15,7 @@
               </el-form-item>
               <template v-if="dataType === '人物头像' || dataType === '首页图片'">
                 <el-form-item label="图片">
-                  <PicUpload v-model:value="data.value"/>
+                  <FileUpload v-model:value="data.value"/>
                 </el-form-item>
               </template>
               <template v-else>
@@ -50,8 +50,7 @@
 <script setup>
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
-import {Plus} from "@element-plus/icons-vue";
-import PicUpload from "@/components/oss/PicUpload.vue";
+import FileUpload from "@/components/oss/FileUpload.vue";
 
 const dataTypeRef = ref(null)
 const dataType = computed(() => {

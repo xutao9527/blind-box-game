@@ -93,5 +93,4 @@ const upLoadProps = reactive({
     emit('update:value', fileUrl)
   }
 })
-
 </script>
