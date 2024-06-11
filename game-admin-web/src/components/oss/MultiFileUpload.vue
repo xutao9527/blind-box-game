@@ -10,11 +10,16 @@
         <Plus/>
       </el-icon>
       <template #file="{ file }">
-        <el-image
-            :src="file.url"
-            :preview-src-list="[file.url]"
-            fit="contain"
-            preview-teleported/>
+        <div class="image-container">
+          <el-image
+              :src="file.url"
+              :preview-src-list="[file.url]"
+              fit="contain"
+              preview-teleported/>
+          <el-icon class="check-icon">
+            <Check/>
+          </el-icon>
+        </div>
         <div>
           <span class="el-upload-list__item-actions">
             <span
@@ -39,7 +44,7 @@
   />
 </template>
 <script setup>
-import {Delete, Plus, ZoomIn} from "@element-plus/icons-vue";
+import {Check, Delete, Plus, ZoomIn} from "@element-plus/icons-vue";
 import {http} from "@/core/axios/index.js";
 
 const viewerVisible = ref(false)
@@ -58,7 +63,7 @@ const viewerClose = () => {
 }
 
 const handleRemove = (rmFile) => {
-  fileList.value = fileList.value.filter(file => file !== rmFile)
+  fileList.value = fileList.value.filter(file => file.uid !== rmFile.uid)
 }
 
 const upLoadProps = reactive({
@@ -70,29 +75,32 @@ const upLoadProps = reactive({
     return null
   },
   getDataForm: (ossInfo, file) => {
-    const getSuffix = fileName => '.' + fileName.split('.').pop();
-    const filename = new Date().getTime() + getSuffix(file.name)
+    const filename = file.name
     const formData = new FormData()
-    formData.append('key', ossInfo.ossDir + filename) // 存储在oss的文件路径
-    formData.append('OSSAccessKeyId', ossInfo.accessId) // accessKeyId
-    formData.append('policy', ossInfo.policy) // policy
-    formData.append('Signature', ossInfo.signature) // 签名
+    formData.append('key', ossInfo.ossDir + filename)                       // 存储在oss的文件路径
+    formData.append('OSSAccessKeyId', ossInfo.accessId)                           // accessKeyId
+    formData.append('policy', ossInfo.policy)                                     // policy
+    formData.append('Signature', ossInfo.signature)                               // 签名
     formData.append('file', file)
     formData.append('fileName', filename)
     return formData
   },
-  upload: async (param) => {
-    let file = param.file
-    const fileDir = new Date().toLocaleDateString()
+  upload: async (file) => {
+    const fileDir = 'profileData'                                                     // oss存储目录
     let ossInfo = await upLoadProps.sign(fileDir)
     let dataForm = upLoadProps.getDataForm(ossInfo, file)
     await http.post(ossInfo.baseUrlPath, dataForm)
-    let fileUrl = `${ossInfo.baseUrlPath}${fileDir}/${dataForm.get('fileName')}`
-    emit('update:value', fileUrl)
+    return `${ossInfo.baseUrlPath}${fileDir}/${dataForm.get('fileName')}`
   }
 })
 
 const uploadMultiFile = async (callBack) => {
+  for (const file of fileList.value) {
+    console.log(file)
+    if (file.raw instanceof Blob) {
+      let filePath = await upLoadProps.upload(file)
+    }
+  }
   callBack()
 }
 
@@ -102,5 +110,19 @@ defineExpose({
 
 </script>
 <style scoped lang="less">
+.image-container {
+  position: relative;
+  display: inline-block;
+}
 
+.check-icon {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  font-size: 15px;
+  color: green;
+  background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+  border-radius: 50%;
+  padding: 2px;
+}
 </style>
