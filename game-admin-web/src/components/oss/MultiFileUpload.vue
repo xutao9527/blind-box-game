@@ -96,10 +96,11 @@ const upLoadProps = reactive({
 
 const uploadMultiFile = async (callBack) => {
   for (const file of fileList.value) {
-    console.log(file)
     if (file.raw instanceof Blob) {
       let filePath = await upLoadProps.upload(file)
-      callBack(filePath)
+      if(callBack(filePath)){
+        file.src = filePath
+      }
     }
   }
 }

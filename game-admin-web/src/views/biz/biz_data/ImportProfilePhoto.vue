@@ -59,15 +59,20 @@ onMounted(async () => {
 
 const submit = async () => {
   multiFileUploadRef.value.uploadMultiFile(callBack)
-
 }
 
 const callBack = async (filePath) => {
-  data.value = filePath
-  const apiRet = await http.post('/bizData/save', data)
-  if (apiRet.ok) {
-    ElMessage({type: 'success', message: apiRet.msg})
+  let result = false;
+  try {
+    data.value = filePath
+    const apiRet = await http.post('/bizData/save', data)
+    if (apiRet.ok) {
+      result = true;
+    }
+  } catch (e) {
+    console.error(e)
   }
+  return result;
 }
 
 const backList = () => {
