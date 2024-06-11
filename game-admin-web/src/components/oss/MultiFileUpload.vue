@@ -3,6 +3,7 @@
       list-type="picture-card"
       :auto-upload="false"
       multiple
+      v-model:file-list="fileList"
   >
     <el-icon>
       <Plus/>
@@ -36,6 +37,7 @@ import {Delete, Plus, ZoomIn} from "@element-plus/icons-vue";
 
 const viewerVisible = ref(false)
 const viewerUrlList = ref([])
+const fileList = ref([])
 
 const viewerPreview = (file) => {
   viewerUrlList.value = [
@@ -45,12 +47,11 @@ const viewerPreview = (file) => {
 }
 
 const viewerClose = () => {
-  console.log("viewerClose")
   viewerVisible.value = false
 }
 
-const handleRemove = (file) => {
-  console.log("1213213")
+const handleRemove = (rmFile) => {
+  fileList.value = fileList.value.filter(file => file !== rmFile)
 }
 
 </script>
