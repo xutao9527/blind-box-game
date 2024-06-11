@@ -82,7 +82,7 @@ const upLoadProps = reactive({
     formData.append('OSSAccessKeyId', ossInfo.accessId)                           // accessKeyId
     formData.append('policy', ossInfo.policy)                                     // policy
     formData.append('Signature', ossInfo.signature)                               // 签名
-    formData.append('file', file)
+    formData.append('file', file.raw)
     formData.append('fileName', filename)
     return formData
   },
