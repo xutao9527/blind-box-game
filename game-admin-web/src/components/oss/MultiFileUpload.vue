@@ -1,31 +1,37 @@
 <template>
-  <el-upload
-      list-type="picture-card"
-      :auto-upload="false"
-      multiple
-      v-model:file-list="fileList"
-  >
-    <el-icon>
-      <Plus/>
-    </el-icon>
-    <template #file="{ file }">
-      <el-image :src="file.url" :preview-src-list="[file.url]" fit="contain" preview-teleported/>
-      <div>
-        <span class="el-upload-list__item-actions">
-          <span
-              class="el-upload-list__item-preview"
-              @click="viewerPreview(file)">
-            <el-icon><zoom-in/></el-icon>
+  <el-scrollbar max-height="450" height="450">
+    <el-upload
+        list-type="picture-card"
+        :auto-upload="false"
+        multiple
+        v-model:file-list="fileList"
+    >
+      <el-icon>
+        <Plus/>
+      </el-icon>
+      <template #file="{ file }">
+        <el-image
+            :src="file.url"
+            :preview-src-list="[file.url]"
+            fit="contain"
+            preview-teleported/>
+        <div>
+          <span class="el-upload-list__item-actions">
+            <span
+                class="el-upload-list__item-preview"
+                @click="viewerPreview(file)">
+              <el-icon><zoom-in/></el-icon>
+            </span>
+            <span
+                class="el-upload-list__item-delete"
+                @click="handleRemove(file)">
+              <el-icon><Delete/></el-icon>
+            </span>
           </span>
-          <span
-              class="el-upload-list__item-delete"
-              @click="handleRemove(file)">
-            <el-icon><Delete/></el-icon>
-          </span>
-        </span>
-      </div>
-    </template>
-  </el-upload>
+        </div>
+      </template>
+    </el-upload>
+  </el-scrollbar>
   <ElImageViewer
       v-if="viewerVisible"
       :url-list="viewerUrlList"

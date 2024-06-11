@@ -51,7 +51,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="sort" label="排序"  width="60"/>
-        <el-table-column prop="remark" label="数据描述"  width="170"/>
+        <el-table-column prop="remark" label="数据描述"/>
         <el-table-column prop="enable" label="状态" width="60">
           <template #default="scope">
             {{ scope.row.enable ? '启用' : '停用' }}
@@ -59,7 +59,7 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="170"/>
         <el-table-column prop="updateTime" label="修改时间" width="170"/>
-        <el-table-column fixed="right" label="操作">
+        <el-table-column fixed="right" label="操作" width="120">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
             <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
