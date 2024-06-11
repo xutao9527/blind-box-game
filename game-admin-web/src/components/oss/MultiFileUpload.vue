@@ -75,7 +75,8 @@ const upLoadProps = reactive({
     return null
   },
   getDataForm: (ossInfo, file) => {
-    const filename = file.name
+    const getSuffix = fileName => '.' + fileName.split('.').pop();
+    const filename = new Date().getTime() + getSuffix(file.name)
     const formData = new FormData()
     formData.append('key', ossInfo.ossDir + filename)                       // 存储在oss的文件路径
     formData.append('OSSAccessKeyId', ossInfo.accessId)                           // accessKeyId
@@ -86,7 +87,7 @@ const upLoadProps = reactive({
     return formData
   },
   upload: async (file) => {
-    const fileDir = 'profileData'                                                     // oss存储目录
+    const fileDir = new Date().toLocaleDateString()
     let ossInfo = await upLoadProps.sign(fileDir)
     let dataForm = upLoadProps.getDataForm(ossInfo, file)
     await http.post(ossInfo.baseUrlPath, dataForm)
@@ -99,9 +100,9 @@ const uploadMultiFile = async (callBack) => {
     console.log(file)
     if (file.raw instanceof Blob) {
       let filePath = await upLoadProps.upload(file)
+      callBack(filePath)
     }
   }
-  callBack()
 }
 
 defineExpose({

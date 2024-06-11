@@ -47,7 +47,7 @@ import emitter from "@/core/mitt/index.js";
 
 
 const visible = ref(false)
-const data = reactive([]);
+const data = reactive({});
 const finalData = computed(() => {
   if (data.value) {
     return data.value.trim().split('\n').map(item => {

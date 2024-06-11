@@ -24,7 +24,7 @@
               </el-col>
             </el-row>
             <el-form-item label="数据值">
-              <MultiFileUpload v-model:value="data.value" ref="multiFileUploadRef"/>
+              <MultiFileUpload ref="multiFileUploadRef"/>
             </el-form-item>
           </el-form>
         </el-scrollbar>
@@ -40,9 +40,10 @@
 <script setup>
 import {DictObject} from "@/core/dict/index.js";
 import MultiFileUpload from "@/components/oss/MultiFileUpload.vue";
+import {http} from "@/core/axios/index.js";
 
 const visible = ref(true)
-const data = reactive([]);
+const data = reactive({});
 const dataTypeRef = ref(null)
 const multiFileUploadRef = ref(null);
 
@@ -58,10 +59,15 @@ onMounted(async () => {
 
 const submit = async () => {
   multiFileUploadRef.value.uploadMultiFile(callBack)
+
 }
 
-const callBack = (file) => {
-  console.log("callBack file")
+const callBack = async (filePath) => {
+  data.value = filePath
+  const apiRet = await http.post('/bizData/save', data)
+  if (apiRet.ok) {
+    ElMessage({type: 'success', message: apiRet.msg})
+  }
 }
 
 const backList = () => {
