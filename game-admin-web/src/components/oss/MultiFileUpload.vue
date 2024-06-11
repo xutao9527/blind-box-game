@@ -40,6 +40,7 @@
 </template>
 <script setup>
 import {Delete, Plus, ZoomIn} from "@element-plus/icons-vue";
+import {http} from "@/core/axios/index.js";
 
 const viewerVisible = ref(false)
 const viewerUrlList = ref([])
@@ -59,6 +60,45 @@ const viewerClose = () => {
 const handleRemove = (rmFile) => {
   fileList.value = fileList.value.filter(file => file !== rmFile)
 }
+
+const upLoadProps = reactive({
+  sign: async (dir) => {
+    const apiRet = await http.get(`/oss/sign?dir=${dir}`)
+    if (apiRet.ok) {
+      return apiRet.data
+    }
+    return null
+  },
+  getDataForm: (ossInfo, file) => {
+    const getSuffix = fileName => '.' + fileName.split('.').pop();
+    const filename = new Date().getTime() + getSuffix(file.name)
+    const formData = new FormData()
+    formData.append('key', ossInfo.ossDir + filename) // 存储在oss的文件路径
+    formData.append('OSSAccessKeyId', ossInfo.accessId) // accessKeyId
+    formData.append('policy', ossInfo.policy) // policy
+    formData.append('Signature', ossInfo.signature) // 签名
+    formData.append('file', file)
+    formData.append('fileName', filename)
+    return formData
+  },
+  upload: async (param) => {
+    let file = param.file
+    const fileDir = new Date().toLocaleDateString()
+    let ossInfo = await upLoadProps.sign(fileDir)
+    let dataForm = upLoadProps.getDataForm(ossInfo, file)
+    await http.post(ossInfo.baseUrlPath, dataForm)
+    let fileUrl = `${ossInfo.baseUrlPath}${fileDir}/${dataForm.get('fileName')}`
+    emit('update:value', fileUrl)
+  }
+})
+
+const uploadMultiFile = async (callBack) => {
+  callBack()
+}
+
+defineExpose({
+  uploadMultiFile
+})
 
 </script>
 <style scoped lang="less">

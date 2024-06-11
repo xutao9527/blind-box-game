@@ -24,7 +24,7 @@
               </el-col>
             </el-row>
             <el-form-item label="数据值">
-              <MultiFileUpload v-model:value="data.value" />
+              <MultiFileUpload v-model:value="data.value" ref="multiFileUploadRef"/>
             </el-form-item>
           </el-form>
         </el-scrollbar>
@@ -39,25 +39,12 @@
 </template>
 <script setup>
 import {DictObject} from "@/core/dict/index.js";
-import {http} from "@/core/axios/index.js";
-import emitter from "@/core/mitt/index.js";
 import MultiFileUpload from "@/components/oss/MultiFileUpload.vue";
-import FileUpload from "@/components/oss/FileUpload.vue";
 
 const visible = ref(true)
 const data = reactive([]);
-const finalData = computed(() => {
-  if (data.value) {
-    return data.value.trim().split('\n').map(item => {
-      return {
-        type: data.type,
-        value: item.trim()
-      }
-    }).filter(d => d.value && d.value !== '');
-  }
-  return []
-})
 const dataTypeRef = ref(null)
+const multiFileUploadRef = ref(null);
 
 const importData = () => {
   visible.value = true;
@@ -70,18 +57,11 @@ onMounted(async () => {
 })
 
 const submit = async () => {
-  if (data.value && finalData.value && finalData.value.length > 0) {
-    const apiRet = await http.post('/bizData/saveBatch', finalData.value)
-    if (apiRet.ok) {
-      if (apiRet.data) {
-        ElMessage({type: 'success', message: '操作成功'})
-      } else {
-        ElMessage({type: 'success', message: '操作过于频繁'})
-      }
-      backList()
-      emitter.emit('bizDataFetchData');
-    }
-  }
+  multiFileUploadRef.value.uploadMultiFile(callBack)
+}
+
+const callBack = (file) => {
+  console.log("callBack file")
 }
 
 const backList = () => {
