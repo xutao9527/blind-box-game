@@ -38,7 +38,6 @@
           <template #default="scope">
             <el-image
                 lazy
-
                 :src="scope.row.photo"
                 :preview-src-list="[scope.row.photo]" preview-teleported
                 fit="cover"
