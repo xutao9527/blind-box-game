@@ -33,36 +33,40 @@
             <template #default="scope">
               <el-row>
                 <el-col :span="4" v-for="user in scope.row.roomUsers" :key="user.id">
-                    <el-tooltip placement="top">
-                      <template #content>
-                        <el-text size="small">
-                          userId:{{ user.userId  }}<br/>
-                          nickName:{{ user.nickName  }}<br/>
-                          userType:{{ user.userType  }}<br/>
-                        </el-text>
-                      </template>
-                      <el-avatar >{{ user.nickName.substring(0,1) }}</el-avatar>
-                    </el-tooltip>
+                  <el-tooltip placement="top">
+                    <template #content>
+                      <el-text size="small">
+                        userId:{{ user.userId }}<br/>
+                        nickName:{{ user.nickName }}<br/>
+                        userType:{{ user.userType }}<br/>
+                      </el-text>
+                    </template>
+                    <el-avatar>
+                      <el-image
+                          :src="user.imageUrl"
+                      />
+                    </el-avatar>
+                  </el-tooltip>
                 </el-col>
               </el-row>
             </template>
           </el-table-column>
-                    <el-table-column prop="peopleNumber" label="操作" width="120px">
-                      <template #default="scope">
-                        <el-tooltip placement="top">
-                          <template #content>
-                            查看详情
-                          </template>
-                          <el-button type="warning" icon="View" circle size="large"/>
-                        </el-tooltip>
-                        <el-tooltip placement="top">
-                          <template #content>
-                            加入战斗
-                          </template>
-                          <el-button type="success" icon="Place" circle size="large"/>
-                        </el-tooltip>
-                      </template>
-                    </el-table-column>
+          <el-table-column prop="peopleNumber" label="操作" width="120px">
+            <template #default="scope">
+              <el-tooltip placement="top">
+                <template #content>
+                  查看详情
+                </template>
+                <el-button type="warning" icon="View" circle size="large"/>
+              </el-tooltip>
+              <el-tooltip placement="top">
+                <template #content>
+                  加入战斗
+                </template>
+                <el-button type="success" icon="Place" circle size="large"/>
+              </el-tooltip>
+            </template>
+          </el-table-column>
         </el-table>
       </el-scrollbar>
     </el-main>
@@ -138,9 +142,9 @@ onMounted(() => {
   battleMock.getRobotList()
   // 每10秒钟获得一次房间列表,首次立即获得
   battleMock.getRoomList()
-  // setInterval(() => {
-  //   battleMock.getRoomList()
-  // }, 120)
+  setInterval(() => {
+    battleMock.getRoomList()
+  }, 5000)
 
 })
 </script>
