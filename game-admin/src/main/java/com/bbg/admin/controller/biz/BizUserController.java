@@ -74,14 +74,11 @@ public class BizUserController extends BaseBizUserController {
     }
 
     @Operation(description = "后台查看验证码")
-    @GetMapping("viewCode/{id}")
-    public ApiRet<String> viewSmsCode(@PathVariable(name = "id") @Parameter(description = "用户编号") Serializable id) {
-        BizUser bizUser = bizUserService.getById(id);
-        if (bizUser != null) {
-            String code = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE,bizUser.getMobile()));
-            if (code != null) {
-                return ApiRet.buildOk(code);
-            }
+    @GetMapping("viewCode/{mobile}")
+    public ApiRet<String> viewSmsCode(@PathVariable(name = "mobile") @Parameter(description = "手机号") @NotNull String mobile) {
+        String code = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE,mobile));
+        if (code != null) {
+            return ApiRet.buildOk(code);
         }
         return ApiRet.buildNo("验证码不存在");
     }

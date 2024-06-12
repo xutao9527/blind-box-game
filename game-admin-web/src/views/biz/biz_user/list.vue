@@ -13,21 +13,13 @@
             <div class="bbg-table-header-input">
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="userTypeRef" :tag="'user_type'" placeholder="用户类型"/>
             </div>
-<!--            <div class="bbg-table-header-input" style="width: 420px">-->
-<!--              <el-date-picker-->
-<!--                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"-->
-<!--                  type="datetimerange"-->
-<!--                  start-placeholder="Start date"-->
-<!--                  end-placeholder="End date"-->
-<!--                  value-format="YYYY-MM-DD HH:mm:ss"-->
-<!--              />-->
-<!--            </div>-->
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
             <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
             <el-button class="bbg-table-header-control" icon="DocumentAdd" @click="addVirtualUser">生成假人</el-button>
+            <el-button class="bbg-table-header-control" icon="DocumentAdd" @click="viewSmsCode">查看验证码</el-button>
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
@@ -41,7 +33,7 @@
                   :height="tableDynamicHeight"
                   table-layout="auto"
                   border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
+        <el-table-column prop="id" label="主键" width="190"/>
         <el-table-column prop="nickName" label="昵称"/>
         <el-table-column prop="mobile" label="手机号" width="120"/>
         <el-table-column prop="account" label="登录账号"/>
@@ -65,9 +57,9 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
-        <el-table-column fixed="right" label="操作" width="160">
+        <el-table-column fixed="right" label="操作" width="120">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="viewSmsCode(scope.row)">验证码</el-button>
+<!--            <el-button link type="primary" size="small" @click="viewSmsCode(scope.row)">验证码</el-button>-->
             <el-button link type="primary" size="small" @click="openUpdateBizUserMoney(scope.row)">充值</el-button>
             <el-button link type="primary" size="small" @click="edit(scope.row)">详情</el-button>
 <!--            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>-->
@@ -217,21 +209,34 @@ const openUpdateBizUserMoney = (row) => {
       })
 }
 
-const viewSmsCode = async (row) => {
-  const apiRet = await http.get(`/bizUser/viewCode/${row.id}`)
-  if (apiRet.ok) {
-    await ElMessageBox.alert(`code is ${apiRet.data}`, 'sms code', {
-      confirmButtonText: 'OK',
-      type: 'warning'
-    })
-  }else{
-    ElMessage({
-      type: 'error',
-      message: apiRet.msg,
-    })
-  }
-
+const viewSmsCode = () => {
+  ElMessageBox.prompt('手机号', '验证码', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+  })
+      .then(async ({value}) => {
+        const apiRet = await http.get(`/bizUser/viewCode/${value}`)
+        if (apiRet.ok) {
+          await ElMessageBox.alert(`code is ${apiRet.data}`, 'sms code', {
+            confirmButtonText: 'OK',
+            type: 'warning'
+          })
+        }else{
+          ElMessage({
+            type: 'error',
+            message: apiRet.msg,
+          })
+        }
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: 'Input canceled',
+        })
+      })
 }
+
+
 
 const emits = defineEmits(['activeRightTabs']);
 defineExpose({
