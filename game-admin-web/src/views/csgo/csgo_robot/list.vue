@@ -41,7 +41,7 @@
         <el-table-column prop="imageUrl" label="机器人头像">
           <template #default="scope">
             <el-tooltip :content="scope.row.imageUrl" placement="top">
-              <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported :fit="'contain'" style="width: 50px;height: 50px"/>
+              <el-image lazy :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported :fit="'contain'" style="width: 50px;height: 50px"/>
             </el-tooltip>
           </template>
         </el-table-column>

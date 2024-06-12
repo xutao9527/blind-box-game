@@ -49,7 +49,6 @@
         <el-table-column prop="mobile" label="手机号" width="120"/>
         <el-table-column prop="account" label="登录账号"/>
         <el-table-column prop="password" label="密码"/>
-
         <el-table-column prop="type" label="类型">
           <template #default="scope">
             {{userTypeRef.getLabel(scope.row.type)}}

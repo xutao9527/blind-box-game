@@ -45,7 +45,7 @@
         <el-table-column prop="imageUrl" label="图片地址">
           <template #default="scope">
             <el-tooltip :content="scope.row.imageUrl" placement="top">
-              <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported
+              <el-image lazy :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported
                         style="width: 50px;height: 50px"/>
             </el-tooltip>
           </template>

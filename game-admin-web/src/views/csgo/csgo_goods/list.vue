@@ -34,7 +34,7 @@
         <el-table-column prop="marketHashName" label="皮肤市场名称" width="340"/>
         <el-table-column prop="imageUrl" label="图片" width="80" :show-overflow-tooltip="false">
           <template #default="scope">
-            <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported />
+            <el-image lazy :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported />
           </template>
         </el-table-column>
         <el-table-column prop="price" label="价格"/>

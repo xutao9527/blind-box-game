@@ -43,7 +43,7 @@
       <el-table-column prop="nameAlias" label="商品别名"/>
       <el-table-column prop="imageUrl" label="图片" width="60">
         <template #default="scope">
-          <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
+          <el-image lazy :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
         </template>
       </el-table-column>
       <el-table-column prop="price" label="商品价格"/>

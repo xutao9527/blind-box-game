@@ -37,7 +37,7 @@
           <el-table-column prop="name" label="商品名称" width="300"/>
           <el-table-column prop="imageUrl" label="图片" width="80">
             <template #default="scope">
-              <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
+              <el-image :src="scope.row.imageUrl" lazy :preview-src-list="[scope.row.imageUrl]" preview-teleported/>
             </template>
           </el-table-column>
           <el-table-column prop="typeName" label="类型名称"/>
