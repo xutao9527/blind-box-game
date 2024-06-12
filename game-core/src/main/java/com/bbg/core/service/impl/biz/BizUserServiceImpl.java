@@ -145,10 +145,14 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public boolean addVirtualUser(int count) {
         var userTypeDict = bizDictService.getDictByTag("user_type");
         var dataTypeDict = bizDictService.getDictByTag("biz_data_type");
-        QueryWrapper queryWrapper = QueryWrapper.create()
+        QueryWrapper nickNameQueryWrapper = QueryWrapper.create()
                 .select(QueryMethods.column(BizData::getValue))
                 .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("nick_name"));
-        List<String> nickNameList = dataService.listAs(queryWrapper, String.class);
+        List<String> nickNameList = dataService.listAs(nickNameQueryWrapper, String.class);
+        QueryWrapper photoQueryWrapper = QueryWrapper.create()
+                .select(QueryMethods.column(BizData::getValue))
+                .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("profile_photo"));
+        List<String> profilePhotoList = dataService.listAs(photoQueryWrapper, String.class);
         List<BizUser> userList = new ArrayList<>();
         List<CsgoUserInfo> userInfoList = new ArrayList<>();
         if (!nickNameList.isEmpty()) {
@@ -156,6 +160,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
             for (int i = 0; i < count; i++) {
                 BizUser bizUser = new BizUser();
                 bizUser.setId(IdTool.nextId());
+                bizUser.setPhoto(profilePhotoList.get(secureRandom.nextInt(profilePhotoList.size())));
                 bizUser.setNickName(nickNameList.get(secureRandom.nextInt(nickNameList.size())));
                 bizUser.setType(userTypeDict.getValueByAlias("virtual_user"));
                 bizUser.setEnable(true);
