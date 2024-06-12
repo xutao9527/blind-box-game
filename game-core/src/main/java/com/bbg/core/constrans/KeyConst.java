@@ -12,6 +12,8 @@ public class KeyConst {
     public final static String USER_INFO_TOKEN = "user::info::token";
     // 不同用户类型的人数
     public final static String USER_TYPE_COUNT = "user::type::count";
+    // 用户短信验证码
+    public final static String USER_SMS_CODE = "user::sms::code";
 
     // 业务平台配置
     public final static String BIZ_CONFIG_NAME_ALIAS = "biz::config::nameAlias";
