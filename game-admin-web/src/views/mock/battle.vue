@@ -147,7 +147,7 @@ onMounted(() => {
   battleMock.getRoomList()
   setInterval(() => {
     battleMock.getRoomList()
-  }, 5000)
+  }, 3000)
 
 })
 </script>
