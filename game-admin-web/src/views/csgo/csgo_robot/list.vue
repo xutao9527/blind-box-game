@@ -38,7 +38,13 @@
         <el-table-column prop="id" label="编号"/>
         <el-table-column prop="name" label="机器人名称"/>
         <el-table-column prop="nameAlias" label="机器人别名"/>
-        <el-table-column prop="imageUrl" label="机器人头像"/>
+        <el-table-column prop="imageUrl" label="机器人头像">
+          <template #default="scope">
+            <el-tooltip :content="scope.row.imageUrl" placement="top">
+              <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported :fit="'contain'" style="width: 50px;height: 50px"/>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column prop="takeTotal" label="参战总数"/>
         <el-table-column prop="winTotal" label="赢的总数"/>
         <el-table-column prop="enable" label="启动状态">

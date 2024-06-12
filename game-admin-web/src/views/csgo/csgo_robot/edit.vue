@@ -17,7 +17,7 @@
                 <el-input v-model="data.nameAlias"/>
               </el-form-item>
               <el-form-item label="机器人头像">
-                <el-input v-model="data.imageUrl"/>
+                <FileUpload v-model:value="data.imageUrl"/>
               </el-form-item>
               <el-form-item label="参战总数">
                 <el-input v-model="data.takeTotal"/>
@@ -46,6 +46,7 @@
 <script setup>
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
+import FileUpload from "@/components/oss/FileUpload.vue";
 
 const data = reactive({});
 const submitText = computed(() => {
