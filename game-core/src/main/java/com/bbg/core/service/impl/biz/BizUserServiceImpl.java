@@ -2,14 +2,17 @@ package com.bbg.core.service.impl.biz;
 
 import cn.hutool.core.util.IdUtil;
 import com.bbg.core.annotation.RedisCache;
+import com.bbg.core.box.dto.LoginDto;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.constrans.ServicesConst;
+import com.bbg.core.entity.ApiRet;
 import com.bbg.core.mapper.csgo.CsgoUserInfoMapper;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.service.biz.BizDataService;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.csgo.CsgoCapitalRecordService;
 import com.bbg.core.service.csgo.CsgoUserInfoService;
+import com.bbg.core.third.sms.SmsService;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.core.utils.IdTool;
 import com.bbg.model.biz.BizData;
@@ -33,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +57,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public final BizDictService bizDictService;
     public final BizDataService dataService;
     public final RedisService redisService;
+    public final SmsService smsService;
 
     @Override
     public BizUser getById(Serializable id) {
@@ -121,9 +126,46 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         return getMapper().selectListByQueryAs(queryWrapper, Long.class);
     }
 
-    @Override
+    /**
+     * 注册用户
+     */
     @Transactional(rollbackFor = Exception.class)
-    public boolean save(BizUser entity) {
+    public ApiRet<String> register(LoginDto.RegisterReq registerReq) {
+        // 验证短信验证码
+        boolean isOk = smsService.verifySmsCode(registerReq.getMobile(), registerReq.getCode());
+        if (!isOk) {
+            return ApiRet.buildNo("验证码错误");
+        }
+        var userTypeDict = bizDictService.getDictByTag("user_type");
+        var dataTypeDict = bizDictService.getDictByTag("biz_data_type");
+        QueryWrapper nickNameQueryWrapper = QueryWrapper.create()
+                .select(QueryMethods.column(BizData::getValue))
+                .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("nick_name"));
+        List<String> nickNameList = dataService.listAs(nickNameQueryWrapper, String.class);
+        QueryWrapper photoQueryWrapper = QueryWrapper.create()
+                .select(QueryMethods.column(BizData::getValue))
+                .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("profile_photo"));
+        List<String> profilePhotoList = dataService.listAs(photoQueryWrapper, String.class);
+        final var secureRandom = new SecureRandom();
+        // 保存用户信息
+        BizUser bizUser = new BizUser();
+        bizUser.setMobile(registerReq.getMobile());
+        bizUser.setPassword(registerReq.getPassword());
+        bizUser.setId(IdTool.nextId());
+        bizUser.setPhoto(profilePhotoList.get(secureRandom.nextInt(profilePhotoList.size())));
+        bizUser.setNickName(nickNameList.get(secureRandom.nextInt(nickNameList.size())));
+        bizUser.setType(userTypeDict.getValueByAlias("real_user"));
+        bizUser.setEnable(true);
+        bizUser.setMoney(BigDecimal.valueOf(0.0));
+        this.addUser(bizUser);
+        return ApiRet.buildOk("注册成功");
+    }
+
+    /**
+     * 新增用户
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void addUser(BizUser entity) {
         entity.setId(IdTool.nextId());
         getMapper().insert(entity, true);
         FairFactory.FairEntity fairEntity = FairFactory.build();
@@ -135,7 +177,6 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
                 .setClientSeed(fairEntity.getClientSeed())
                 .setRoundNumber(1);
         csgoUserInfoService.save(csgoUserInfo);
-        return true;
     }
 
     /**

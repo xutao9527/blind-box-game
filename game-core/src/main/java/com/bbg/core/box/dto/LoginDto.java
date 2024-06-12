@@ -41,4 +41,28 @@ public class LoginDto {
         @Schema(description = "密码")
         private String token;
     }
+
+
+    @Data
+    @Accessors(chain = true)
+    @Schema(description = "注册参数")
+    public static class RegisterReq implements Serializable {
+        /**
+         * 手机号
+         */
+        @Schema(description = "手机号")
+        private String mobile;
+
+        /**
+         * 密码
+         */
+        @Schema(description = "密码")
+        private String password;
+
+        /**
+         * 验证码
+         */
+        @Schema(description = "验证码")
+        private String code;
+    }
 }

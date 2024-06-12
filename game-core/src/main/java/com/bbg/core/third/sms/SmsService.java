@@ -18,9 +18,10 @@ public class SmsService {
     /**
      * 发送短信验证码
      */
-    public void sendSmsCode(String phone, String code) {
+    public boolean sendSmsCode(String phone, String code) {
         log.info("send sms code to {} with code: {}", phone, code);
         redisService.set(KeyConst.build(KeyConst.USER_SMS_CODE, phone), code, 10L, TimeUnit.MINUTES);
+        return true;
     }
 
     /**

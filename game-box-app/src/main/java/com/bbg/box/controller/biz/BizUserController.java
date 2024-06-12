@@ -1,16 +1,33 @@
 package com.bbg.box.controller.biz;
 
+import cn.hutool.core.util.RandomUtil;
 import com.bbg.box.base.BaseController;
 import com.bbg.core.box.dto.LoginDto;
+import com.bbg.core.service.biz.BizDataService;
+import com.bbg.core.service.biz.BizDictService;
+import com.bbg.core.service.csgo.CsgoUserInfoService;
+import com.bbg.core.third.sms.SmsService;
+import com.bbg.core.utils.FairFactory;
+import com.bbg.core.utils.IdTool;
+import com.bbg.model.biz.BizData;
 import com.bbg.model.biz.BizUser;
 import com.bbg.core.service.biz.BizUserService;
 import com.bbg.core.entity.ApiRet;
+import com.bbg.model.csgo.CsgoUserInfo;
+import com.mybatisflex.core.query.QueryMethods;
+import com.mybatisflex.core.query.QueryWrapper;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+
+import java.math.BigDecimal;
+import java.security.SecureRandom;
+import java.util.List;
 
 /**
  * 业务用户 控制层。
@@ -22,15 +39,19 @@ import io.swagger.v3.oas.annotations.Operation;
 @Tag(name = "业务用户接口")
 @RequestMapping("/bizUser")
 @RequiredArgsConstructor
+@Validated
 public class BizUserController extends BaseController<BizUser> {
-    @Autowired
-    protected BizUserService bizUserService;
+    public final BizUserService bizUserService;
+    public final SmsService smsService;
+    public final BizDictService bizDictService;
+    public final BizDataService dataService;
+    public final CsgoUserInfoService csgoUserInfoService;
 
-    @GetMapping ("getInfo")
+    @GetMapping("getInfo")
     @Operation(description = "获得用户信息")
     public ApiRet<LoginDto.LoginRes> getInfo() {
         LoginDto.LoginRes LoginRes = new LoginDto.LoginRes();
-        String token =  request.getHeader("token");
+        String token = request.getHeader("token");
         BizUser bizUser = getCurrentUser();
         LoginRes.setToken(token).setBizUser(bizUser);
         return ApiRet.buildOk(LoginRes);
@@ -60,4 +81,21 @@ public class BizUserController extends BaseController<BizUser> {
         return ApiRet.buildOk(token);
     }
 
+    @GetMapping ("sendSms")
+    @Operation(description = "发送短信")
+    public ApiRet<String> sendSms(@RequestParam @NotNull String mobile) {
+        // 生成4位数验证码
+        String code = RandomUtil.randomNumbers(4);
+        boolean isOk = smsService.sendSmsCode(mobile, code);
+        if (!isOk) {
+            return ApiRet.buildNo("发送失败");
+        }
+        return ApiRet.buildOk("发送成功");
+    }
+
+    @PostMapping("register")
+    @Operation(description = "用户注册")
+    public ApiRet<String> sendSms(@RequestBody LoginDto.RegisterReq registerReq) {
+        return bizUserService.register(registerReq);
+    }
 }
