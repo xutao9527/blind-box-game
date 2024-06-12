@@ -57,12 +57,26 @@ public class BizUserController extends BaseController<BizUser> {
         return ApiRet.buildOk(LoginRes);
     }
 
-    @PostMapping("login")
-    @Operation(description = "用户登录")
-    public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginReq loginReq) {
+    @PostMapping("loginByPwd")
+    @Operation(description = "用户密码登录")
+    public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginPwdReq loginReq) {
         LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
         BizUser bizUser = bizUserService.getOneByMobile(loginReq.getMobile());
         if (null != bizUser && bizUser.getEnable() && bizUser.getPassword().equals(loginReq.getPassword())) {
+            bizUser = bizUserService.getById(bizUser.getId());
+            String token = redisService.userLogin(bizUser);
+            loginRes.setBizUser(bizUser).setToken(token);
+            return ApiRet.buildOk(loginRes);
+        }
+        return ApiRet.buildNo(loginRes, "用户不存在!");
+    }
+
+    @PostMapping("loginByCode")
+    @Operation(description = "用户验证码登录")
+    public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginCodeReq loginReq) {
+        LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
+        BizUser bizUser = bizUserService.getOneByMobile(loginReq.getMobile());
+        if (null != bizUser && bizUser.getEnable() && smsService.verifySmsCode(loginReq.getMobile(), loginReq.getCode())) {
             bizUser = bizUserService.getById(bizUser.getId());
             String token = redisService.userLogin(bizUser);
             loginRes.setBizUser(bizUser).setToken(token);
@@ -95,7 +109,7 @@ public class BizUserController extends BaseController<BizUser> {
 
     @PostMapping("register")
     @Operation(description = "用户注册")
-    public ApiRet<String> sendSms(@RequestBody LoginDto.RegisterReq registerReq) {
+    public ApiRet<String> register(@RequestBody LoginDto.RegisterReq registerReq) {
         return bizUserService.register(registerReq);
     }
 }

@@ -1,18 +1,50 @@
 <template>
   <el-container class="mock">
     <el-header class="mock-header">
-      <el-form label-position="right" :inline="true">
-        <el-form-item label="手机号">
-          <el-input v-model="loginMock.loginReq.mobile" placeholder="手机号"/>
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="loginMock.loginReq.password" placeholder="密码"/>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="loginMock.login">登 录</el-button>
-          <el-button @click="loginMock.logout">登出</el-button>
-        </el-form-item>
-      </el-form>
+      <el-tabs tab-position="top" model-value="pwdLogin">
+        <el-tab-pane label="密码登录" name="pwdLogin" >
+          <el-form label-position="right" :inline="true" size="small">
+            <el-form-item label="手机号">
+              <el-input v-model="loginMock.LoginPwdReq.mobile" placeholder="手机号"/>
+            </el-form-item>
+            <el-form-item label="密码">
+              <el-input v-model="loginMock.LoginPwdReq.password" placeholder="密码"/>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="success" @click="loginMock.loginPwd">登 录</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="短信登录" name="codeLogin">
+          <el-form label-position="right" :inline="true" size="small">
+            <el-form-item label="手机号">
+              <el-input v-model="loginMock.LoginCodeReq.mobile" placeholder="手机号"/>
+            </el-form-item>
+            <el-form-item label="验证码">
+              <el-input v-model="loginMock.LoginCodeReq.password" placeholder="验证码"/>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="success" @click="loginMock.loginCode">登 录</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="注册" name="box">
+          <el-form label-position="right" :inline="true" size="small">
+            <el-form-item label="手机号">
+              <el-input v-model="loginMock.RegisterReq.mobile" placeholder="手机号"/>
+            </el-form-item>
+            <el-form-item label="密码">
+              <el-input v-model="loginMock.RegisterReq.password" placeholder="密码"/>
+            </el-form-item>
+            <el-form-item label="验证码">
+              <el-input v-model="loginMock.RegisterReq.code" placeholder="验证码"/>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="success" @click="loginMock.register">注 册</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
       <el-row>
         <el-col>
           <el-text type="success">用户信息</el-text>
@@ -25,9 +57,13 @@
         <el-col :span="3">
           <el-text>余额: {{ mockGlobal.bizUser.money }}</el-text>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="6">
           <el-text>token: {{ mockGlobal.bizToken }}</el-text>
         </el-col>
+        <el-col :span="12">
+          <el-button type="warning" size="small"  @click="loginMock.logout">登出</el-button>
+        </el-col>
+
       </el-row>
     </el-header>
     <el-main class="mock-main">
@@ -65,13 +101,12 @@ onMounted(()=>{
 <style lang="less" scoped>
 .mock {
   .mock-header {
-    padding-top: 10px;
-    height: 150px;
+    height: 160px;
     border: 1px solid var(--el-border-color);
   }
   .mock-main {
     padding: 0;
-    height: calc(100vh - 281px);
+    height: calc(100vh - 291px);
     border-left: 1px solid var(--el-border-color);
     border-right: 1px solid var(--el-border-color);
     border-bottom: 1px solid var(--el-border-color);

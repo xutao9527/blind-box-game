@@ -11,8 +11,8 @@ public class LoginDto {
 
     @Data
     @Accessors(chain = true)
-    @Schema(description = "登录参数")
-    public static class LoginReq implements Serializable {
+    @Schema(description = "密码登录参数")
+    public static class LoginPwdReq implements Serializable {
         /**
          * 手机号
          */
@@ -24,6 +24,23 @@ public class LoginDto {
          */
         @Schema(description = "密码")
         private String password;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @Schema(description = "验证码登录参数")
+    public static class LoginCodeReq implements Serializable {
+        /**
+         * 手机号
+         */
+        @Schema(description = "手机号")
+        private String mobile;
+
+        /**
+         * 验证码
+         */
+        @Schema(description = "验证码")
+        private String code;
     }
 
     @Data
