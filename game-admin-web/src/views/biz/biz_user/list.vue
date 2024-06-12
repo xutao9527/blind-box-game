@@ -170,7 +170,7 @@ const addVirtualUser = () => {
     cancelButtonText: 'Cancel',
     inputPattern:
         /^(?:[1-9]|[1-9][0-9]|[1-9][0-9]{2}|1000)$/,
-    inputErrorMessage: 'Invalid Number',
+    inputErrorMessage: '1~1000数量限制',
   })
       .then(async ({value}) => {
         const apiRet = await http.get(`/bizUser/addVirtualUser?count=${value}`)
