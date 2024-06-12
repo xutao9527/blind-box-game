@@ -21,9 +21,14 @@
                 <el-col :span="4" v-for="box in scope.row.roomBoxes" :key="box.id">
                   <el-tooltip placement="top">
                     <template #content>
-                      <el-text size="small">boxId:{{ box.boxId }}</el-text>
+                      <el-text size="small">
+                        boxId:{{ box.boxId }}<br/>
+                        boxName:{{ box.name }}<br/>
+                      </el-text>
                     </template>
-                    <el-avatar>{{ box.name }}</el-avatar>
+                    <el-avatar>
+                      <el-image :src="box.imageUrl"/>
+                    </el-avatar>
                   </el-tooltip>
                 </el-col>
               </el-row>
@@ -42,9 +47,7 @@
                       </el-text>
                     </template>
                     <el-avatar>
-                      <el-image
-                          :src="user.imageUrl"
-                      />
+                      <el-image :src="user.imageUrl"/>
                     </el-avatar>
                   </el-tooltip>
                 </el-col>

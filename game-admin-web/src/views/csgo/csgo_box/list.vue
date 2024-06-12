@@ -8,10 +8,12 @@
               <el-input v-model="tableProps.reqParams.queryEntity.name" placeholder="箱子名称"/>
             </div>
             <div class="bbg-table-header-input">
-              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dictTypeRef" :tag="'csgo_box_type'" placeholder="箱子类型"/>
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dictTypeRef"
+                               :tag="'csgo_box_type'" placeholder="箱子类型"/>
             </div>
             <div class="bbg-table-header-input">
-              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.group" ref="dictGroupRef" :tag="'csgo_box_group'" placeholder="箱子分组"/>
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.group" ref="dictGroupRef"
+                               :tag="'csgo_box_group'" placeholder="箱子分组"/>
             </div>
           </el-row>
         </el-col>
@@ -26,12 +28,12 @@
       </el-row>
     </el-header>
     <el-main class="bbg-table-main">
-        <el-table class="bbg-table-main"
-                  :data="tableProps.apiRet.data.records"
-                  :height="tableDynamicHeight"
-                  table-layout="auto"
-                  @sortChange="tableProps.sortChange"
-                  border show-overflow-tooltip>
+      <el-table class="bbg-table-main"
+                :data="tableProps.apiRet.data.records"
+                :height="tableDynamicHeight"
+                table-layout="auto"
+                @sortChange="tableProps.sortChange"
+                border show-overflow-tooltip>
         <el-table-column type="expand" label="#">
           <template #default="props">
             <BoxGood v-model:row-ojb="props.row"/>
@@ -40,22 +42,29 @@
         <el-table-column prop="id" label="主键"/>
         <el-table-column prop="name" label="箱子名称"/>
         <el-table-column prop="nameAlias" label="箱子别名"/>
-        <el-table-column prop="imageUrl" label="图片地址"/>
-        <el-table-column prop="type" label="箱子类型"  sortable="custom">
+        <el-table-column prop="imageUrl" label="图片地址">
           <template #default="scope">
-            {{dictTypeRef.getLabel(scope.row.type)}}
+            <el-tooltip :content="scope.row.imageUrl" placement="top">
+              <el-image :src="scope.row.imageUrl" :preview-src-list="[scope.row.imageUrl]" preview-teleported
+                        style="width: 50px;height: 50px"/>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column prop="type" label="箱子类型" sortable="custom">
+          <template #default="scope">
+            {{ dictTypeRef.getLabel(scope.row.type) }}
           </template>
         </el-table-column>
         <el-table-column prop="group" label="箱子分组">
           <template #default="scope">
-            {{dictGroupRef.getLabel(scope.row.group)}}
+            {{ dictGroupRef.getLabel(scope.row.group) }}
           </template>
         </el-table-column>
         <el-table-column prop="price" label="箱子价格"/>
         <el-table-column prop="enable" label="状态">
-        <template #default="scope">
-            {{scope.row.enable?'启动':'停用'}}
-        </template>
+          <template #default="scope">
+            {{ scope.row.enable ? '启动' : '停用' }}
+          </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
@@ -138,7 +147,7 @@ const tableProps = reactive({
       pageSize: 15,
     },
     queryEntity: {
-      "expandProps":{}
+      "expandProps": {}
     }
   },
   apiRet: {
@@ -158,13 +167,13 @@ const tableProps = reactive({
       tableProps.apiRet.totalRow = apiRet.data.totalRow
     }
   },
-  sortChange: async (column)=>{
+  sortChange: async (column) => {
     console.log(column)
-    if(column.order === "descending"){
-      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'descending'}
-    }else if(column.order === "ascending"){
-      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop] : 'ascending'}
-    }else{
+    if (column.order === "descending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'descending'}
+    } else if (column.order === "ascending") {
+      tableProps.reqParams.queryEntity.expandProps.orderField = {[column.prop]: 'ascending'}
+    } else {
       delete tableProps.reqParams.queryEntity.expandProps.orderField;
     }
     await tableProps.fetchData()

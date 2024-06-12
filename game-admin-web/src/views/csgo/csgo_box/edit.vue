@@ -17,7 +17,8 @@
                 <el-input v-model="data.nameAlias"/>
               </el-form-item>
               <el-form-item label="图片地址">
-                <el-input v-model="data.imageUrl"/>
+
+                <FileUpload v-model:value="data.imageUrl"/>
               </el-form-item>
               <el-form-item label="箱子类型">
                 <bbg-dict-select v-model:value="data.type" :tag="'csgo_box_type'" placeholder="箱子类型"/>
@@ -49,6 +50,7 @@
 <script setup>
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
+import FileUpload from "@/components/oss/FileUpload.vue";
 
 const data = reactive({});
 const submitText = computed(() => {
