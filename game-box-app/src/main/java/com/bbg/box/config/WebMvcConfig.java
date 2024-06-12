@@ -27,6 +27,9 @@ public class  WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api-doc")                            // 在线接口文档
                 .excludePathPatterns("/swagger-ui/**")                      // 在线接口文档
                 .excludePathPatterns("/api-doc/swagger-config")             // 在线接口文档
-                .excludePathPatterns("/bizUser/login");                     // 登录
+                .excludePathPatterns("/bizUser/register")                   // 注册
+                .excludePathPatterns("/bizUser/loginByPwd")                 // 密码登录
+                .excludePathPatterns("/bizUser/loginByCode")                // 验证码登录
+                .excludePathPatterns("/bizUser/sendSms");                   // 验证码
     }
 }

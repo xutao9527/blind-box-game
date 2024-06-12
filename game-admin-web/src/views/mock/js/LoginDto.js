@@ -38,18 +38,28 @@ export const loginMock = reactive({
             mockGlobal.bizToken = apiRet.data.token
             // 保存token到后端，防止刷新页面后token丢失
             await http.get('boxGameMock/setToken?token=' + apiRet.data.token)
+        }else{
+            ElMessage({type: 'success', message: apiRet.msg})
         }
-
     },
     loginCode: async () => {    // 验证码登录
         const apiRet = await appHttp.post('bizUser/loginByCode', loginMock.LoginCodeReq)
+
         if(apiRet.ok){
             mockGlobal.bizUser = apiRet.data.bizUser
             mockGlobal.bizToken = apiRet.data.token
             // 保存token到后端，防止刷新页面后token丢失
             await http.get('boxGameMock/setToken?token=' + apiRet.data.token)
+        }else{
+            ElMessage({type: 'error', message: apiRet.msg})
         }
 
+    },
+    sendCode: async (mobile) => {     // 发送验证码
+        const apiRet = await appHttp.get('bizUser/sendCode?mobile=' + mobile)
+        if(apiRet.ok){
+            ElMessage.success('发送成功')
+        }
     },
     register: async () => {     // 注册
         const apiRet = await appHttp.post('bizUser/register', loginMock.RegisterReq)

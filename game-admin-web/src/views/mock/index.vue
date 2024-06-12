@@ -21,10 +21,10 @@
               <el-input v-model="loginMock.LoginCodeReq.mobile" placeholder="手机号"/>
             </el-form-item>
             <el-form-item label="验证码">
-              <el-input v-model="loginMock.LoginCodeReq.password" placeholder="验证码"/>
+              <el-input v-model="loginMock.LoginCodeReq.code" placeholder="验证码"/>
             </el-form-item>
             <el-form-item>
-              <el-button type="info" @click="loginMock.loginCode">验 证 码</el-button>
+              <el-button type="info" @click="loginMock.sendCode(loginMock.LoginCodeReq.mobile)">验 证 码</el-button>
               <el-button type="success" @click="loginMock.loginCode">登 录</el-button>
             </el-form-item>
           </el-form>

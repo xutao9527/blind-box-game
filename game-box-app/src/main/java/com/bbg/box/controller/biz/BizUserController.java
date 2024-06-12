@@ -76,11 +76,15 @@ public class BizUserController extends BaseController<BizUser> {
     public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginCodeReq loginReq) {
         LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
         BizUser bizUser = bizUserService.getOneByMobile(loginReq.getMobile());
-        if (null != bizUser && bizUser.getEnable() && smsService.verifySmsCode(loginReq.getMobile(), loginReq.getCode())) {
-            bizUser = bizUserService.getById(bizUser.getId());
-            String token = redisService.userLogin(bizUser);
-            loginRes.setBizUser(bizUser).setToken(token);
-            return ApiRet.buildOk(loginRes);
+        if (null != bizUser && bizUser.getEnable()) {
+            if(smsService.verifySmsCode(loginReq.getMobile(), loginReq.getCode())){
+                bizUser = bizUserService.getById(bizUser.getId());
+                String token = redisService.userLogin(bizUser);
+                loginRes.setBizUser(bizUser).setToken(token);
+                return ApiRet.buildOk(loginRes);
+            }else{
+                return ApiRet.buildNo("验证码错误!");
+            }
         }
         return ApiRet.buildNo(loginRes, "用户不存在!");
     }
@@ -95,8 +99,8 @@ public class BizUserController extends BaseController<BizUser> {
         return ApiRet.buildOk(token);
     }
 
-    @GetMapping ("sendSms")
-    @Operation(description = "发送短信")
+    @GetMapping ("sendCode")
+    @Operation(description = "发送短信验证码")
     public ApiRet<String> sendSms(@RequestParam @NotNull String mobile) {
         // 生成4位数验证码
         String code = RandomUtil.randomNumbers(4);
