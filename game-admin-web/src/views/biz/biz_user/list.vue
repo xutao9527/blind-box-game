@@ -34,11 +34,11 @@
                   table-layout="auto"
                   border show-overflow-tooltip>
         <el-table-column prop="id" label="主键" width="190"/>
-        <el-table-column prop="photo" label="头像">
+        <el-table-column prop="photo" label="头像" width="60">
           <template #default="scope">
             <el-image
                 lazy
-                style="width: 50px; height: 50px"
+
                 :src="scope.row.photo"
                 :preview-src-list="[scope.row.photo]" preview-teleported
                 fit="cover"
