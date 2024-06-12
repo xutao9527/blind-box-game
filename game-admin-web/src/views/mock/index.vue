@@ -1,7 +1,7 @@
 <template>
   <el-container class="mock">
     <el-header class="mock-header">
-      <el-tabs tab-position="top" model-value="pwdLogin">
+      <el-tabs tab-position="top" model-value="codeLogin">
         <el-tab-pane label="密码登录" name="pwdLogin" >
           <el-form label-position="right" :inline="true" size="small">
             <el-form-item label="手机号">
@@ -24,6 +24,7 @@
               <el-input v-model="loginMock.LoginCodeReq.password" placeholder="验证码"/>
             </el-form-item>
             <el-form-item>
+              <el-button type="info" @click="loginMock.loginCode">验 证 码</el-button>
               <el-button type="success" @click="loginMock.loginCode">登 录</el-button>
             </el-form-item>
           </el-form>
@@ -40,6 +41,7 @@
               <el-input v-model="loginMock.RegisterReq.code" placeholder="验证码"/>
             </el-form-item>
             <el-form-item>
+              <el-button type="info" @click="loginMock.loginCode">验 证 码</el-button>
               <el-button type="success" @click="loginMock.register">注 册</el-button>
             </el-form-item>
           </el-form>
