@@ -22,7 +22,7 @@ import java.util.List;
 public interface BoxGameMockService {
 
     @PostMapping("/bizUser/login")
-    ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginReq loginReq);
+    ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginPwdReq loginReq);
 
     @GetMapping("/bizUser/logout")
     ApiRet<String> logout();

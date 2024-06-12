@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * 业务用户 控制层。
@@ -69,5 +70,15 @@ public class BizUserController extends BaseBizUserController {
             @Schema(description = "新增数量")
             int count){
         return ApiRet.buildOk(bizUserService.addVirtualUser(count));
+    }
+
+    @Operation(description = "后台查看验证码")
+    @GetMapping("viewCode/{mobile}")
+    public ApiRet<String> viewSmsCode(@PathVariable(name = "mobile") @Parameter(description = "手机号") @NotNull String mobile){
+        String code = (String) redisService.get(mobile);
+        if(code!=null){
+            return ApiRet.buildOk(code);
+        }
+        return ApiRet.buildNo("验证码不存在");
     }
 }
