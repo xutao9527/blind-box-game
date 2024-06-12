@@ -61,8 +61,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
 
     @Override
     public BizUser getById(Serializable id) {
-        return getMapper().selectOneWithRelationsById(id);
-        // return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsById(id));
+        return MaskManager.execWithoutMask(() -> getMapper().selectOneWithRelationsById(id));
     }
 
     /**

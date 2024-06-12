@@ -1,6 +1,7 @@
 package com.bbg.admin.controller.biz;
 
 import com.bbg.admin.base.controller.biz.BaseBizUserController;
+import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.biz.BizUserService;
 import com.bbg.core.entity.ApiRet;
@@ -50,13 +51,13 @@ public class BizUserController extends BaseBizUserController {
     ) {
         SysUser sysUser = getCurrentUser();
         BizUser bizUser = bizUserService.getById(id);
-        if(bizUser!=null){
+        if (bizUser != null) {
             CsgoCapitalRecord capitalRecord = new CsgoCapitalRecord();
             capitalRecord.setUserId(bizUser.getId())
                     .setSourceId(sysUser.getId().toString())
-                    .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("admin_pay"))  //流水类型
+                    .setType(bizDictService.getDictByTag("csgo_capital_type").getValueByAlias("admin_pay"))  // 流水类型
                     .setChangeMoney(money);
-            bizUserService.updateUserMoney(bizUser,capitalRecord);
+            bizUserService.updateUserMoney(bizUser, capitalRecord);
         }
         return ApiRet.buildOk(true);
     }
@@ -65,19 +66,22 @@ public class BizUserController extends BaseBizUserController {
     @GetMapping("addVirtualUser")
     public ApiRet<Boolean> addVirtualUser(
             @RequestParam("count")
-            @Min(value = 1,message = "新增数量1~1000之间")
-            @Max(value = 1000,message = "新增数量1~1000之间")
+            @Min(value = 1, message = "新增数量1~1000之间")
+            @Max(value = 1000, message = "新增数量1~1000之间")
             @Schema(description = "新增数量")
-            int count){
+            int count) {
         return ApiRet.buildOk(bizUserService.addVirtualUser(count));
     }
 
     @Operation(description = "后台查看验证码")
-    @GetMapping("viewCode/{mobile}")
-    public ApiRet<String> viewSmsCode(@PathVariable(name = "mobile") @Parameter(description = "手机号") @NotNull String mobile){
-        String code = (String) redisService.get(mobile);
-        if(code!=null){
-            return ApiRet.buildOk(code);
+    @GetMapping("viewCode/{id}")
+    public ApiRet<String> viewSmsCode(@PathVariable(name = "id") @Parameter(description = "用户编号") Serializable id) {
+        BizUser bizUser = bizUserService.getById(id);
+        if (bizUser != null) {
+            String code = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE,bizUser.getMobile()));
+            if (code != null) {
+                return ApiRet.buildOk(code);
+            }
         }
         return ApiRet.buildNo("验证码不存在");
     }

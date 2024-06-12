@@ -30,6 +30,6 @@ public class  WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/bizUser/register")                   // 注册
                 .excludePathPatterns("/bizUser/loginByPwd")                 // 密码登录
                 .excludePathPatterns("/bizUser/loginByCode")                // 验证码登录
-                .excludePathPatterns("/bizUser/sendSms");                   // 验证码
+                .excludePathPatterns("/bizUser/sendCode");                  // 验证码
     }
 }
