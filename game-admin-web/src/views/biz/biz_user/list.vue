@@ -34,10 +34,22 @@
                   table-layout="auto"
                   border show-overflow-tooltip>
         <el-table-column prop="id" label="主键" width="190"/>
+        <el-table-column prop="photo" label="头像">
+          <template #default="scope">
+            <el-image
+                lazy
+                style="width: 50px; height: 50px"
+                :src="scope.row.photo"
+                :preview-src-list="[scope.row.photo]" preview-teleported
+                fit="cover"
+            ></el-image>
+          </template>
+        </el-table-column>
         <el-table-column prop="nickName" label="昵称"/>
         <el-table-column prop="mobile" label="手机号" width="120"/>
         <el-table-column prop="account" label="登录账号"/>
         <el-table-column prop="password" label="密码"/>
+
         <el-table-column prop="type" label="类型">
           <template #default="scope">
             {{userTypeRef.getLabel(scope.row.type)}}
