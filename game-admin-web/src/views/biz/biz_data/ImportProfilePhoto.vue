@@ -33,6 +33,9 @@
         <el-button @click="submit">
           导入
         </el-button>
+        <el-button @click="clear">
+          清除
+        </el-button>
       </el-footer>
     </el-container>
   </el-dialog>
@@ -42,7 +45,7 @@ import {DictObject} from "@/core/dict/index.js";
 import MultiFileUpload from "@/components/oss/MultiFileUpload.vue";
 import {http} from "@/core/axios/index.js";
 
-const visible = ref(true)
+const visible = ref(false)
 const data = reactive({});
 const dataTypeRef = ref(null)
 const multiFileUploadRef = ref(null);
@@ -60,6 +63,11 @@ onMounted(async () => {
 const submit = async () => {
   multiFileUploadRef.value.uploadMultiFile(callBack)
 }
+
+const clear = async () => {
+  multiFileUploadRef.value.clearMultiFile()
+}
+
 
 const callBack = async (filePath) => {
   let result = false;

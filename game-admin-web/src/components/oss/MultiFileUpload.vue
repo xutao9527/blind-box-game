@@ -1,10 +1,13 @@
 <template>
-  <el-scrollbar max-height="450" height="450">
+  <el-scrollbar max-height="450" height="450" min-size="450">
+    <div>
     <el-upload
         list-type="picture-card"
         :auto-upload="false"
         multiple
         v-model:file-list="fileList"
+        :limit="100"
+        :on-exceed="handleExceed"
     >
       <el-icon>
         <Plus/>
@@ -37,6 +40,7 @@
         </div>
       </template>
     </el-upload>
+    </div>
   </el-scrollbar>
   <ElImageViewer
       v-if="viewerVisible"
@@ -74,6 +78,10 @@ const viewerClose = () => {
 
 const handleRemove = (rmFile) => {
   fileList.value = fileList.value.filter(file => file.uid !== rmFile.uid)
+}
+
+const handleExceed = (files, fileList) => {
+  ElMessage.warning(`当前限制选择 100 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
 }
 
 const upLoadProps = reactive({
@@ -115,8 +123,13 @@ const uploadMultiFile = async (callBack) => {
   }
 }
 
+const clearMultiFile = () => {
+  fileList.value = []
+}
+
 defineExpose({
-  uploadMultiFile
+  uploadMultiFile,
+  clearMultiFile
 })
 
 </script>
