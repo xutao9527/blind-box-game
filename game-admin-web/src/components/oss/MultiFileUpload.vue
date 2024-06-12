@@ -12,11 +12,12 @@
       <template #file="{ file }">
         <div class="image-container">
           <el-image
+              :ref="(el) => {setFileRefs(file,el)}"
               :src="file.url"
               :preview-src-list="[file.url]"
               fit="contain"
               preview-teleported/>
-          <el-icon class="check-icon">
+          <el-icon v-if="!isBlob(file)" class="check-icon">
             <Check/>
           </el-icon>
         </div>
@@ -50,6 +51,15 @@ import {http} from "@/core/axios/index.js";
 const viewerVisible = ref(false)
 const viewerUrlList = ref([])
 const fileList = ref([])
+const fileRefs = ref({})
+
+const isBlob = computed(() => (file) => {
+  return file.url.startsWith('blob:')
+})
+
+const setFileRefs = (file,el) => {
+  fileRefs.value[file.uid] = el
+}
 
 const viewerPreview = (file) => {
   viewerUrlList.value = [
@@ -99,7 +109,7 @@ const uploadMultiFile = async (callBack) => {
     if (file.raw instanceof Blob) {
       let filePath = await upLoadProps.upload(file)
       if(callBack(filePath)){
-        file.src = filePath
+        file.url = filePath
       }
     }
   }
