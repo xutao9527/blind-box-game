@@ -140,15 +140,8 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         if (this.getOneByMobile(registerReq.getMobile()) != null) {
             return ApiRet.buildNo("手机号已注册");
         }
-        // 渠道码
-        Map<String, BizChannel> channelAsMap = bizChannelService.getChannelAsMap();
-        String requestDomain = null;
-        Enumeration<String> headers = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
-                .getRequest().getHeaders("X-Forwarded-Host");
-        if (headers.hasMoreElements()) {
-            requestDomain = headers.nextElement();
-        }
-        BizChannel bizChannel = channelAsMap.get(requestDomain);
+        // 查询邀请码与渠道码
+        Map<String,String> ChannelMap = bizChannelService.getChannelCode();
         // 验证短信验证码
         boolean isOk = smsService.verifySmsCode(registerReq.getMobile(), registerReq.getCode());
         if (!isOk) {
@@ -174,7 +167,8 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         bizUser.setType(userTypeDict.getValueByAlias("real_user"));
         bizUser.setEnable(true);
         bizUser.setMoney(BigDecimal.valueOf(0.0));
-        bizUser.setChannelCode(bizChannel == null ? null : bizChannel.getChannelCode());//设置渠道码
+        bizUser.setChannelCode(ChannelMap.get("channelCode"));//设置渠道码
+        bizUser.setInvitationCode(ChannelMap.get("invitationCode"));//设置邀请码
         this.addUser(bizUser);
         return ApiRet.buildOk("注册成功");
     }

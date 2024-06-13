@@ -5,18 +5,23 @@ import cn.hutool.core.convert.Convert;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.constrans.KeyConst;
+import com.bbg.core.service.biz.BizUserService;
 import com.bbg.core.utils.IdTool;
+import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.CsgoRobot;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.biz.BizChannel;
 import com.bbg.core.mapper.biz.BizChannelMapper;
 import com.bbg.core.service.biz.BizChannelService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -27,7 +32,11 @@ import java.util.stream.Collectors;
  * @since 2024-06-13
  */
 @Service
+@RequiredArgsConstructor
 public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChannel> implements BizChannelService {
+
+    public final BizChannelService selfProxy;
+    public final BizUserService bizUserService;
 
     @RedisCache(key = KeyConst.BIZ_CHANNEL_LIST)
     public Map<String, BizChannel> getChannelAsMap() {
@@ -55,4 +64,32 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
         entity.setChannelCode(null);
         return super.updateById(entity);
     }
+
+    public Map<String,String> getChannelCode() {
+        Map<String,String> map = new HashMap<>();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        // 优先使用请求头中的promoCode,查询所属用户的渠道码
+        String promoCode = request.getHeader("promoCode");
+        if(promoCode != null) {
+            BizUser bizUser = bizUserService.getOne(QueryWrapper.create().eq(BizUser::getPromoCode, promoCode));
+            if(bizUser != null) {
+                map.put("channelCode", bizUser.getChannelCode());
+                map.put("invitationCode", bizUser.getPromoCode());
+                return map;
+            }
+        }
+        // 从请求头中获取域名，查询渠道码
+        String requestDomain = null;
+        Enumeration<String> headers = request.getHeaders("X-Forwarded-Host");
+        if (headers.hasMoreElements()) {
+            requestDomain = headers.nextElement();
+        }
+        Map<String, BizChannel> channelAsMap = selfProxy.getChannelAsMap();
+        BizChannel bizChannel = channelAsMap.get(requestDomain);
+        if(bizChannel != null) {
+            map.put("channelCode", bizChannel.getChannelCode());
+        }
+        return map;
+    }
+
 }
