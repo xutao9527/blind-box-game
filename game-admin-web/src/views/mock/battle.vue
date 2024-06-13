@@ -145,10 +145,9 @@ onMounted(() => {
   battleMock.getRobotList()
   // 每10秒钟获得一次房间列表,首次立即获得
   battleMock.getRoomList()
-  setInterval(() => {
-    battleMock.getRoomList()
-  }, 3000)
-
+  // setInterval(() => {
+  //   battleMock.getRoomList()
+  // }, 3000)
 })
 </script>
 

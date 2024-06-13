@@ -31,7 +31,7 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
 
     @RedisCache(key = KeyConst.BIZ_CHANNEL_LIST)
     public Map<String, BizChannel> getChannelAsMap() {
-        List<BizChannel> bizChannels = super.list(QueryWrapper.create().eq(CsgoRobot::getEnable, true));
+        List<BizChannel> bizChannels = super.list(QueryWrapper.create().eq(BizChannel::getEnable, true));
         return bizChannels.stream().collect(Collectors.toMap(BizChannel::getChannelDomain, Function.identity()));
     }
 

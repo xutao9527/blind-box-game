@@ -88,8 +88,8 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         if (!bizUser.getType().equals(userTypeDict.getValueByAlias("real_user")) && !bizUser.getType().equals(userTypeDict.getValueByAlias("test_user"))) {
             return bizUser;
         } else {
-            bizUser = getMapper().selectOneWithRelationsByQuery(QueryWrapper.create().eq(BizUser::getId,bizUser.getId()).forUpdate());
-            if(capitalRecord.getChangeMoney().signum() != 1 && bizUser.getMoney().compareTo(capitalRecord.getChangeMoney().abs()) < 0) {
+            bizUser = getMapper().selectOneWithRelationsByQuery(QueryWrapper.create().eq(BizUser::getId, bizUser.getId()).forUpdate());
+            if (capitalRecord.getChangeMoney().signum() != 1 && bizUser.getMoney().compareTo(capitalRecord.getChangeMoney().abs()) < 0) {
                 throw new RuntimeException("用户余额不足");
             }
         }
@@ -136,15 +136,19 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
      */
     @Transactional(rollbackFor = Exception.class)
     public ApiRet<String> register(LoginDto.RegisterReq registerReq) {
-        final var channelAsMap = bizChannelService.getChannelAsMap();
+        // 判断手机号是否已注册
+        if (this.getOneByMobile(registerReq.getMobile()) != null) {
+            return ApiRet.buildNo("手机号已注册");
+        }
+        // 渠道码
+        Map<String, BizChannel> channelAsMap = bizChannelService.getChannelAsMap();
         String requestDomain = null;
-         Enumeration<String> headers = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+        Enumeration<String> headers = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
                 .getRequest().getHeaders("X-Forwarded-Host");
-        if(headers.hasMoreElements()){
+        if (headers.hasMoreElements()) {
             requestDomain = headers.nextElement();
         }
         BizChannel bizChannel = channelAsMap.get(requestDomain);
-
         // 验证短信验证码
         boolean isOk = smsService.verifySmsCode(registerReq.getMobile(), registerReq.getCode());
         if (!isOk) {
@@ -154,11 +158,11 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         var dataTypeDict = bizDictService.getDictByTag("biz_data_type");
         QueryWrapper nickNameQueryWrapper = QueryWrapper.create()
                 .select(QueryMethods.column(BizData::getValue))
-                .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("nick_name"));
+                .from(BizData.class).eq(BizData::getType, dataTypeDict.getValueByAlias("nick_name"));
         List<String> nickNameList = dataService.listAs(nickNameQueryWrapper, String.class);
         QueryWrapper photoQueryWrapper = QueryWrapper.create()
                 .select(QueryMethods.column(BizData::getValue))
-                .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("profile_photo"));
+                .from(BizData.class).eq(BizData::getType, dataTypeDict.getValueByAlias("profile_photo"));
         List<String> profilePhotoList = dataService.listAs(photoQueryWrapper, String.class);
         final var secureRandom = new SecureRandom();
         // 保存用户信息
@@ -170,6 +174,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         bizUser.setType(userTypeDict.getValueByAlias("real_user"));
         bizUser.setEnable(true);
         bizUser.setMoney(BigDecimal.valueOf(0.0));
+        bizUser.setChannelCode(bizChannel == null ? null : bizChannel.getChannelCode());//设置渠道码
         this.addUser(bizUser);
         return ApiRet.buildOk("注册成功");
     }
@@ -180,7 +185,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     @Transactional(rollbackFor = Exception.class)
     public void addUser(BizUser entity) {
         entity.setId(IdTool.nextId());
-        entity.setPromoCode(Base58.encode(Convert.longToBytes(entity.getId())));
+        entity.setPromoCode(Base58.encode(Convert.longToBytes(entity.getId())));    //生成推广码
         getMapper().insert(entity, true);
         FairFactory.FairEntity fairEntity = FairFactory.build();
         CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
@@ -202,11 +207,11 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         var dataTypeDict = bizDictService.getDictByTag("biz_data_type");
         QueryWrapper nickNameQueryWrapper = QueryWrapper.create()
                 .select(QueryMethods.column(BizData::getValue))
-                .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("nick_name"));
+                .from(BizData.class).eq(BizData::getType, dataTypeDict.getValueByAlias("nick_name"));
         List<String> nickNameList = dataService.listAs(nickNameQueryWrapper, String.class);
         QueryWrapper photoQueryWrapper = QueryWrapper.create()
                 .select(QueryMethods.column(BizData::getValue))
-                .from(BizData.class).eq(BizData::getType,dataTypeDict.getValueByAlias("profile_photo"));
+                .from(BizData.class).eq(BizData::getType, dataTypeDict.getValueByAlias("profile_photo"));
         List<String> profilePhotoList = dataService.listAs(photoQueryWrapper, String.class);
         List<BizUser> userList = new ArrayList<>();
         List<CsgoUserInfo> userInfoList = new ArrayList<>();
