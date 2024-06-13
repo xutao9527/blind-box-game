@@ -10,6 +10,7 @@ import com.bbg.core.constrans.ServicesConst;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.mapper.csgo.CsgoUserInfoMapper;
 import com.bbg.core.service.RedisService;
+import com.bbg.core.service.biz.BizChannelService;
 import com.bbg.core.service.biz.BizDataService;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.csgo.CsgoCapitalRecordService;
@@ -17,6 +18,7 @@ import com.bbg.core.service.csgo.CsgoUserInfoService;
 import com.bbg.core.third.sms.SmsService;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.core.utils.IdTool;
+import com.bbg.model.biz.BizChannel;
 import com.bbg.model.biz.BizData;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.csgo.CsgoBox;
@@ -43,9 +45,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -63,7 +63,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public final BizDataService dataService;
     public final RedisService redisService;
     public final SmsService smsService;
-
+    public final BizChannelService bizChannelService;
 
     @Override
     public BizUser getById(Serializable id) {
@@ -136,6 +136,15 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
      */
     @Transactional(rollbackFor = Exception.class)
     public ApiRet<String> register(LoginDto.RegisterReq registerReq) {
+        final var channelAsMap = bizChannelService.getChannelAsMap();
+        String requestDomain = null;
+         Enumeration<String> headers = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                .getRequest().getHeaders("X-Forwarded-Host");
+        if(headers.hasMoreElements()){
+            requestDomain = headers.nextElement();
+        }
+        BizChannel bizChannel = channelAsMap.get(requestDomain);
+
         // 验证短信验证码
         boolean isOk = smsService.verifySmsCode(registerReq.getMobile(), registerReq.getCode());
         if (!isOk) {
