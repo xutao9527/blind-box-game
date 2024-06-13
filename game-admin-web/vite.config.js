@@ -7,13 +7,9 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 
-
 const pathSrc = path.resolve(__dirname, 'src')
 
-
-
 export default defineConfig({
-
     // build:{
     //     assetsDir: "admin-assets",
     //     outDir:"../admin-service/resources/admin-dist"
@@ -70,7 +66,7 @@ export default defineConfig({
                 rewrite: (path) => path.replace(/^\/api/, ""),
             },
             "/app": {
-                target: "http://localhost/",
+                target: "http://www.bbg.com/",
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/app/, ""),
             },
