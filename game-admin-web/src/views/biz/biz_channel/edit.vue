@@ -19,9 +19,9 @@
               <el-form-item label="渠道域名">
                 <el-input v-model="data.channelDomain"/>
               </el-form-item>
-              <el-form-item label="渠道码">
-                <el-input v-model="data.channelCode"/>
-              </el-form-item>
+<!--              <el-form-item label="渠道码">-->
+<!--                <el-input v-model="data.channelCode"/>-->
+<!--              </el-form-item>-->
               <el-form-item label="渠道描述">
                 <el-input v-model="data.channelRemark"/>
               </el-form-item>

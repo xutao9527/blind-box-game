@@ -1,8 +1,11 @@
 package com.bbg.core.service.impl.biz;
 
+import cn.hutool.core.codec.Base58;
+import cn.hutool.core.convert.Convert;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.constrans.KeyConst;
+import com.bbg.core.utils.IdTool;
 import com.bbg.model.csgo.CsgoRobot;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
@@ -35,6 +38,8 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
     @Override
     @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST)
     public boolean save(BizChannel entity) {
+        entity.setId(IdTool.nextId());
+        entity.setChannelCode(Base58.encode(Convert.longToBytes(entity.getId())));
         return super.save(entity);
     }
 
@@ -47,6 +52,7 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
     @Override
     @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST)
     public boolean updateById(BizChannel entity) {
+        entity.setChannelCode(null);
         return super.updateById(entity);
     }
 }
