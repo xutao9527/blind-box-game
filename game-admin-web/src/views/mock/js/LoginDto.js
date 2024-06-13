@@ -62,7 +62,11 @@ export const loginMock = reactive({
         }
     },
     register: async () => {     // 注册
-        const apiRet = await appHttp.post('bizUser/register', loginMock.RegisterReq)
+        const apiRet = await appHttp.post('bizUser/register', loginMock.RegisterReq, {
+            headers: {
+                promoCode: '1cZVQMDpEB'
+            }
+        })
         if(apiRet.ok){
             ElMessage.success('注册成功')
         }

@@ -5,6 +5,7 @@ import cn.hutool.core.convert.Convert;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.constrans.KeyConst;
+import com.bbg.core.mapper.biz.BizUserMapper;
 import com.bbg.core.service.biz.BizUserService;
 import com.bbg.core.utils.IdTool;
 import com.bbg.model.biz.BizUser;
@@ -16,6 +17,8 @@ import com.bbg.core.mapper.biz.BizChannelMapper;
 import com.bbg.core.service.biz.BizChannelService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -32,11 +35,10 @@ import java.util.stream.Collectors;
  * @since 2024-06-13
  */
 @Service
-@RequiredArgsConstructor
 public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChannel> implements BizChannelService {
-
-    public final BizChannelService selfProxy;
-    public final BizUserService bizUserService;
+    @Lazy
+    @Autowired
+    private BizChannelService selfProxy;
 
     @RedisCache(key = KeyConst.BIZ_CHANNEL_LIST)
     public Map<String, BizChannel> getChannelAsMap() {
@@ -71,7 +73,8 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
         // 优先使用请求头中的promoCode,查询所属用户的渠道码
         String promoCode = request.getHeader("promoCode");
         if(promoCode != null) {
-            BizUser bizUser = bizUserService.getOne(QueryWrapper.create().eq(BizUser::getPromoCode, promoCode));
+            QueryWrapper queryWrapper = QueryWrapper.create().from(BizUser.class).eq(BizUser::getPromoCode, promoCode);
+            BizUser bizUser = getMapper().selectOneByQueryAs(queryWrapper, BizUser.class);
             if(bizUser != null) {
                 map.put("channelCode", bizUser.getChannelCode());
                 map.put("invitationCode", bizUser.getPromoCode());

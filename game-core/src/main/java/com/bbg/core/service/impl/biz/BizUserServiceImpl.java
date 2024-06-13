@@ -36,6 +36,7 @@ import com.bbg.model.biz.BizUser;
 import com.bbg.core.mapper.biz.BizUserMapper;
 import com.bbg.core.service.biz.BizUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestAttributes;
@@ -63,7 +64,8 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public final BizDataService dataService;
     public final RedisService redisService;
     public final SmsService smsService;
-    public final BizChannelService bizChannelService;
+    @Autowired
+    private BizChannelService bizChannelService;
 
     @Override
     public BizUser getById(Serializable id) {
