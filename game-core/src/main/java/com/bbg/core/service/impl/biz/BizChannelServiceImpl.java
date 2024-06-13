@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChannel> implements BizChannelService {
 
     @RedisCache(key = KeyConst.BIZ_CHANNEL_LIST)
-    public Map<String,BizChannel> getChannelAsMap(){
-        List<BizChannel> bizChannels = super.list(QueryWrapper.create().eq(CsgoRobot::getEnable,true));
+    public Map<String, BizChannel> getChannelAsMap() {
+        List<BizChannel> bizChannels = super.list(QueryWrapper.create().eq(CsgoRobot::getEnable, true));
         return bizChannels.stream().collect(Collectors.toMap(BizChannel::getChannelCode, Function.identity()));
     }
 

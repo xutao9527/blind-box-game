@@ -3,6 +3,8 @@ package com.bbg.core.service.biz;
 import com.mybatisflex.core.service.IService;
 import com.bbg.model.biz.BizChannel;
 
+import java.util.Map;
+
 /**
  * 渠道管理 服务层。
  *
@@ -11,4 +13,5 @@ import com.bbg.model.biz.BizChannel;
  */
 public interface BizChannelService extends IService<BizChannel> {
 
+    Map<String, BizChannel> getChannelAsMap()
 }
