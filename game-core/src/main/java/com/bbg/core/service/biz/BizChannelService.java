@@ -12,6 +12,5 @@ import java.util.Map;
  * @since 2024-06-13
  */
 public interface BizChannelService extends IService<BizChannel> {
-
     Map<String, BizChannel> getChannelAsMap()
 }
