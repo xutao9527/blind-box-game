@@ -3,6 +3,7 @@ package com.bbg.box.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.entity.ApiRet;
+import com.bbg.core.service.biz.BizChannelService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     // 在请求处理之前进行拦截逻辑，返回 true 表示继续执行，返回 false 表示终止执行
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info(request.getRequestURI());
         String token = request.getHeader("token");
         if (token != null) {
             if (!redisService.expireUser(token)) {

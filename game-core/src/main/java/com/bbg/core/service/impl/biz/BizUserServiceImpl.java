@@ -36,6 +36,9 @@ import com.bbg.core.service.biz.BizUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -60,6 +63,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     public final BizDataService dataService;
     public final RedisService redisService;
     public final SmsService smsService;
+
 
     @Override
     public BizUser getById(Serializable id) {
