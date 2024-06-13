@@ -89,6 +89,12 @@ public class BizUserRecord extends BaseModel implements Serializable {
     private LocalDateTime birthday;
 
     /**
+     * 推广码
+     */
+    @Schema(description = "推广码")
+    private String promoCode;
+
+    /**
      * 邀请码
      */
     @Schema(description = "邀请码")
