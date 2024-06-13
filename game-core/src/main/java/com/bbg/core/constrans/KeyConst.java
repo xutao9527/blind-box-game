@@ -17,6 +17,9 @@ public class KeyConst {
 
     // 业务平台配置
     public final static String BIZ_CONFIG_NAME_ALIAS = "biz::config::nameAlias";
+    // 业务渠道列表
+    public final static String BIZ_CHANNEL_LIST = "biz::channel::list";
+
     // 游戏配置
     public final static String GAME_CONFIG_NAME_ALIAS = "game::config::nameAlias";
     // 字典标签缓存
