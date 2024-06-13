@@ -1,5 +1,7 @@
 package com.bbg.core.service.impl.biz;
 
+import cn.hutool.core.codec.Base58;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.box.dto.LoginDto;
@@ -150,7 +152,6 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         BizUser bizUser = new BizUser();
         bizUser.setMobile(registerReq.getMobile());
         bizUser.setPassword(registerReq.getPassword());
-        bizUser.setId(IdTool.nextId());
         bizUser.setPhoto(profilePhotoList.get(secureRandom.nextInt(profilePhotoList.size())));
         bizUser.setNickName(nickNameList.get(secureRandom.nextInt(nickNameList.size())));
         bizUser.setType(userTypeDict.getValueByAlias("real_user"));
@@ -170,6 +171,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         FairFactory.FairEntity fairEntity = FairFactory.build();
         CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
         csgoUserInfo.setUserId(entity.getId())
+                .setInvitationCode(Base58.encode(Convert.longToBytes(entity.getId())))
                 .setSecretHash(fairEntity.getSecretHash())
                 .setSecretSalt(fairEntity.getSecretSalt())
                 .setPublicHash(fairEntity.getPublicHash())
