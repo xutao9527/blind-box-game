@@ -19,7 +19,7 @@ import java.io.Serial;
  * 业务用户 实体类。
  *
  * @author bbg
- * @since 2024-06-10
+ * @since 2024-06-13
  */
 @Data
 @NoArgsConstructor
@@ -71,12 +71,6 @@ public class BizUserRecord extends BaseModel implements Serializable {
     private BigDecimal money;
 
     /**
-     * 金额校验
-     */
-    @Schema(description = "金额校验")
-    private String moneySign;
-
-    /**
      * 头像
      */
     @Schema(description = "头像")
@@ -93,6 +87,18 @@ public class BizUserRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "生日")
     private LocalDateTime birthday;
+
+    /**
+     * 邀请码
+     */
+    @Schema(description = "邀请码")
+    private String invitationCode;
+
+    /**
+     * 渠道码
+     */
+    @Schema(description = "渠道码")
+    private String channelCode;
 
     /**
      * 类型

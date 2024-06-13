@@ -154,6 +154,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
         bizUser.setPassword(registerReq.getPassword());
         bizUser.setPhoto(profilePhotoList.get(secureRandom.nextInt(profilePhotoList.size())));
         bizUser.setNickName(nickNameList.get(secureRandom.nextInt(nickNameList.size())));
+
         bizUser.setType(userTypeDict.getValueByAlias("real_user"));
         bizUser.setEnable(true);
         bizUser.setMoney(BigDecimal.valueOf(0.0));
@@ -167,11 +168,11 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     @Transactional(rollbackFor = Exception.class)
     public void addUser(BizUser entity) {
         entity.setId(IdTool.nextId());
+        entity.setInvitationCode(Base58.encode(Convert.longToBytes(entity.getId())));
         getMapper().insert(entity, true);
         FairFactory.FairEntity fairEntity = FairFactory.build();
         CsgoUserInfo csgoUserInfo = new CsgoUserInfo();
         csgoUserInfo.setUserId(entity.getId())
-                .setInvitationCode(Base58.encode(Convert.longToBytes(entity.getId())))
                 .setSecretHash(fairEntity.getSecretHash())
                 .setSecretSalt(fairEntity.getSecretSalt())
                 .setPublicHash(fairEntity.getPublicHash())

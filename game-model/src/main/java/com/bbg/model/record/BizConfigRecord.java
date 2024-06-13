@@ -18,7 +18,7 @@ import java.io.Serial;
  * 平台配置 实体类。
  *
  * @author bbg
- * @since 2024-06-10
+ * @since 2024-06-13
  */
 @Data
 @NoArgsConstructor
