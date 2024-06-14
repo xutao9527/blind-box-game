@@ -72,7 +72,7 @@
       </el-row>
     </el-header>
     <el-main class="mock-main">
-      <el-tabs tab-position="right" model-value="battle">
+      <el-tabs tab-position="right" model-value="roll">
         <el-tab-pane label="盲盒" name="box">
           <box></box>
         </el-tab-pane>
@@ -83,7 +83,7 @@
           <battle></battle>
         </el-tab-pane>
         <el-tab-pane label="Roll房" name="roll">
-          Roll房
+          <roll></roll>
         </el-tab-pane>
         <el-tab-pane label="个人中心" name="userInfo">
           个人中心
@@ -98,6 +98,7 @@ import {mockGlobal} from "./js/mockGlobal.js";
 import box from "@/views/mock/box.vue";
 import Dream from "@/views/mock/dream.vue";
 import Battle from "@/views/mock/battle.vue";
+import Roll from "@/views/mock/roll.vue";
 
 onMounted(()=>{
   loginMock.getInfo();
