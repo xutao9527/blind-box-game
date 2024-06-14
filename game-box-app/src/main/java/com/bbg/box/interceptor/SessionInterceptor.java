@@ -17,7 +17,6 @@ import java.io.IOException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-
 public class SessionInterceptor implements HandlerInterceptor {
 
     public final RedisService redisService;
@@ -25,6 +24,13 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     // 在请求处理之前进行拦截逻辑，返回 true 表示继续执行，返回 false 表示终止执行
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 获取请求的 URI
+        String uri = request.getRequestURI();
+        // 获取查询参数
+        String queryString = request.getQueryString();
+        // 构建完整的 URL
+        String fullUrl = uri + (queryString != null ? "?" + queryString : "");
+        log.info("请求的URL为：{}", fullUrl);
         String token = request.getHeader("token");
         if (token != null) {
             if (!redisService.expireUser(token)) {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Tag(name = "在线支付接口")
-@RequestMapping("/online/pay")
+@RequestMapping("/pay")
 @RequiredArgsConstructor
 public class OnlinePayController extends BaseController {
 
