@@ -19,6 +19,13 @@ spring:
           predicates:
             - Path=/**
 
+        - id: box-app-server
+          uri: lb://box-app-server
+          predicates:
+            - Path=/scheduler/**
+          filters:
+            - StripPrefix=1
+
 #        - id: scheduler-server
 #          uri: lb://scheduler-server
 #          predicates:

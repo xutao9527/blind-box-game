@@ -1,13 +1,13 @@
-package com.bbg.gamethird;
+package com.bbg.third;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GameThirdApplication {
+public class ThirdServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GameThirdApplication.class, args);
+		SpringApplication.run(ThirdServiceApplication.class, args);
 	}
 
 }
