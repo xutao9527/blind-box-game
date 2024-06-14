@@ -10,12 +10,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>game-gateway</module><!-- 网关 -->
         <module>game-model</module><!-- 数据模型 -->
+        <module>game-core</module><!-- 核心模块 -->
+        <module>game-gateway</module><!-- 网关 -->
         <module>game-box-app</module><!-- 盲盒应用 -->
         <module>game-admin</module><!-- 后台管理 -->
         <module>game-scheduler</module><!-- 定时任务 -->
-        <module>game-core</module><!-- 核心模块 -->
     </modules>
 
     <properties>
