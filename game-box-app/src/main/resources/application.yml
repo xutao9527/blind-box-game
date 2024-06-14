@@ -35,6 +35,10 @@ spring:
 
 springdoc:
   api-docs:
+    enabled: true
     path: /api-doc
   swagger-ui:
     path: /doc
+    urls:
+      - name: 盲盒服务
+        url: /api-doc

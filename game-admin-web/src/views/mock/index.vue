@@ -1,7 +1,7 @@
 <template>
   <el-container class="mock">
     <el-header class="mock-header">
-      <el-tabs tab-position="top" model-value="codeLogin">
+      <el-tabs tab-position="top" model-value="pwdLogin">
         <el-tab-pane label="密码登录" name="pwdLogin" >
           <el-form label-position="right" :inline="true" size="small">
             <el-form-item label="手机号">

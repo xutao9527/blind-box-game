@@ -26,15 +26,12 @@ spring:
           predicates:
             - Path=/**
 
-
-
 #        - id: scheduler-server
 #          uri: lb://scheduler-server
 #          predicates:
 #            - Path=/scheduler/**
 #          filters:
 #            - StripPrefix=1
-#
 #        - id: scheduler-server
 #          uri: lb://scheduler-server
 #          predicates:
