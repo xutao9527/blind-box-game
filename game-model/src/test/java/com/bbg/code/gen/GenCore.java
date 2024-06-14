@@ -22,6 +22,8 @@ public class GenCore {
             "biz_data",//业务数据
             "biz_config",//平台配置
             "biz_channel",//渠道
+            "biz_pay_platform",//支付平台
+            "biz_pay_order",//支付订单
     };
 
     public static String[] csgoTables = {

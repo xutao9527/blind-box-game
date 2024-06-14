@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 装备仓库 实体类。
+ * 支付订单 实体类。
  *
  * @author bbg
  * @since 2024-06-14
@@ -26,9 +26,9 @@ import java.io.Serial;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "装备仓库")
-@Table("csgo_storehouse")
-public class CsgoStorehouseRecord extends BaseModel implements Serializable {
+@Schema(description = "支付订单")
+@Table("biz_pay_order")
+public class BizPayOrderRecord extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -47,64 +47,58 @@ public class CsgoStorehouseRecord extends BaseModel implements Serializable {
     private Long userId;
 
     /**
-     * 商品编号
+     * 用户手机
      */
-    @Schema(description = "商品编号")
-    private Long goodId;
+    @Schema(description = "用户手机")
+    private String userMobile;
 
     /**
-     * 商品名称
+     * 支付订单号
      */
-    @Schema(description = "商品名称")
-    private String name;
+    @Schema(description = "支付订单号")
+    private String payNo;
 
     /**
-     * 商品别名
+     * 支付平台编号
      */
-    @Schema(description = "商品别名")
-    private String nameAlias;
+    @Schema(description = "支付平台编号")
+    private Long payPlatformId;
 
     /**
-     * 图片地址
+     * 支付币种
      */
-    @Schema(description = "图片地址")
-    private String imageUrl;
+    @Schema(description = "支付币种")
+    private String payCurrency;
 
     /**
-     * 商品价值
+     * 支付金额
      */
-    @Schema(description = "商品价值")
-    private BigDecimal price;
+    @Schema(description = "支付金额")
+    private BigDecimal payMoney;
 
     /**
-     * 来源类型
+     * 回调时间
      */
-    @Schema(description = "来源类型")
-    private String sourceType;
+    @Schema(description = "回调时间")
+    private LocalDateTime callbackTime;
 
     /**
-     * 来源编号
+     * 回调内容
      */
-    @Schema(description = "来源编号")
-    private Long sourceId;
+    @Schema(description = "回调内容")
+    private String callbackContent;
 
     /**
-     * 来源信息
+     * 支付订单描述
      */
-    @Schema(description = "来源信息")
-    private String sourceInfo;
+    @Schema(description = "支付订单描述")
+    private String payOrderRemark;
 
     /**
-     * 商品状态
+     * 支付状态
      */
-    @Schema(description = "商品状态")
-    private String status;
-
-    /**
-     * 状态:1=启动,0=禁用
-     */
-    @Schema(description = "状态:1=启动,0=禁用")
-    private Boolean enable;
+    @Schema(description = "支付状态")
+    private String payStatus;
 
     /**
      * 创建时间

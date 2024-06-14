@@ -11,6 +11,7 @@ public class GenBox {
             "biz_user",//账号
             "biz_dict",//业务字典
             "biz_dict_detail",//字典详情
+            "biz_pay_platform",//支付平台
     };
 
     public static String[] csgoTables = {
@@ -43,8 +44,8 @@ public class GenBox {
                 .resolve("java")
                 .toString();
         CodeGenNormal codeGenNormal = new CodeGenNormal();
-        // codeGenNormal.generateController(bizTables, "com.bbg.box", ".biz", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
-        // codeGenNormal.generateController(csgoTables, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
-        codeGenNormal.generateController(new String[]{"csgo_robot_test"}, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
+        codeGenNormal.generateController(bizTables, "com.bbg.box", ".biz", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
+        codeGenNormal.generateController(csgoTables, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
+        //codeGenNormal.generateController(new String[]{"csgo_robot_test"}, "com.bbg.box", ".csgo", extPackagePath, "/templates/enjoy/CustomAppController.tpl");
     }
 }
