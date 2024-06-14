@@ -143,7 +143,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
             return ApiRet.buildNo("手机号已注册");
         }
         // 查询邀请码与渠道码
-        Map<String,String> ChannelMap = bizChannelService.getChannelCode();
+        Map<String,String> ChannelMap = bizChannelService.getChannelCode(registerReq.getInvitationCode());
         // 验证短信验证码
         boolean isOk = smsService.verifySmsCode(registerReq.getMobile(), registerReq.getCode());
         if (!isOk) {

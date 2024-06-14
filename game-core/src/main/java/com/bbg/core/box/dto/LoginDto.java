@@ -81,5 +81,10 @@ public class LoginDto {
          */
         @Schema(description = "验证码")
         private String code;
+        /**
+         * 验证码
+         */
+        @Schema(description = "邀请码")
+        private String invitationCode;
     }
 }

@@ -67,11 +67,13 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
         return super.updateById(entity);
     }
 
-    public Map<String,String> getChannelCode() {
+    public Map<String,String> getChannelCode(String promoCode) {
         Map<String,String> map = new HashMap<>();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        // 优先使用请求头中的promoCode,查询所属用户的渠道码
-        String promoCode = request.getHeader("promoCode");
+        if (promoCode == null) {
+            // 使用请求头中的promoCode,查询所属用户的渠道码
+            promoCode = request.getHeader("promoCode");
+        }
         if(promoCode != null) {
             QueryWrapper queryWrapper = QueryWrapper.create().from(BizUser.class).eq(BizUser::getPromoCode, promoCode);
             BizUser bizUser = getMapper().selectOneByQueryAs(queryWrapper, BizUser.class);

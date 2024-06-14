@@ -13,5 +13,5 @@ import java.util.Map;
  */
 public interface BizChannelService extends IService<BizChannel> {
     Map<String, BizChannel> getChannelAsMap();
-    Map<String,String> getChannelCode();
+    Map<String,String> getChannelCode(String promoCode);
 }
