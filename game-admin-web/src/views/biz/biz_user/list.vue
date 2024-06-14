@@ -119,6 +119,7 @@ scope.run(() => {
 })
 
 onMounted(() => {
+  tableProps.reqParams.queryEntity.type = '1'
   tableProps.fetchData()
 })
 
