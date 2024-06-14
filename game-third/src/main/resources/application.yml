@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: box-app-server
+    name: game-third-server
   cloud:
     nacos:
       server-addr: 127.0.0.1:8848
@@ -32,6 +32,7 @@ spring:
           max-active: 100
           # 连接分配应该阻塞的最大时间
           max-wait: 2000
+
 
 springdoc:
   api-docs:

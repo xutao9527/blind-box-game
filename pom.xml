@@ -16,6 +16,7 @@
         <module>game-box-app</module><!-- 盲盒应用 -->
         <module>game-admin</module><!-- 后台管理 -->
         <module>game-scheduler</module><!-- 定时任务 -->
+        <module>game-third</module><!-- 第三方服务 -->
     </modules>
 
     <properties>
