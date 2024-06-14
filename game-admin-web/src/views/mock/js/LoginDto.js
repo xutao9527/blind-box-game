@@ -16,6 +16,7 @@ export const loginMock = reactive({
         mobile: "",
         password: "",
         code: "",
+        invitationCode:null
     },
     loginRes: {},
     getInfo: async () => {

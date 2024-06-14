@@ -40,6 +40,9 @@
             <el-form-item label="验证码">
               <el-input v-model="loginMock.RegisterReq.code" placeholder="验证码"/>
             </el-form-item>
+            <el-form-item label="验证码">
+              <el-input v-model="loginMock.RegisterReq.invitationCode" placeholder="邀请码(可选)"/>
+            </el-form-item>
             <el-form-item>
               <el-button type="info" @click="loginMock.sendCode(loginMock.RegisterReq.mobile)">验 证 码</el-button>
               <el-button type="success" @click="loginMock.register">注 册</el-button>
