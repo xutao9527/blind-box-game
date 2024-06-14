@@ -70,7 +70,7 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
     public Map<String,String> getChannelCode(String promoCode) {
         Map<String,String> map = new HashMap<>();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        if (promoCode == null) {
+        if (promoCode == null || promoCode.isEmpty()) {
             // 使用请求头中的promoCode,查询所属用户的渠道码
             promoCode = request.getHeader("promoCode");
         }
