@@ -9,7 +9,11 @@
       </el-aside>
       <el-main class="bbg-main" style="padding: 10px">
         <bbg-tabs/>
-        <router-view></router-view>
+        <router-view v-slot="{Component, route}">
+          <keep-alive>
+            <component :is="Component" :key="route.path + (route.meta.keepAlive ? '' : '')"/>
+          </keep-alive>
+        </router-view>
       </el-main>
     </el-container>
   </el-container>
