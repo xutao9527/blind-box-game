@@ -33,12 +33,16 @@ spring:
           # 连接分配应该阻塞的最大时间
           max-wait: 2000
 
+# springdoc-openapi项目配置
 springdoc:
-  api-docs:
-    enabled: true
-    path: /api-doc
   swagger-ui:
-    path: /doc
-    urls:
-      - name: 盲盒服务
-        url: /api-doc
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn

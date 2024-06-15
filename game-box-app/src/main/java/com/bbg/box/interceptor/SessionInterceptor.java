@@ -31,16 +31,16 @@ public class SessionInterceptor implements HandlerInterceptor {
         // 构建完整的 URL
         String fullUrl = uri + (queryString != null ? "?" + queryString : "");
         log.info("请求的URL为：{}", fullUrl);
-        String token = request.getHeader("token");
-        if (token != null) {
-            if (!redisService.expireUser(token)) {
-                noLogin(response);
-                return false;
-            }
-        } else {
-            noLogin(response);
-            return false;
-        }
+        // String token = request.getHeader("token");
+        // if (token != null) {
+        //     if (!redisService.expireUser(token)) {
+        //         noLogin(response);
+        //         return false;
+        //     }
+        // } else {
+        //     noLogin(response);
+        //     return false;
+        // }
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
