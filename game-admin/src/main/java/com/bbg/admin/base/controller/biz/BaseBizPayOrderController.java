@@ -56,13 +56,13 @@ public class BaseBizPayOrderController extends BaseController<BizPayOrder, BizPa
     }
 
     @PostMapping("list")
-    Operation(summary = "查询所有", description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<BizPayOrder>> list(@RequestBody BizPayOrder model) {
         return ApiRet.buildOk(bizPayOrderService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    Operation(summary = "分页查询", description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<BizPayOrder>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<BizPayOrder> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(BizPayOrder::getId, SqlOperator.EQUALS);

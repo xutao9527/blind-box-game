@@ -56,13 +56,13 @@ public class BaseCsgoBattleRoomUserController extends BaseController<CsgoBattleR
     }
 
     @PostMapping("list")
-    Operation(summary = "查询所有", description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<CsgoBattleRoomUser>> list(@RequestBody CsgoBattleRoomUser model) {
         return ApiRet.buildOk(csgoBattleRoomUserService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    Operation(summary = "分页查询", description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<CsgoBattleRoomUser>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<CsgoBattleRoomUser> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(CsgoBattleRoomUser::getId, SqlOperator.EQUALS);

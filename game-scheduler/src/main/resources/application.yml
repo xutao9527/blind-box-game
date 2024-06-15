@@ -37,6 +37,6 @@ spring:
 
 springdoc:
   api-docs:
-    path: /api-doc
+    path: /api-docs
   swagger-ui:
     path: /doc

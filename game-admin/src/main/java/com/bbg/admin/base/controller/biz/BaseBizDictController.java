@@ -57,13 +57,13 @@ public class BaseBizDictController extends BaseController<BizDict, BizDictServic
     }
 
     @PostMapping("list")
-    Operation(summary = "查询所有", description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<BizDict>> list(@RequestBody BizDict model) {
         return ApiRet.buildOk(bizDictService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    Operation(summary = "分页查询", description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<BizDict>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<BizDict> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(BizDict::getId, SqlOperator.EQUALS);

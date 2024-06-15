@@ -57,14 +57,14 @@ public class BaseCsgoBoxGoodsController extends BaseController<CsgoBoxGoods, Csg
     }
 
     @PostMapping("list")
-    Operation(summary = "查询所有", description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<CsgoBoxGoods>> list(@RequestBody CsgoBoxGoods model) {
         QueryWrapper queryWrapper = QueryWrapper.create(model).orderBy(CsgoBoxGoods::getSort, true);
         return ApiRet.buildOk(csgoBoxGoodsService.list(queryWrapper));
     }
 
     @PostMapping("page")
-    Operation(summary = "分页查询", description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<CsgoBoxGoods>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<CsgoBoxGoods> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(CsgoBoxGoods::getId, SqlOperator.EQUALS);

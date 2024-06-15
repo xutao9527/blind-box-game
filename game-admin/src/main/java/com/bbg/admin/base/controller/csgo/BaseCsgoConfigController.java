@@ -56,13 +56,13 @@ public class BaseCsgoConfigController extends BaseController<CsgoConfig, CsgoCon
     }
 
     @PostMapping("list")
-    Operation(summary = "查询所有", description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<CsgoConfig>> list(@RequestBody CsgoConfig model) {
         return ApiRet.buildOk(csgoConfigService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    Operation(summary = "分页查询", description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<CsgoConfig>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<CsgoConfig> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of()

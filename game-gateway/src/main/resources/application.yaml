@@ -21,22 +21,42 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: admin-server
+          uri: lb://admin-server
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+
         - id: box-app-server
           uri: lb://box-app-server
           predicates:
-            - Path=/**
+            - Path=/box/**
+          filters:
+            - StripPrefix=1
+
+        - id: scheduler-server
+          uri: lb://scheduler-server
+          predicates:
+            - Path=/sched/**
+          filters:
+            - StripPrefix=1
 
 
 springdoc:
   api-docs:
-    path: /api-doc
+    path: /api-docs
   webjars:
     prefix:
   swagger-ui:
     path: /doc.html
     urls:
-      - name: 第三方服务
+      - name: 盲盒服务接口
+        url: /box/api-docs
+      - name: 第三方服务接口
         url: /third/api-docs
-      - name: 盲盒服务
-        url: /api-docs
+      - name: 后台管理服务接口
+        url: /admin/api-docs
+      - name: 调度任务服务接口
+        url: /sched/api-docs
 

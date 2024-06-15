@@ -56,13 +56,13 @@ public class BaseCsgoUserInfoController extends BaseController<CsgoUserInfo, Csg
     }
 
     @PostMapping("list")
-    Operation(summary = "查询所有", description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<CsgoUserInfo>> list(@RequestBody CsgoUserInfo model) {
         return ApiRet.buildOk(csgoUserInfoService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    Operation(summary = "分页查询", description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<CsgoUserInfo>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<CsgoUserInfo> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(CsgoUserInfo::getId, SqlOperator.EQUALS);

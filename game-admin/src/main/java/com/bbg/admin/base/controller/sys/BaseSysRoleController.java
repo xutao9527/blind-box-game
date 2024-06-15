@@ -56,13 +56,13 @@ public class BaseSysRoleController extends BaseController<SysRole, SysRoleServic
     }
 
     @PostMapping("list")
-    Operation(summary = "查询所有", description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<SysRole>> list(@RequestBody SysRole model) {
         return ApiRet.buildOk(sysRoleService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    Operation(summary = "分页查询", description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<SysRole>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<SysRole> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of()
