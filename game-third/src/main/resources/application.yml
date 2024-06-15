@@ -37,9 +37,9 @@ spring:
 springdoc:
   api-docs:
     enabled: true
-    path: /api-doc
+    path: /api-docs
   swagger-ui:
     path: /doc
     urls:
-      - name: 第三方服务接口
-        url: /api-doc
+      - name: 第三方服务
+        url: /api-docs

@@ -36,10 +36,10 @@ spring:
 # springdoc-openapi项目配置
 springdoc:
   api-docs:
-    path: /api-doc
+    path: /api-docs
   swagger-ui:
     path: /doc
     urls:
       - name: 盲盒服务
-        url: /api-doc
+        url: /api-docs
 
