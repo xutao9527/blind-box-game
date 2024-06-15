@@ -24,22 +24,19 @@ spring:
         - id: box-app-server
           uri: lb://box-app-server
           predicates:
-            - Path=/box/**
-          filters:
-            - StripPrefix=1
+            - Path=/**
 
-#        - id: box-app-server
-#          uri: lb://box-app-server
-#          predicates:
-#            - Path=/**
 
 springdoc:
   api-docs:
-    path: /api-docs
+    path: /api-doc
+  webjars:
+    prefix:
   swagger-ui:
     path: /doc.html
     urls:
-      - name: 盲盒服务
-        url: /box/api-docs
       - name: 第三方服务
         url: /third/api-docs
+      - name: 盲盒服务
+        url: /api-docs
+

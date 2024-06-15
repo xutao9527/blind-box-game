@@ -1,5 +1,5 @@
 server:
-  port: 7890
+  port: 0
 
 spring:
   application:
@@ -39,7 +39,5 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /doc
-    urls:
-      - name: 盲盒服务
-        url: /api-docs
+
 
