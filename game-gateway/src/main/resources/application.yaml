@@ -40,6 +40,6 @@ springdoc:
     path: /doc.html
     urls:
       - name: 盲盒服务
-        url: /third/api-docs
-      - name: 第三方服务
         url: /box/api-docs
+      - name: 第三方服务
+        url: /third/api-docs
