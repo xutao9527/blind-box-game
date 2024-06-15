@@ -23,7 +23,6 @@ public class  WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/csgoBattleRoom/getRoomList")         // 获取对战房间列表
                 .excludePathPatterns("/csgoBattleRoom/getRoom")             // 获得对战房间信息
                 .excludePathPatterns("/csgoBattleRoom/joinByUserId")        // 测试接口,后面屏蔽
-                .excludePathPatterns("/doc.html")                                // 在线接口文档
                 .excludePathPatterns("/doc")                                // 在线接口文档
                 .excludePathPatterns("/api-doc")                            // 在线接口文档
                 .excludePathPatterns("/swagger-ui/**")                      // 在线接口文档
