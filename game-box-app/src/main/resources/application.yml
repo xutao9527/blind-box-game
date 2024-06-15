@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 7890
 
 spring:
   application:
@@ -35,18 +35,11 @@ spring:
 
 # springdoc-openapi项目配置
 springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    tags-sorter: alpha
-    operations-sorter: alpha
   api-docs:
-    path: /v3/api-docs
-  group-configs:
-    - group: 'default'
-      paths-to-match: /**
-      packages-to-scan: com.bbg.box
+    path: /api-doc
+  swagger-ui:
+    path: /doc
+    urls:
+      - name: 盲盒服务
+        url: /api-doc
 
-knife4j:
-  enable: true
-  setting:
-    language: zh_cn
