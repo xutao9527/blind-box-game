@@ -66,7 +66,7 @@ export default defineConfig({
                 rewrite: (path) => path.replace(/^\/api/, ""),
             },
             "/app": {
-                target: "http://www.bbg.com/",
+                target: "http://www.bbg.com/box/",
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/app/, ""),
             },

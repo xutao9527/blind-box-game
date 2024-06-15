@@ -72,7 +72,7 @@
       </el-row>
     </el-header>
     <el-main class="mock-main">
-      <el-tabs tab-position="right" model-value="roll">
+      <el-tabs tab-position="right" model-value="box">
         <el-tab-pane label="盲盒" name="box">
           <box></box>
         </el-tab-pane>
