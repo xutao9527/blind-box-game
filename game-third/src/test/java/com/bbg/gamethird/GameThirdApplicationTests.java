@@ -1,13 +1,17 @@
 package com.bbg.gamethird;
 
+import org.graalvm.polyglot.Context;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+
+
 class GameThirdApplicationTests {
 
 	@Test
 	void contextLoads() {
+		try(Context context = Context.create()) {
+			context.eval("js", "console.log('Hello, World!')");
+		}
 	}
 
 }
