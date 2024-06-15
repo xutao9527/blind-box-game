@@ -14,6 +14,13 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: gateway-server
+          uri: lb://gateway-server
+          predicates:
+            - Path=/
+          filters:
+            - RedirectTo=302, /doc.html
+
         - id: game-third-server
           uri: lb://game-third-server
           predicates:
@@ -42,7 +49,6 @@ spring:
           filters:
             - StripPrefix=1
 
-
 springdoc:
   api-docs:
     path: /api-docs
@@ -51,12 +57,12 @@ springdoc:
   swagger-ui:
     path: /doc.html
     urls:
-      - name: 盲盒服务接口
+      - name: 1.游戏服务接口
         url: /box/api-docs
-      - name: 第三方服务接口
+      - name: 2.第三方服务接口
         url: /third/api-docs
-      - name: 后台管理服务接口
+      - name: 3.后台管理服务接口
         url: /admin/api-docs
-      - name: 调度任务服务接口
+      - name: 4.调度任务服务接口
         url: /sched/api-docs
 
