@@ -35,7 +35,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom> {
     public final BizUserService bizUserService;
 
     @PostMapping("create")
-    @Operation(description = "创建对战房间")
+    @Operation(summary = "创建对战房间", description = "创建对战房间")
     public ApiRet<BattleRoomDto.BattleRoomRes> create(@Validated @RequestBody BattleRoomDto.CreateRoomReq model) {
         BizUser bizUser = getCurrentUser();
         long roomId = IdTool.nextId();
@@ -50,7 +50,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom> {
     }
 
     @GetMapping("join")
-    @Operation(description = "加入对战房间")
+    @Operation(summary = "加入对战房间", description = "加入对战房间")
     public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId") Long roomId) {
         ApiRet<BattleRoomDto.BattleRoomRes> apiRet;
         BizUser bizUser = getCurrentUser();
@@ -67,7 +67,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom> {
     }
 
     @GetMapping("joinByUserId")
-    @Operation(description = "加入对战房间(用户Id-测试)")
+    @Operation(summary = "加入对战房间(用户Id-测试)", description = "加入对战房间(用户Id-测试)")
     public ApiRet<BattleRoomDto.BattleRoomRes> join(@NotNull @RequestParam("roomId") Long roomId, @NotNull @RequestParam("userId") Long userId) {
         ApiRet<BattleRoomDto.BattleRoomRes> apiRet;
         BizUser bizUser = bizUserService.getById(userId);
@@ -84,7 +84,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom> {
     }
 
     @PostMapping("getRoom")
-    @Operation(description = "获得对战房间信息")
+    @Operation(summary = "获得对战房间信息", description = "获得对战房间信息")
     public ApiRet<BattleRoomDto.BattleRoomRes> getInfo(@NotNull @RequestParam("roomId") Long roomId) {
         BattleRoomDto.BattleRoomRes createBattleRoomRes = new BattleRoomDto.BattleRoomRes();
         CsgoBattleRoom battleRoom = csgoBattleRoomService.getInfo(roomId);
@@ -93,7 +93,7 @@ public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom> {
     }
 
     @PostMapping("getRoomList")
-    @Operation(description = "获取对战房间列表")
+    @Operation(summary = "获取对战房间列表", description = "获取对战房间列表")
     public ApiRet<Page<CsgoBattleRoom>> getRoomList(@RequestBody BattleRoomDto.GetRoomListReq model) {
         return ApiRet.buildOk(csgoBattleRoomService.getRoomList(model));
     }

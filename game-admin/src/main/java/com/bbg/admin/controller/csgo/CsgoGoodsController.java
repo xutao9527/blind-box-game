@@ -26,7 +26,7 @@ public class CsgoGoodsController extends BaseCsgoGoodsController {
     public final ZBTDataSyncService zbtDataSyncService;
 
     @GetMapping("syncData")
-    @Operation(description = "同步ZBT商品")
+    @Operation(summary = "同步ZBT商品", description = "同步ZBT商品")
     public ApiRet<Boolean> syncData() {
         return ApiRet.buildOk(zbtDataSyncService.syncData());
     }

@@ -48,7 +48,7 @@ public class BizUserController extends BaseController<BizUser> {
     public final CsgoUserInfoService csgoUserInfoService;
 
     @GetMapping("getInfo")
-    @Operation(description = "获得用户信息")
+    @Operation(summary = "获得用户信息", description = "获得用户信息")
     public ApiRet<LoginDto.LoginRes> getInfo() {
         LoginDto.LoginRes LoginRes = new LoginDto.LoginRes();
         String token = request.getHeader("token");
@@ -58,7 +58,7 @@ public class BizUserController extends BaseController<BizUser> {
     }
 
     @PostMapping("loginByPwd")
-    @Operation(description = "用户密码登录")
+    @Operation(summary = "用户密码登录", description = "用户密码登录")
     public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginPwdReq loginReq) {
         LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
         BizUser bizUser = bizUserService.getOneByMobile(loginReq.getMobile());
@@ -72,7 +72,7 @@ public class BizUserController extends BaseController<BizUser> {
     }
 
     @PostMapping("loginByCode")
-    @Operation(description = "用户验证码登录")
+    @Operation(summary = "用户验证码登录", description = "用户验证码登录")
     public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginCodeReq loginReq) {
         LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
         BizUser bizUser = bizUserService.getOneByMobile(loginReq.getMobile());
@@ -90,7 +90,7 @@ public class BizUserController extends BaseController<BizUser> {
     }
 
     @GetMapping("logout")
-    @Operation(description = "用户登出")
+    @Operation(summary = "用户登出", description = "用户登出")
     public ApiRet<String> logout() {
         String token = request.getHeader("token");
         if (token != null) {
@@ -100,7 +100,7 @@ public class BizUserController extends BaseController<BizUser> {
     }
 
     @GetMapping ("sendCode")
-    @Operation(description = "发送短信验证码")
+    @Operation(summary = "发送短信验证码", description = "发送短信验证码")
     public ApiRet<String> sendSms(@RequestParam @NotNull String mobile) {
         // 生成4位数验证码
         String code = RandomUtil.randomNumbers(4);
@@ -112,7 +112,7 @@ public class BizUserController extends BaseController<BizUser> {
     }
 
     @PostMapping("register")
-    @Operation(description = "用户注册")
+    @Operation(summary = "用户注册", description = "用户注册")
     public ApiRet<String> register(@RequestBody LoginDto.RegisterReq registerReq) {
         return bizUserService.register(registerReq);
     }

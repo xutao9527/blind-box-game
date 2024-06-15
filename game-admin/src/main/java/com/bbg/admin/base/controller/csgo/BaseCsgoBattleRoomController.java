@@ -32,37 +32,37 @@ public class BaseCsgoBattleRoomController extends BaseController<CsgoBattleRoom,
     protected  CsgoBattleRoomService csgoBattleRoomService;
 
     @PostMapping("save")
-    @Operation(description = "保存")
+    @Operation(summary = "保存", description = "保存")
     public ApiRet<Boolean> save(@RequestBody CsgoBattleRoom model) {
         return ApiRet.buildOk(csgoBattleRoomService.save(model));
     }
 
     @GetMapping("remove/{id}")
-    @Operation(description = "根据主键删除")
+    @Operation(summary = "根据主键删除", description = "根据主键删除")
     public ApiRet<Boolean> remove(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(csgoBattleRoomService.removeById(id));
     }
 
     @PostMapping("update")
-    @Operation(description = "根据主键更新")
+    @Operation(summary = "根据主键更新", description = "根据主键更新")
     public ApiRet<Boolean> update(@RequestBody @Parameter(description = "业务主键") CsgoBattleRoom model) {
         return ApiRet.buildOk(csgoBattleRoomService.updateById(model));
     }
 
     @GetMapping("getInfo/{id}")
-    @Operation(description = "根据主键获取")
+    @Operation(summary = "根据主键获取", description = "根据主键获取")
     public ApiRet<CsgoBattleRoom> getInfo(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(csgoBattleRoomService.getById(id));
     }
 
     @PostMapping("list")
-    @Operation(description = "查询所有")
+    Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<CsgoBattleRoom>> list(@RequestBody CsgoBattleRoom model) {
         return ApiRet.buildOk(csgoBattleRoomService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    @Operation(description = "分页查询")
+    Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<CsgoBattleRoom>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<CsgoBattleRoom> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(CsgoBattleRoom::getId, SqlOperator.EQUALS);

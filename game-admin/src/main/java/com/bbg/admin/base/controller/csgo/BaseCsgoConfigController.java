@@ -32,37 +32,37 @@ public class BaseCsgoConfigController extends BaseController<CsgoConfig, CsgoCon
     protected  CsgoConfigService csgoConfigService;
 
     @PostMapping("save")
-    @Operation(description = "保存")
+    @Operation(summary = "保存", description = "保存")
     public ApiRet<Boolean> save(@RequestBody CsgoConfig model) {
         return ApiRet.buildOk(csgoConfigService.save(model));
     }
 
     @GetMapping("remove/{id}")
-    @Operation(description = "根据主键删除")
+    @Operation(summary = "根据主键删除", description = "根据主键删除")
     public ApiRet<Boolean> remove(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(csgoConfigService.removeById(id));
     }
 
     @PostMapping("update")
-    @Operation(description = "根据主键更新")
+    @Operation(summary = "根据主键更新", description = "根据主键更新")
     public ApiRet<Boolean> update(@RequestBody @Parameter(description = "业务主键") CsgoConfig model) {
         return ApiRet.buildOk(csgoConfigService.updateById(model));
     }
 
     @GetMapping("getInfo/{id}")
-    @Operation(description = "根据主键获取")
+    @Operation(summary = "根据主键获取", description = "根据主键获取")
     public ApiRet<CsgoConfig> getInfo(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(csgoConfigService.getById(id));
     }
 
     @PostMapping("list")
-    @Operation(description = "查询所有")
+    Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<CsgoConfig>> list(@RequestBody CsgoConfig model) {
         return ApiRet.buildOk(csgoConfigService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    @Operation(description = "分页查询")
+    Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<CsgoConfig>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<CsgoConfig> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of()

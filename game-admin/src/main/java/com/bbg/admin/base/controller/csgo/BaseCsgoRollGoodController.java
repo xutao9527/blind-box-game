@@ -32,37 +32,37 @@ public class BaseCsgoRollGoodController extends BaseController<CsgoRollGood, Csg
     protected  CsgoRollGoodService csgoRollGoodService;
 
     @PostMapping("save")
-    @Operation(description = "保存")
+    @Operation(summary = "保存", description = "保存")
     public ApiRet<Boolean> save(@RequestBody CsgoRollGood model) {
         return ApiRet.buildOk(csgoRollGoodService.save(model));
     }
 
     @GetMapping("remove/{id}")
-    @Operation(description = "根据主键删除")
+    @Operation(summary = "根据主键删除", description = "根据主键删除")
     public ApiRet<Boolean> remove(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(csgoRollGoodService.removeById(id));
     }
 
     @PostMapping("update")
-    @Operation(description = "根据主键更新")
+    @Operation(summary = "根据主键更新", description = "根据主键更新")
     public ApiRet<Boolean> update(@RequestBody @Parameter(description = "业务主键") CsgoRollGood model) {
         return ApiRet.buildOk(csgoRollGoodService.updateById(model));
     }
 
     @GetMapping("getInfo/{id}")
-    @Operation(description = "根据主键获取")
+    @Operation(summary = "根据主键获取", description = "根据主键获取")
     public ApiRet<CsgoRollGood> getInfo(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(csgoRollGoodService.getById(id));
     }
 
     @PostMapping("list")
-    @Operation(description = "查询所有")
+    Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<CsgoRollGood>> list(@RequestBody CsgoRollGood model) {
         return ApiRet.buildOk(csgoRollGoodService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    @Operation(description = "分页查询")
+    Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<CsgoRollGood>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<CsgoRollGood> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(CsgoRollGood::getId, SqlOperator.EQUALS);

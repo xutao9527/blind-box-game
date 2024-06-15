@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class OnlinePayController extends BaseController {
 
     @GetMapping("call")
-    @Operation(description = "支付请求")
+    @Operation(summary = "支付请求", description = "支付请求")
     public ApiRet<String> call() {
         return ApiRet.buildOk("call");
     }
 
     @GetMapping("callback")
-    @Operation(description = "支付回调")
+    @Operation(summary = "支付回调", description = "支付回调")
     public ApiRet<String> callback() {
         return ApiRet.buildOk("callback");
     }

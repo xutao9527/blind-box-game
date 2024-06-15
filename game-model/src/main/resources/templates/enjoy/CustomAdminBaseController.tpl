@@ -53,37 +53,37 @@ public class #(table.buildControllerClassName()) extends BaseController<#(entity
     protected #(table.buildServiceClassName()) #(serviceVarName);
 
     @PostMapping("save")
-    @Operation(description = "保存")
+    @Operation(summary = "保存", description = "保存")
     public ApiRet<Boolean> save(@RequestBody #(entityClassName) model) {
         return ApiRet.buildOk(#(serviceVarName).save(model));
     }
 
     @GetMapping("remove/{id}")
-    @Operation(description = "根据主键删除")
+    @Operation(summary = "根据主键删除", description = "根据主键删除")
     public ApiRet<Boolean> remove(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(#(serviceVarName).removeById(id));
     }
 
     @PostMapping("update")
-    @Operation(description = "根据主键更新")
+    @Operation(summary = "根据主键更新", description = "根据主键更新")
     public ApiRet<Boolean> update(@RequestBody @Parameter(description = "业务主键") #(entityClassName) model) {
         return ApiRet.buildOk(#(serviceVarName).updateById(model));
     }
 
     @GetMapping("getInfo/{id}")
-    @Operation(description = "根据主键获取")
+    @Operation(summary = "根据主键获取", description = "根据主键获取")
     public ApiRet<#(entityClassName)> getInfo(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(#(serviceVarName).getById(id));
     }
 
     @PostMapping("list")
-    @Operation(description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<#(entityClassName)>> list(@RequestBody #(entityClassName) model) {
         return ApiRet.buildOk(#(serviceVarName).list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    @Operation(description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<#(entityClassName)>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<#(entityClassName)> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(#(entityClassName)::getId, SqlOperator.EQUALS);

@@ -23,7 +23,7 @@ public class ScheduleController extends BaseController {
     public final ScheduleService scheduleService;
 
     @GetMapping("list")
-    @Operation(description = "所有任务")
+    @Operation(summary = "所有任务", description = "所有任务")
     public ApiRet<List<QuartzJobInfo>> list() throws Exception {
         return ApiRet.buildOk(scheduleService.getAll());
     }

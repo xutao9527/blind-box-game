@@ -28,7 +28,7 @@ public class BoxGameMockController {
    public String token = null;
 
     @GetMapping("getToken")
-    @Operation(description = "获得Token")
+    @Operation(summary = "获得Token", description = "获得Token")
     public ApiRet<String> getToken() {
         if(token == null) {
             return ApiRet.buildNo(null, "token为空");
@@ -38,7 +38,7 @@ public class BoxGameMockController {
 
 
     @GetMapping("setToken")
-    @Operation(description = "设置Token")
+    @Operation(summary = "设置Token", description = "设置Token")
     public void setToken(@RequestParam String token) {
         this.token = token;
     }

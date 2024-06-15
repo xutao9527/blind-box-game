@@ -33,7 +33,7 @@ public class CsgoRobotController extends BaseController<CsgoRobot> {
     public final CsgoRobotService csgoRobotService;
 
     @GetMapping("list")
-    @Operation(description = "获得所有机器人")
+    @Operation(summary = "获得所有机器人", description = "获得所有机器人")
     @RedisCache(key = KeyConst.ROBOT_LIST)
     public ApiRet<List<CsgoRobot>> list() {
         log.info("获得所有机器人");

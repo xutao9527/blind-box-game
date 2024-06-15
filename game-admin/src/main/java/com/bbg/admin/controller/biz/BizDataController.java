@@ -32,7 +32,7 @@ public class BizDataController extends BaseBizDataController {
     private boolean isRunning = false;
 
     @PostMapping("saveBatch")
-    @Operation(description = "批量保存")
+    @Operation(summary = "批量保存", description = "批量保存")
     public ApiRet<Boolean> save(@RequestBody List<BizData> modelList) {
         boolean isOk = false;
         try {

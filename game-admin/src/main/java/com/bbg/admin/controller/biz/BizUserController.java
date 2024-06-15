@@ -43,7 +43,7 @@ public class BizUserController extends BaseBizUserController {
 
     public final BizDictService bizDictService;
 
-    @Operation(description = "业务用户后台充值")
+    @Operation(summary = "业务用户后台充值", description = "业务用户后台充值")
     @GetMapping("updateBizUserMoney/{id}/{money}")
     public ApiRet<Boolean> updateBizUserMoney(
             @PathVariable(name = "id") @Parameter(description = "用户编号") Serializable id,
@@ -62,7 +62,7 @@ public class BizUserController extends BaseBizUserController {
         return ApiRet.buildOk(true);
     }
 
-    @Operation(description = "批量新增虚拟用户")
+    @Operation(summary = "批量新增虚拟用户", description = "批量新增虚拟用户")
     @GetMapping("addVirtualUser")
     public ApiRet<Boolean> addVirtualUser(
             @RequestParam("count")
@@ -73,10 +73,10 @@ public class BizUserController extends BaseBizUserController {
         return ApiRet.buildOk(bizUserService.addVirtualUser(count));
     }
 
-    @Operation(description = "后台查看验证码")
+    @Operation(summary = "后台查看验证码", description = "后台查看验证码")
     @GetMapping("viewCode/{mobile}")
     public ApiRet<String> viewSmsCode(@PathVariable(name = "mobile") @Parameter(description = "手机号") @NotNull String mobile) {
-        String code = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE,mobile));
+        String code = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE, mobile));
         if (code != null) {
             return ApiRet.buildOk(code);
         }

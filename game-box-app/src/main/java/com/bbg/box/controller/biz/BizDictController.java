@@ -25,7 +25,7 @@ public class BizDictController extends BaseController<BizDict> {
     public final BizDictService bizDictService;
 
     @GetMapping("getDict/{tag}")
-    @Operation(description = "根据字典标识获取")
+    @Operation(summary = "根据字典标识获取", description = "根据字典标识获取")
     public ApiRet<BizDict> getDictByTag(@PathVariable(name = "tag") @Parameter(description = "字典标识") String tag) {
         return ApiRet.buildOk(bizDictService.getDictByTag(tag));
     }

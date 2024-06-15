@@ -44,7 +44,7 @@ public class CsgoBoxController extends BaseController<CsgoBox> {
 
     @PostMapping("list")
     @Tag(name = "CS:GO盲盒接口")
-    @Operation(description = "获得盲盒列表")
+    @Operation(summary = "获得盲盒列表", description = "获得盲盒列表")
     public ApiRet<List<CsgoBox>> list(@RequestBody @Validated BoxDto.GetBoxReq model) {
         List<CsgoBox> csgoBoxes = csgoBoxService.getBoxesByType(model.getType());
         return ApiRet.buildOk(csgoBoxes);
@@ -52,7 +52,7 @@ public class CsgoBoxController extends BaseController<CsgoBox> {
 
     @PostMapping("open")
     @Tag(name = "CS:GO盲盒接口")
-    @Operation(description = "打开盲盒")
+    @Operation(summary = "打开盲盒", description = "打开盲盒")
     public ApiRet<BoxDto.OpenBoxRes> openBox(@RequestBody @Validated BoxDto.OpenBoxReq model) {
         BizUser bizUser = getCurrentUser();
         BoxDto.OpenBoxRes boxRes = csgoBoxService.openBox(bizUser, model.getBoxId());
@@ -61,7 +61,7 @@ public class CsgoBoxController extends BaseController<CsgoBox> {
 
     @PostMapping("dreamList")
     @Tag(name = "CS:GO追梦接口")
-    @Operation(description = "获得追梦商品列表")
+    @Operation(summary = "获得追梦商品列表", description = "获得追梦商品列表")
     public ApiRet<DreamDto.DreamListRes> dreamList(@RequestBody DreamDto.DreamListReq model) {
         Page<CsgoBoxGoods> page = null;
         BizDict bizDict = bizDictService.getDictByTag("csgo_box_type");
@@ -83,7 +83,7 @@ public class CsgoBoxController extends BaseController<CsgoBox> {
 
     @PostMapping("dreamGood")
     @Tag(name = "CS:GO追梦接口")
-    @Operation(description = "进行追梦")
+    @Operation(summary = "进行追梦", description = "进行追梦")
     public ApiRet<DreamDto.DreamGoodRes> dreamGood(@RequestBody DreamDto.DreamGoodReq model) {
         BizUser bizUser = getCurrentUser();
         DreamDto.DreamGoodRes dreamGoodRes = csgoBoxService.dreamGood(bizUser, model);

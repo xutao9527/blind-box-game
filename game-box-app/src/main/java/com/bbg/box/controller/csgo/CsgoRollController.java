@@ -37,26 +37,26 @@ public class CsgoRollController extends BaseController<CsgoRoll> {
     public final BizUserService bizUserService;
 
     @PostMapping("getRollList")
-    @Operation(description = "获取撸房列表")
+    @Operation(summary = "获取撸房列表", description = "获取撸房列表")
     public ApiRet<Page<CsgoRoll>> getRollList(@RequestBody RollDto.GetRollListReq model) {
         return ApiRet.buildOk(csgoRollService.getRollList(model));
     }
 
     @GetMapping("getRoll")
-    @Operation(description = "获得撸房")
+    @Operation(summary = "获得撸房", description = "获得撸房")
     public ApiRet<CsgoRoll> getRoll(@NotNull @RequestParam("rollId") Long rollId) {
         return ApiRet.buildOk(csgoRollService.getInfo(rollId));
     }
 
     @PostMapping("getRollUsers")
-    @Operation(description = "获得撸房用户列表")
+    @Operation(summary = "获得撸房用户列表", description = "获得撸房用户列表")
     public ApiRet<Page<CsgoRollUser>> getRollUsers(@RequestBody RollDto.GetRollUsersReq model) {
         Page<CsgoRollUser> page = csgoRollUserService.page(Page.of(model.getPageNumber(), model.getPageSize()), QueryWrapper.create(new CsgoRollUser().setRollId(model.getRollId())));
         return ApiRet.buildOk(page);
     }
 
     @GetMapping("join")
-    @Operation(description = "加入撸房")
+    @Operation(summary = "加入撸房", description = "加入撸房")
     public ApiRet<CsgoRoll> join(@NotNull @RequestParam("rollId") Long rollId) {
         ApiRet<CsgoRoll> apiRet;
         BizUser bizUser = getCurrentUser();
@@ -73,7 +73,7 @@ public class CsgoRollController extends BaseController<CsgoRoll> {
     }
 
     @GetMapping("joinByUserId")
-    @Operation(description = "加入撸房(用户Id-测试)")
+    @Operation(summary = "加入撸房(用户Id-测试)", description = "加入撸房(用户Id-测试)")
     public ApiRet<CsgoRoll> join(@NotNull @RequestParam("rollId") Long rollId, @NotNull @RequestParam("userId") Long userId) {
         ApiRet<CsgoRoll> apiRet;
         BizUser bizUser = bizUserService.getById(userId);

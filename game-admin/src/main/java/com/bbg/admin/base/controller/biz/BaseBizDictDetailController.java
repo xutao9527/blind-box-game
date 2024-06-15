@@ -32,38 +32,38 @@ public class BaseBizDictDetailController extends BaseController<BizDictDetail, B
     protected  BizDictDetailService bizDictDetailService;
 
     @PostMapping("save")
-    @Operation(description = "保存")
+    @Operation(summary = "保存", description = "保存")
     public ApiRet<Boolean> save(@RequestBody BizDictDetail model) {
         return ApiRet.buildOk(bizDictDetailService.save(model));
     }
 
     @GetMapping("remove/{id}")
-    @Operation(description = "根据主键删除")
+    @Operation(summary = "根据主键删除", description = "根据主键删除")
     public ApiRet<Boolean> remove(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(bizDictDetailService.removeById(id));
     }
 
     @PostMapping("update")
-    @Operation(description = "根据主键更新")
+    @Operation(summary = "根据主键更新", description = "根据主键更新")
     public ApiRet<Boolean> update(@RequestBody @Parameter(description = "业务主键") BizDictDetail model) {
         return ApiRet.buildOk(bizDictDetailService.updateById(model));
     }
 
     @GetMapping("getInfo/{id}")
-    @Operation(description = "根据主键获取")
+    @Operation(summary = "根据主键获取", description = "根据主键获取")
     public ApiRet<BizDictDetail> getInfo(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(bizDictDetailService.getById(id));
     }
 
     @PostMapping("list")
-    @Operation(description = "查询所有")
+    @Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<BizDictDetail>> list(@RequestBody BizDictDetail model) {
         QueryWrapper queryWrapper = QueryWrapper.create(model).orderBy(BizDictDetail::getSort, true);
         return ApiRet.buildOk(bizDictDetailService.list(queryWrapper));
     }
 
     @PostMapping("page")
-    @Operation(description = "分页查询")
+    @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<BizDictDetail>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<BizDictDetail> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(BizDictDetail::getId, SqlOperator.EQUALS);

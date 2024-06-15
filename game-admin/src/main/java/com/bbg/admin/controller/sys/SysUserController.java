@@ -37,7 +37,7 @@ public class SysUserController extends BaseSysUserController {
     public final SysRoleService sysRoleService;
 
     @PostMapping("login")
-    @Operation(description = "管理员登录")
+    @Operation(summary = "管理员登录", description = "管理员登录")
     public ApiRet<String> login(@RequestBody SysUser sysUser) {
         ApiRet<String> ret;
         QueryWrapper queryWrapper = QueryWrapper.create().and(SysUser::getAccount).eq(sysUser.getAccount());
@@ -53,7 +53,7 @@ public class SysUserController extends BaseSysUserController {
     }
 
     @GetMapping("logout")
-    @Operation(description = "管理员登出")
+    @Operation(summary = "管理员登出", description = "管理员登出")
     public ApiRet<String> logout() {
         String token = request.getHeader("token");
         if (token != null) {
@@ -63,14 +63,14 @@ public class SysUserController extends BaseSysUserController {
     }
 
     @PostMapping("authUserRole")
-    @Operation(description = "授权用户的角色")
+    @Operation(summary = "授权用户的角色", description = "授权用户的角色")
     public ApiRet<Boolean> authUserRole(@RequestBody SysUserRole sysUserRole) {
         sysUserRoleService.remove(QueryWrapper.create(new SysUserRole().setUserId(sysUserRole.getUserId())));
         return ApiRet.buildOk(sysUserRoleService.save(sysUserRole));
     }
 
     @PostMapping("getUserRole")
-    @Operation(description = "获得用户的角色")
+    @Operation(summary = "获得用户的角色", description = "获得用户的角色")
     public ApiRet<SysRole> getUserRole(@RequestBody SysUserRole sysUserRole) {
         SysRole sysRole = null;
         SysUserRole userRole = sysUserRoleService.getOne(QueryWrapper.create(new SysUserRole().setUserId(sysUserRole.getUserId())));
@@ -81,7 +81,7 @@ public class SysUserController extends BaseSysUserController {
     }
 
     @PostMapping("authRoleMenu")
-    @Operation(description = "授权角色的菜单")
+    @Operation(summary = "授权角色的菜单", description = "授权角色的菜单")
     public ApiRet<Boolean> authRoleMenu(@RequestBody List<SysRoleMenu> roleMenuList) {
         boolean result = false;
         if (roleMenuList != null && !roleMenuList.isEmpty()) {
@@ -92,7 +92,7 @@ public class SysUserController extends BaseSysUserController {
     }
 
     @PostMapping("getRoleMenu")
-    @Operation(description = "获得角色的菜单")
+    @Operation(summary = "获得角色的菜单", description = "获得角色的菜单")
     public ApiRet<List<SysRoleMenu>> getRoleMenu(@RequestBody SysRoleMenu sysRoleMenu) {
         QueryWrapper queryWrapper = QueryWrapper.create(new SysRoleMenu().setRoleId(sysRoleMenu.getRoleId()));
         List<SysRoleMenu> sysMenuList = sysRoleMenuService.list(queryWrapper);
@@ -101,7 +101,7 @@ public class SysUserController extends BaseSysUserController {
 
 
     @GetMapping("currentUserMenu")
-    @Operation(description = "当前管理员菜单")
+    @Operation(summary = "当前管理员菜单", description = "当前管理员菜单")
     public ApiRet<List<SysMenu>> currentUserMenu() {
         SysUser sysUser = null;
         List<SysMenu> sysMenus = null;
@@ -126,7 +126,7 @@ public class SysUserController extends BaseSysUserController {
 
 
     @GetMapping("currentUser")
-    @Operation(description = "当前管理员信息")
+    @Operation(summary = "当前管理员信息", description = "当前管理员信息")
     public ApiRet<SysUser> currentUser() {
         SysUser sysUser = null;
         String token = request.getHeader("token");

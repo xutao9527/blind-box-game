@@ -19,7 +19,7 @@ import java.util.List;
 public class ScheduleController {
     public final ScheduleService scheduleService;
 
-    @Operation(description = "调度任务列表")
+    @Operation(summary = "调度任务列表", description = "调度任务列表")
     @GetMapping("list")
     public ApiRet<List<QuartzJobInfo>> list(){
         return scheduleService.list();

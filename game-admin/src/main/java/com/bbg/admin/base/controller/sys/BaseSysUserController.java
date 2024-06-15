@@ -32,37 +32,37 @@ public class BaseSysUserController extends BaseController<SysUser, SysUserServic
     protected  SysUserService sysUserService;
 
     @PostMapping("save")
-    @Operation(description = "保存")
+    @Operation(summary = "保存", description = "保存")
     public ApiRet<Boolean> save(@RequestBody SysUser model) {
         return ApiRet.buildOk(sysUserService.save(model));
     }
 
     @GetMapping("remove/{id}")
-    @Operation(description = "根据主键删除")
+    @Operation(summary = "根据主键删除", description = "根据主键删除")
     public ApiRet<Boolean> remove(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(sysUserService.removeById(id));
     }
 
     @PostMapping("update")
-    @Operation(description = "根据主键更新")
+    @Operation(summary = "根据主键更新", description = "根据主键更新")
     public ApiRet<Boolean> update(@RequestBody @Parameter(description = "业务主键") SysUser model) {
         return ApiRet.buildOk(sysUserService.updateById(model));
     }
 
     @GetMapping("getInfo/{id}")
-    @Operation(description = "根据主键获取")
+    @Operation(summary = "根据主键获取", description = "根据主键获取")
     public ApiRet<SysUser> getInfo(@PathVariable(name = "id") @Parameter(description = "业务主键") Serializable id) {
         return ApiRet.buildOk(sysUserService.getById(id));
     }
 
     @PostMapping("list")
-    @Operation(description = "查询所有")
+    Operation(summary = "查询所有", description = "查询所有")
     public ApiRet<List<SysUser>> list(@RequestBody SysUser model) {
         return ApiRet.buildOk(sysUserService.list(QueryWrapper.create(model)));
     }
 
     @PostMapping("page")
-    @Operation(description = "分页查询")
+    Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<SysUser>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<SysUser> reqParams) {
         // Entity 转查询条件
         SqlOperators operators = SqlOperators.of().set(SysUser::getId, SqlOperator.EQUALS);
