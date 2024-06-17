@@ -19,8 +19,8 @@ public class BattleRoomDto {
         @Schema(description = "页大小")
         private int pageSize = 10;
         @NotNull(message = "对战模式不能为空")
-        @Min(value = 0, message = "对战模式1~2之间")
-        @Max(value = 2, message = "对战模式1~2之间")
+        @Min(value = 0, message = "对战模式0~2之间")
+        @Max(value = 2, message = "对战模式0~2之间")
         @Schema(description = "对战模式:0=所有,1=欧皇,2=非酋")
         private String battleModel;
     }
