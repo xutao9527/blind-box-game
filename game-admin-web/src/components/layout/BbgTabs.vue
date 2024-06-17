@@ -102,5 +102,9 @@ const handleTabsEdit = (
 .bbg-tabs > .el-tabs__header {
   margin-bottom: 10px;
 }
+
+.el-tabs__item.is-active >  .el-dropdown {
+  color: var(--el-color-primary);
+}
 </style>
 

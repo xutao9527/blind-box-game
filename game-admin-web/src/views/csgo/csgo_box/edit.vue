@@ -17,7 +17,6 @@
                 <el-input v-model="data.nameAlias"/>
               </el-form-item>
               <el-form-item label="图片地址">
-
                 <FileUpload v-model:value="data.imageUrl"/>
               </el-form-item>
               <el-form-item label="箱子类型">
@@ -29,9 +28,6 @@
               <el-form-item label="箱子价格">
                 <el-input v-model="data.price"/>
               </el-form-item>
-<!--              <el-form-item label="状态">-->
-<!--                <el-switch v-model="data.enable"/>-->
-<!--              </el-form-item>-->
             </el-form>
           </el-col>
         </el-row>
