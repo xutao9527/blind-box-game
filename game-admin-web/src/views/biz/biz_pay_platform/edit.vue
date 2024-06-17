@@ -142,7 +142,7 @@
                 </el-col>
                 <el-col :span="10">
                   <el-form-item label="查询引擎重载">
-                    <el-switch v-model="data.queryReload"/>
+                    <el-switch v-model="data.queryReload" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="20">
@@ -158,7 +158,7 @@
                 </el-col>
                 <el-col :span="20">
                   <el-form-item label="查询引擎内容">
-                    <el-input v-model="data.queryContent"/>
+                    <el-input v-model="data.queryContent" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -210,8 +210,11 @@ const isJsonforQueryArg = computed(() => {
   }
 });
 
-
-const data = reactive({});
+const data = reactive({
+  callReload: true,
+  callbackReload: true,
+  queryReload: true,
+});
 const submitText = computed(() => {
   return data.id ? '修改' : '添加'
 })
