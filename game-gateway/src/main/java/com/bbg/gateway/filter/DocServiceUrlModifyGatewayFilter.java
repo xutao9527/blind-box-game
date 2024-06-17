@@ -6,6 +6,7 @@ import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.filter.NettyWriteResponseFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -49,8 +50,7 @@ public class DocServiceUrlModifyGatewayFilter implements GlobalFilter, Ordered {
                     Flux<? extends DataBuffer> fluxBody = (Flux<? extends DataBuffer>) body;
                     return super.writeWith(
                             fluxBody.buffer().map(dataBuffers -> {
-                                DataBufferFactory dataBufferFactory = new DefaultDataBufferFactory();
-                                DataBuffer dataBuffer = dataBufferFactory.join(dataBuffers);
+                                DataBuffer dataBuffer = new DefaultDataBufferFactory().join(dataBuffers);
                                 byte[] content = new byte[dataBuffer.readableByteCount()];
                                 dataBuffer.read(content);
                                 try {
@@ -61,7 +61,7 @@ public class DocServiceUrlModifyGatewayFilter implements GlobalFilter, Ordered {
                                     if(matcher.find()){
                                         String oldUrl = matcher.group(1);
                                         responseData = responseData.replace(oldUrl, gatewayUrl);
-                                        log.info("oldUrl ->{}", responseData);
+                                        // log.info("oldUrl ->{}", responseData);
                                     }
                                     byte[] newContent = responseData.getBytes(StandardCharsets.UTF_8);
                                     response.getHeaders().setContentLength(newContent.length);
@@ -81,6 +81,6 @@ public class DocServiceUrlModifyGatewayFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -2;
+        return NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER - 1;
     }
 }
