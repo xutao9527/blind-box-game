@@ -18,7 +18,7 @@ import java.io.Serial;
  * 支付平台管理 实体类。
  *
  * @author bbg
- * @since 2024-06-14
+ * @since 2024-06-17
  */
 @Data
 @NoArgsConstructor
@@ -170,6 +170,12 @@ public class BizPayPlatformRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "排序")
     private Integer sort;
+
+    /**
+     * 状态:1=启动,0=禁用
+     */
+    @Schema(description = "状态:1=启动,0=禁用")
+    private Boolean enable;
 
     /**
      * 创建时间

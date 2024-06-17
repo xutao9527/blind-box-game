@@ -71,6 +71,11 @@
                               :autosize="{ minRows: 2, maxRows: 5 }"/>
                   </el-form-item>
                 </el-col>
+                <el-col>
+                  <el-form-item label="状态">
+                    <el-switch v-model="data.enable"/>
+                  </el-form-item>
+                </el-col>
               </el-row>
               <el-divider content-position="left">调用引擎</el-divider>
                 <el-row>
@@ -125,7 +130,6 @@
                       <el-button v-if="isJsonforCallbackArg"  size="small" type="success" link @click="() => data.callbackArg = JSON.stringify(JSON.parse(data.callArg),null,2)">格式化</el-button>
                     </el-row>
                   </el-form-item>
-
                 </el-col>
                 <el-col :span="20">
                   <el-form-item label="回调引擎内容">
@@ -199,7 +203,6 @@ const isJsonArray = computed(() => {
 
 const isJsonforCallArg = computed(() => {
   try {
-    console.log(data.callArg)
     JSON.parse(data.callArg);
     return true;
   } catch {
@@ -229,6 +232,8 @@ const data = reactive({
   callReload: true,
   callbackReload: true,
   queryReload: true,
+  payType:'1',
+  payCurrency:'1',
 });
 const submitText = computed(() => {
   return data.id ? '修改' : '添加'

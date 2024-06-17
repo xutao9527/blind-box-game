@@ -19,7 +19,7 @@ import java.io.Serial;
  * 支付订单 实体类。
  *
  * @author bbg
- * @since 2024-06-14
+ * @since 2024-06-17
  */
 @Data
 @NoArgsConstructor
