@@ -61,7 +61,7 @@ export default defineConfig({
         host:'0.0.0.0',
         proxy: {
             "/api": {
-                target: "http://localhost:5500/",
+                target: "http://www.bbg.com/admin/",
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ""),
             },
