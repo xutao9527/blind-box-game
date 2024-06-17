@@ -39,22 +39,30 @@
                 </el-col>
                 <el-col :span="10" >
                   <el-form-item label="支付类型">
-                    <el-input v-model="data.payType"/>
+                    <bbg-dict-select v-model:value="data.payType" ref="dataTypeRef" :tag="'third_pay_type'"
+                                     placeholder="支付类型"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="10">
                   <el-form-item label="支付币种">
-                    <el-input v-model="data.payCurrency"/>
+                    <bbg-dict-select v-model:value="data.payCurrency" ref="dataTypeRef" :tag="'third_pay_currency'"
+                                     placeholder="支付币种"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="20">
                   <el-form-item label="支付限额">
-                    <el-input v-model="data.payAmountLimit"/>
+                    <el-input v-model="data.payAmountLimit" size="small"
+                              type="textarea"
+                              show-word-limit maxlength="255"
+                              :autosize="{ minRows: 2, maxRows: 5 }"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="20">
                   <el-form-item label="支付描述">
-                    <el-input v-model="data.payRemark"/>
+                    <el-input v-model="data.payRemark" size="small"
+                              type="textarea"
+                              show-word-limit maxlength="255"
+                              :autosize="{ minRows: 2, maxRows: 5 }"/>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -73,7 +81,13 @@
                   </el-col>
                   <el-col :span="20">
                     <el-form-item label="调用参数">
-                      <el-input v-model="data.callArg"/>
+                      <el-input v-model="data.callArg" size="small"
+                                type="textarea"
+                                show-word-limit maxlength="1024"
+                                :autosize="{ minRows: 3, maxRows: 10 }"/>
+                      <el-row justify="end" style="width: 100%">
+                        <el-button v-if="isJsonforCallArg" size="small" type="success" link @click="() => data.callArg = JSON.stringify(JSON.parse(data.callArg),null,2)">格式化</el-button>
+                      </el-row>
                     </el-form-item>
                   </el-col>
                   <el-col :span="20">
@@ -86,7 +100,7 @@
               <el-row>
                 <el-col :span="10">
                   <el-form-item label="回调引擎">
-                    <bbg-dict-select v-model:value="data.type" ref="dataTypeRef" :tag="'third_pay_engine'"
+                    <bbg-dict-select v-model:value="data.callbackEngine" ref="dataTypeRef" :tag="'third_pay_engine'"
                                      placeholder="调用引擎"/>
                   </el-form-item>
                 </el-col>
@@ -97,8 +111,15 @@
                 </el-col>
                 <el-col :span="20">
                   <el-form-item label="回调参数">
-                    <el-input v-model="data.callbackArg"/>
+                    <el-input v-model="data.callbackArg" size="small"
+                              type="textarea"
+                              show-word-limit maxlength="1024"
+                              :autosize="{ minRows: 3, maxRows: 10 }"/>
+                    <el-row justify="end" style="width: 100%">
+                      <el-button v-if="isJsonforCallbackArg"  size="small" type="success" link @click="() => data.callbackArg = JSON.stringify(JSON.parse(data.callArg),null,2)">格式化</el-button>
+                    </el-row>
                   </el-form-item>
+
                 </el-col>
                 <el-col :span="20">
                   <el-form-item label="回调引擎内容">
@@ -115,8 +136,8 @@
               <el-row>
                 <el-col :span="10">
                   <el-form-item label="查询引擎">
-                    <bbg-dict-select v-model:value="data.type" ref="dataTypeRef" :tag="'third_pay_engine'"
-                                     placeholder="调用引擎"/>
+                    <bbg-dict-select v-model:value="data.queryEngine" ref="dataTypeRef" :tag="'third_pay_engine'"
+                                     placeholder="查询引擎"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="10">
@@ -126,7 +147,13 @@
                 </el-col>
                 <el-col :span="20">
                   <el-form-item label="查询参数">
-                    <el-input v-model="data.queryArg"/>
+                    <el-input v-model="data.queryArg" size="small"
+                              type="textarea"
+                              show-word-limit maxlength="1024"
+                              :autosize="{ minRows: 3, maxRows: 10 }"/>
+                    <el-row justify="end" style="width: 100%">
+                      <el-button v-if="isJsonforQueryArg"  size="small" type="success" link @click="() => data.queryArg = JSON.stringify(JSON.parse(data.queryArg),null,2)">格式化</el-button>
+                    </el-row>
                   </el-form-item>
                 </el-col>
                 <el-col :span="20">
@@ -135,16 +162,6 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-
-
-
-
-
-
-
-
-
-
             </el-form>
           </el-col>
         </el-row>
@@ -164,6 +181,35 @@
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
 import FileUpload from "@/components/oss/FileUpload.vue";
+
+const isJsonforCallArg = computed(() => {
+  try {
+    console.log(data.callArg)
+    JSON.parse(data.callArg);
+    return true;
+  } catch {
+    return false;
+  }
+});
+
+const isJsonforCallbackArg = computed(() => {
+  try {
+    JSON.parse(data.callbackArg);
+    return true;
+  } catch {
+    return false;
+  }
+});
+
+const isJsonforQueryArg = computed(() => {
+  try {
+    JSON.parse(data.queryArg);
+    return true;
+  } catch {
+    return false;
+  }
+});
+
 
 const data = reactive({});
 const submitText = computed(() => {
