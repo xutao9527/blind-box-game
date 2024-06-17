@@ -104,7 +104,11 @@
                   <el-col :span="20">
                     <el-form-item label="调用引擎内容">
                       <el-input v-model="data.callContent"/>
+                      <el-row justify="end" style="width: 100%">
+                        <el-button size="small" type="success" link >编辑代码</el-button>
+                      </el-row>
                     </el-form-item>
+
                   </el-col>
                 </el-row>
               <el-divider content-position="left">回调引擎</el-divider>
@@ -169,6 +173,9 @@
                 <el-col :span="20">
                   <el-form-item label="查询引擎内容">
                     <el-input v-model="data.queryContent" />
+                    <el-row justify="end" style="width: 100%">
+                      <el-button size="small" type="success" link @click="queryContentRef.editScript()">编辑代码</el-button>
+                    </el-row>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -186,12 +193,15 @@
       </el-button>
     </el-footer>
   </el-container>
+  <ScriptEdit ref="queryContentRef" />
 </template>
+
 <script setup>
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
 import FileUpload from "@/components/oss/FileUpload.vue";
 
+const queryContentRef = ref(null)
 const isJsonArray = computed(() => {
   try {
     const parsed = JSON.parse(data.payAmountLimit);
