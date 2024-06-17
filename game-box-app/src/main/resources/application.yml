@@ -40,8 +40,6 @@ springdoc:
   swagger-ui:
     path: /doc
     urls:
-      - name: 第三方服务
-        url: /third/api-docs
       - name: 盲盒服务
         url: /api-docs
 

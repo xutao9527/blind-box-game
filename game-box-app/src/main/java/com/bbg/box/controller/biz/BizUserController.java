@@ -16,6 +16,7 @@ import com.bbg.core.entity.ApiRet;
 import com.bbg.model.csgo.CsgoUserInfo;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,7 @@ public class BizUserController extends BaseController<BizUser> {
         return ApiRet.buildOk(LoginRes);
     }
 
+    @SecurityRequirements()
     @PostMapping("loginByPwd")
     @Operation(summary = "用户密码登录", description = "用户密码登录")
     public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginPwdReq loginReq) {
@@ -70,6 +72,7 @@ public class BizUserController extends BaseController<BizUser> {
         }
         return ApiRet.buildNo(loginRes, "用户不存在!");
     }
+
 
     @PostMapping("loginByCode")
     @Operation(summary = "用户验证码登录", description = "用户验证码登录")
