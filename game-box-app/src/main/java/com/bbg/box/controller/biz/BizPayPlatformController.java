@@ -40,11 +40,18 @@ public class BizPayPlatformController extends BaseController<BizPayPlatform> {
 
     public final BizPayPlatformService bizPayPlatformService;
 
-
     @GetMapping("list")
     @Operation(summary = "支付列表", description = "支付列表")
     public ApiRet<List<Map>> list() {
-        QueryWrapper queryWrapper = QueryWrapper.create().select(QueryMethods.column(BizPayPlatform::getId));
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(
+                        QueryMethods.column(BizPayPlatform::getPayCode),
+                        QueryMethods.column(BizPayPlatform::getPayImageUrl),
+                        QueryMethods.column(BizPayPlatform::getPayName),
+                        QueryMethods.column(BizPayPlatform::getPayAmountLimit)
+                ).from(BizPayPlatform.class)
+                .where(BizPayPlatform::getEnable).eq(true)
+                .orderBy(BizPayPlatform::getSort).asc();
         List<Map> bizPayPlatforms = bizPayPlatformService.listAs(queryWrapper, Map.class);
         return ApiRet.buildOk(bizPayPlatforms);
     }

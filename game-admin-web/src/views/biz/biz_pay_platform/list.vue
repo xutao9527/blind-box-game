@@ -59,6 +59,12 @@
         </el-table-column>
         <el-table-column prop="payAmountLimit" label="支付限额" width="100"/>
         <el-table-column prop="sort" label="排序" width="40"/>
+        <el-table-column prop="enable" label="状态" width="40">
+          <template #default="scope">
+            {{ scope.row.enable ? '启用' : '停用' }}
+          </template>
+        </el-table-column>
+
         <el-table-column prop="payRemark" label="支付描述"  width="130"/>
         <el-table-column prop="callEngine" label="调用引擎" width="100">
           <template #default="scope">
