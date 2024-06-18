@@ -7,15 +7,15 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
             </div>
-<!--            <div class="bbg-table-header-input" style="width: 420px">-->
-<!--              <el-date-picker-->
-<!--                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"-->
-<!--                  type="datetimerange"-->
-<!--                  start-placeholder="Start date"-->
-<!--                  end-placeholder="End date"-->
-<!--                  value-format="YYYY-MM-DD HH:mm:ss"-->
-<!--              />-->
-<!--            </div>-->
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.payType" ref="payTypeRef" :tag="'third_pay_type'"
+                               placeholder="支付类型"/>
+            </div>
+            <div class="bbg-table-header-input">
+              <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.payCurrency" ref="payCurrencyRef" :tag="'third_pay_currency'"
+                               placeholder="支付币种"/>
+            </div>
+
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -30,49 +30,76 @@
     </el-header>
     <el-main class="bbg-table-main">
       <el-table class="bbg-table-main"
+                size="small"
                 :data="tableProps.apiRet.data.records"
                 :height="tableDynamicHeight"
                 table-layout="auto"
                 @sortChange="tableProps.sortChange"
                 border show-overflow-tooltip>
-        <el-table-column prop="id" label="主键"/>
-        <el-table-column prop="payName" label="支付名称"/>
-        <el-table-column prop="payNameAlias" label="支付别名"/>
-        <el-table-column prop="payImageUrl" label="支付图标"/>
-        <el-table-column prop="payCode" label="支付编码"/>
-        <el-table-column prop="payType" label="支付类型"/>
-        <el-table-column prop="payCurrency" label="支付币种"/>
-        <el-table-column prop="payAmountLimit" label="支付限额"/>
-        <el-table-column prop="payRemark" label="支付描述"/>
-        <el-table-column prop="callEngine" label="调用引擎"/>
-        <el-table-column prop="callArg" label="调用参数"/>
-        <el-table-column prop="callContent" label="调用引擎内容"/>
-        <el-table-column prop="callReload" label="调用引擎重载">
+        <el-table-column prop="id" label="主键" width="155"/>
+        <el-table-column prop="payName" label="支付名称" width="120"/>
+<!--        <el-table-column prop="payNameAlias" label="支付别名" width="185"/>-->
+        <el-table-column prop="payImageUrl" label="支付图标" width="80">
+          <template #default="scope">
+            <el-image
+                :fit="'contain'" style="width: 20px;height: 20px"
+                lazy :src="scope.row.payImageUrl" :preview-src-list="[scope.row.payImageUrl]" preview-teleported/>
+          </template>
+        </el-table-column>
+        <el-table-column prop="payCode" label="支付编码"  width="80"/>
+        <el-table-column prop="payType" label="支付类型"  width="80">
+          <template #default="scope">
+            {{ payTypeRef.getLabel(scope.row.payType) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="payCurrency" label="支付币种" width="0">
+          <template #default="scope">
+            {{ payCurrencyRef.getLabel(scope.row.payCurrency) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="payAmountLimit" label="支付限额" width="100"/>
+        <el-table-column prop="sort" label="排序" width="40"/>
+        <el-table-column prop="payRemark" label="支付描述"  width="130"/>
+        <el-table-column prop="callEngine" label="调用引擎" width="100">
+          <template #default="scope">
+            {{ payEngineDictObject.getLabel(scope.row.callEngine) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="callArg" label="调用参数" width="80"/>
+        <el-table-column prop="callContent" label="调用引擎内容" width="100"/>
+        <el-table-column prop="callReload" label="调用引擎重载" width="90">
           <template #default="scope">
             {{ scope.row.callReload ? '启用' : '停用' }}
           </template>
         </el-table-column>
-        <el-table-column prop="callbackEngine" label="回调引擎"/>
-        <el-table-column prop="callbackArg" label="回调参数"/>
-        <el-table-column prop="callbackContent" label="回调引擎内容"/>
-        <el-table-column prop="callbackReload" label="回调引擎重载">
+        <el-table-column prop="callbackEngine" label="回调引擎"  width="100">
+          <template #default="scope">
+            {{ payEngineDictObject.getLabel(scope.row.callbackEngine) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="callbackArg" label="回调参数" width="80"/>
+        <el-table-column prop="callbackContent" label="回调引擎内容" width="100"/>
+        <el-table-column prop="callbackReload" label="回调引擎重载" width="90">
           <template #default="scope">
             {{ scope.row.callbackReload ? '启用' : '停用' }}
           </template>
         </el-table-column>
-        <el-table-column prop="callbackIp" label="回调白名单"/>
-        <el-table-column prop="queryEngine" label="查询引擎"/>
-        <el-table-column prop="queryArg" label="查询参数"/>
-        <el-table-column prop="queryContent" label="查询引擎内容"/>
-        <el-table-column prop="queryReload" label="查询引擎重载">
+        <el-table-column prop="callbackIp" label="回调白名单"  width="100"/>
+        <el-table-column prop="queryEngine" label="查询引擎"  width="100">
           <template #default="scope">
-            {{ scope.row.queryReload ? '启用' : '停用' }}
+            {{ payEngineDictObject.getLabel(scope.row.queryEngine) }}
           </template>
         </el-table-column>
-        <el-table-column prop="sort" label="排序"/>
-        <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column prop="updateTime" label="修改时间"/>
-        <el-table-column fixed="right" label="操作">
+        <el-table-column prop="queryArg" label="查询参数"  width="80"/>
+        <el-table-column prop="queryContent" label="查询引擎内容"  width="100"/>
+        <el-table-column prop="queryReload" label="查询引擎重载" width="90">
+          <template #default="scope">
+            {{ scope.row.queryReload ? '待重载' : '已编译' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="140"/>
+        <el-table-column prop="updateTime" label="修改时间" width="140"/>
+        <el-table-column fixed="right" label="操作" width="100">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
             <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
@@ -101,8 +128,11 @@
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
+import {DictObject} from "@/core/dict/index.js";
 
-const header = ref(null);
+const payTypeRef = ref(null)
+const payCurrencyRef = ref(null)
+const header = ref(null)
 const tableDynamicHeight = ref(0)
 
 const scope = effectScope()
@@ -120,8 +150,11 @@ scope.run(() => {
   })
 })
 
-onMounted(() => {
-  tableProps.fetchData()
+const payEngineDictObject = ref(null);
+onMounted(async () => {
+  payEngineDictObject.value = await DictObject.create('third_pay_engine');
+
+  await tableProps.fetchData()
 })
 
 const add = () => {

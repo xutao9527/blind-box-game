@@ -12,7 +12,7 @@
 import List from "./list.vue";
 import Edit from "./edit.vue";
 
-const activeName = ref('form')
+const activeName = ref('list')
 const listRef = ref(null);
 const editRef = ref(null)
 const activeTabs = (tabs, refresh = false, id) => {

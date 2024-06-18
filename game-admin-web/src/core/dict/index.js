@@ -7,7 +7,6 @@ export class DictObject{
         this.bizDictDetails = bizDictDetails;
         this.dictMap = this.createDictMap(bizDictDetails);
     }
-
     static async create(tag) {
         try {
             let apiRet = await http.get(`/bizDict/getDict/${tag}`);
