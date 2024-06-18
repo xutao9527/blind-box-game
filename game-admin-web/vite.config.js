@@ -14,6 +14,15 @@ export default defineConfig({
     //     assetsDir: "admin-assets",
     //     outDir:"../admin-service/resources/admin-dist"
     // },
+    optimizeDeps:{
+      include:[
+          `monaco-editor/esm/vs/language/json/json.worker`,
+          `monaco-editor/esm/vs/language/css/css.worker`,
+          `monaco-editor/esm/vs/language/html/html.worker`,
+          `monaco-editor/esm/vs/language/typescript/ts.worker`,
+          `monaco-editor/esm/vs/editor/editor.worker`
+      ]
+    },
     resolve: {
         alias: {
             "@": pathSrc,

@@ -70,6 +70,8 @@ declare module 'vue' {
     GoodsSelect: typeof import('./components/good/GoodsSelect.vue')['default']
     Header: typeof import('./components/layout/Header.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
+    Monaco: typeof import('./components/edit/Monaco.vue')['default']
+    MonacoEdt: typeof import('./components/edit/MonacoEdt.vue')['default']
     MultiFileUpload: typeof import('./components/oss/MultiFileUpload.vue')['default']
     PicUpload: typeof import('./components/oss/PicUpload.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
