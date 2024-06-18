@@ -1,6 +1,7 @@
 package com.bbg.box.controller.biz;
 
 import com.bbg.box.base.BaseController;
+import com.bbg.box.third.pay.PayService;
 import com.bbg.core.box.dto.BoxDto;
 import com.bbg.model.biz.BizPayPlatform;
 import com.bbg.core.service.biz.BizPayPlatformService;
@@ -13,8 +14,10 @@ import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.constant.SqlOperator;
 import com.mybatisflex.core.query.SqlOperators;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +40,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RequestMapping("/bizPayPlatform")
 @RequiredArgsConstructor
 public class BizPayPlatformController extends BaseController<BizPayPlatform> {
-
+    public final PayService payService;
     public final BizPayPlatformService bizPayPlatformService;
 
     @GetMapping("list")
@@ -54,5 +57,14 @@ public class BizPayPlatformController extends BaseController<BizPayPlatform> {
                 .orderBy(BizPayPlatform::getSort).asc();
         List<Map> bizPayPlatforms = bizPayPlatformService.listAs(queryWrapper, Map.class);
         return ApiRet.buildOk(bizPayPlatforms);
+    }
+
+    @GetMapping("call")
+    @Operation(summary = "发起支付请求", description = "发起支付请求")
+    public ApiRet<Object> call(
+            @RequestParam("payCode") @Parameter(description = "支付编码") @NotNull String payCode,
+            @RequestParam("money") @Parameter(description = "支付金额") @NotNull BigDecimal money
+    ) {
+        return payService.call(payCode, money);
     }
 }

@@ -2,6 +2,7 @@ package com.bbg.third.controller;
 
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.service.biz.BizPayPlatformService;
+import com.bbg.model.biz.BizUser;
 import com.bbg.third.base.BaseController;
 import com.bbg.third.service.PayService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,7 @@ public class OnlinePayController extends BaseController {
             @RequestParam("payCode") @Parameter(description = "支付编码") @NotNull String payCode,
             @RequestParam("money") @Parameter(description = "支付金额") @NotNull BigDecimal money
     ) {
+        BizUser bizUser = getCurrentUser();
         return payService.payCall();
     }
 
