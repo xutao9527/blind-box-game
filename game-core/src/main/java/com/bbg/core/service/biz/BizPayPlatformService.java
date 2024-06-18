@@ -10,5 +10,5 @@ import com.bbg.model.biz.BizPayPlatform;
  * @since 2024-06-14
  */
 public interface BizPayPlatformService extends IService<BizPayPlatform> {
-
+    BizPayPlatform getOneByCode(String payCode);
 }

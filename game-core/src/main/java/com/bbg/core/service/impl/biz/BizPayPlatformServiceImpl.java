@@ -1,5 +1,6 @@
 package com.bbg.core.service.impl.biz;
 
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.biz.BizPayPlatform;
 import com.bbg.core.mapper.biz.BizPayPlatformMapper;
@@ -14,5 +15,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BizPayPlatformServiceImpl extends ServiceImpl<BizPayPlatformMapper, BizPayPlatform> implements BizPayPlatformService {
-
+    public BizPayPlatform getOneByCode(String payCode) {
+        return getOne(QueryWrapper.create(new BizPayPlatform().setPayCode(payCode).setEnable(true)));
+    }
 }
