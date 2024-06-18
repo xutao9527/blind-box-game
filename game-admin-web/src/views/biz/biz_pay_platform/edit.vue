@@ -176,6 +176,7 @@
                     <el-row justify="end" style="width: 100%">
                       <el-button size="small" type="success" link @click="queryContentRef.editScript()">编辑代码</el-button>
                     </el-row>
+                    <ScriptEdit ref="queryContentRef" v-model:value="data.queryContent"/>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -193,7 +194,7 @@
       </el-button>
     </el-footer>
   </el-container>
-  <ScriptEdit ref="queryContentRef" />
+
 </template>
 
 <script setup>

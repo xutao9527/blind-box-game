@@ -3,38 +3,79 @@
       append-to-body
       v-model="drawer"
       direction="rtl"
-      size="80%">
+      size="20%"
+      :before-close="handleClose"
+  >
     <template #header style="margin-bottom: 10px">
       <el-text type="primary" size="large">
         脚本编辑
       </el-text>
     </template>
     <template #default>
-      <MonacoEdt :editorOption="editorOption" />
+      {{editorOption}}
+      <MonacoEdit :editor-option="editorOption" />
     </template>
     <template #footer>
-      <el-button >返 回</el-button>
+      <el-button @click="close">返 回</el-button>
       &nbsp;&nbsp;
-      <el-button type="primary" >保 存</el-button>
+      <el-button type="primary" @click="save">保 存</el-button>
     </template>
   </el-drawer>
 </template>
 
 <script setup>
+import MonacoEdit from "@/components/edit/MonacoEdit.vue";
 
-const drawer = ref(true)
+const props = defineProps({
+  value: {
+    type: String,
+  }
+})
+
+const editorOption = reactive({
+  language: 'javascript',
+  code: props.value,
+});
+
+watchEffect(() => {
+  console.log("script edit",editorOption.code)
+});
+
+watch(() => props.value, (newValue) => {
+  console.log("script edit",newValue)
+  editorOption.code = newValue;
+});
+
+const drawer = ref(false)
 const editScript = () => {
   drawer.value = true
+}
+
+const save = () => {
+  drawer.value = false
+}
+
+const close = () => {
+  drawer.value = false
+}
+
+const handleClose = () => {
+  close()
+  // ElMessageBox.confirm('保存脚本编辑?', {
+  //   confirmButtonText: '确认',
+  //   cancelButtonText: '取消',
+  // })
+  //     .then(() => {
+  //       save()
+  //     })
+  //     .catch(() => {
+  //       close()
+  //     })
 }
 
 defineExpose({
   editScript
 })
-
-const editorOption = reactive({
-  language: 'javascript',
-  code: `console.log('hello world')`
-});
 
 </script>
 <style lang="less">

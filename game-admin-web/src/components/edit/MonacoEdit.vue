@@ -27,30 +27,32 @@ self.MonacoEnvironment = {
   },
 }
 
-const monacoEditor = ref(null);
-let editor = ref(null); //编辑器实例
-let code = ref(''); //代码
-let language = ref(''); //语言
-
 const props = defineProps({
   editorOption: Object,
 });
 
+const monacoEditor = ref(null);
+let editor = ref(null); //编辑器实例
+
+watchEffect(() => {
+  if(editor.value){
+    //toRaw(editor.value).setValue(props.editorOption.code===undefined?"":props.editorOption.code)
+  }
+})
+
 onMounted(() => {
-  language.value = props.editorOption.language;
-  code.value = props.editorOption.code;
   initEditor();
-});
+})
 
 function initEditor() {
   monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
     noSemanticValidation: true,
     noSyntaxValidation: false
-  });
+  })
   monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
     target: monaco.languages.typescript.ScriptTarget.Latest,
     allowNonTsExtensions: true
-  });
+  })
   editor.value = monaco.editor.create(monacoEditor.value, {
     value: props.editorOption.code, // 代码
     theme: "vs-dark", // 主题
@@ -70,7 +72,10 @@ function initEditor() {
     lineNumbers: "on", // 行号 取值： "on" | "off" | "relative" | "interval" | function
     lineNumbersMinChars: 5, // 行号最小字符   number
     readOnly: false, //是否只读  取值 true | false
-  });
+  })
+  editor.value.onDidChangeModelContent((val) => {
+    props.editorOption.code = toRaw(editor.value).getValue()
+  })
 }
 </script>
 <style scoped>
