@@ -1,6 +1,6 @@
 <template>
-  me1: {{script}}<br>
-  me2: {{props.value}}<br>
+<!--  me1: {{script}}<br>-->
+<!--  me2: {{props.value}}<br>-->
   <div class="monaco-editor" ref="monacoEditorRef"/>
 </template>
 <script setup>
@@ -29,6 +29,10 @@ const script = ref(props.value)                     //脚本内容
 const emit = defineEmits(['update:value'])
 const monacoEditorRef = ref(null);                  //编辑器引用
 let editor = ref(null); //编辑器实例
+
+const editScript = (val) => {
+  script.value = val;
+}
 
 watchEffect(() => {
   if (editor.value) {
@@ -73,6 +77,11 @@ function initEditor() {
     emit('update:value', toRaw(editor.value).getValue())
   })
 }
+
+defineExpose({
+  editScript
+})
+
 </script>
 <style scoped>
 .monaco-editor {
