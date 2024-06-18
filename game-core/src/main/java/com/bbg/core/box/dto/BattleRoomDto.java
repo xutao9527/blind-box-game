@@ -22,7 +22,7 @@ public class BattleRoomDto {
         @Min(value = 0, message = "对战模式0~2之间")
         @Max(value = 2, message = "对战模式0~2之间")
         @Schema(description = "对战模式:0=所有,1=欧皇,2=非酋")
-        private String battleModel;
+        private String battleModel = "0";
     }
 
     @Data
