@@ -3,11 +3,11 @@
       append-to-body
       v-model="drawer"
       direction="rtl"
-      size="20%"
+      size="80%"
   >
     <template #header style="margin-bottom: 10px">
       <el-text type="primary" size="large">
-        脚本编辑
+        {{props.title}}
       </el-text>
     </template>
     <template #default>
@@ -30,6 +30,10 @@ const emit = defineEmits(['update:value'])
 const props = defineProps({
   value: {
     type: String,
+  },
+  title:{
+    type: String,
+    default: '脚本编辑'
   }
 })
 const script = ref(props.value)

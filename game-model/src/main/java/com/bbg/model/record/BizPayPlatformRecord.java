@@ -18,7 +18,7 @@ import java.io.Serial;
  * 支付平台管理 实体类。
  *
  * @author bbg
- * @since 2024-06-17
+ * @since 2024-06-18
  */
 @Data
 @NoArgsConstructor
@@ -100,9 +100,15 @@ public class BizPayPlatformRecord extends BaseModel implements Serializable {
     private String callArg;
 
     /**
-     * 调用引擎内容
+     * 调用实例[Bean]
      */
-    @Schema(description = "调用引擎内容")
+    @Schema(description = "调用实例[Bean]")
+    private String callBeanName;
+
+    /**
+     * 调用引擎脚本
+     */
+    @Schema(description = "调用引擎脚本")
     private String callContent;
 
     /**
@@ -122,6 +128,12 @@ public class BizPayPlatformRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "回调参数")
     private String callbackArg;
+
+    /**
+     * 回调实例[Bean]
+     */
+    @Schema(description = "回调实例[Bean]")
+    private String callbackBeanName;
 
     /**
      * 回调引擎内容
@@ -152,6 +164,12 @@ public class BizPayPlatformRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "查询参数")
     private String queryArg;
+
+    /**
+     * 查询实例[Bean]
+     */
+    @Schema(description = "查询实例[Bean]")
+    private String queryBeanName;
 
     /**
      * 查询引擎内容

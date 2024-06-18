@@ -2,7 +2,7 @@
   <el-container class="bbg-form">
     <el-header class="bbg-form-header">
       <el-text tag="b" size="large" type="primary">
-        <h3>{{ submitText }}-支付平台管理</h3>
+        <h3>{{ submitText }}-支付平台配置</h3>
       </el-text>
     </el-header>
     <el-main class="bbg-form-main">
@@ -37,7 +37,7 @@
                     <el-input v-model="data.sort" type="number"/>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10" >
+                <el-col :span="10">
                   <el-form-item label="支付类型">
                     <bbg-dict-select v-model:value="data.payType" ref="dataTypeRef" :tag="'third_pay_type'"
                                      placeholder="支付类型"/>
@@ -78,45 +78,55 @@
                 </el-col>
               </el-row>
               <el-divider content-position="left">调用引擎</el-divider>
-                <el-row>
-                  <el-col :span="10">
-                    <el-form-item label="调用引擎">
-                      <bbg-dict-select v-model:value="data.type" ref="dataTypeRef" :tag="'third_pay_engine'"
-                                       placeholder="调用引擎"/>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="10">
-                    <el-form-item label="调用引擎重载">
-                      <el-switch v-model="data.callReload"/>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="20">
-                    <el-form-item label="调用参数">
-                      <el-input v-model="data.callArg" size="small"
-                                type="textarea"
-                                show-word-limit maxlength="1024"
-                                :autosize="{ minRows: 3, maxRows: 10 }"/>
-                      <el-row justify="end" style="width: 100%">
-                        <el-button v-if="isJsonforCallArg" size="small" type="success" link @click="() => data.callArg = JSON.stringify(JSON.parse(data.callArg),null,2)">格式化</el-button>
-                      </el-row>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="20">
-                    <el-form-item label="调用引擎内容">
-                      <el-input v-model="data.callContent"/>
-                      <el-row justify="end" style="width: 100%">
-                        <el-button size="small" type="success" link >编辑代码</el-button>
-                      </el-row>
-                    </el-form-item>
-
-                  </el-col>
-                </el-row>
+              <el-row>
+                <el-col :span="10">
+                  <el-form-item label="调用引擎">
+                    <bbg-dict-select v-model:value="data.callEngine" :tag="'third_pay_engine'"
+                                     placeholder="调用引擎"/>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item label="调用引擎重载">
+                    <el-switch v-model="data.callReload"/>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="20">
+                  <el-form-item label="调用参数">
+                    <el-input v-model="data.callArg" size="small"
+                              type="textarea"
+                              show-word-limit maxlength="1024"
+                              :autosize="{ minRows: 3, maxRows: 10 }"/>
+                    <el-row justify="end" style="width: 100%">
+                      <el-button v-if="isJsonforCallArg" size="small" type="success" link
+                                 @click="() => data.callArg = JSON.stringify(JSON.parse(data.callArg),null,2)">格式化
+                      </el-button>
+                    </el-row>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="20">
+                  <template v-if="payEngineDictObject">
+                    <template v-if="data.callEngine === payEngineDictObject.dictMap['javascript_engine']">
+                      <el-form-item label="调用引擎脚本">
+                        <el-input v-model="data.callContent"/>
+                        <el-row justify="end" style="width: 100%">
+                          <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码</el-button>
+                        </el-row>
+                        <ScriptEdit ref="callContentRef" v-model:value="data.callContent" :title="`调用引擎脚本-编辑`"/>
+                      </el-form-item>
+                    </template>
+                    <template v-else>
+                      <el-form-item label="调用实例[Bean]">
+                        <el-input v-model="data.callBeanName"/>
+                      </el-form-item>
+                    </template>
+                  </template>
+                </el-col>
+              </el-row>
               <el-divider content-position="left">回调引擎</el-divider>
               <el-row>
                 <el-col :span="10">
                   <el-form-item label="回调引擎">
-                    <bbg-dict-select v-model:value="data.callbackEngine" ref="dataTypeRef" :tag="'third_pay_engine'"
-                                     placeholder="调用引擎"/>
+                    <bbg-dict-select v-model:value="data.callbackEngine" :tag="'third_pay_engine'" placeholder="回调引擎"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="10">
@@ -131,14 +141,29 @@
                               show-word-limit maxlength="1024"
                               :autosize="{ minRows: 3, maxRows: 10 }"/>
                     <el-row justify="end" style="width: 100%">
-                      <el-button v-if="isJsonforCallbackArg"  size="small" type="success" link @click="() => data.callbackArg = JSON.stringify(JSON.parse(data.callArg),null,2)">格式化</el-button>
+                      <el-button v-if="isJsonforCallbackArg" size="small" type="success" link
+                                 @click="() => data.callbackArg = JSON.stringify(JSON.parse(data.callArg),null,2)">格式化
+                      </el-button>
                     </el-row>
                   </el-form-item>
                 </el-col>
                 <el-col :span="20">
-                  <el-form-item label="回调引擎内容">
-                    <el-input v-model="data.callbackContent"/>
-                  </el-form-item>
+                    <template v-if="payEngineDictObject">
+                      <template v-if="data.callbackEngine === payEngineDictObject.dictMap['javascript_engine']">
+                        <el-form-item label="回调引擎脚本">
+                          <el-input v-model="data.callbackContent"/>
+                          <el-row justify="end" style="width: 100%">
+                            <el-button size="small" type="success" link @click="callbackContentRef.editScript()">编辑代码</el-button>
+                          </el-row>
+                          <ScriptEdit ref="callbackContentRef" v-model:value="data.callbackContent" :title="`回调引擎脚本-编辑`"/>
+                        </el-form-item>
+                      </template>
+                      <template v-else>
+                        <el-form-item label="回调实例[Bean]">
+                          <el-input v-model="data.callbackBeanName"/>
+                        </el-form-item>
+                      </template>
+                    </template>
                 </el-col>
                 <el-col :span="20">
                   <el-form-item label="回调白名单">
@@ -150,13 +175,12 @@
               <el-row>
                 <el-col :span="10">
                   <el-form-item label="查询引擎">
-                    <bbg-dict-select v-model:value="data.queryEngine" ref="dataTypeRef" :tag="'third_pay_engine'"
-                                     placeholder="查询引擎"/>
+                    <bbg-dict-select v-model:value="data.queryEngine" :tag="'third_pay_engine'" placeholder="查询引擎"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="10">
                   <el-form-item label="查询引擎重载">
-                    <el-switch v-model="data.queryReload" />
+                    <el-switch v-model="data.queryReload"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="20">
@@ -166,18 +190,30 @@
                               show-word-limit maxlength="1024"
                               :autosize="{ minRows: 3, maxRows: 10 }"/>
                     <el-row justify="end" style="width: 100%">
-                      <el-button v-if="isJsonforQueryArg"  size="small" type="success" link @click="() => data.queryArg = JSON.stringify(JSON.parse(data.queryArg),null,2)">格式化</el-button>
+                      <el-button v-if="isJsonforQueryArg" size="small" type="success" link
+                                 @click="() => data.queryArg = JSON.stringify(JSON.parse(data.queryArg),null,2)">格式化
+                      </el-button>
                     </el-row>
                   </el-form-item>
                 </el-col>
                 <el-col :span="20">
-                  <el-form-item label="查询引擎内容">
-                    <el-input v-model="data.queryContent" />
-                    <el-row justify="end" style="width: 100%">
-                      <el-button size="small" type="success" link @click="queryContentRef.editScript()">编辑代码</el-button>
-                    </el-row>
-                    <ScriptEdit ref="queryContentRef" v-model:value="data.queryContent"/>
-                  </el-form-item>
+                  <template v-if="payEngineDictObject">
+                    <template v-if="data.queryEngine === payEngineDictObject.dictMap['javascript_engine']">
+                      <el-form-item label="查询引擎脚本">
+                        <el-input v-model="data.queryContent"/>
+                        <el-row justify="end" style="width: 100%">
+                          <el-button size="small" type="success" link @click="queryContentRef.editScript()">编辑代码
+                          </el-button>
+                        </el-row>
+                        <ScriptEdit ref="queryContentRef" v-model:value="data.queryContent" :title="`查询引擎脚本-编辑`"/>
+                      </el-form-item>
+                    </template>
+                    <template v-else>
+                      <el-form-item label="查询实例[Bean]">
+                        <el-input v-model="data.queryBeanName"/>
+                      </el-form-item>
+                    </template>
+                  </template>
                 </el-col>
               </el-row>
             </el-form>
@@ -201,7 +237,15 @@
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
 import FileUpload from "@/components/oss/FileUpload.vue";
+import {DictObject} from "@/core/dict/index.js";
 
+const payEngineDictObject = ref(null);
+onMounted(async () => {
+  payEngineDictObject.value = await DictObject.create('third_pay_engine');
+})
+
+const callContentRef = ref(null)
+const callbackContentRef = ref(null)
 const queryContentRef = ref(null)
 const isJsonArray = computed(() => {
   try {
@@ -243,8 +287,11 @@ const data = reactive({
   callReload: true,
   callbackReload: true,
   queryReload: true,
-  payType:'1',
-  payCurrency:'1',
+  callEngine: '1',
+  callbackEngine: '1',
+  queryEngine: '1',
+  payType: '1',
+  payCurrency: '1',
 });
 const submitText = computed(() => {
   return data.id ? '修改' : '添加'
