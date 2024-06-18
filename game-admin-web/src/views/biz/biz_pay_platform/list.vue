@@ -64,7 +64,6 @@
             {{ scope.row.enable ? '启用' : '停用' }}
           </template>
         </el-table-column>
-
         <el-table-column prop="payRemark" label="支付描述"  width="130"/>
         <el-table-column prop="callEngine" label="调用引擎" width="100">
           <template #default="scope">
