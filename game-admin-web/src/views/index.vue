@@ -1,4 +1,5 @@
 <template>
+<!--  <el-config-provider :locale="locale">-->
   <el-container style="height: 100vh">
     <el-header class="bbg-header header-dynamic-height">
       <bbg-header/>
@@ -17,9 +18,15 @@
       </el-main>
     </el-container>
   </el-container>
+<!--  </el-config-provider>-->
 </template>
 <script setup>
 import emitter from "@/core/mitt/index.js";
+
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
+const language = ref('zh-cn')
+const locale = computed(() => (language.value === 'zh-cn' ? zhCn : en))
 
 const isMenuCollapse = ref(false)
 const menuDynamicWidth = ref(0)

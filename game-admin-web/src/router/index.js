@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {useUserStore} from "@/store/userStore.js";
-import store from "@/store/index.js";
+
 
 const routes = [
     {
