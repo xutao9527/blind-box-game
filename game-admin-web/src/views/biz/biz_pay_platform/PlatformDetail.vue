@@ -2,48 +2,141 @@
   <div class="bbg_sub_table">
     <el-form label-position="right" label-width="120" size="small">
       <el-row>
-        <el-col :span="5">
-          <el-form-item label="调用引擎:">
-            {{ props.rowOjb.callEngine }}
-          </el-form-item>
+        <el-col :span="8">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="调用引擎:">
+                {{ props.rowOjb.callEngine }}
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="调用引擎重载:">
+                {{ props.rowOjb.callReload }}
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
+              <el-form-item label="调用参数:">
+                <el-text line-clamp="2" class="script-content">
+                  {{ props.rowOjb.callArg }}
+                </el-text>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
+              <el-form-item label="调用引擎脚本:">
+                <el-text line-clamp="2" class="script-content">
+                  {{ props.rowOjb.callContent }}
+                </el-text>
+                <el-row justify="end" style="width: 100%">
+                  <el-row justify="end" style="width: 100%">
+                    <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
+                    </el-button>
+                  </el-row>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-col>
-        <el-col :span="5">
-          <el-form-item label="调用引擎重载:">
-            {{ props.rowOjb.callReload }}
-          </el-form-item>
+        <el-col :span="8">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="调用引擎:">
+                {{ props.rowOjb.callEngine }}
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="调用引擎重载:">
+                {{ props.rowOjb.callReload }}
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
+              <el-form-item label="调用参数:">
+                <el-text line-clamp="2" class="script-content">
+                  {{ props.rowOjb.callArg }}
+                </el-text>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
+              <el-form-item label="调用引擎脚本:">
+                <el-text line-clamp="2" class="script-content">
+                  {{ props.rowOjb.callContent }}
+                </el-text>
+                <el-row justify="end" style="width: 100%">
+                  <el-row justify="end" style="width: 100%">
+                    <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
+                    </el-button>
+                  </el-row>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="10">
-          <el-form-item label="调用参数:">
-            <el-text line-clamp="2" class="script-content" >
-              {{ props.rowOjb.callArg }}
-            </el-text>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="10">
-          <el-form-item label="调用引擎内容">
-            <el-text line-clamp="2" class="script-content" >
-              {{ props.rowOjb.callContent }}
-            </el-text>
-          </el-form-item>
+        <el-col :span="8">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="调用引擎:">
+                {{ props.rowOjb.callEngine }}
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="调用引擎重载:">
+                {{ props.rowOjb.callReload }}
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
+              <el-form-item label="调用参数:">
+                <el-text line-clamp="2" class="script-content">
+                  {{ props.rowOjb.callArg }}
+                </el-text>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
+              <el-form-item label="调用引擎脚本:">
+                <el-text line-clamp="2" class="script-content">
+                  {{ props.rowOjb.callContent }}
+                </el-text>
+                <el-row justify="end" style="width: 100%">
+                  <el-row justify="end" style="width: 100%">
+                    <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
+                    </el-button>
+                  </el-row>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
     </el-form>
   </div>
 </template>
 <script setup>
+
+const contentWidth = computed(() => props.width - 20 + 'px')
 const props = defineProps({
   rowOjb: {
     type: Object,
     required: true
+  },
+  width: {
+    type: Number,
+    default: 100
   }
 })
 </script>
 <style scoped lang="less">
 .bbg_sub_table {
+  width: v-bind(contentWidth);
   margin: 10px;
   border-right: 1px solid var(--el-border-color);
 }
@@ -51,9 +144,9 @@ const props = defineProps({
 .script-content {
   white-space: pre-wrap; /* 保留换行符和空白字符 */
   font-family: monospace; /* 使用等宽字体显示代码 */
-  background-color: #f5f5f5; /* 可选：设置背景颜色 */
-  padding: 10px; /* 可选：设置内边距 */
-  border-radius: 5px; /* 可选：设置圆角边框 */
+  background-color: var(--el-fill-color-light); /* 可选：设置背景颜色 */
+  padding: 1px; /* 可选：设置内边距 */
+  border-radius: 1px; /* 可选：设置圆角边框 */
   border: 1px solid #ccc; /* 可选：设置边框 */
   width: 100%;
 }

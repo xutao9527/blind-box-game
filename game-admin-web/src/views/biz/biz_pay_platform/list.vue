@@ -35,10 +35,11 @@
                 :height="tableDynamicHeight"
                 table-layout="auto"
                 @sortChange="tableProps.sortChange"
+                ref="tableRef"
                 border show-overflow-tooltip>
         <el-table-column type="expand" label="#">
           <template #default="props" >
-            <PlatformDetail :row-ojb="props.row"/>
+            <PlatformDetail :row-ojb="props.row" :width="tableWidth"/>
           </template>
         </el-table-column>
         <el-table-column prop="id" label="主键" width="155"/>
@@ -142,6 +143,8 @@ import {DictObject} from "@/core/dict/index.js";
 import DictDetail from "@/views/biz/biz_dict/DictDetail.vue";
 import PlatformDetail from "@/views/biz/biz_pay_platform/PlatformDetail.vue";
 
+const tableRef = ref(null)
+const tableWidth = computed(() => tableRef.value ? tableRef.value.$el.offsetWidth : 0)
 const payTypeRef = ref(null)
 const payCurrencyRef = ref(null)
 const header = ref(null)
@@ -165,7 +168,6 @@ scope.run(() => {
 const payEngineDictObject = ref(null);
 onMounted(async () => {
   payEngineDictObject.value = await DictObject.create('third_pay_engine');
-
   await tableProps.fetchData()
 })
 
