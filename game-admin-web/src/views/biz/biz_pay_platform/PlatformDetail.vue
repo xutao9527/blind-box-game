@@ -158,10 +158,18 @@
 </template>
 <script setup>
 
+import {http} from "@/core/axios/index.js";
+
 const scriptEditRef = ref(null)
-const scriptEditCallBack = (rowOjb,editField) => {
-  console.log(rowOjb[editField])
-  console.log("scriptEditCallBack",rowOjb.id.toString(),editField)
+const scriptEditCallBack = async (rowOjb,editField) => {
+  const request = {
+    id: rowOjb.id.toString(),
+    [editField]: rowOjb[editField]
+  }
+  // const apiRet = await http.post('/bizPayPlatform/update', request)
+  // if (apiRet.ok) {
+  //   ElMessage({type: 'success', message: apiRet.msg})
+  // }
 }
 
 const contentWidth = computed(() => props.width - 20 + 'px')

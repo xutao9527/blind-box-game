@@ -66,7 +66,6 @@ const save = () => {
       editOjbRef.value[editFieldRef.value] = script.value
       props.callback(editOjbRef.value,editFieldRef.value)
     }
-
   }
   drawer.value = false
 }
