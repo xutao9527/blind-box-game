@@ -40,7 +40,6 @@
 </template>
 <script setup>
 import {rollMock} from "@/views/mock/js/rollDto.js";
-import {boxMock} from "@/views/mock/js/boxDto.js";
 import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 onMounted(() => {

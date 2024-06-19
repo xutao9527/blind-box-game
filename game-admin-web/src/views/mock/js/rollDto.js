@@ -11,7 +11,6 @@ export const rollMock = reactive({
         const apiRet = await appHttp.post('csgoRoll/getRollList', rollMock.GetRollListReq)
         if (apiRet.ok) {
             rollMock.rollList = apiRet.data.records
-            console.log(rollMock.rollList)
         }
     },
 })
