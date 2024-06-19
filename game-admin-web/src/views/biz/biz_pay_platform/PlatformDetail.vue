@@ -18,9 +18,16 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="调用参数:">
-                <el-text line-clamp="2" class="script-content">
-                  {{ props.rowOjb.callArg }}
-                </el-text>
+                <el-tooltip placement="top">
+                  <template #content>
+                    <el-scrollbar class="script-content-scrollbar" :max-height="200">
+                      {{ props.rowOjb.callArg }}
+                    </el-scrollbar>
+                  </template>
+                  <el-text line-clamp="2" class="script-content">
+                    {{ props.rowOjb.callArg }}
+                  </el-text>
+                </el-tooltip>
               </el-form-item>
             </el-col>
           </el-row>
@@ -29,7 +36,7 @@
               <el-form-item label="调用引擎脚本:">
                 <el-tooltip placement="top">
                   <template #content>
-                    <el-scrollbar style="white-space: pre-wrap;padding-right: 8px;min-width: 400px" :max-height="200">
+                    <el-scrollbar class="script-content-scrollbar" :max-height="200">
                       {{ props.rowOjb.callContent }}
                     </el-scrollbar>
                   </template>
@@ -38,10 +45,59 @@
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-row justify="end" style="width: 100%">
-                    <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
-                    </el-button>
-                  </el-row>
+                  <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
+                  </el-button>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-col>
+
+        <el-col :span="8">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回调引擎:">
+                {{ props.rowOjb.callbackEngine }}
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="回调引擎重载:">
+                {{ props.rowOjb.callbackReload }}
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
+              <el-form-item label="回调参数:">
+                <el-tooltip placement="top">
+                  <template #content>
+                    <el-scrollbar class="script-content-scrollbar" :max-height="200">
+                      {{ props.rowOjb.callbackArg }}
+                    </el-scrollbar>
+                  </template>
+                  <el-text line-clamp="2" class="script-content">
+                    {{ props.rowOjb.callbackArg }}
+                  </el-text>
+                </el-tooltip>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
+              <el-form-item label="回调参数脚本:">
+                <el-tooltip placement="top">
+                  <template #content>
+                    <el-scrollbar class="script-content-scrollbar" :max-height="200">
+                      {{ props.rowOjb.callbackContent }}
+                    </el-scrollbar>
+                  </template>
+                  <el-text line-clamp="2" class="script-content">
+                    {{ props.rowOjb.callbackContent }}
+                  </el-text>
+                </el-tooltip>
+                <el-row justify="end" style="width: 100%">
+                  <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
+                  </el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -50,74 +106,48 @@
         <el-col :span="8">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="调用引擎:">
-                {{ props.rowOjb.callEngine }}
+              <el-form-item label="查询引擎:">
+                {{ props.rowOjb.queryEngine }}
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="调用引擎重载:">
-                {{ props.rowOjb.callReload }}
+              <el-form-item label="查询引擎重载:">
+                {{ props.rowOjb.queryReload }}
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="22">
-              <el-form-item label="调用参数:">
-                <el-text line-clamp="2" class="script-content">
-                  {{ props.rowOjb.callArg }}
-                </el-text>
+              <el-form-item label="查询参数:">
+                <el-tooltip placement="top">
+                  <template #content>
+                    <el-scrollbar class="script-content-scrollbar" :max-height="200">
+                      {{ props.rowOjb.queryArg }}
+                    </el-scrollbar>
+                  </template>
+                  <el-text line-clamp="2" class="script-content">
+                    {{ props.rowOjb.queryArg }}
+                  </el-text>
+                </el-tooltip>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="22">
-              <el-form-item label="调用引擎脚本:">
-                <el-text line-clamp="2" class="script-content">
-                  {{ props.rowOjb.callContent }}
-                </el-text>
+              <el-form-item label="查询引擎脚本:">
+                <el-tooltip placement="top">
+                  <template #content>
+                    <el-scrollbar class="script-content-scrollbar" :max-height="200">
+                      {{ props.rowOjb.queryContent }}
+                    </el-scrollbar>
+                  </template>
+                  <el-text line-clamp="2" class="script-content">
+                    {{ props.rowOjb.queryContent }}
+                  </el-text>
+                </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-row justify="end" style="width: 100%">
-                    <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
-                    </el-button>
-                  </el-row>
-                </el-row>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="8">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="调用引擎:">
-                {{ props.rowOjb.callEngine }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="调用引擎重载:">
-                {{ props.rowOjb.callReload }}
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="22">
-              <el-form-item label="调用参数:">
-                <el-text line-clamp="2" class="script-content">
-                  {{ props.rowOjb.callArg }}
-                </el-text>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="22">
-              <el-form-item label="调用引擎脚本:">
-                <el-text line-clamp="2" class="script-content">
-                  {{ props.rowOjb.callContent }}
-                </el-text>
-                <el-row justify="end" style="width: 100%">
-                  <el-row justify="end" style="width: 100%">
-                    <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
-                    </el-button>
-                  </el-row>
+                  <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
+                  </el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -146,6 +176,13 @@ const props = defineProps({
   width: v-bind(contentWidth);
   margin: 10px;
   border-right: 1px solid var(--el-border-color);
+}
+
+.script-content-scrollbar{
+  white-space: pre-wrap;
+  padding-right: 8px;
+  min-width: 400px;
+  max-width: 500px;
 }
 
 .script-content {
