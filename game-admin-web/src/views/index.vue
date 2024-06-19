@@ -23,11 +23,6 @@
 <script setup>
 import emitter from "@/core/mitt/index.js";
 
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
-
-const language = ref('zh-cn')
-const locale = computed(() => (language.value === 'zh-cn' ? zhCn : en))
-
 const isMenuCollapse = ref(false)
 const menuDynamicWidth = ref(0)
 const menuWidth = ref(0)
