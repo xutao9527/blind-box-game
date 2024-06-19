@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import MonacoEdit from "@/components/edit/MonacoEdit.vue";
+import MonacoEdit from "@/components/editor/MonacoEdit.vue";
 
 const monacoEditRef = ref(null)
 const emit = defineEmits(['update:value'])

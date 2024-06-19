@@ -72,13 +72,13 @@ declare module 'vue' {
     Header: typeof import('./components/layout/Header.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     Monaco: typeof import('./components/edit/Monaco.vue')['default']
-    MonacoEdit: typeof import('./components/edit/MonacoEdit.vue')['default']
+    MonacoEdit: typeof import('./components/editor/MonacoEdit.vue')['default']
     MonacoEdt: typeof import('./components/edit/MonacoEdt.vue')['default']
     MultiFileUpload: typeof import('./components/oss/MultiFileUpload.vue')['default']
     PicUpload: typeof import('./components/oss/PicUpload.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ScriptEdit: typeof import('./components/edit/ScriptEdit.vue')['default']
+    ScriptEdit: typeof import('./components/editor/ScriptEdit.vue')['default']
     Tabs: typeof import('./components/layout/Tabs.vue')['default']
   }
 }
