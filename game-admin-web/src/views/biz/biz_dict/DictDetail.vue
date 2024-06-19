@@ -120,7 +120,6 @@ const props = defineProps({
 <style lang="less" scoped>
 .bbg_sub_table {
   margin: 10px;
-
   border-right: 1px solid var(--el-border-color);
 }
 </style>

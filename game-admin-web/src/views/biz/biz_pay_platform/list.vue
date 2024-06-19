@@ -36,6 +36,11 @@
                 table-layout="auto"
                 @sortChange="tableProps.sortChange"
                 border show-overflow-tooltip>
+        <el-table-column type="expand" label="#">
+          <template #default="props" >
+            <PlatformDetail row-ojb="props.row"/>
+          </template>
+        </el-table-column>
         <el-table-column prop="id" label="主键" width="155"/>
         <el-table-column prop="payName" label="支付名称" width="120"/>
 <!--        <el-table-column prop="payNameAlias" label="支付别名" width="185"/>-->
@@ -134,6 +139,8 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
 import {DictObject} from "@/core/dict/index.js";
+import DictDetail from "@/views/biz/biz_dict/DictDetail.vue";
+import PlatformDetail from "@/views/biz/biz_pay_platform/PlatformDetail.vue";
 
 const payTypeRef = ref(null)
 const payCurrencyRef = ref(null)
