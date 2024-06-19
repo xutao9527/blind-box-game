@@ -145,8 +145,7 @@
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
-                  </el-button>
+                  <el-button size="small" type="success" link @click="scriptEditRef.editScript(props.rowOjb,'queryContent')" >编辑代码</el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -155,8 +154,15 @@
       </el-row>
     </el-form>
   </div>
+  <ScriptEdit ref="scriptEditRef" :callback="scriptEditCallBack"></ScriptEdit>
 </template>
 <script setup>
+
+const scriptEditRef = ref(null)
+const scriptEditCallBack = (rowOjb,editField) => {
+  console.log(rowOjb[editField])
+  console.log("scriptEditCallBack",rowOjb.id.toString(),editField)
+}
 
 const contentWidth = computed(() => props.width - 20 + 'px')
 const props = defineProps({

@@ -34,22 +34,40 @@ const props = defineProps({
   title:{
     type: String,
     default: '脚本编辑'
+  },
+  callback: {
+    type: Function,
   }
 })
+
 const script = ref(props.value)
 const drawer = ref(false)
+const editOjbRef = ref(null)
+const editFieldRef = ref(null)
 
-const editScript = () => {
-  console.log("editScript",props.value)
-  script.value = props.value
+const editScript = (editOjb,editField) => {
+  if (editOjb && editField && editOjb[editField]) {
+    editOjbRef.value = editOjb
+    editFieldRef.value = editField
+    script.value = editOjb[editField]
+  } else {
+    script.value = props.value
+  }
   if(monacoEditRef.value){
-    monacoEditRef.value.editScript(props.value)
+    monacoEditRef.value.editScript(script.value)
   }
   drawer.value = true
 }
 
 const save = () => {
   emit('update:value', script.value)
+  if(props.callback){
+    if(editOjbRef.value){
+      editOjbRef.value[editFieldRef.value] = script.value
+      props.callback(editOjbRef.value,editFieldRef.value)
+    }
+
+  }
   drawer.value = false
 }
 

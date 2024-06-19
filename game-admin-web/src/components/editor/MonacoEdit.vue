@@ -32,13 +32,10 @@ let editor = ref(null); //编辑器实例
 
 const editScript = (val) => {
   script.value = val;
-}
-
-watchEffect(() => {
   if (editor.value) {
     toRaw(editor.value).setValue(script.value === undefined ? "" : script.value)
   }
-})
+}
 
 onMounted(() => {
   initEditor();
