@@ -11,14 +11,15 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import ElementPlus from 'element-plus'
 
 const app = createApp(App)
-app.use(ElementPlus, {
-    locale: zhCn,
-})
+// app.use(ElementPlus, {
+//     locale: zhCn,
+// })
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
     bbgConf.iconList.push(key);
 }
 app.use(store)
 app.use(router)
+
 app.mount('#app')
 
