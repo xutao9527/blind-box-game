@@ -232,8 +232,7 @@
                           </el-text>
                         </el-tooltip>
                         <el-row justify="end" style="width: 100%">
-                          <el-button size="small" type="success" link @click="queryContentRef.editScript()">编辑代码
-                          </el-button>
+                          <el-button size="small" type="success" link @click="queryContentRef.editScript()">编辑代码</el-button>
                         </el-row>
                         <ScriptEdit ref="queryContentRef" v-model:value="data.queryContent" :title="`查询引擎脚本-编辑`"/>
                       </el-form-item>

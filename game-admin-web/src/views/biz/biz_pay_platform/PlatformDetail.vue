@@ -45,7 +45,10 @@
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="scriptEditRef.editScript(rowOjb,'callContent')">编辑代码</el-button>
+                  <el-button size="small" type="success" link
+                             @click="() => { scriptEditTitle = '调用引擎脚本-编辑';scriptEditRef.editScript(rowOjb, 'callContent');}">
+                    编辑代码
+                  </el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -94,7 +97,9 @@
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="scriptEditRef.editScript(rowOjb,'callbackContent')">编辑代码</el-button>
+                  <el-button size="small" type="success" link @click="() => { scriptEditTitle = '回调参数脚本-编辑';scriptEditRef.editScript(rowOjb, 'callbackContent');}" >
+                    编辑代码
+                  </el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -143,7 +148,9 @@
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="scriptEditRef.editScript(rowOjb,'queryContent')">编辑代码</el-button>
+                  <el-button size="small" type="success" link @click="() => { scriptEditTitle = '查询引擎脚本-编辑';scriptEditRef.editScript(rowOjb, 'queryContent');}">
+                    编辑代码
+                  </el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -152,13 +159,16 @@
       </el-row>
     </el-form>
   </div>
-  <ScriptEdit ref="scriptEditRef" :callback="scriptEditCallBack"></ScriptEdit>
+  <ScriptEdit ref="scriptEditRef" :callback="scriptEditCallBack" :title="scriptEditTitle"></ScriptEdit>
 </template>
 <script setup>
 
 import {http} from "@/core/axios/index.js";
-
+// 编辑脚本引用
 const scriptEditRef = ref(null)
+// 编辑脚本标题
+const scriptEditTitle = ref('引擎脚本-编辑')
+// 编辑脚本回调
 const scriptEditCallBack = async (newOjb,editField) => {
   const request = {
     id: newOjb.id.toString(),
