@@ -3,7 +3,7 @@
       append-to-body
       v-model="drawer"
       direction="rtl"
-      size="90%"
+      size="100%"
       :before-close="beforeClose"
   >
     <template #header style="margin-bottom: 10px">

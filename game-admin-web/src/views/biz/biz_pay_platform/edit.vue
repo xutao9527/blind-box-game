@@ -56,7 +56,7 @@
                               show-word-limit maxlength="255"
                               :autosize="{ minRows: 2, maxRows: 5 }"/>
                     <el-row justify="end" style="width: 100%">
-                      <el-button v-if="isJsonArray" size="small" type="success" link
+                      <el-button v-if="isJsonArrayForAmountLimit" size="small" type="success" link
                                  @click="() => data.payAmountLimit = JSON.stringify(JSON.parse(data.payAmountLimit),null,2)">
                         格式化
                       </el-button>
@@ -186,8 +186,20 @@
                     </template>
                 </el-col>
                 <el-col :span="20">
+<!--                  <el-form-item label="回调白名单">-->
+<!--                    <el-input v-model="data.callbackIp"/>-->
+<!--                  </el-form-item>-->
                   <el-form-item label="回调白名单">
-                    <el-input v-model="data.callbackIp"/>
+                    <el-input v-model="data.callbackIp" size="small"
+                              type="textarea"
+                              show-word-limit maxlength="255"
+                              :autosize="{ minRows: 2, maxRows: 5 }"/>
+                    <el-row justify="end" style="width: 100%">
+                      <el-button v-if="isJsonArrayForCallbackIp" size="small" type="success" link
+                                 @click="() => data.callbackIp = JSON.stringify(JSON.parse(data.callbackIp),null,2)">
+                        格式化
+                      </el-button>
+                    </el-row>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -276,7 +288,17 @@ onMounted(async () => {
 const callContentRef = ref(null)
 const callbackContentRef = ref(null)
 const queryContentRef = ref(null)
-const isJsonArray = computed(() => {
+
+const isJsonArrayForCallbackIp = computed(() => {
+  try {
+    const parsed = JSON.parse(data.callbackIp);
+    return Array.isArray(parsed) && parsed.every(item => typeof item === 'string');
+  } catch {
+    return false;
+  }
+})
+
+const isJsonArrayForAmountLimit = computed(() => {
   try {
     const parsed = JSON.parse(data.payAmountLimit);
     return Array.isArray(parsed) && parsed.every(item => typeof item === 'number');
@@ -389,5 +411,6 @@ onMounted(() => {
   border-radius: 1px; /* 可选：设置圆角边框 */
   border: 1px solid #ccc; /* 可选：设置边框 */
   width: 100%;
+  min-height: 48px;
 }
 </style>
