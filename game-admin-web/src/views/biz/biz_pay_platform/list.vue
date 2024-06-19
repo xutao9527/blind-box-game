@@ -15,7 +15,6 @@
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.payCurrency" ref="payCurrencyRef" :tag="'third_pay_currency'"
                                placeholder="支付币种"/>
             </div>
-
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -47,9 +46,10 @@
 <!--        <el-table-column prop="payNameAlias" label="支付别名" width="185"/>-->
         <el-table-column prop="payImageUrl" label="支付图标" width="80">
           <template #default="scope">
-            <el-image
-                :fit="'contain'" style="width: 20px;height: 20px"
-                lazy :src="scope.row.payImageUrl" :preview-src-list="[scope.row.payImageUrl]" preview-teleported/>
+            <el-tooltip :content="scope.row.payImageUrl" placement="top">
+              <el-image :fit="'contain'" style="width: 20px;height: 20px"
+                        lazy :src="scope.row.payImageUrl" :preview-src-list="[scope.row.payImageUrl]" preview-teleported/>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column prop="payCode" label="支付编码"  width="80"/>

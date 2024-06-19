@@ -27,9 +27,16 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="调用引擎脚本:">
-                <el-text line-clamp="2" class="script-content">
-                  {{ props.rowOjb.callContent }}
-                </el-text>
+                <el-tooltip placement="top">
+                  <template #content>
+                    <el-scrollbar style="white-space: pre-wrap;padding-right: 8px;min-width: 400px" :max-height="200">
+                      {{ props.rowOjb.callContent }}
+                    </el-scrollbar>
+                  </template>
+                  <el-text line-clamp="2" class="script-content">
+                    {{ props.rowOjb.callContent }}
+                  </el-text>
+                </el-tooltip>
                 <el-row justify="end" style="width: 100%">
                   <el-row justify="end" style="width: 100%">
                     <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
