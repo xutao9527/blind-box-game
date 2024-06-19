@@ -107,7 +107,17 @@
                   <template v-if="payEngineDictObject">
                     <template v-if="data.callEngine === payEngineDictObject.dictMap['javascript_engine']">
                       <el-form-item label="调用引擎脚本">
-                        <el-input v-model="data.callContent"/>
+<!--                        <el-input v-model="data.callContent"/>-->
+                        <el-tooltip placement="top">
+                          <template #content>
+                            <el-scrollbar class="script-content-scrollbar" :max-height="200">
+                              {{ data.callContent }}
+                            </el-scrollbar>
+                          </template>
+                          <el-text line-clamp="2" class="script-content">
+                            {{ data.callContent }}
+                          </el-text>
+                        </el-tooltip>
                         <el-row justify="end" style="width: 100%">
                           <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码</el-button>
                         </el-row>
@@ -151,7 +161,17 @@
                     <template v-if="payEngineDictObject">
                       <template v-if="data.callbackEngine === payEngineDictObject.dictMap['javascript_engine']">
                         <el-form-item label="回调引擎脚本">
-                          <el-input v-model="data.callbackContent"/>
+<!--                          <el-input v-model="data.callbackContent"/>-->
+                          <el-tooltip placement="top">
+                            <template #content>
+                              <el-scrollbar class="script-content-scrollbar" :max-height="200">
+                                {{ data.callbackContent }}
+                              </el-scrollbar>
+                            </template>
+                            <el-text line-clamp="2" class="script-content">
+                              {{ data.callbackContent }}
+                            </el-text>
+                          </el-tooltip>
                           <el-row justify="end" style="width: 100%">
                             <el-button size="small" type="success" link @click="callbackContentRef.editScript()">编辑代码</el-button>
                           </el-row>
@@ -200,7 +220,17 @@
                   <template v-if="payEngineDictObject">
                     <template v-if="data.queryEngine === payEngineDictObject.dictMap['javascript_engine']">
                       <el-form-item label="查询引擎脚本">
-                        <el-input v-model="data.queryContent"/>
+<!--                        <el-input v-model="data.queryContent"/>-->
+                        <el-tooltip placement="top">
+                          <template #content>
+                            <el-scrollbar class="script-content-scrollbar" :max-height="200">
+                              {{ data.queryContent }}
+                            </el-scrollbar>
+                          </template>
+                          <el-text line-clamp="2" class="script-content">
+                            {{ data.queryContent }}
+                          </el-text>
+                        </el-tooltip>
                         <el-row justify="end" style="width: 100%">
                           <el-button size="small" type="success" link @click="queryContentRef.editScript()">编辑代码
                           </el-button>
@@ -345,5 +375,20 @@ onMounted(() => {
 })
 </script>
 <style scoped>
+.script-content-scrollbar{
+  white-space: pre-wrap;
+  padding-right: 8px;
+  min-width: 400px;
+  max-width: 500px;
+}
 
+.script-content {
+  white-space: pre-wrap; /* 保留换行符和空白字符 */
+  font-family: monospace; /* 使用等宽字体显示代码 */
+  background-color: var(--el-fill-color-light); /* 可选：设置背景颜色 */
+  padding: 1px; /* 可选：设置内边距 */
+  border-radius: 1px; /* 可选：设置圆角边框 */
+  border: 1px solid #ccc; /* 可选：设置边框 */
+  width: 100%;
+}
 </style>
