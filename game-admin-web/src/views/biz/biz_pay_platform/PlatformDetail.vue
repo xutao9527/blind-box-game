@@ -234,5 +234,6 @@ onMounted(() => {
   border-radius: 1px; /* 可选：设置圆角边框 */
   border: 1px solid #ccc; /* 可选：设置边框 */
   width: 100%;
+  min-height: 48px;
 }
 </style>
