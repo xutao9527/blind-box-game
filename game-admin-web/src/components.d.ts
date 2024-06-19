@@ -78,6 +78,7 @@ declare module 'vue' {
     PicUpload: typeof import('./components/oss/PicUpload.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ScriptDebug: typeof import('./components/editor/ScriptDebug.vue')['default']
     ScriptEdit: typeof import('./components/editor/ScriptEdit.vue')['default']
     Tabs: typeof import('./components/layout/Tabs.vue')['default']
   }

@@ -53,6 +53,9 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row justify="center">
+            <el-button size="small" type="primary" :icon="CaretRight" @click="scriptDebugRef.debugScript(rowOjb,'call')">调试代码</el-button>
+          </el-row>
         </el-col>
         <el-col :span="8">
           <el-row>
@@ -103,6 +106,9 @@
                 </el-row>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row justify="center">
+            <el-button size="small" type="primary" :icon="CaretRight" @click="scriptDebugRef.debugScript(rowOjb,'callback')">调试代码</el-button>
           </el-row>
         </el-col>
         <el-col :span="8">
@@ -155,15 +161,21 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row justify="center">
+            <el-button size="small" type="primary" :icon="CaretRight" @click="scriptDebugRef.debugScript(rowOjb,'query')">调试代码</el-button>
+          </el-row>
         </el-col>
       </el-row>
     </el-form>
   </div>
+  <ScriptDebug ref="scriptDebugRef"></ScriptDebug>
   <ScriptEdit ref="scriptEditRef" :callback="scriptEditCallBack" :title="scriptEditTitle"></ScriptEdit>
 </template>
 <script setup>
-
 import {http} from "@/core/axios/index.js";
+import {CaretRight} from "@element-plus/icons-vue";
+// 调试脚本引用
+const scriptDebugRef = ref(null)
 // 编辑脚本引用
 const scriptEditRef = ref(null)
 // 编辑脚本标题
