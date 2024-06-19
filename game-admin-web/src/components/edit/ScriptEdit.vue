@@ -4,6 +4,7 @@
       v-model="drawer"
       direction="rtl"
       size="80%"
+      :before-close="beforeClose"
   >
     <template #header style="margin-bottom: 10px">
       <el-text type="primary" size="large">
@@ -50,11 +51,23 @@ const editScript = () => {
 
 const save = () => {
   emit('update:value', script.value)
-  //drawer.value = false
+  drawer.value = false
 }
 
 const close = () => {
   drawer.value = false
+}
+
+const beforeClose = (done) => {
+  ElMessageBox.confirm("确认保存？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    save();
+  }).catch(() => {
+    close()
+  });
 }
 
 defineExpose({
@@ -72,6 +85,6 @@ defineExpose({
 }
 
 .el-drawer__footer{
-  text-align: center;
+  text-align: right;
 }
 </style>
