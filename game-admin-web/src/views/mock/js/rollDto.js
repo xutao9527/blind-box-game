@@ -1,5 +1,4 @@
 import {appHttp} from "./mockHttp.js";
-import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 
 export const rollMock = reactive({
     GetRollListReq: {
