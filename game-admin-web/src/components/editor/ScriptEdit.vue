@@ -3,7 +3,7 @@
       append-to-body
       v-model="drawer"
       direction="rtl"
-      size="80%"
+      size="90%"
       :before-close="beforeClose"
   >
     <template #header style="margin-bottom: 10px">
@@ -17,7 +17,6 @@
     </template>
     <template #footer>
       <el-button @click="close">返 回</el-button>
-      &nbsp;&nbsp;
       <el-button type="primary" @click="save">保 存</el-button>
     </template>
   </el-drawer>
