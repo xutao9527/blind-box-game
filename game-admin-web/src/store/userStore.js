@@ -1,6 +1,5 @@
 import {http} from "@/core/axios/";
 import {defineStore} from "pinia";
-import {useRouter} from "vue-router";
 
 const viewModules = import.meta.glob('@/views/**/*.vue');
 
