@@ -63,8 +63,10 @@ const save = () => {
   emit('update:value', script.value)
   if(props.callback){
     if(editOjbRef.value){
-      editOjbRef.value[editFieldRef.value] = script.value
-      props.callback(editOjbRef.value,editFieldRef.value)
+      // 拷贝一份editOjbRef.value，防止直接修改
+      let editOjb = JSON.parse(JSON.stringify(editOjbRef.value))
+      editOjb[editFieldRef.value] = script.value
+      props.callback(editOjb,editFieldRef.value)
     }
   }
   drawer.value = false

@@ -6,12 +6,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="调用引擎:">
-                {{ props.rowOjb.callEngine }}
+                {{ rowOjb.callEngine }}
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="调用引擎重载:">
-                {{ props.rowOjb.callReload }}
+                {{ rowOjb.callReload }}
               </el-form-item>
             </el-col>
           </el-row>
@@ -21,11 +21,11 @@
                 <el-tooltip placement="top">
                   <template #content>
                     <el-scrollbar class="script-content-scrollbar" :max-height="200">
-                      {{ props.rowOjb.callArg }}
+                      {{ rowOjb.callArg }}
                     </el-scrollbar>
                   </template>
                   <el-text line-clamp="2" class="script-content">
-                    {{ props.rowOjb.callArg }}
+                    {{ rowOjb.callArg }}
                   </el-text>
                 </el-tooltip>
               </el-form-item>
@@ -37,16 +37,15 @@
                 <el-tooltip placement="top">
                   <template #content>
                     <el-scrollbar class="script-content-scrollbar" :max-height="200">
-                      {{ props.rowOjb.callContent }}
+                      {{ rowOjb.callContent }}
                     </el-scrollbar>
                   </template>
                   <el-text line-clamp="2" class="script-content">
-                    {{ props.rowOjb.callContent }}
+                    {{ rowOjb.callContent }}
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
-                  </el-button>
+                  <el-button size="small" type="success" link @click="scriptEditRef.editScript(rowOjb,'callContent')">编辑代码</el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -56,12 +55,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="回调引擎:">
-                {{ props.rowOjb.callbackEngine }}
+                {{ rowOjb.callbackEngine }}
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="回调引擎重载:">
-                {{ props.rowOjb.callbackReload }}
+                {{ rowOjb.callbackReload }}
               </el-form-item>
             </el-col>
           </el-row>
@@ -71,11 +70,11 @@
                 <el-tooltip placement="top">
                   <template #content>
                     <el-scrollbar class="script-content-scrollbar" :max-height="200">
-                      {{ props.rowOjb.callbackArg }}
+                      {{ rowOjb.callbackArg }}
                     </el-scrollbar>
                   </template>
                   <el-text line-clamp="2" class="script-content">
-                    {{ props.rowOjb.callbackArg }}
+                    {{ rowOjb.callbackArg }}
                   </el-text>
                 </el-tooltip>
               </el-form-item>
@@ -87,16 +86,15 @@
                 <el-tooltip placement="top">
                   <template #content>
                     <el-scrollbar class="script-content-scrollbar" :max-height="200">
-                      {{ props.rowOjb.callbackContent }}
+                      {{ rowOjb.callbackContent }}
                     </el-scrollbar>
                   </template>
                   <el-text line-clamp="2" class="script-content">
-                    {{ props.rowOjb.callbackContent }}
+                    {{ rowOjb.callbackContent }}
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="callContentRef.editScript()">编辑代码
-                  </el-button>
+                  <el-button size="small" type="success" link @click="scriptEditRef.editScript(rowOjb,'callbackContent')">编辑代码</el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -106,12 +104,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="查询引擎:">
-                {{ props.rowOjb.queryEngine }}
+                {{ rowOjb.queryEngine }}
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="查询引擎重载:">
-                {{ props.rowOjb.queryReload }}
+                {{ rowOjb.queryReload }}
               </el-form-item>
             </el-col>
           </el-row>
@@ -121,11 +119,11 @@
                 <el-tooltip placement="top">
                   <template #content>
                     <el-scrollbar class="script-content-scrollbar" :max-height="200">
-                      {{ props.rowOjb.queryArg }}
+                      {{ rowOjb.queryArg }}
                     </el-scrollbar>
                   </template>
                   <el-text line-clamp="2" class="script-content">
-                    {{ props.rowOjb.queryArg }}
+                    {{ rowOjb.queryArg }}
                   </el-text>
                 </el-tooltip>
               </el-form-item>
@@ -137,15 +135,15 @@
                 <el-tooltip placement="top">
                   <template #content>
                     <el-scrollbar class="script-content-scrollbar" :max-height="200">
-                      {{ props.rowOjb.queryContent }}
+                      {{ rowOjb.queryContent }}
                     </el-scrollbar>
                   </template>
                   <el-text line-clamp="2" class="script-content">
-                    {{ props.rowOjb.queryContent }}
+                    {{ rowOjb.queryContent }}
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="scriptEditRef.editScript(props.rowOjb,'queryContent')" >编辑代码</el-button>
+                  <el-button size="small" type="success" link @click="scriptEditRef.editScript(rowOjb,'queryContent')">编辑代码</el-button>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -161,18 +159,20 @@
 import {http} from "@/core/axios/index.js";
 
 const scriptEditRef = ref(null)
-const scriptEditCallBack = async (rowOjb,editField) => {
+const scriptEditCallBack = async (newOjb,editField) => {
   const request = {
-    id: rowOjb.id.toString(),
-    [editField]: rowOjb[editField]
+    id: newOjb.id.toString(),
+    [editField]: newOjb[editField]
   }
-  // const apiRet = await http.post('/bizPayPlatform/update', request)
-  // if (apiRet.ok) {
-  //   ElMessage({type: 'success', message: apiRet.msg})
-  // }
+  const apiRet = await http.post('/bizPayPlatform/update', request)
+  if (apiRet.ok) {
+    rowOjb.value[editField]= newOjb[editField]
+    ElMessage({type: 'success', message: apiRet.msg})
+  }
 }
 
 const contentWidth = computed(() => props.width - 20 + 'px')
+
 const props = defineProps({
   rowOjb: {
     type: Object,
@@ -183,6 +183,12 @@ const props = defineProps({
     default: 100
   }
 })
+const rowOjb = ref({})
+
+onMounted(() => {
+  rowOjb.value = JSON.parse(JSON.stringify(props.rowOjb))
+})
+
 </script>
 <style scoped lang="less">
 .bbg_sub_table {
