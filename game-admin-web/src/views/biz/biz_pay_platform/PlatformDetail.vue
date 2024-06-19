@@ -1,8 +1,11 @@
 <template>
   <div class="bbg_sub_table">
-    <el-form  size="small">
+    <el-form size="small">
       <el-form-item label="调用引擎">
-        <el-input v-model="props.rowOjb.name" placeholder="名称"/>
+        调用引擎
+      </el-form-item>
+      <el-form-item label="调用引擎">
+        调用引擎
       </el-form-item>
     </el-form>
   </div>

@@ -38,7 +38,7 @@
                 border show-overflow-tooltip>
         <el-table-column type="expand" label="#">
           <template #default="props" >
-            <PlatformDetail row-ojb="props.row"/>
+            <PlatformDetail :row-ojb="props.row"/>
           </template>
         </el-table-column>
         <el-table-column prop="id" label="主键" width="155"/>
