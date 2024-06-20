@@ -15,9 +15,15 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.math.BigDecimal;
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @FeignClient(name = "game-third-server",path = "/pay",configuration = PayService.PayServiceInterceptor.class)
 public interface PayService {
+
+    // 定义一个线程安全的map集合对象
+    Map<String, String> headers = new ConcurrentHashMap<>();
+
 
     @GetMapping("call")
     @Operation(summary = "支付请求", description = "支付请求")
@@ -38,12 +44,18 @@ public interface PayService {
             @RequestParam("payNo") @Parameter(description = "支付订单号") @NotNull String payNo
     );
 
-
+    default void setHeaders(Map<String,String> headers) {
+        PayService.headers.putAll(headers);
+    }
 
     class PayServiceInterceptor implements RequestInterceptor {
         @Override
         public void apply(RequestTemplate requestTemplate) {
-            ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes)  RequestContextHolder.getRequestAttributes();;
+            ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes)  RequestContextHolder.getRequestAttributes();
+            for (Map.Entry<String, String> entry : PayService.headers.entrySet()) {
+                requestTemplate.header(entry.getKey(), entry.getValue());
+                System.out.println("headerName: " + entry.getKey() + " headerValue: " + entry.getValue());
+            }
             if (servletRequestAttributes != null) {
                 HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
                 Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
@@ -52,6 +64,7 @@ public interface PayService {
                         String headerName = headerNames.nextElement();
                         String headerValue = httpServletRequest.getHeader(headerName);
                         requestTemplate.header(headerName, headerValue);
+                        System.out.println("headerName: " + headerName + " headerValue: " + headerValue);
                     }
                 }
             }

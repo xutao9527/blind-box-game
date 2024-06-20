@@ -32,13 +32,14 @@ public class BizPayPlatformController extends BaseBizPayPlatformController {
     @PostMapping("debug")
     @Operation(summary = "支付调试接口", description = "支付调试接口")
     public ApiRet<Object> debug(@RequestBody DebugData debugData) {
+        payService.setHeaders(debugData.headers);
         return switch (debugData.debugTarget) {
             case "call" ->
-                    payService.call(debugData.payPlatform.getPayCode(), new BigDecimal(debugData.params.get("money").toString()));
+                    payService.call(debugData.payPlatform.getPayCode(), new BigDecimal(debugData.params.get("money")));
             case "callback" ->
                     payService.callback(debugData.payPlatform.getPayCode());
             case "query" ->
-                    payService.queryOrder(debugData.params.get("payNo").toString());
+                    payService.queryOrder(debugData.params.get("payNo"));
             default -> ApiRet.buildNo("调试对象不存在");
         };
     }
@@ -50,9 +51,9 @@ public class BizPayPlatformController extends BaseBizPayPlatformController {
         @Schema(description = "调试对象")
         String debugTarget;
         @Schema(description = "调试请求头")
-        Map<String, Object> headers;
+        Map<String, String> headers;
         @Schema(description = "调试请求参数")
-        Map<String, Object> params;
+        Map<String, String> params;
         @Schema(description = "调试请求体")
         BizPayPlatform payPlatform;
     }
