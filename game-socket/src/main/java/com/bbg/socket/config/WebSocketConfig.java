@@ -16,7 +16,7 @@ import java.util.Map;
 public class WebSocketConfig {
 
     @Bean
-    public HandlerMapping webSocketMapping(final MyWebSocketHandler  webSocketHandler) {
+    public HandlerMapping webSocketMapping(final MyWebSocketHandler webSocketHandler) {
         final Map<String, WebSocketHandler> map = new HashMap<>();
         map.put("/ws", webSocketHandler);
         final SimpleUrlHandlerMapping handlerMapping = new SimpleUrlHandlerMapping();
