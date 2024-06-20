@@ -11,6 +11,7 @@
 .debug-log {
   height: 400px;
   border: 1px solid var(--el-border-color);
+
   .debug-log-content {
     height: 100%;
 
@@ -38,29 +39,18 @@
             <el-text type="primary">参数值</el-text>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" link :icon="Plus"></el-button>
+            <el-button type="primary" link :icon="Plus" @click="debugReq.addHeader()"></el-button>
           </el-col>
         </el-row>
-        <el-row justify="space-evenly">
+        <el-row justify="space-evenly" v-for="(header, index) in debugReq.headers">
           <el-col :span="8">
-            <el-input size="small" placeholder="header-name" clearable></el-input>
+            <el-input size="small" v-model="header.name" placeholder="header-name" clearable></el-input>
           </el-col>
           <el-col :span="12">
-            <el-input size="small" placeholder="header-value" clearable></el-input>
+            <el-input size="small" v-model="header.value" placeholder="header-value" clearable></el-input>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" link :icon="Minus"/>
-          </el-col>
-        </el-row>
-        <el-row justify="space-evenly">
-          <el-col :span="8">
-            <el-input size="small" placeholder="header-name" clearable></el-input>
-          </el-col>
-          <el-col :span="12">
-            <el-input size="small" placeholder="header-value" clearable></el-input>
-          </el-col>
-          <el-col :span="2">
-            <el-button type="primary" link :icon="Minus"/>
+            <el-button type="primary" link :icon="Minus" @click="debugReq.removeHeader(index)"/>
           </el-col>
         </el-row>
       </el-col>
@@ -76,12 +66,12 @@
             <el-text type="primary">参数值</el-text>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row :gutter="20" v-for="param in debugReq.params">
           <el-col :span="8">
-            <el-input size="small" placeholder="param-name" clearable></el-input>
+            <el-input size="small" v-model="param.name" placeholder="param-name" clearable></el-input>
           </el-col>
           <el-col :span="16">
-            <el-input size="small" placeholder="param-value" clearable></el-input>
+            <el-input size="small" v-model="param.value" placeholder="param-value" clearable></el-input>
           </el-col>
         </el-row>
       </el-col>
@@ -94,43 +84,85 @@
         <el-row style="position: absolute;z-index: 10;right: 0">
           <el-button type="primary" link size="small">清除</el-button>
         </el-row>
-        <el-scrollbar class="debug-log-content">
-
-        </el-scrollbar>
+        <el-scrollbar class="debug-log-content"></el-scrollbar>
       </el-col>
     </el-row>
     <el-row justify="center" style="margin-top: 20px">
-      <el-button type="primary" size="large"> 执 行 脚 本 </el-button>
+      <el-button type="primary" size="large" @click="debugReq.execute"> 执 行 脚 本</el-button>
     </el-row>
   </el-dialog>
 </template>
 <script setup>
 import {Minus, Plus} from "@element-plus/icons-vue";
-import {boxMock} from "@/views/mock/js/boxDto.js";
+import {useDebugDataStore} from "@/store/debugStore.js";
 
 const isShow = ref(false)
-
 const debugTitle = computed(() => {
   let title = scriptType.value === 'query' ? '查询脚本调试' : scriptType.value === 'call' ? '调用脚本调试' : '回调脚本调试'
   title = title + '[' + scriptObject.value?.payName + ']'
   return title
 })
 
+const debugReq = reactive({
+  target: '',
+  headers: [],
+  params: [],
+  addHeader() {
+    this.headers.push({name: '', value: ''})
+  },
+  removeHeader(index) {
+    this.headers.splice(index, 1)
+  },
+  pushHeader(header) {
+    const index = this.headers.findIndex(item => item.name === header.name)
+    if (index === -1) {
+      this.headers.push(header)
+    }
+  },
+  pushParam(param) {
+    const index = this.params.findIndex(item => item.name === param.name)
+    if (index === -1) {
+      this.params.push(param)
+    }
+  },
+  execute() {
+    debugStore.setData(debugReq.target, {headers: debugReq.headers, params: debugReq.params})
+    switch (debugReq.target) {
+      case 'query':
+        break
+      case 'call':
+        console.log(debugReq.target)
+        break
+      case 'callback':
+        console.log(debugReq.target)
+        break
+    }
+  }
+})
+
+const debugStore = useDebugDataStore()
 const scriptObject = ref(null)
 const scriptType = ref(null)
 const debugScript = (rowOjb, rowType) => {
   scriptObject.value = rowOjb
   scriptType.value = rowType
-  switch (rowType) {
-    case 'query':
-      console.log(rowType)
-      break
-    case 'call':
-      console.log(rowType)
-      break
-    case 'callback':
-      console.log(rowType)
-      break
+  debugReq.target = rowType
+  debugReq.headers = []
+  debugReq.params = []
+  let storeData = debugStore.getData(rowType)
+  if (storeData) {
+    debugReq.headers = storeData.headers
+    debugReq.params = storeData.params
+  } else {
+    if (rowType === 'call') {
+      debugReq.pushHeader({name: 'token', value: ''})
+      debugReq.pushParam({name: 'payCode', value: rowOjb.payCode})
+      debugReq.pushParam({name: 'money', value: ''})
+    } else if (rowType === 'callback') {
+      debugReq.pushParam({name: 'payCode', value: rowOjb.payCode})
+    } else if (rowType === 'query') {
+      debugReq.pushParam({name: 'payCode', value: ''})
+    }
   }
   isShow.value = true
 }
