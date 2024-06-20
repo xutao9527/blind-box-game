@@ -1,0 +1,12 @@
+server:
+  port: 7890
+
+spring:
+  application:
+    name: socket-server
+
+#springdoc:
+#  api-docs:
+#    path: /api-docs
+#  swagger-ui:
+#    path: /doc
