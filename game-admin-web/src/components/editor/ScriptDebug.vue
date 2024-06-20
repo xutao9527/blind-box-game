@@ -157,7 +157,12 @@ const debugScript = (rowOjb, rowType) => {
     if (rowType === 'call') {
       debugReq.pushHeader({name: 'token', value: ''})
       debugReq.pushParam({name: 'payCode', value: rowOjb.payCode})
-      debugReq.pushParam({name: 'money', value: ''})
+      if(rowOjb.payAmountLimit){
+        debugReq.pushParam({name: 'money', value: JSON.parse(rowOjb.payAmountLimit)[0]})
+      }else {
+        debugReq.pushParam({name: 'money', value: ''})
+      }
+
     } else if (rowType === 'callback') {
       debugReq.pushParam({name: 'payCode', value: rowOjb.payCode})
     } else if (rowType === 'query') {
