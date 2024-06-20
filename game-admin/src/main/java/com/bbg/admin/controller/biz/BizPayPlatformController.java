@@ -32,7 +32,7 @@ public class BizPayPlatformController extends BaseBizPayPlatformController {
     @PostMapping("debug")
     @Operation(summary = "支付调试接口", description = "支付调试接口")
     public ApiRet<Object> debug(@RequestBody DebugData debugData) {
-        ApiRet<Object> result = switch (debugData.debugTarget) {
+        return switch (debugData.debugTarget) {
             case "call" ->
                     payService.call(debugData.payPlatform.getPayCode(), new BigDecimal(debugData.params.get("money").toString()));
             case "callback" ->
@@ -41,7 +41,6 @@ public class BizPayPlatformController extends BaseBizPayPlatformController {
                     payService.queryOrder(debugData.params.get("payNo").toString());
             default -> ApiRet.buildNo("调试对象不存在");
         };
-        return result;
     }
 
     @Data
