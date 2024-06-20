@@ -38,6 +38,8 @@ public interface PayService {
             @RequestParam("payNo") @Parameter(description = "支付订单号") @NotNull String payNo
     );
 
+
+
     class PayServiceInterceptor implements RequestInterceptor {
         @Override
         public void apply(RequestTemplate requestTemplate) {

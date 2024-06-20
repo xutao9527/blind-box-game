@@ -64,13 +64,16 @@ public class BizUserController extends BaseController<BizUser> {
     public ApiRet<LoginDto.LoginRes> login(@RequestBody LoginDto.LoginPwdReq loginReq) {
         LoginDto.LoginRes loginRes = new LoginDto.LoginRes();
         BizUser bizUser = bizUserService.getOneByMobile(loginReq.getMobile());
-        if (null != bizUser && bizUser.getEnable() && bizUser.getPassword().equals(loginReq.getPassword())) {
+        if(bizUser == null){
+            return ApiRet.buildNo("用户不存在!");
+        }
+        if (bizUser.getEnable() && bizUser.getPassword().equals(loginReq.getPassword())) {
             bizUser = bizUserService.getById(bizUser.getId());
             String token = redisService.userLogin(bizUser);
             loginRes.setBizUser(bizUser).setToken(token);
             return ApiRet.buildOk(loginRes);
         }
-        return ApiRet.buildNo(loginRes, "用户不存在!");
+        return ApiRet.buildNo(loginRes, "密码错误!");
     }
 
 

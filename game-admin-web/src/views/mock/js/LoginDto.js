@@ -6,7 +6,7 @@ import {mockGlobal} from "@/views/mock/js/mockGlobal.js";
 export const loginMock = reactive({
     LoginPwdReq: {  // 密码登录请求参数
         mobile: "18612344321",
-        password: "xutao",
+        password: "123456",
     },
     LoginCodeReq: { // 验证码登录请求参数
         mobile: "18612344321",
