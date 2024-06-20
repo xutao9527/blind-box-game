@@ -54,7 +54,6 @@ public interface PayService {
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes)  RequestContextHolder.getRequestAttributes();
             for (Map.Entry<String, String> entry : PayService.headers.entrySet()) {
                 requestTemplate.header(entry.getKey(), entry.getValue());
-                System.out.println("headerName: " + entry.getKey() + " headerValue: " + entry.getValue());
             }
             if (servletRequestAttributes != null) {
                 HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
@@ -64,7 +63,6 @@ public interface PayService {
                         String headerName = headerNames.nextElement();
                         String headerValue = httpServletRequest.getHeader(headerName);
                         requestTemplate.header(headerName, headerValue);
-                        System.out.println("headerName: " + headerName + " headerValue: " + headerValue);
                     }
                 }
             }
