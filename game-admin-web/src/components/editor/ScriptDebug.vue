@@ -95,6 +95,7 @@
 <script setup>
 import {Minus, Plus} from "@element-plus/icons-vue";
 import {useDebugDataStore} from "@/store/debugStore.js";
+import {http} from "@/core/axios/index.js";
 
 const isShow = ref(false)
 const debugTitle = computed(() => {
@@ -125,17 +126,16 @@ const debugReq = reactive({
       this.params.push(param)
     }
   },
-  execute() {
+  async execute () {
     debugStore.setData(debugReq.target, {headers: debugReq.headers, params: debugReq.params})
-    switch (debugReq.target) {
-      case 'query':
-        break
-      case 'call':
-        console.log(debugReq.target)
-        break
-      case 'callback':
-        console.log(debugReq.target)
-        break
+    let debugData = {
+      debugTarget: debugReq.target,
+      headers: debugReq.headers,
+      params: debugReq.params
+    }
+    const apiRet = await http.post('/bizPayPlatform/debug', debugData)
+    if(apiRet.ok){
+      ElMessage({type: 'success', message: apiRet.msg})
     }
   }
 })

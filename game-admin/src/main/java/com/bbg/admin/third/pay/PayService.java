@@ -1,4 +1,4 @@
-package com.bbg.box.third.pay;
+package com.bbg.admin.third.pay;
 
 import com.bbg.core.entity.ApiRet;
 import feign.RequestInterceptor;
@@ -24,6 +24,18 @@ public interface PayService {
     ApiRet<Object> call(
             @RequestParam("payCode") @Parameter(description = "支付编码") @NotNull String payCode,
             @RequestParam("money") @Parameter(description = "支付金额") @NotNull BigDecimal money
+    );
+
+    @GetMapping("callback")
+    @Operation(summary = "支付回调", description = "支付回调")
+    ApiRet<Object> callback(
+            @RequestParam("payCode") @Parameter(description = "支付编码") @NotNull String payCode
+    );
+
+    @GetMapping("orderQuery")
+    @Operation(summary = "支付订单查询", description = "支付订单查询")
+    ApiRet<Object> queryOrder(
+            @RequestParam("payNo") @Parameter(description = "支付订单号") @NotNull String payNo
     );
 
     class PayServiceInterceptor implements RequestInterceptor {
