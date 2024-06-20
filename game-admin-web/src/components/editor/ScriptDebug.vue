@@ -126,15 +126,25 @@ const debugReq = reactive({
       this.params.push(param)
     }
   },
-  async execute () {
+  async execute() {
     debugStore.setData(debugReq.target, {headers: debugReq.headers, params: debugReq.params})
+    const convertArrayToMap = (array) => {
+      let map = {}
+      array.forEach(item => {
+        if (item.name && item.value !== undefined) {
+          map[item.name] = item.value;
+        }
+      })
+      return map
+    }
     let debugData = {
       debugTarget: debugReq.target,
-      headers: debugReq.headers,
-      params: debugReq.params
+      headers: convertArrayToMap(debugReq.headers),
+      params: convertArrayToMap(debugReq.params),
+      payPlatform: scriptObject.value
     }
     const apiRet = await http.post('/bizPayPlatform/debug', debugData)
-    if(apiRet.ok){
+    if (apiRet.ok) {
       ElMessage({type: 'success', message: apiRet.msg})
     }
   }
@@ -156,13 +166,11 @@ const debugScript = (rowOjb, rowType) => {
   } else {
     if (rowType === 'call') {
       debugReq.pushHeader({name: 'token', value: ''})
-      debugReq.pushParam({name: 'payCode', value: rowOjb.payCode})
-      if(rowOjb.payAmountLimit){
+      if (rowOjb.payAmountLimit) {
         debugReq.pushParam({name: 'money', value: JSON.parse(rowOjb.payAmountLimit)[0]})
-      }else {
+      } else {
         debugReq.pushParam({name: 'money', value: ''})
       }
-
     } else if (rowType === 'callback') {
       debugReq.pushParam({name: 'payCode', value: rowOjb.payCode})
     } else if (rowType === 'query') {
