@@ -10,5 +10,3 @@ spring:
       discovery:
         namespace: be713592-842b-4885-9251-9fd0f3d0f770
 
-netty:
-  port: 9999
