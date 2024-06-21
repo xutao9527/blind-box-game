@@ -20,6 +20,7 @@ public class WebSocketConfig  {
     @Bean
     public HandlerMapping handlerMapping(){
         Map<String, WebSocketHandler> map = new HashMap<>();
+        // ws://localhost:7788/echo
         map.put("/echo", new GameWebSocketHandler());
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(map);
@@ -31,4 +32,5 @@ public class WebSocketConfig  {
     public WebSocketHandlerAdapter handlerAdapter() {
         return new WebSocketHandlerAdapter();
     }
+
 }

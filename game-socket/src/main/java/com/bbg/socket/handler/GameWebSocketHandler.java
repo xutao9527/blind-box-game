@@ -9,7 +9,7 @@ public class GameWebSocketHandler implements WebSocketHandler {
     public Mono<Void> handle(WebSocketSession session) {
         return session.send(
                 session.receive()
-                        .map(msg -> "服务端返回：" + msg.getPayloadAsText())
+                        .map(msg -> "服务端返回1：" + msg.getPayloadAsText())
                         .map(session::textMessage)
         );
     }
