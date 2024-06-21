@@ -1,7 +1,14 @@
+server:
+  port: 7788
 
 spring:
   application:
     name: socket-server
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      discovery:
+        namespace: be713592-842b-4885-9251-9fd0f3d0f770
 
 netty:
-  port: 8080
+  port: 9999

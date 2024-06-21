@@ -21,8 +21,8 @@ public class WebSocketNettyServer {
     private final WebSocketChannelInitializer webSocketChannelInitializer;
 
 
-    EventLoopGroup bossGroup = new NioEventLoopGroup();
-    EventLoopGroup workerGroup =new NioEventLoopGroup();
+    EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    EventLoopGroup workerGroup = new NioEventLoopGroup();
 
 
     public void startNettyServer() {
@@ -32,7 +32,15 @@ public class WebSocketNettyServer {
             serverBootstrap.group(bossGroup, workerGroup);
             serverBootstrap.channel(NioServerSocketChannel.class);
             serverBootstrap.childHandler(webSocketChannelInitializer);
-            ChannelFuture channelFuture = serverBootstrap.bind(nettyPort).sync();
+            ChannelFuture channelFuture = serverBootstrap.bind(nettyPort).addListener(
+                    future -> {
+                        if (future.isSuccess()) {
+                            log.info("Netty服务端启动成功，端口：{}", nettyPort);
+                        } else {
+                            log.error("Netty服务端启动失败，端口：{}", nettyPort);
+                        }
+                    }
+            ).sync();
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
             throw new RuntimeException(e);
