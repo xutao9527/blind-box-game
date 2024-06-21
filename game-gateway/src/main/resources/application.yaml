@@ -88,10 +88,11 @@ knife4j:
       service-config:
         box-app-server:
           group-name: 1.游戏服务接口
-        game-third-server:
-          group-name: 2.第三方服务接口
+
         admin-server:
-          group-name: 3.后台管理服务接口
+          group-name: 2.后台管理服务接口
+        game-third-server:
+          group-name: 3.第三方服务接口
         scheduler-server:
           group-name: 4.调度任务服务接口
         socket-server:
