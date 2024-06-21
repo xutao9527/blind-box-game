@@ -49,6 +49,13 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: socket-server
+          uri: lb://socket-server
+          predicates:
+            - Path=/sk/**
+          filters:
+            - StripPrefix=1
+
 #springdoc:
 #  api-docs:
 #    path: /api-docs
@@ -88,3 +95,8 @@ knife4j:
         url: /sched/api-docs
         service-name: scheduler-server
         context-path: /sched
+      - name: 5.socket服务接口
+        url: /sk/api-docs
+        service-name: scheduler-server
+        context-path: /sk
+

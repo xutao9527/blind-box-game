@@ -4,6 +4,7 @@ import com.bbg.socket.handler.GameWebSocketHandler;
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
@@ -24,10 +25,10 @@ public class WebSocketConfig  {
     public HandlerMapping handlerMapping(){
         Map<String, WebSocketHandler> map = new HashMap<>();
         // ws://localhost:7788/echo
-        map.put("/echo", new GameWebSocketHandler());
+        map.put("/", new GameWebSocketHandler());
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(map);
-        mapping.setOrder(-1);
+        mapping.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return mapping;
     }
 

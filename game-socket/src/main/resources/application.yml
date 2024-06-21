@@ -10,3 +10,8 @@ spring:
       discovery:
         namespace: be713592-842b-4885-9251-9fd0f3d0f770
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /doc
