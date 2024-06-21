@@ -60,27 +60,6 @@ knife4j:
   gateway:
     enabled: true
     strategy: discover
-#    routes:
-#      - name: 1.游戏服务接口
-#        url: /box/api-docs
-#        service-name: box-app-server
-#        context-path: /box
-#      - name: 2.第三方服务接口
-#        url: /third/api-docs
-#        service-name: game-third-server
-#        context-path: /third
-#      - name: 3.后台管理服务接口
-#        url: /admin/api-docs
-#        service-name: admin-server
-#        context-path: /admin
-#      - name: 4.调度任务服务接口
-#        url: /sched/api-docs
-#        service-name: scheduler-server
-#        context-path: /sched
-#      - name: 5.socket服务接口
-#        url: /sk/api-docs
-#        service-name: socket-server
-#        context-path: /sk
     discover:
       enabled: true
       oas3:
@@ -88,7 +67,6 @@ knife4j:
       service-config:
         box-app-server:
           group-name: 1.游戏服务接口
-
         admin-server:
           group-name: 2.后台管理服务接口
         game-third-server:
