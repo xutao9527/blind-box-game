@@ -23,7 +23,7 @@ public class WebSocketController {
     private static final Logger log = LoggerFactory.getLogger(WebSocketController.class);
     public final ConcurrentMap<String, WebSocketSender> senderMap;
 
-    @PostMapping(value = "/send",consumes = "text/plain")
+    @PostMapping(value = "/send")
     @Operation(summary = "发送消息", description = "发送消息")
     public ApiRet<Boolean> sendMessage(@RequestBody WebSocketMsg webSocketMsg) {
         log.info("send message: {}", webSocketMsg.getMsgContent());
