@@ -20,25 +20,15 @@ import java.util.concurrent.ConcurrentMap;
 @EnableWebFlux
 @Configuration
 public class WebSocketConfig {
-    @Lazy
-    @Autowired
-    AdminWebSocketHandler adminWebSocketHandler;
-
     @Bean
-    public ConcurrentMap<String, WebSocketSender> senderMap() {
+    public ConcurrentMap<String, WebSocketSender> adminSenderMap() {
         return new ConcurrentHashMap<>();
     }
 
-    // @Bean
-    // public HandlerMapping handlerMapping() {
-    //     Map<String, WebSocketHandler> map = new HashMap<>();
-    //     // ws://localhost:7788/echo
-    //     map.put("/", adminWebSocketHandler);
-    //     SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
-    //     mapping.setUrlMap(map);
-    //     mapping.setOrder(Ordered.HIGHEST_PRECEDENCE);
-    //     return webSocketMapping();
-    // }
+    @Bean
+    public ConcurrentMap<String, WebSocketSender> gameSenderMap() {
+        return new ConcurrentHashMap<>();
+    }
 
     @Bean
     public HandlerMapping webSocketMapping() {

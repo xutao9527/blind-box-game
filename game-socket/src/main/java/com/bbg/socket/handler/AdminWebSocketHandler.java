@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentMap;
 @WebSocketMapping("/admin")
 public class AdminWebSocketHandler implements WebSocketHandler {
 
-    public final ConcurrentMap<String, WebSocketSender> senderMap;
+    public final ConcurrentMap<String, WebSocketSender> adminSenderMap;
 
     @Override
     @NonNull
@@ -30,12 +30,12 @@ public class AdminWebSocketHandler implements WebSocketHandler {
         Mono<Void> outgoing = session.send(
                 Flux.create(sink -> {
                     log.info("session opened: {}", session.getId());
-                    senderMap.put(session.getId(), new WebSocketSender(session, sink));
+                    adminSenderMap.put(session.getId(), new WebSocketSender(session, sink));
                 })
         );
         return Mono.when(outgoing, incoming).then().doFinally(signalType -> {
             log.info("session closed: {}", session.getId());
-            senderMap.remove(session.getId());
+            adminSenderMap.remove(session.getId());
         });
     }
 }
