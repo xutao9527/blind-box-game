@@ -21,6 +21,7 @@ public class ScriptPayEngine implements PayEngine {
 
     @Override
     public Object execCall(BizUser bizUser, BizPayPlatform bizPayPlatform, BigDecimal money) {
+        log.info(log.getClass().getName());
         webSocketService.sendAdminMessage(new WebSocketMsg().setMessage("支付请求"));
         try(Context context = Context.newBuilder().allowAllAccess(true).build()) {
             context.getBindings("js").putMember("log", log);
