@@ -24,7 +24,6 @@ public interface PayService {
     // 定义一个线程安全的map集合对象
     Map<String, String> headers = new ConcurrentHashMap<>();
 
-
     @GetMapping("call")
     @Operation(summary = "支付请求", description = "支付请求")
     ApiRet<Object> call(
