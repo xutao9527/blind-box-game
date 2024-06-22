@@ -39,7 +39,7 @@ public class OnlinePayController extends BaseController {
     public final PayEngine scriptPayEngine;
     public final PayEngine beanPayEngine;
 
-    public final WebSocketService webSocketService;
+
 
     @GetMapping("call")
     @Operation(summary = "支付请求", description = "支付请求")
@@ -48,7 +48,7 @@ public class OnlinePayController extends BaseController {
             @RequestParam("money") @Parameter(description = "支付金额") @NotNull BigDecimal money
     ) {
         // ----------------------------------------- 前置检查 -----------------------------------------
-        webSocketService.sendAdminMessage(new WebSocketMsg().setMessage("支付请求"));
+
         BizUser bizUser = getCurrentUser();
         if (bizUser == null) {
             return ApiRet.buildNo("用户未登录");
