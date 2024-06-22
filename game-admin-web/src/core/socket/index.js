@@ -1,5 +1,7 @@
+import {bbgConf} from "@/config/index.js";
+
 class WebSocketSingleton {
-    constructor(url) {
+     constructor(url) {
         if (WebSocketSingleton.instances[url]) {
             return WebSocketSingleton.instances[url];
         }
@@ -7,10 +9,11 @@ class WebSocketSingleton {
         this.url = url;
         this.socket = null;
         this.isConnected = false;
-        this.messages = [];
+        // this.messages = [];
         this.error = null;
 
         WebSocketSingleton.instances[url] = this;
+        this.connect();
     }
 
     static getInstance(url) {
@@ -38,7 +41,6 @@ class WebSocketSingleton {
 
         this.socket.onmessage = (event) => {
             console.log('收到消息:', event.data)
-            this.messages.push(event.data);
         };
 
         this.socket.onerror = (err) => {
@@ -67,4 +69,5 @@ class WebSocketSingleton {
     }
 }
 
-export default WebSocketSingleton;
+
+export const webSocket = WebSocketSingleton.getInstance(bbgConf.env.wsBaseUrl)

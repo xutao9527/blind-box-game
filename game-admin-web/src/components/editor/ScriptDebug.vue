@@ -84,7 +84,11 @@
         <el-row style="position: absolute;z-index: 10;right: 0">
           <el-button type="primary" link size="small">清除</el-button>
         </el-row>
-        <el-scrollbar class="debug-log-content"></el-scrollbar>
+        <el-scrollbar class="debug-log-content">
+          <el-text v-for="msg in messages">
+            {{ msg }}
+          </el-text>
+        </el-scrollbar>
       </el-col>
     </el-row>
     <el-row justify="center" style="margin-top: 20px">
@@ -96,20 +100,32 @@
 import {Minus, Plus} from "@element-plus/icons-vue";
 import {useDebugDataStore} from "@/store/debugStore.js";
 import {http} from "@/core/axios/index.js";
+import {webSocket} from "@/core/socket/index.js";
 
-import WebSocketSingleton from "@/core/socket/index.js";
-import {bbgConf} from "@/config/index.js";
+
+const messages = ref([])
+const handleMessageEvent  = (event) => {
+
+  messages.value.push(event.data);
+};
+
+onMounted(() => {
+  // 添加事件监听器，监听消息事件
+  console.log('onMounted')
+  webSocket.socket.addEventListener('message', handleMessageEvent);
+});
+
+onUnmounted(() => {
+  // 移除事件监听器
+  console.log('onUnmounted')
+  webSocket.socket.removeEventListener('message', handleMessageEvent);
+});
 
 const isShow = ref(false)
 const debugTitle = computed(() => {
   let title = scriptType.value === 'query' ? '查询脚本调试' : scriptType.value === 'call' ? '调用脚本调试' : '回调脚本调试'
   title = title + '[' + scriptObject.value?.payName + ']'
   return title
-})
-
-onMounted(() => {
-  const webSocketClient = WebSocketSingleton.getInstance(bbgConf.env.wsBaseUrl);
-  webSocketClient.connect()
 })
 
 const debugReq = reactive({
