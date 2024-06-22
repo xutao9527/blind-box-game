@@ -2,6 +2,8 @@ package com.bbg.third.controller;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.bbg.core.entity.ApiRet;
+import com.bbg.core.entity.WebSocketMsg;
+import com.bbg.core.feign.WebSocketService;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.biz.BizPayPlatformService;
 import com.bbg.model.biz.BizDict;
@@ -9,6 +11,7 @@ import com.bbg.model.biz.BizPayPlatform;
 import com.bbg.model.biz.BizUser;
 import com.bbg.third.base.BaseController;
 import com.bbg.third.engine.PayEngine;
+import com.bbg.third.feign.WebSocketServiceFeign;
 import com.bbg.third.service.PayService;
 import com.esotericsoftware.minlog.Log;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,10 +39,10 @@ public class OnlinePayController extends BaseController {
     public final BizPayPlatformService bizPayPlatformService;
     public final BizDictService bizDictService;
 
-
     public final PayEngine scriptPayEngine;
     public final PayEngine beanPayEngine;
 
+    public final WebSocketService webSocketService;
 
     @GetMapping("call")
     @Operation(summary = "支付请求", description = "支付请求")
@@ -48,6 +51,7 @@ public class OnlinePayController extends BaseController {
             @RequestParam("money") @Parameter(description = "支付金额") @NotNull BigDecimal money
     ) {
         // ----------------------------------------- 前置检查 -----------------------------------------
+        webSocketService.sendAdminMessage(new WebSocketMsg().setMessage("支付请求"));
         BizUser bizUser = getCurrentUser();
         if (bizUser == null) {
             return ApiRet.buildNo("用户未登录");
