@@ -1,5 +1,7 @@
 package com.bbg.socket.handler;
 
+import com.bbg.socket.annotation.WebSocketMapping;
+import com.bbg.socket.entity.WebSocketSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -15,7 +17,8 @@ import java.util.concurrent.ConcurrentMap;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class WebSocketEchoHandler implements WebSocketHandler {
+@WebSocketMapping("/")
+public class AdminWebSocketHandler implements WebSocketHandler {
 
     public final ConcurrentMap<String, WebSocketSender> senderMap;
 

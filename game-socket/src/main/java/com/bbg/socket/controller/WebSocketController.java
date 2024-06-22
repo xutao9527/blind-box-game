@@ -2,7 +2,7 @@ package com.bbg.socket.controller;
 
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.WebSocketMsg;
-import com.bbg.socket.handler.WebSocketSender;
+import com.bbg.socket.entity.WebSocketSender;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

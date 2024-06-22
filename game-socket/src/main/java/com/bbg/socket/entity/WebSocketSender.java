@@ -1,4 +1,4 @@
-package com.bbg.socket.handler;
+package com.bbg.socket.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

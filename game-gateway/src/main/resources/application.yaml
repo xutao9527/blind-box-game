@@ -52,7 +52,7 @@ spring:
         - id: socket-server
           uri: lb://socket-server
           predicates:
-            - Path=/sk/**
+            - Path=/wss/**
           filters:
             - StripPrefix=1
 

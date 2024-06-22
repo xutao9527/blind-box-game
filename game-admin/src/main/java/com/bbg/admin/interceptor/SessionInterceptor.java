@@ -23,7 +23,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     // 在请求处理之前进行拦截逻辑，返回 true 表示继续执行，返回 false 表示终止执行
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info(request.getRequestURI());
+        // log.info(request.getRequestURI());
         String token = request.getHeader("token");
         if (token != null) {
             if (!redisService.expireAdmin(token)) {
@@ -40,7 +40,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     // 请求处理之后但在视图渲染之前执行的拦截逻辑
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 
