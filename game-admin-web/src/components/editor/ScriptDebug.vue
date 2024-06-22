@@ -1,4 +1,4 @@
-<style scoped lang="less">
+<style scoped lang="less" xmlns="http://www.w3.org/1999/html">
 .request-header-content {
   display: flex;
   flex-direction: column;
@@ -82,11 +82,11 @@
     <el-row class="debug-log">
       <el-col :span="24" style="position: relative">
         <el-row style="position: absolute;z-index: 10;right: 0">
-          <el-button type="primary" link size="small">清除</el-button>
+          <el-button type="primary" link size="small" @click="messages = []">清除</el-button>
         </el-row>
         <el-scrollbar class="debug-log-content">
-          <el-text v-for="msg in messages">
-            {{ msg }}
+          <el-text v-for="msg in messages" style="white-space: pre-wrap;" size="small">
+            {{ msg }}<br/>
           </el-text>
         </el-scrollbar>
       </el-col>
@@ -102,10 +102,8 @@ import {useDebugDataStore} from "@/store/debugStore.js";
 import {http} from "@/core/axios/index.js";
 import {webSocket} from "@/core/socket/index.js";
 
-
 const messages = ref([])
 const handleMessageEvent  = (event) => {
-
   messages.value.push(event.data);
 };
 
