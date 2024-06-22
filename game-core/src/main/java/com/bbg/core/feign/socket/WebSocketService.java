@@ -1,6 +1,5 @@
-package com.bbg.admin.third.socket;
+package com.bbg.core.feign.socket;
 
-import com.bbg.admin.third.pay.PayService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.WebSocketMsg;
 import io.swagger.v3.oas.annotations.Operation;

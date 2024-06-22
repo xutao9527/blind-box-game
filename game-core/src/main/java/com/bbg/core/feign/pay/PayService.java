@@ -1,4 +1,4 @@
-package com.bbg.admin.third.pay;
+package com.bbg.core.feign.pay;
 
 import com.bbg.core.entity.ApiRet;
 import feign.RequestInterceptor;
@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @FeignClient(name = "game-third-server",path = "/pay",configuration = PayService.PayServiceInterceptor.class)
 public interface PayService {
-
     // 定义一个线程安全的map集合对象
     Map<String, String> headers = new ConcurrentHashMap<>();
 

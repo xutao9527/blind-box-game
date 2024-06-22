@@ -1,7 +1,5 @@
-package com.bbg.admin.third.mock;
+package com.bbg.core.feign.mock;
 
-
-import com.bbg.admin.third.zbt.ZBTHttpService;
 import com.bbg.core.box.dto.BoxDto;
 import com.bbg.core.box.dto.DreamDto;
 import com.bbg.core.box.dto.LoginDto;
@@ -9,8 +7,6 @@ import com.bbg.core.entity.ApiRet;
 import com.bbg.model.csgo.CsgoBox;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import lombok.Data;
-import lombok.Synchronized;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

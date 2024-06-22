@@ -1,4 +1,4 @@
-package com.bbg.admin.third.scheduler;
+package com.bbg.core.feign.scheduler;
 
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.QuartzJobInfo;

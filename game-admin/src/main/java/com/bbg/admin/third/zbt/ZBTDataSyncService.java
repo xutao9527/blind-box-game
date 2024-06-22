@@ -6,12 +6,12 @@ import com.alibaba.fastjson2.JSONObject;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.csgo.CsgoGoodsService;
 import com.bbg.core.annotation.RedisLock;
+import com.bbg.core.third.zbt.ZBTHttpService;
 import com.bbg.model.csgo.CsgoGoods;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;

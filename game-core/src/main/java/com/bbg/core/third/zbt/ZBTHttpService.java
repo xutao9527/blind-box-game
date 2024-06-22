@@ -1,4 +1,4 @@
-package com.bbg.admin.third.zbt;
+package com.bbg.core.third.zbt;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

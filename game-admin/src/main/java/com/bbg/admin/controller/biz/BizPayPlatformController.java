@@ -1,7 +1,7 @@
 package com.bbg.admin.controller.biz;
 
 import com.bbg.admin.base.controller.biz.BaseBizPayPlatformController;
-import com.bbg.admin.third.pay.PayService;
+import com.bbg.core.feign.pay.PayService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.biz.BizPayPlatform;
 import io.swagger.v3.oas.annotations.Operation;

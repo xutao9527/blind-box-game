@@ -1,17 +1,10 @@
 package com.bbg.admin.controller.mock;
 
-import com.bbg.admin.third.mock.BoxGameMockService;
-import com.bbg.core.box.dto.BoxDto;
-import com.bbg.core.box.dto.DreamDto;
-import com.bbg.core.box.dto.LoginDto;
 import com.bbg.core.entity.ApiRet;
-import com.bbg.model.csgo.CsgoBox;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Csgo游戏模拟 控制层。

@@ -8,8 +8,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-@EnableFeignClients
+
 @MapperScan("com.bbg.core.mapper")
+@EnableFeignClients(basePackages = {"com.bbg.core"})
 @ComponentScan(basePackages = {"com.bbg.core","com.bbg.admin"})
 @SpringBootApplication(exclude = FlexTransactionAutoConfiguration.class)
 public class AdminServiceApplication {

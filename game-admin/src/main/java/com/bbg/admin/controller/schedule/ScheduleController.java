@@ -1,6 +1,6 @@
 package com.bbg.admin.controller.schedule;
 
-import com.bbg.admin.third.scheduler.ScheduleService;
+import com.bbg.core.feign.scheduler.ScheduleService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.QuartzJobInfo;
 import io.swagger.v3.oas.annotations.Operation;

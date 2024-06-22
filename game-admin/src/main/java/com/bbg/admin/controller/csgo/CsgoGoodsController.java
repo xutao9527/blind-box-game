@@ -2,11 +2,9 @@ package com.bbg.admin.controller.csgo;
 
 import com.bbg.admin.base.controller.csgo.BaseCsgoGoodsController;
 import com.bbg.admin.third.zbt.ZBTDataSyncService;
-import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.entity.ApiRet;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
