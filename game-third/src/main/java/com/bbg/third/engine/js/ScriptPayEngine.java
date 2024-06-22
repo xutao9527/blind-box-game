@@ -8,9 +8,6 @@ import com.bbg.third.engine.PayEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.graalvm.polyglot.Context;
-import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.MessageFormatter;
-import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
