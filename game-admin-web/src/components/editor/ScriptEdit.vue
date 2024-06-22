@@ -24,6 +24,10 @@
 
 <script setup>
 import MonacoEdit from "@/components/editor/MonacoEdit.vue";
+import WebSocketSingleton from "@/core/socket/index.js";
+import {bbgConf} from "@/config/index.js";
+
+const webSocketClient = WebSocketSingleton.getInstance(bbgConf.env.apiBaseUrl);
 
 const monacoEditRef = ref(null)
 const emit = defineEmits(['update:value'])
