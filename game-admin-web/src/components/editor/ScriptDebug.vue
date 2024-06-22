@@ -97,11 +97,21 @@ import {Minus, Plus} from "@element-plus/icons-vue";
 import {useDebugDataStore} from "@/store/debugStore.js";
 import {http} from "@/core/axios/index.js";
 
+import WebSocketSingleton from "@/core/socket/index.js";
+import {bbgConf} from "@/config/index.js";
+
+
+
 const isShow = ref(false)
 const debugTitle = computed(() => {
   let title = scriptType.value === 'query' ? '查询脚本调试' : scriptType.value === 'call' ? '调用脚本调试' : '回调脚本调试'
   title = title + '[' + scriptObject.value?.payName + ']'
   return title
+})
+
+onMounted(() => {
+  const webSocketClient = WebSocketSingleton.getInstance(bbgConf.env.wsBaseUrl);
+  webSocketClient.connect()
 })
 
 const debugReq = reactive({
