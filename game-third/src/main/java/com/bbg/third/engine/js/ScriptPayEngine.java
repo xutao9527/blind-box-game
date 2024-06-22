@@ -29,7 +29,7 @@ public class ScriptPayEngine implements PayEngine {
             // context.eval("js", bizPayPlatform.getCallEngine());
             context.eval("js", bizPayPlatform.getCallContent());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("execCall",e );
         }
         return null;
     }
