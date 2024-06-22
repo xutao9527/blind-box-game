@@ -21,13 +21,13 @@ import java.util.concurrent.ConcurrentMap;
 public class WebSocketController {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketController.class);
-    public final ConcurrentMap<String, WebSocketSender> senderMap;
+    public final ConcurrentMap<String, WebSocketSender> adminSenderMap;
 
     @PostMapping(value = "/send")
-    @Operation(summary = "发送消息", description = "发送消息")
+    @Operation(summary = "管理后台推送消息", description = "管理后台推送消息")
     public ApiRet<Boolean> sendMessage(@RequestBody WebSocketMsg webSocketMsg) {
-        log.info("send message: {}", webSocketMsg.getMsgContent());
-        senderMap.forEach((id, sender) -> sender.send(webSocketMsg.getMsgContent()));
+        log.info("send message: {}", webSocketMsg.getMessage());
+        adminSenderMap.forEach((id, sender) -> sender.send(webSocketMsg.getMessage()));
         return ApiRet.buildOk();
     }
 
