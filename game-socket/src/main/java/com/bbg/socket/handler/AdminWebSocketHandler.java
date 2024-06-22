@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentMap;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@WebSocketMapping("/")
+@WebSocketMapping("/admin")
 public class AdminWebSocketHandler implements WebSocketHandler {
 
     public final ConcurrentMap<String, WebSocketSender> senderMap;
