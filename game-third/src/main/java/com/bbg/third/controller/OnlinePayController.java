@@ -48,7 +48,6 @@ public class OnlinePayController extends BaseController {
             @RequestParam("money") @Parameter(description = "支付金额") @NotNull BigDecimal money
     ) {
         // ----------------------------------------- 前置检查 -----------------------------------------
-
         BizUser bizUser = getCurrentUser();
         if (bizUser == null) {
             return ApiRet.buildNo("用户未登录");
