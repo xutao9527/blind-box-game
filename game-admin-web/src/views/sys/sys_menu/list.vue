@@ -36,7 +36,19 @@
                 size="small"
                 border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"  width="160"/>
-        <el-table-column prop="parentId" label="父Id" width="160"/>
+        <el-table-column prop="parentId" label="父标题" >
+          <template #default="scope">
+            <el-tooltip>
+              <template #content>
+
+                  {{scope.row.parentId}}
+
+              </template>
+              {{scope.row.expandProps.parentTitle}}
+            </el-tooltip>
+
+          </template>
+        </el-table-column>
         <el-table-column prop="title" label="菜单标题"/>
         <el-table-column prop="name" label="菜单名称"/>
         <el-table-column prop="path" label="请求路径"/>
