@@ -54,7 +54,9 @@
             </el-col>
           </el-row>
           <el-row justify="center">
-            <el-button size="small" type="primary" :icon="CaretRight" @click="scriptDebugRef.debugScript(rowOjb,'call')">调试代码</el-button>
+            <el-button size="small" type="primary" :icon="CaretRight"
+                       @click="scriptDebugRef.debugScript(rowOjb,'call')">调试代码
+            </el-button>
           </el-row>
         </el-col>
         <el-col :span="8">
@@ -100,7 +102,8 @@
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="() => { scriptEditTitle = '回调参数脚本-编辑';scriptEditRef.editScript(rowOjb, 'callbackContent');}" >
+                  <el-button size="small" type="success" link
+                             @click="() => { scriptEditTitle = '回调参数脚本-编辑';scriptEditRef.editScript(rowOjb, 'callbackContent');}">
                     编辑代码
                   </el-button>
                 </el-row>
@@ -108,7 +111,9 @@
             </el-col>
           </el-row>
           <el-row justify="center">
-            <el-button size="small" type="primary" :icon="CaretRight" @click="scriptDebugRef.debugScript(rowOjb,'callback')">调试代码</el-button>
+            <el-button size="small" type="primary" :icon="CaretRight"
+                       @click="scriptDebugRef.debugScript(rowOjb,'callback')">调试代码
+            </el-button>
           </el-row>
         </el-col>
         <el-col :span="8">
@@ -154,7 +159,8 @@
                   </el-text>
                 </el-tooltip>
                 <el-row justify="end" style="width: 100%">
-                  <el-button size="small" type="success" link @click="() => { scriptEditTitle = '查询引擎脚本-编辑';scriptEditRef.editScript(rowOjb, 'queryContent');}">
+                  <el-button size="small" type="success" link
+                             @click="() => { scriptEditTitle = '查询引擎脚本-编辑';scriptEditRef.editScript(rowOjb, 'queryContent');}">
                     编辑代码
                   </el-button>
                 </el-row>
@@ -162,7 +168,9 @@
             </el-col>
           </el-row>
           <el-row justify="center">
-            <el-button size="small" type="primary" :icon="CaretRight" @click="scriptDebugRef.debugScript(rowOjb,'query')">调试代码</el-button>
+            <el-button size="small" type="primary" :icon="CaretRight"
+                       @click="scriptDebugRef.debugScript(rowOjb,'query')">调试代码
+            </el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -181,15 +189,17 @@ const scriptEditRef = ref(null)
 // 编辑脚本标题
 const scriptEditTitle = ref('引擎脚本-编辑')
 // 编辑脚本回调
-const scriptEditCallBack = async (newOjb,editField) => {
+const scriptEditCallBack = async (newOjb, editField) => {
   const request = {
     id: newOjb.id.toString(),
     [editField]: newOjb[editField]
   }
   const apiRet = await http.post('/bizPayPlatform/update', request)
   if (apiRet.ok) {
-    rowOjb.value[editField]= newOjb[editField]
+    rowOjb.value[editField] = newOjb[editField]
     ElMessage({type: 'success', message: apiRet.msg})
+  }else{
+    ElMessage({type: 'error', message: apiRet.msg})
   }
 }
 
@@ -219,7 +229,7 @@ onMounted(() => {
   border-right: 1px solid var(--el-border-color);
 }
 
-.script-content-scrollbar{
+.script-content-scrollbar {
   white-space: pre-wrap;
   padding-right: 8px;
   min-width: 400px;

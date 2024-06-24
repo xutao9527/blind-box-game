@@ -166,6 +166,8 @@ const debugReq = reactive({
     const apiRet = await http.post('/bizPayPlatform/debug', debugData)
     if (apiRet.ok) {
       ElMessage({type: 'success', message: apiRet.msg})
+    }else{
+      ElMessage({type: 'error', message: apiRet.msg})
     }
   }
 })
