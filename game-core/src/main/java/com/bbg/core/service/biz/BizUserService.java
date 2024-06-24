@@ -39,7 +39,7 @@ public interface BizUserService extends IService<BizUser> {
     /**
      * 注册用户
      */
-     ApiRet<String> register(LoginDto.RegisterReq registerReq);
+    ApiRet<String> register(LoginDto.RegisterReq registerReq);
 
     /**
      * 新增用户

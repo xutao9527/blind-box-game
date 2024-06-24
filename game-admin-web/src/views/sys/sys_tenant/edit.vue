@@ -16,9 +16,9 @@
               <el-form-item label="租户名称">
                 <el-input v-model="data.tenantName"/>
               </el-form-item>
-              <el-form-item label="租户编码">
-                <el-input v-model="data.tenantCode"/>
-              </el-form-item>
+<!--              <el-form-item label="租户编码">-->
+<!--                <el-input v-model="data.tenantCode"/>-->
+<!--              </el-form-item>-->
               <el-form-item label="启用">
                 <el-switch v-model="data.enable"/>
               </el-form-item>
