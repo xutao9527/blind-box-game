@@ -18,7 +18,7 @@ import java.io.Serial;
  * 系统角色 实体类。
  *
  * @author bbg
- * @since 2024-06-17
+ * @since 2024-06-24
  */
 @Data
 @NoArgsConstructor
@@ -56,6 +56,12 @@ public class SysRoleRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "状态:1=启动,0=禁用")
     private Boolean enable;
+
+    /**
+     * 租户编号
+     */
+    @Schema(description = "租户编号")
+    private Long tenantId;
 
     /**
      * 创建时间

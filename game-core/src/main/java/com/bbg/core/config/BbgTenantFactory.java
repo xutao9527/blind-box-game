@@ -1,0 +1,15 @@
+package com.bbg.core.config;
+
+import com.mybatisflex.core.tenant.TenantFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+
+@Component
+public class BbgTenantFactory implements TenantFactory {
+    @Override
+    public Object[] getTenantIds() {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        return new Object[]{0};
+    }
+}

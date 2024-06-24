@@ -1,4 +1,4 @@
-package com.bbg.schedule.config;
+package com.bbg.core.config;
 
 import com.bbg.core.utils.IdTool;
 import com.mybatisflex.annotation.KeyType;
@@ -9,6 +9,7 @@ import com.mybatisflex.core.audit.MessageCollector;
 import com.mybatisflex.core.keygen.IKeyGenerator;
 import com.mybatisflex.core.keygen.KeyGeneratorFactory;
 import com.mybatisflex.core.mybatis.FlexConfiguration;
+import com.mybatisflex.core.tenant.TenantManager;
 import com.mybatisflex.spring.boot.ConfigurationCustomizer;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,18 +20,21 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
     @Override
     public void customize(FlexConfiguration flexConfiguration) {
         KeyGeneratorFactory.register("SnowFlakeIdKeyGenerator", new SnowFlakeIdKeyGenerator());
-        //配置主键生成
+        // 配置主键生成
         FlexGlobalConfig.KeyConfig keyConfig = new FlexGlobalConfig.KeyConfig();
         keyConfig.setKeyType(KeyType.Generator);
         keyConfig.setValue("SnowFlakeIdKeyGenerator");
         keyConfig.setBefore(true);
         FlexGlobalConfig flexGlobalConfig = FlexGlobalConfig.getDefaultConfig();
         flexGlobalConfig.setKeyConfig(keyConfig);
-        //开启审计功能
+        // 开启审计功能
         AuditManager.setAuditEnable(true);
-        //设置 SQL 审计收集器
+        // 设置 SQL 审计收集器
         MessageCollector collector = new ConsoleMessageCollector();
         AuditManager.setMessageCollector(collector);
+        // 全局多租户配置
+        flexGlobalConfig.setTenantColumn("tenant_id");
+        TenantManager.setTenantFactory(new BbgTenantFactory());
     }
 
     static class SnowFlakeIdKeyGenerator implements IKeyGenerator{
