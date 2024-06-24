@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 public class GenAdmin {
     public static String[] sysTables = {
+            "sys_tenant",//租户
             "sys_menu",// 菜单
             "sys_role",// 角色
             "sys_role_menu",// 角色菜单

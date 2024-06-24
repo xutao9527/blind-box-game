@@ -33,7 +33,7 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         MessageCollector collector = new ConsoleMessageCollector();
         AuditManager.setMessageCollector(collector);
         // 全局多租户配置
-        flexGlobalConfig.setTenantColumn("tenant_id");
+        //flexGlobalConfig.setTenantColumn("tenant_id");
         //TenantManager.setTenantFactory(new BbgTenantFactory());
     }
 
