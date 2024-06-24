@@ -17,11 +17,12 @@ import java.math.BigDecimal;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @FeignClient(name = "game-third-server",path = "/pay",configuration = PayService.PayServiceInterceptor.class)
 public interface PayService {
     // 定义一个线程安全的map集合对象
-    Map<String, String> headers = new ConcurrentHashMap<>();
+    ConcurrentMap<String, String> headers = new ConcurrentHashMap<>();
 
     @GetMapping("call")
     @Operation(summary = "支付请求", description = "支付请求")

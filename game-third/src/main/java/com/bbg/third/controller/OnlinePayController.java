@@ -10,6 +10,7 @@ import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizPayPlatform;
 import com.bbg.model.biz.BizUser;
 import com.bbg.third.base.BaseController;
+import com.bbg.third.config.LogbackConfig;
 import com.bbg.third.engine.PayEngine;
 import com.bbg.third.service.PayService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +41,7 @@ public class OnlinePayController extends BaseController {
 
     public final PayEngine scriptPayEngine;
     public final PayEngine beanPayEngine;
-
+    public final DiscoveryClient discoveryClient;
 
 
     @GetMapping("call")
@@ -47,30 +50,42 @@ public class OnlinePayController extends BaseController {
             @RequestParam("payCode") @Parameter(description = "支付编码") @NotNull String payCode,
             @RequestParam("money") @Parameter(description = "支付金额") @NotNull BigDecimal money
     ) {
-        // ----------------------------------------- 前置检查 -----------------------------------------
-        BizUser bizUser = getCurrentUser();
-        if (bizUser == null) {
-            return ApiRet.buildNo("用户未登录");
-        }
-        BizPayPlatform bizPayPlatform = bizPayPlatformService.getOneByCode(payCode);
-        if (bizPayPlatform == null) {
-            return ApiRet.buildNo("支付平台不存在");
-        }
+        List<ServiceInstance> instances = discoveryClient.getInstances("admin-server");
+        boolean adminCall = instances.stream().anyMatch(instance -> instance.getHost().equals(request.getRemoteHost()));
+        Object result;
         try {
-            List<BigDecimal> amountLimit = JSONArray.parseArray(bizPayPlatform.getPayAmountLimit(), BigDecimal.class);
-            if (amountLimit.stream().noneMatch(amount -> amount.compareTo(money) == 0)) {
-                return ApiRet.buildNo("支付金额不在范围内");
+            // ----------------------------------------- 前置检查 -----------------------------------------
+            BizUser bizUser = getCurrentUser();
+            if (bizUser == null) {
+                return ApiRet.buildNo("用户未登录");
             }
-        } catch (Exception ignored) {
-            return ApiRet.buildNo("支付限额配置错误");
-        }
-        // ----------------------------------------- 前置检查 -----------------------------------------
-        Object result = null;
-        BizDict thirdPayEngine = bizDictService.getDictByTag("third_pay_engine");
-        if (bizPayPlatform.getCallEngine().equals(thirdPayEngine.getValueByAlias("javascript_engine"))) {
-            result = scriptPayEngine.execCall(bizUser, bizPayPlatform, money);
-        } else if (bizPayPlatform.getCallEngine().equals(thirdPayEngine.getValueByAlias("java_engine"))) {
-            result = beanPayEngine.execCall(bizUser, bizPayPlatform, money);
+            BizPayPlatform bizPayPlatform = bizPayPlatformService.getOneByCode(payCode);
+            if (bizPayPlatform == null) {
+                return ApiRet.buildNo("支付平台不存在");
+            }
+            try {
+                List<BigDecimal> amountLimit = JSONArray.parseArray(bizPayPlatform.getPayAmountLimit(), BigDecimal.class);
+                if (amountLimit.stream().noneMatch(amount -> amount.compareTo(money) == 0)) {
+                    return ApiRet.buildNo("支付金额不在范围内");
+                }
+            } catch (Exception ignored) {
+                return ApiRet.buildNo("支付限额配置错误");
+            }
+            // ----------------------------------------- 前置检查 -----------------------------------------
+            result = null;
+            BizDict thirdPayEngine = bizDictService.getDictByTag("third_pay_engine");
+            if (bizPayPlatform.getCallEngine().equals(thirdPayEngine.getValueByAlias("javascript_engine"))) {
+                if(adminCall){
+                    LogbackConfig.WebSocketFilter.isFilter.set(true);
+                }
+                result = scriptPayEngine.execCall(bizUser, bizPayPlatform, money);
+            } else if (bizPayPlatform.getCallEngine().equals(thirdPayEngine.getValueByAlias("java_engine"))) {
+                result = beanPayEngine.execCall(bizUser, bizPayPlatform, money);
+            }
+        } finally {
+            if(adminCall){
+                LogbackConfig.WebSocketFilter.isFilter.set(false);
+            }
         }
         return ApiRet.buildOk(result);
     }

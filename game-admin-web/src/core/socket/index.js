@@ -28,7 +28,6 @@ class WebSocketSingleton {
 
     connect() {
         if (this.socket && this.isConnected) {
-            console.warn('WebSocket 已连接');
             return;
         }
 
@@ -36,11 +35,11 @@ class WebSocketSingleton {
 
         this.socket.onopen = () => {
             this.isConnected = true;
-            console.log('WebSocket 已连接');
+            // console.log('WebSocket 已连接');
         };
 
         this.socket.onmessage = (event) => {
-            console.log('收到消息:', event.data)
+            // console.log('收到消息:', event.data)
         };
 
         this.socket.onerror = (err) => {

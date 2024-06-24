@@ -22,17 +22,14 @@ public class ScriptPayEngine implements PayEngine {
 
     @Override
     public Object execCall(BizUser bizUser, BizPayPlatform bizPayPlatform, BigDecimal money) {
-        try(Context context = Context.newBuilder().allowAllAccess(true).build()) {
-            LogbackConfig.WebSocketFilter.isFilter.set(true);
+        try (Context context = Context.newBuilder().allowAllAccess(true).build()) {
             context.getBindings("js").putMember("log", log);
             // context.getBindings("js").putMember("bizPayPlatform", bizPayPlatform);
             // context.getBindings("js").putMember("money", money);
             // context.eval("js", bizPayPlatform.getCallEngine());
             context.eval("js", bizPayPlatform.getCallContent());
         } catch (Exception e) {
-            log.info("execCall",e );
-        }finally {
-            LogbackConfig.WebSocketFilter.isFilter.set(false);
+            log.info("execCall", e);
         }
         return null;
     }

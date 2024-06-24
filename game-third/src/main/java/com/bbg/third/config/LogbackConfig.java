@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Configuration
 public class LogbackConfig {
 
-
     @Bean
     public Logger logger(WebSocketFilter webSocketFilter) {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -47,10 +46,7 @@ public class LogbackConfig {
         @Override
         public FilterReply decide(ILoggingEvent event) {
             if (isFilter.get() && encoder != null) {
-                String logContent1 =  event.getFormattedMessage();
                 String logContent = encoder.getLayout().doLayout(event);
-
-                System.out.print("logContent\n"+logContent);
                 webSocketService.sendAdminMessage(new WebSocketMsg().setMessage(logContent));
             }
             if (event.getLevel().equals(Level.INFO)) {
@@ -60,6 +56,5 @@ public class LogbackConfig {
             }
         }
     }
-
 
 }

@@ -20,7 +20,6 @@ public class SessionInterceptor implements HandlerInterceptor {
         String queryString = request.getQueryString();
         // 构建完整的 URL
         String fullUrl = uri + (queryString != null ? "?" + queryString : "");
-        log.info("请求的URL为：{}", fullUrl);
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 }

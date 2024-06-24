@@ -9,7 +9,6 @@ export const useDebugDataStore = defineStore('debugDataStore', {
     ),
     actions:{
         setData(key, data){
-            console.log('setData',this.debugData)
             this.debugData[key] = data;
         },
         getData(key)   {
