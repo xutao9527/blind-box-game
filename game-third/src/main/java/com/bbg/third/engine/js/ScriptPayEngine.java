@@ -2,6 +2,7 @@ package com.bbg.third.engine.js;
 
 import com.bbg.core.entity.WebSocketMsg;
 import com.bbg.core.feign.socket.WebSocketService;
+import com.bbg.core.utils.DiscoveryUtil;
 import com.bbg.model.biz.BizPayPlatform;
 import com.bbg.model.biz.BizUser;
 import com.bbg.third.config.LogbackConfig;
@@ -22,7 +23,11 @@ public class ScriptPayEngine implements PayEngine {
 
     @Override
     public Object execCall(BizUser bizUser, BizPayPlatform bizPayPlatform, BigDecimal money) {
+        boolean adminCall =  DiscoveryUtil.isServiceCall("admin-server");
         try (Context context = Context.newBuilder().allowAllAccess(true).build()) {
+            if(adminCall) {
+                LogbackConfig.WebSocketFilter.isFilter.set(true);
+            }
             context.getBindings("js").putMember("log", log);
             // context.getBindings("js").putMember("bizPayPlatform", bizPayPlatform);
             // context.getBindings("js").putMember("money", money);
@@ -30,8 +35,12 @@ public class ScriptPayEngine implements PayEngine {
             context.eval("js", bizPayPlatform.getCallContent());
         } catch (Exception e) {
             log.info("execCall", e);
+        } finally {
+            if(adminCall) {
+                LogbackConfig.WebSocketFilter.isFilter.set(false);
+            }
         }
-        return null;
+        return adminCall;
     }
 
     @Override

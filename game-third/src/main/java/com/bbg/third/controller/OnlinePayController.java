@@ -6,6 +6,7 @@ import com.bbg.core.entity.WebSocketMsg;
 import com.bbg.core.feign.socket.WebSocketService;
 import com.bbg.core.service.biz.BizDictService;
 import com.bbg.core.service.biz.BizPayPlatformService;
+import com.bbg.core.utils.DiscoveryUtil;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizPayPlatform;
 import com.bbg.model.biz.BizUser;
@@ -50,42 +51,30 @@ public class OnlinePayController extends BaseController {
             @RequestParam("payCode") @Parameter(description = "支付编码") @NotNull String payCode,
             @RequestParam("money") @Parameter(description = "支付金额") @NotNull BigDecimal money
     ) {
-        List<ServiceInstance> instances = discoveryClient.getInstances("admin-server");
-        boolean adminCall = instances.stream().anyMatch(instance -> instance.getHost().equals(request.getRemoteHost()));
-        Object result;
+        Object result = null;
+        // ----------------------------------------- 前置检查 -----------------------------------------
+        BizUser bizUser = getCurrentUser();
+        if (bizUser == null) {
+            return ApiRet.buildNo("用户未登录");
+        }
+        BizPayPlatform bizPayPlatform = bizPayPlatformService.getOneByCode(payCode);
+        if (bizPayPlatform == null) {
+            return ApiRet.buildNo("支付平台不存在");
+        }
         try {
-            // ----------------------------------------- 前置检查 -----------------------------------------
-            BizUser bizUser = getCurrentUser();
-            if (bizUser == null) {
-                return ApiRet.buildNo("用户未登录");
+            List<BigDecimal> amountLimit = JSONArray.parseArray(bizPayPlatform.getPayAmountLimit(), BigDecimal.class);
+            if (amountLimit.stream().noneMatch(amount -> amount.compareTo(money) == 0)) {
+                return ApiRet.buildNo("支付金额不在范围内");
             }
-            BizPayPlatform bizPayPlatform = bizPayPlatformService.getOneByCode(payCode);
-            if (bizPayPlatform == null) {
-                return ApiRet.buildNo("支付平台不存在");
-            }
-            try {
-                List<BigDecimal> amountLimit = JSONArray.parseArray(bizPayPlatform.getPayAmountLimit(), BigDecimal.class);
-                if (amountLimit.stream().noneMatch(amount -> amount.compareTo(money) == 0)) {
-                    return ApiRet.buildNo("支付金额不在范围内");
-                }
-            } catch (Exception ignored) {
-                return ApiRet.buildNo("支付限额配置错误");
-            }
-            // ----------------------------------------- 前置检查 -----------------------------------------
-            result = null;
-            BizDict thirdPayEngine = bizDictService.getDictByTag("third_pay_engine");
-            if (bizPayPlatform.getCallEngine().equals(thirdPayEngine.getValueByAlias("javascript_engine"))) {
-                if(adminCall){
-                    LogbackConfig.WebSocketFilter.isFilter.set(true);
-                }
-                result = scriptPayEngine.execCall(bizUser, bizPayPlatform, money);
-            } else if (bizPayPlatform.getCallEngine().equals(thirdPayEngine.getValueByAlias("java_engine"))) {
-                result = beanPayEngine.execCall(bizUser, bizPayPlatform, money);
-            }
-        } finally {
-            if(adminCall){
-                LogbackConfig.WebSocketFilter.isFilter.set(false);
-            }
+        } catch (Exception ignored) {
+            return ApiRet.buildNo("支付限额配置错误");
+        }
+        // ----------------------------------------- 前置检查 -----------------------------------------
+        BizDict thirdPayEngine = bizDictService.getDictByTag("third_pay_engine");
+        if (bizPayPlatform.getCallEngine().equals(thirdPayEngine.getValueByAlias("javascript_engine"))) {
+            result = scriptPayEngine.execCall(bizUser, bizPayPlatform, money);
+        } else if (bizPayPlatform.getCallEngine().equals(thirdPayEngine.getValueByAlias("java_engine"))) {
+            result = beanPayEngine.execCall(bizUser, bizPayPlatform, money);
         }
         return ApiRet.buildOk(result);
     }
