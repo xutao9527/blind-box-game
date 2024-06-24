@@ -86,7 +86,7 @@
         </el-row>
         <el-scrollbar class="debug-log-content">
           <el-text v-for="msg in messages" style="white-space: pre-wrap;" size="small">
-            {{ msg }}<br/>
+            <p v-html="msg" style="margin: 0"/>
           </el-text>
         </el-scrollbar>
       </el-col>
@@ -101,21 +101,19 @@ import {Minus, Plus} from "@element-plus/icons-vue";
 import {useDebugDataStore} from "@/store/debugStore.js";
 import {http} from "@/core/axios/index.js";
 import {webSocket} from "@/core/socket/index.js";
+import {AnsiUp} from "ansi_up";
 
 const messages = ref([])
+const ansiUp = new AnsiUp();
 const handleMessageEvent  = (event) => {
-  messages.value.push(event.data);
+  messages.value.push(ansiUp.ansi_to_html(event.data));
 };
 
 onMounted(() => {
-  // 添加事件监听器，监听消息事件
-  console.log('onMounted')
   webSocket.socket.addEventListener('message', handleMessageEvent);
 });
 
 onUnmounted(() => {
-  // 移除事件监听器
-  console.log('onUnmounted')
   webSocket.socket.removeEventListener('message', handleMessageEvent);
 });
 
