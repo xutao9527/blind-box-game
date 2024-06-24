@@ -34,7 +34,7 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         AuditManager.setMessageCollector(collector);
         // 全局多租户配置
         flexGlobalConfig.setTenantColumn("tenant_id");
-        TenantManager.setTenantFactory(new BbgTenantFactory());
+        //TenantManager.setTenantFactory(new BbgTenantFactory());
     }
 
     static class SnowFlakeIdKeyGenerator implements IKeyGenerator{
