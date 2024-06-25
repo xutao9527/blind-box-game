@@ -3,6 +3,7 @@
              placeholder=""
              @change="handleChange"
              clearable
+             default-first-option
              filterable>
     <el-option v-for="tenant in tenants"
                :label="tenant.tenantName"

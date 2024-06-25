@@ -43,7 +43,7 @@
               <template #content>
                 {{ scope.row.parentId }}
               </template>
-              {{ scope.row.expandProps.parentTitle }}
+              {{ scope.row.expandProps ==null ? '': scope.row.expandProps.parentTenantName }}
             </el-tooltip>
           </template>
         </el-table-column>
