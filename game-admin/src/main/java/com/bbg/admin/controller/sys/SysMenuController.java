@@ -34,7 +34,6 @@ public class SysMenuController extends BaseSysMenuController {
     @Override
     @PostMapping("page")
     @Operation(summary = "分页查询", description = "分页查询")
-
     public ApiRet<Page<SysMenu>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<SysMenu> reqParams) {
         ApiRet<Page<SysMenu>> apiRet = super.page(reqParams);
         List<SysMenu> records = apiRet.getData().getRecords();
@@ -65,6 +64,4 @@ public class SysMenuController extends BaseSysMenuController {
         }
         return apiRet;
     }
-
-    ;
 }
