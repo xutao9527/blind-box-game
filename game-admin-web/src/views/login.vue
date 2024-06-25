@@ -56,6 +56,7 @@
 import {http} from "@/core/axios/index.js";
 import {useUserStore} from "@/store/userStore.js"
 import {useRouter} from "vue-router";
+import TenantUtil from "@/core/tenant/index.js";
 
 const loginFormRef = ref();
 const loginData = reactive({
@@ -71,7 +72,6 @@ const rules = {
   ],
 }
 const store = useUserStore()
-
 const router = useRouter()
 
 const submitLogin = async (formEl) => {
@@ -81,6 +81,7 @@ const submitLogin = async (formEl) => {
       const apiRet = await http.post('/sysUser/login', loginData)
       if (apiRet.ok){
         store.setToken(apiRet.data)
+        TenantUtil.currentUser = await store.getUser
         await store.asyncRouters()
         if(store.menus && store.menus.length > 0){
           ElMessage({type: 'success', message: '登录成功!'})

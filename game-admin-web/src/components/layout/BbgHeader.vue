@@ -41,6 +41,7 @@ import {useUserStore} from "@/store/userStore.js";
 import {http} from "@/core/axios/index.js";
 import {useDark} from "@vueuse/core";
 import {useTabsStore} from "@/store/tabsStore.js";
+import TenantUtil from "@/core/tenant/index.js";
 
 const isDark = useDark()
 const user = ref({})
@@ -55,6 +56,7 @@ const menuCollapse = () => {
 onMounted(async ()=>{
   menuWidth.value = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--left-width'));
   user.value = await userStore.getUser
+  TenantUtil.currentUser = user.value
 })
 
 const handleLogout = async () =>{

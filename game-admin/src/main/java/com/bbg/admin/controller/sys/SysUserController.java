@@ -1,10 +1,7 @@
 package com.bbg.admin.controller.sys;
 
 import com.bbg.admin.base.controller.sys.BaseSysUserController;
-import com.bbg.core.service.sys.SysMenuService;
-import com.bbg.core.service.sys.SysRoleMenuService;
-import com.bbg.core.service.sys.SysRoleService;
-import com.bbg.core.service.sys.SysUserRoleService;
+import com.bbg.core.service.sys.*;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.record.SysRoleMenuRecord;
 import com.bbg.model.sys.*;
@@ -36,6 +33,7 @@ public class SysUserController extends BaseSysUserController {
     public final SysUserRoleService sysUserRoleService;
     public final SysRoleMenuService sysRoleMenuService;
     public final SysRoleService sysRoleService;
+    public final SysTenantService sysTenantService;
 
     @PostMapping("login")
     @Operation(summary = "管理员登录", description = "管理员登录")
@@ -135,6 +133,10 @@ public class SysUserController extends BaseSysUserController {
         String token = request.getHeader("token");
         if (token != null) {
             sysUser = redisService.getAdmin(token);
+        }
+        if(sysUser!=null){
+            SysTenant sysTenant = sysTenantService.getById(sysUser.getTenantId());
+            sysUser.setSuperTenant(sysTenant.getParentId()==null);
         }
         return sysUser == null ? ApiRet.buildNo(null, "令牌失效") : ApiRet.buildOk(sysUser);
     }

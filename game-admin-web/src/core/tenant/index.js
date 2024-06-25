@@ -1,14 +1,8 @@
 import {http} from "@/core/axios/index.js";
 
-export class TenantObject{
-    async constructor() {
-        await this.fetchData()
-    }
-    async fetchData() {
-        this.data = await http.get("sysTenant/getTenantList")
-        console.log("TenantObject",this.data)
-    }
+
+const TenantUtil = {
+    currentUser: null
 }
 
-export const tenantObject = new TenantObject();
-
+export default TenantUtil
