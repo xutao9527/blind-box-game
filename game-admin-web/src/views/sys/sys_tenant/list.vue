@@ -36,7 +36,17 @@
                 @sortChange="tableProps.sortChange"
                 border show-overflow-tooltip>
         <el-table-column prop="id" label="租户编号"/>
-        <el-table-column prop="parentId" label="父租户编号"/>
+<!--        <el-table-column prop="parentId" label="父租户编号"/>-->
+        <el-table-column prop="parentId" label="父租户名称">
+          <template #default="scope">
+            <el-tooltip>
+              <template #content>
+                {{ scope.row.parentId }}
+              </template>
+              {{ scope.row.expandProps.parentTitle }}
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column prop="tenantName" label="租户名称"/>
         <el-table-column prop="tenantCode" label="租户编码"/>
         <el-table-column prop="enable" label="启用">
