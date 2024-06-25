@@ -35,7 +35,7 @@ class WebSocketSingleton {
 
         this.socket.onopen = () => {
             this.isConnected = true;
-            // console.log('WebSocket 已连接');
+             console.log('WebSocket 已连接');
         };
 
         this.socket.onmessage = (event) => {
