@@ -10,6 +10,7 @@ import com.bbg.model.record.SysRoleMenuRecord;
 import com.bbg.model.sys.*;
 import com.mybatisflex.core.mask.MaskManager;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.tenant.TenantManager;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,9 @@ public class SysUserController extends BaseSysUserController {
     public ApiRet<String> login(@RequestBody SysUser sysUser) {
         ApiRet<String> ret;
         QueryWrapper queryWrapper = QueryWrapper.create().and(SysUser::getAccount).eq(sysUser.getAccount());
-        SysUser user = MaskManager.execWithoutMask(() -> sysUserService.getOne(queryWrapper));
+        SysUser user = TenantManager.withoutTenantCondition(
+                ()->MaskManager.execWithoutMask(() -> sysUserService.getOne(queryWrapper))
+        );
         if (user != null && user.getEnable() && user.getPassword().equals(sysUser.getPassword())) {
             user.setPassword(null);
             String token = redisService.adminLogin(user);

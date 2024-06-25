@@ -18,7 +18,7 @@ import java.io.Serial;
  * 系统菜单 实体类。
  *
  * @author bbg
- * @since 2024-06-24
+ * @since 2024-06-25
  */
 @Data
 @NoArgsConstructor
@@ -98,12 +98,6 @@ public class SysMenuRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "启用:1=启动,0=禁用")
     private Boolean enable;
-
-    /**
-     * 租户编号
-     */
-    @Schema(description = "租户编号")
-    private Long tenantId;
 
     /**
      * 创建时间
