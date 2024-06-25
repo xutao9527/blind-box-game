@@ -31,7 +31,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                 noLogin(response);
                 return false;
             }
-            request.setAttribute("tenantId",String.valueOf(sysUser.getTenantId()));
+            request.setAttribute("tenantId", String.valueOf(sysUser.getTenantId()));
         } else {
             noLogin(response);
             return false;
