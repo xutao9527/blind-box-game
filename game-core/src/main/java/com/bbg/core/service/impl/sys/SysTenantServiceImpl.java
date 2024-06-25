@@ -2,6 +2,9 @@ package com.bbg.core.service.impl.sys;
 
 import cn.hutool.core.codec.Base58;
 import cn.hutool.core.convert.Convert;
+import com.bbg.core.annotation.RedisCache;
+import com.bbg.core.annotation.RedisClear;
+import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.utils.IdTool;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
@@ -31,6 +34,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     }
 
     @Override
+    @RedisClear(value = "#entity.id", key = KeyConst.TENANT_ID)
     public boolean updateById(SysTenant entity) {
         entity.setTenantCode(null); // 不允许修改租户编码
         entity.setParentId(null);// 不允许修改父租户编号
@@ -38,6 +42,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     }
 
     @Override
+    @RedisClear(value = "#id", key = KeyConst.TENANT_ID)
     public boolean removeById(Serializable id) {
         SysTenant entity = getById(id); // 逻辑删除
         if (entity.getParentId() != null) {//不允许禁用顶级租户
@@ -46,4 +51,9 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         return this.updateById(entity);
     }
 
+    @Override
+    @RedisCache(value = "#id", key = KeyConst.TENANT_ID)
+    public SysTenant getById(Serializable id) {
+        return super.getById(id);
+    }
 }

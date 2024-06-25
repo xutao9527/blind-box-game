@@ -1,7 +1,8 @@
 package com.bbg.core.constrans;
 
 public class KeyConst {
-
+    // 箱子缓存
+    public final static String TENANT_ID = "tenant::id";
     // admin uid 指向 token
     public final static String ADMIN_TOKEN_UID = "admin::token::uid";
     // admin token

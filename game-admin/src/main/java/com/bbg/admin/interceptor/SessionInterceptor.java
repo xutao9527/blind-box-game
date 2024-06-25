@@ -3,6 +3,8 @@ package com.bbg.admin.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.entity.ApiRet;
+import com.bbg.core.service.sys.SysTenantService;
+import com.bbg.model.sys.SysTenant;
 import com.bbg.model.sys.SysUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +22,7 @@ import java.io.IOException;
 public class SessionInterceptor implements HandlerInterceptor {
 
     public final RedisService redisService;
-
+    public final SysTenantService sysTenantService;
     @Override
     // 在请求处理之前进行拦截逻辑，返回 true 表示继续执行，返回 false 表示终止执行
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -31,7 +33,14 @@ public class SessionInterceptor implements HandlerInterceptor {
                 noLogin(response);
                 return false;
             }
-            request.setAttribute("tenantId", String.valueOf(sysUser.getTenantId()));
+            // 获得用户的租户信息
+            SysTenant sysTenant = sysTenantService.getById(sysUser.getTenantId());
+            if(sysTenant != null){
+                request.setAttribute("tenantObject", sysTenant);
+            }else{
+                noTenant(response);
+                return false;
+            }
         } else {
             noLogin(response);
             return false;
@@ -55,5 +64,10 @@ public class SessionInterceptor implements HandlerInterceptor {
     public void noLogin(HttpServletResponse response) throws IOException {
         response.setContentType("application/json; charset=utf-8");
         response.getWriter().print(JSON.toJSON(ApiRet.buildNo("用户没有登录")));
+    }
+
+    public void noTenant(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json; charset=utf-8");
+        response.getWriter().print(JSON.toJSON(ApiRet.buildNo("不存在租户")));
     }
 }
