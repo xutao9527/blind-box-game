@@ -20,7 +20,6 @@
                   <BbgTenantSelect v-model:value="data.parentId"/>
                 </el-form-item>
               </template>
-
               <el-form-item label="租户名称">
                 <el-input v-model="data.tenantName"/>
               </el-form-item>
