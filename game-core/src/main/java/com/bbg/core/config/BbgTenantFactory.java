@@ -13,9 +13,9 @@ public class BbgTenantFactory implements TenantFactory {
         if (attributes != null) {
             Object tenantId = attributes.getAttribute("tenantId", RequestAttributes.SCOPE_REQUEST);
             if (tenantId != null) {
-                return new Object[]{tenantId};
+                return new Object[]{};
             }
         }
-        return new Object[]{0};
+        return new Object[]{};
     }
 }
