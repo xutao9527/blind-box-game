@@ -15,6 +15,7 @@ declare module 'vue' {
     BbgMenu: typeof import('./components/layout/BbgMenu.vue')['default']
     BbgMenuSelect: typeof import('./components/select/BbgMenuSelect.vue')['default']
     BbgTabs: typeof import('./components/layout/BbgTabs.vue')['default']
+    BbgTenantSelect: typeof import('./components/select/BbgTenantSelect.vue')['default']
     ElAffix: typeof import('element-plus/es')['ElAffix']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']

@@ -23,20 +23,22 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     @Override
     public boolean save(SysTenant entity) {
         entity.setId(IdTool.nextId());
-        entity.setTenantCode(Base58.encode(Convert.longToBytes(entity.getId())));   //生成租户编码
+        entity.setTenantCode(Base58.encode(Convert.longToBytes(entity.getId())));   // 生成租户编码
         return super.save(entity);
     }
 
     @Override
     public boolean updateById(SysTenant entity) {
-        entity.setTenantCode(null); //不允许修改租户编码
+        entity.setTenantCode(null); // 不允许修改租户编码
         return super.updateById(entity);
     }
 
     @Override
     public boolean removeById(Serializable id) {
-        SysTenant entity = getById(id); //逻辑删除
-        entity.setEnable(false);
+        SysTenant entity = getById(id); // 逻辑删除
+        if (entity.getParentId() != null) {
+            entity.setEnable(false);
+        }
         return this.updateById(entity);
     }
 

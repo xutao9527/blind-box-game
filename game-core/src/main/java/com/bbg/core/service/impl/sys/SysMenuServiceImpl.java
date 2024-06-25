@@ -1,6 +1,5 @@
 package com.bbg.core.service.impl.sys;
 
-import com.bbg.model.sys.SysTenant;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.sys.SysMenu;
 import com.bbg.core.mapper.sys.SysMenuMapper;
@@ -20,8 +19,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public boolean removeById(Serializable id) {
-        SysMenu entity = getById(id); //逻辑删除
-        entity.setEnable(false);
+        SysMenu entity = getById(id); // 逻辑删除
+        if (entity.getParentId() != null) {
+            entity.setEnable(false);
+        }
         return this.updateById(entity);
     }
 
