@@ -15,7 +15,7 @@ public interface RedisService extends RedisBase {
     SysUser getAdmin(String token);
 
     // 管理员session延期
-    boolean expireAdmin(String token);
+    SysUser expireAdmin(String token);
 
     // 用户登录
     String userLogin(BizUser user);

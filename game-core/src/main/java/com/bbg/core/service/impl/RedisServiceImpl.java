@@ -41,16 +41,15 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
         return (SysUser) get(adminUserToken);
     }
 
-    public boolean expireAdmin(String token) {
+    public SysUser expireAdmin(String token) {
         String adminUserToken = KeyConst.build(KeyConst.ADMIN_INFO_TOKEN, token);
         SysUser sysUser = getAdmin(token);
         if (sysUser != null) {
             String adminUserId = KeyConst.build(KeyConst.ADMIN_TOKEN_UID, sysUser.getId().toString());
             expire(adminUserId, adminLiveTime + 3, TimeUnit.SECONDS);
             expire(adminUserToken, adminLiveTime, TimeUnit.SECONDS);
-            return true;
         }
-        return false;
+        return sysUser;
     }
 
     public String userLogin(BizUser user) {
