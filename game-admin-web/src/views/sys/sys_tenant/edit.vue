@@ -11,9 +11,9 @@
           <el-col :offset="7" :span="8">
             <el-form label-position="right" label-width="120">
               <template v-if="!data.id">
-                <el-form-item label="父租户编号">
-                  <BbgTenantSelect v-model:value="data.parentId"/>
-                </el-form-item>
+<!--                <el-form-item label="父租户编号">-->
+<!--                  <BbgTenantSelect v-model:value="data.parentId"/>-->
+<!--                </el-form-item>-->
               </template>
               <template v-else-if="data.id && data.parentId != null">
                 <el-form-item label="父租户编号">
