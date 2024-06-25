@@ -43,11 +43,12 @@
             {{scope.row.superAdmin?'是':'否'}}
         </template>
         </el-table-column>
-        <el-table-column prop="enable" label="状态">
-        <template #default="scope">
-            {{scope.row.enable?'启动':'停用'}}
-        </template>
-        </el-table-column>
+          <el-table-column prop="enable" label="状态">
+            <template #default="scope">
+              {{ scope.row.enable ? '启动' : '停用' }}
+            </template>
+          </el-table-column>
+        <el-table-column prop="tenantId" label="所属租户"/>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作">

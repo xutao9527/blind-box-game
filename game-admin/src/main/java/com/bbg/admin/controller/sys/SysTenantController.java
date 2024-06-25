@@ -6,6 +6,7 @@ import com.bbg.core.entity.ReqParams;
 import com.bbg.model.sys.SysTenant;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.tenant.TenantManager;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,5 +52,13 @@ public class SysTenantController extends BaseSysTenantController {
             allTenant.addFirst(rootTenant);
         }
         return ApiRet.buildOk(allTenant);
+    }
+
+    @GetMapping("getTenants")
+    @Operation(summary = "获得所有租户", description = "获得所有租户")
+    public ApiRet<Map<Long,SysTenant>> getTenants() {
+        List<SysTenant> sysTenants =sysTenantService.list();
+        Map<Long,SysTenant> map = sysTenants.stream().collect(Collectors.toMap(SysTenant::getId, sysTenant -> sysTenant));
+        return ApiRet.buildOk(map);
     }
 }

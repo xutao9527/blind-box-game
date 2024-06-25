@@ -5,15 +5,18 @@ import cn.hutool.core.convert.Convert;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.constrans.KeyConst;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.utils.IdTool;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.sys.SysTenant;
 import com.bbg.core.mapper.sys.SysTenantMapper;
 import com.bbg.core.service.sys.SysTenantService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统租户 服务层实现。
@@ -22,7 +25,9 @@ import java.io.Serializable;
  * @since 2024-06-24
  */
 @Service
+@RequiredArgsConstructor
 public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant> implements SysTenantService {
+    public final  RedisService redisService;
 
     @Override
     public boolean save(SysTenant entity) {
@@ -30,6 +35,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         entity.setId(IdTool.nextId());
         entity.setParentId(rootTenant.getId());
         entity.setTenantCode(Base58.encode(Convert.longToBytes(entity.getId())));   // 生成租户编码
+
         return super.save(entity);
     }
 
@@ -38,7 +44,9 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     public boolean updateById(SysTenant entity) {
         entity.setTenantCode(null); // 不允许修改租户编码
         entity.setParentId(null);// 不允许修改父租户编号
+        redisService.delete(KeyConst.TENANT_All);//清缓存
         return super.updateById(entity);
+
     }
 
     @Override
@@ -48,6 +56,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         if (entity.getParentId() != null) {//不允许禁用顶级租户
             entity.setEnable(false);
         }
+        redisService.delete(KeyConst.TENANT_All);//清缓存
         return this.updateById(entity);
     }
 
@@ -55,5 +64,11 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     @RedisCache(value = "#id", key = KeyConst.TENANT_ID)
     public SysTenant getById(Serializable id) {
         return super.getById(id);
+    }
+
+    @Override
+    @RedisCache(key = KeyConst.TENANT_All)
+    public List<SysTenant> list() {
+        return super.list();
     }
 }
