@@ -10,9 +10,16 @@
         <el-row>
           <el-col :offset="7" :span="8">
             <el-form label-position="right" label-width="120">
-              <el-form-item label="父Id">
-                <el-input v-model="data.parentId"/>
-              </el-form-item>
+              <template v-if="!data.id">
+                <el-form-item label="父Id">
+                  <BbgMenuSelect v-model:value="data.parentId"/>
+                </el-form-item>
+              </template>
+              <template v-else-if="data.id && data.parentId != null">
+                <el-form-item label="父Id">
+                  <BbgMenuSelect v-model:value="data.parentId"/>
+                </el-form-item>
+              </template>
               <el-form-item label="菜单标题">
                 <el-input v-model="data.title"/>
               </el-form-item>
@@ -62,7 +69,9 @@
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
 
-const data = reactive({});
+const data = reactive({
+
+});
 const submitText = computed(() => {
   return data.id ? '修改' : '添加'
 })
@@ -72,6 +81,7 @@ const toEdit = async (id) => {
     const apiRet = await http.get(`/sysMenu/getInfo/${id}`);
     if (apiRet.ok) {
       Object.assign(data, apiRet.data);
+      data.parentId = data.parentId == null ? null : data.parentId.toString()
       data.createTime = null
       data.updateTime = null;
     }

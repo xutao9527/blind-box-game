@@ -6,6 +6,7 @@ import com.bbg.core.entity.ReqParams;
 import com.bbg.model.record.SysMenuRecord;
 import com.bbg.model.sys.SysMenu;
 import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -63,5 +61,17 @@ public class SysMenuController extends BaseSysMenuController {
             });
         }
         return apiRet;
+    }
+
+    @GetMapping("getSelectMenus")
+    @Operation(summary = "获得一二级菜单", description = "获得一二级菜单")
+    public ApiRet<List<SysMenu>> getSelectMenus() {
+        List<SysMenu> allMenus = new ArrayList<>();
+        SysMenu rootMenu = sysMenuService.getOne(QueryWrapper.create(new SysMenu().setEnable(true)).isNull(SysMenu::getParentId));
+        if(rootMenu!=null){
+            allMenus = sysMenuService.list(QueryWrapper.create(new SysMenu().setEnable(true)).eq(SysMenu::getParentId, rootMenu.getId()));
+            allMenus.addFirst(rootMenu);
+        }
+        return ApiRet.buildOk(allMenus);
     }
 }

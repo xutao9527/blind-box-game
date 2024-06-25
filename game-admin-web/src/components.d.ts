@@ -8,10 +8,12 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AsiderMenu: typeof import('./components/layout/AsiderMenu.vue')['default']
+    BbgDataSelect: typeof import('./components/select/BbgDataSelect.vue')['default']
     BbgDictSelect: typeof import('./components/dict/BbgDictSelect.vue')['default']
     BbgHeader: typeof import('./components/layout/BbgHeader.vue')['default']
     BbgIconSelect: typeof import('./components/icon/BbgIconSelect.vue')['default']
     BbgMenu: typeof import('./components/layout/BbgMenu.vue')['default']
+    BbgMenuSelect: typeof import('./components/select/BbgMenuSelect.vue')['default']
     BbgTabs: typeof import('./components/layout/BbgTabs.vue')['default']
     ElAffix: typeof import('element-plus/es')['ElAffix']
     ElAside: typeof import('element-plus/es')['ElAside']
