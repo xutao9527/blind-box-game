@@ -36,17 +36,14 @@
                 size="small"
                 border show-overflow-tooltip>
         <el-table-column prop="id" label="主键"  width="160"/>
-        <el-table-column prop="parentId" label="父标题" >
+        <el-table-column prop="parentId" label="父标题">
           <template #default="scope">
             <el-tooltip>
               <template #content>
-
-                  {{scope.row.parentId}}
-
+                {{ scope.row.parentId }}
               </template>
-              {{scope.row.expandProps.parentTitle}}
+              {{ scope.row.expandProps.parentTitle }}
             </el-tooltip>
-
           </template>
         </el-table-column>
         <el-table-column prop="title" label="菜单标题"/>
