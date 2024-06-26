@@ -1,9 +1,9 @@
 import {useUserStore} from "@/store/userStore.js";
 
 const TenantUtil = {
-    currentUser: useUserStore().user,
+    currentUser: await useUserStore().getUser,
     isSuperTenant: () => {
-        if (TenantUtil.currentUser != null) {
+        if (TenantUtil.currentUser ) {
             return TenantUtil.currentUser.superTenant
         }
         return false;
