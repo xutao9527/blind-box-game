@@ -12,9 +12,9 @@ const TenantUtil = {
     getTenantName: (tenantId) => {
         if (tenantId && TenantUtil.currentUser != null && TenantUtil.currentUser.superTenant) {
             const sysTenant = TenantUtil.currentUser.tenantMap[tenantId.toString()]
-            return sysTenant == null ? "无" : sysTenant.tenantName
+            return sysTenant == null ? undefined : sysTenant.tenantName
         }
-        return "无"
+        return undefined
     }
 }
 
