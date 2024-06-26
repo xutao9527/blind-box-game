@@ -22,6 +22,9 @@
               <el-form-item label="超管">
                 <el-switch v-model="data.superAdmin"/>
               </el-form-item>
+              <el-form-item label="租户" v-if="TenantUtil.isSuperTenant()">
+                <TenantIdSelect v-model="data.tenantId"></TenantIdSelect>
+              </el-form-item>
               <el-form-item label="状态">
                 <el-switch v-model="data.enable"/>
               </el-form-item>
@@ -43,6 +46,7 @@
 <script setup>
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
+import TenantUtil from "@/core/tenant/index.js";
 
 const data = reactive({});
 const submitText = computed(() => {

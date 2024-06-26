@@ -3,6 +3,7 @@
   <template v-if="TenantUtil.isSuperTenant()">
     <el-table-column prop="tenantId" label="所属租户">
       <template #default="scope">
+        {{TenantUtil.isSuperTenant()}}
         <el-tooltip>
           <template #content>
             {{ scope.row.tenantId }}
@@ -14,6 +15,5 @@
   </template>
 </template>
 <script setup>
-
 import TenantUtil from "@/core/tenant/index.js";
 </script>
