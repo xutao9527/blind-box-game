@@ -7,6 +7,9 @@ import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+import java.util.Map;
+
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
@@ -15,4 +18,6 @@ import lombok.experimental.Accessors;
 public class SysUser extends SysUserRecord {
     @Column(ignore = true)
     private boolean superTenant = false;
+    @Column(ignore = true)
+    private Map<Long,SysTenant> tenantMap;
 }

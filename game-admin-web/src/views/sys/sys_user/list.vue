@@ -50,7 +50,8 @@
           </el-table-column>
         <el-table-column prop="tenantId" label="所属租户">
           <template #default="scope">
-            {{scope.row.tenantId}} {{TenantUtil.isSuperTenant()}}
+            <!--{{scope.row.tenantId}} {{TenantUtil.isSuperTenant()}} -->
+            {{ TenantUtil.getTenantName(scope.row.tenantId) }}
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
@@ -112,8 +113,9 @@ scope.run(() => {
   })
 })
 
-onMounted(() => {
-  tableProps.fetchData()
+
+onMounted(async () => {
+  await tableProps.fetchData()
 })
 
 const add = () => {

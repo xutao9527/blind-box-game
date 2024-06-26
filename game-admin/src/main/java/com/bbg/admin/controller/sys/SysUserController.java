@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 系统用户 控制层。
@@ -135,8 +137,12 @@ public class SysUserController extends BaseSysUserController {
             sysUser = redisService.getAdmin(token);
         }
         if(sysUser!=null){
-            SysTenant sysTenant = sysTenantService.getById(sysUser.getTenantId());
-            sysUser.setSuperTenant(sysTenant.getParentId()==null);
+            SysTenant currentTenant = sysTenantService.getById(sysUser.getTenantId());
+            // 判断是不是超级租户
+            if (currentTenant.getParentId() == null) {
+                sysUser.setSuperTenant(true);
+                sysUser.setTenantMap(sysTenantService.list().stream().collect(Collectors.toMap(SysTenant::getId, sysTenant -> sysTenant)));
+            }
         }
         return sysUser == null ? ApiRet.buildNo(null, "令牌失效") : ApiRet.buildOk(sysUser);
     }
