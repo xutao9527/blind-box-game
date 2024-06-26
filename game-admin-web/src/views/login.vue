@@ -56,7 +56,6 @@
 import {http} from "@/core/axios/index.js";
 import {useUserStore} from "@/store/userStore.js"
 import {useRouter} from "vue-router";
-import TenantUtil from "@/core/tenant/index.js";
 
 const loginFormRef = ref();
 const loginData = reactive({

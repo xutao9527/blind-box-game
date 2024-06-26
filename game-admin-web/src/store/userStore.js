@@ -18,8 +18,7 @@ export const useUserStore = defineStore('userStore', {
             if (state.menus.length === 0) {
                 await state.asyncRouters()
             }
-            let menuTree = convertToTree(state.menus);
-            return menuTree
+            return convertToTree(state.menus)
         },
         // 获取用户的路由
         getRoutes: async (state) => {
@@ -58,7 +57,6 @@ export const useUserStore = defineStore('userStore', {
             } else {
                 this.setToken(null)
             }
-            console.log("asyncUserInfo",this.user)
         },
         setToken(t) {
             this.token = t
@@ -70,7 +68,7 @@ export const useUserStore = defineStore('userStore', {
     },
     persist: {
         key: 'token',
-        paths: ['token'],
+        paths: ['token','user'],
         storage: localStorage,
     }
 })
