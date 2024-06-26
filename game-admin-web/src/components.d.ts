@@ -84,5 +84,6 @@ declare module 'vue' {
     ScriptDebug: typeof import('./components/editor/ScriptDebug.vue')['default']
     ScriptEdit: typeof import('./components/editor/ScriptEdit.vue')['default']
     Tabs: typeof import('./components/layout/Tabs.vue')['default']
+    TenantIdColumn: typeof import('./components/tenant/TenantIdColumn.vue')['default']
   }
 }
