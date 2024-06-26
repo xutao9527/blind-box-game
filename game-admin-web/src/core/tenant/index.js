@@ -1,8 +1,12 @@
-import {http} from "@/core/axios/index.js";
-
-
 const TenantUtil = {
-    currentUser: null
+
+    currentUser: null,
+    isSuperTenant: () => {
+        if (TenantUtil.currentUser != null) {
+            return TenantUtil.currentUser.superTenant
+        }
+        return false;
+    }
 }
 
 export default TenantUtil
