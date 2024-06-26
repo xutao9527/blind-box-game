@@ -35,9 +35,11 @@ export const useUserStore = defineStore('userStore', {
         },
         // 获取用户信息
         getUser: async (state) => {
+            console.log("getUser",state.user)
             if (!state.user) {
                 await state.asyncUserInfo()
             }
+            console.log("getUser",state.user)
             return state.user
         },
     },

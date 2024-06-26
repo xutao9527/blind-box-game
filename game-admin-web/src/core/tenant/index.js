@@ -4,6 +4,7 @@ import {http} from "@/core/axios/index.js";
 const TenantUtil = {
     currentUser: await useUserStore().getUser,
     isSuperTenant: () => {
+        console.log("isSuperTenant",TenantUtil.currentUser)
         if (TenantUtil.currentUser) {
             return TenantUtil.currentUser.superTenant
         }
