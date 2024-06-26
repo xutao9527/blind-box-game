@@ -22,8 +22,10 @@
               <el-form-item label="超管">
                 <el-switch v-model="data.superAdmin"/>
               </el-form-item>
-              <el-form-item label="租户" >
-                                <TenantIdSelect v-model="data.tenantId"></TenantIdSelect>
+              {{isSuperTenant}}
+              <el-form-item label="租户" v-if="isSuperTenant">
+                12121
+<!--                                <TenantIdSelect v-model="data.tenantId"></TenantIdSelect>-->
               </el-form-item>
               <el-form-item label="状态">
                 <el-switch v-model="data.enable"/>
@@ -46,7 +48,13 @@
 <script setup>
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
-import TenantUtil from "@/core/tenant/index.js";
+import isSuperTenant from "@/core/tenant/index.js";
+
+// const store = useUserStore()
+// const isSuperTenant = ref(false);
+// const checkSuperTenant = async () => {
+//   isSuperTenant.value = (await store.getUser).superTenant
+// }
 
 const data = reactive({});
 const submitText = computed(() => {
@@ -91,7 +99,7 @@ defineExpose({
 })
 
 const formDynamicHeight = ref(0)
-onMounted(() => {
+onMounted(async () => {
   let top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'))
   formDynamicHeight.value = document.body.offsetHeight - top - 60 - 60 - 51 - 32
   emitter.on('bbgWindowResize', () => {

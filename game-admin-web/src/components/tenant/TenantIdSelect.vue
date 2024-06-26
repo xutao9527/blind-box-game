@@ -32,9 +32,7 @@ const tenants = ref([])
 const selectValue = ref(props.value)
 
 onMounted(() => {
-  console.log("TenantIdSelect s")
   tenants.value = TenantUtil.getTenants(props.includeTopTenant)
-  console.log("TenantIdSelect e",tenants.value )
 })
 
 const handleChange = (value) => {
