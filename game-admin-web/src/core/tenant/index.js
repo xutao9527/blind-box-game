@@ -1,6 +1,7 @@
-const TenantUtil = {
+import {useUserStore} from "@/store/userStore.js";
 
-    currentUser: null,
+const TenantUtil = {
+    currentUser: useUserStore().user,
     isSuperTenant: () => {
         if (TenantUtil.currentUser != null) {
             return TenantUtil.currentUser.superTenant

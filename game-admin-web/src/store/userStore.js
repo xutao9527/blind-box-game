@@ -44,6 +44,7 @@ export const useUserStore = defineStore('userStore', {
     actions: {
         async asyncRouters() {
             let ret = await http.get('/sysUser/currentUserMenu', {token: this.token})
+            console.log("/sysUser/currentUserMenu")
             if (ret.ok && ret.data) {
                 this.menus = ret.data.filter(m => m.enable)
             } else {

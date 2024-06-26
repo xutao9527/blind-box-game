@@ -81,7 +81,7 @@ const submitLogin = async (formEl) => {
       const apiRet = await http.post('/sysUser/login', loginData)
       if (apiRet.ok){
         store.setToken(apiRet.data)
-        TenantUtil.currentUser = await store.getUser
+        await store.getUser
         await store.asyncRouters()
         if(store.menus && store.menus.length > 0){
           ElMessage({type: 'success', message: '登录成功!'})
