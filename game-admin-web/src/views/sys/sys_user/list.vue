@@ -10,9 +10,9 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.mobile" placeholder="手机" clearable/>
             </div>
-            <div class="bbg-table-header-input" v-if="TenantUtil.isSuperTenant()">
-              <TenantIdSelect v-model="tableProps.reqParams.queryEntity.tenantId"></TenantIdSelect>
-            </div>
+<!--            <div class="bbg-table-header-input" v-if="TenantUtil.isSuperTenant()">-->
+<!--              <TenantIdSelect v-model="tableProps.reqParams.queryEntity.tenantId"></TenantIdSelect>-->
+<!--            </div>-->
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -45,7 +45,7 @@
             {{ scope.row.enable ? '启动' : '停用' }}
           </template>
         </el-table-column>
-        <TenantIdColumn/>
+<!--        <TenantIdColumn/>-->
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作">
