@@ -149,7 +149,6 @@ const tableProps = reactive({
     tableProps.reqParams.page.pageSize = pageSize;
     tableProps.fetchData()
   },
-
   fetchData: async () => {
     const apiRet = await http.post('/sysUser/page', tableProps.reqParams)
     if (apiRet.ok) {
