@@ -16,6 +16,7 @@
               <el-form-item label="角色描述">
                 <el-input v-model="data.remark"/>
               </el-form-item>
+              <TenantIdSelect v-model:value="data.tenantId" :include-top-tenant="true"/>
               <el-form-item label="状态">
                 <el-switch v-model="data.enable"/>
               </el-form-item>
