@@ -66,8 +66,6 @@
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
-import TenantIdColumn from "@/components/tenant/TenantIdColumn.vue";
-
 
 const header = ref(null);
 const tableDynamicHeight = ref(0)
