@@ -26,13 +26,20 @@ const props = defineProps(
       includeTopTenant: {
         type: Boolean,
         default: false
-      }
+      },
+      // dataId: {
+      //   type: String,
+      // }
     }
 )
 
 watch(() => props.value, (newVal) => {
   selectValue.value = newVal
 })
+
+// watch(() => props.dataId, (newVal) => {
+//   console.log(props.dataId)
+// })
 
 const store = useUserStore()
 const isSuperTenant = ref(false)
@@ -41,6 +48,7 @@ const tenants = ref([])
 const selectValue = ref(props.value)
 
 onMounted(async () => {
+  // console.log(props.dataId)
   user.value = await store.getUser
   isSuperTenant.value =  user.value.superTenant
   if (isSuperTenant.value && user.value.tenantMap) {
