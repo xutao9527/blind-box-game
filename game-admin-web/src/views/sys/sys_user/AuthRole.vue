@@ -10,13 +10,13 @@
           <el-col :span="18">
             <el-row>
               <div class="bbg-table-header-input">
-                <el-input v-model="tableProps.reqParams.queryEntity.name" placeholder="角色名"/>
+                <el-input  v-model="tableProps.reqParams.queryEntity.name" placeholder="角色名"/>
               </div>
-              <div class="bbg-table-header-input">
+              <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId" :disabled="true"/>
+              <div class="bbg-table-header-input" style="display: grid;place-items: center">
                 当前角色: {{ roleName }}
               </div>
             </el-row>
-
           </el-col>
           <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
             <el-row>
@@ -30,6 +30,7 @@
                   :data="tableProps.apiRet.data.records"
                   table-layout="auto"
                   height="440"
+                  size="small"
                   border show-overflow-tooltip>
           <el-table-column prop="id" label="主键"/>
           <el-table-column prop="name" label="角色名"/>
@@ -39,6 +40,7 @@
               {{ scope.row.enable ? '启动' : '停用' }}
             </template>
           </el-table-column>
+          <TenantIdColumn/>
           <el-table-column prop="createTime" label="创建时间"/>
           <el-table-column prop="updateTime" label="修改时间"/>
           <el-table-column fixed="right" label="操作">
@@ -55,7 +57,7 @@
             <el-pagination
                 layout="total, prev, pager, next, jumper, sizes"
                 :total="tableProps.apiRet.totalRow"
-                :page-sizes="[10]"
+                :page-sizes="[10,20,30]"
                 :default-current-page="tableProps.reqParams.page.pageNumber"
                 :default-page-size="tableProps.reqParams.page.pageSize"
                 @change="tableProps.pageChange"
@@ -70,17 +72,19 @@
 <script setup>
 import AuthMenu from "./AuthMenu.vue";
 import {http} from "@/core/axios/index.js";
+import TenantIdColumn from "@/components/tenant/TenantIdColumn.vue";
 
 const visible = ref(false)
 const currentUserId = ref('')
 const roleName = ref('');
 const authMenuRef = ref(null)
 
-const authRole = async (userId) => {
-  currentUserId.value = userId;
+const authRole = async (user) => {
+  currentUserId.value = user.id;
+  tableProps.reqParams.queryEntity.tenantId = user.tenantId.toString()
   await tableProps.fetchData()
   let userRole = {
-    userId: userId,
+    userId: user.id,
   }
   const apiRet = await http.post('/sysUser/getUserRole', userRole)
   roleName.value = apiRet.data ? apiRet.data.name : "无"

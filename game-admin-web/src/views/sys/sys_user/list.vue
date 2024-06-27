@@ -82,7 +82,7 @@ import TenantIdColumn from "@/components/tenant/TenantIdColumn.vue";
 
 const authRoleRef = ref(null)
 const auth = (row) => {
-  authRoleRef.value.authRole(row.id.toString())
+  authRoleRef.value.authRole(row)
 }
 
 const header = ref(null)

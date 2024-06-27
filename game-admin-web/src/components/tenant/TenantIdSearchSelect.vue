@@ -5,6 +5,7 @@
                @change="handleChange"
                default-first-option
                clearable
+               :disabled="isDisabled"
                filterable>
       <el-option v-for="tenant in tenants"
                  :label="tenant.tenantName"
@@ -23,22 +24,28 @@ const props = defineProps(
       value: {
         type: String,
       },
-      includeTopTenant: {
+      disabled: {
         type: Boolean,
         default: false
       }
     }
 )
 
-watch(() => props.value, (newVal) => {
-  selectValue.value = newVal
-})
-
 const store = useUserStore()
 const isSuperTenant = ref(false)
 const user = ref(null)
 const tenants = ref([])
+
 const selectValue = ref(props.value)
+const isDisabled = ref(props.disabled);
+
+watchEffect(() => {
+  selectValue.value = props.value;
+  isDisabled.value = props.disabled;
+});
+
+
+
 
 onMounted(async () => {
   user.value = await store.getUser
