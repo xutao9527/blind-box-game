@@ -111,11 +111,17 @@ const edit = (row) => {
 }
 
 const remove = async (row) => {
-  const apiRet = await http.get(`/sysTenant/remove/${row.id}`)
-  if (apiRet.ok) {
-    ElMessage({type: 'success', message: apiRet.msg})
-    await tableProps.fetchData()
-  }
+  ElMessageBox.confirm("确认删除?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(async () => {
+    const apiRet = await http.get(`/sysTenant/remove/${row.id}`)
+    if (apiRet.ok) {
+      ElMessage({type: 'success', message: apiRet.msg})
+      await tableProps.fetchData()
+    }
+  })
 }
 
 const tableProps = reactive({

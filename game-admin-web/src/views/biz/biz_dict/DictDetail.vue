@@ -97,11 +97,17 @@ const submit = async () => {
 }
 
 const remove = async (row) => {
-  const apiRet = await http.get(`/bizDictDetail/remove/${row.id}`)
-  if (apiRet.ok) {
-    ElMessage({type: 'success', message: apiRet.msg})
-    await tableProps.fetchData()
-  }
+  ElMessageBox.confirm("确认删除?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(async () => {
+    const apiRet = await http.get(`/bizDictDetail/remove/${row.id}`)
+    if (apiRet.ok) {
+      ElMessage({type: 'success', message: apiRet.msg})
+      await tableProps.fetchData()
+    }
+  })
 }
 
 onMounted(() => {
