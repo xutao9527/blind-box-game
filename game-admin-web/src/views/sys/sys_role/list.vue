@@ -34,11 +34,7 @@
             {{scope.row.enable?'启动':'停用'}}
         </template>
         </el-table-column>
-        <el-table-column prop="tenantId" label="所属租户">
-          <template #default="scope">
-            {{scope.row.tenantId}}
-          </template>
-        </el-table-column>
+          <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作">
@@ -70,6 +66,7 @@
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
+import TenantIdColumn from "@/components/tenant/TenantIdColumn.vue";
 
 
 const header = ref(null);
