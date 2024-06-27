@@ -1,5 +1,6 @@
 <template>
-  <el-form-item label="租户" v-if="isSuperTenant">
+
+  <div class="bbg-table-header-input" v-if="isSuperTenant">
     <el-select v-model="selectValue"
                placeholder="租户"
                @change="handleChange"
@@ -12,7 +13,8 @@
         <span style="float: left">{{ tenant.tenantName }}</span>
       </el-option>
     </el-select>
-  </el-form-item>
+  </div>
+
 </template>
 <script setup>
 import {useUserStore} from "@/store/userStore.js";
@@ -43,11 +45,7 @@ const selectValue = ref(props.value)
 onMounted(async () => {
   user.value = await store.getUser
   isSuperTenant.value =  user.value.superTenant
-  if(props.includeTopTenant){
-    tenants.value = Object.values(user.value.tenantMap).sort((a, b) => a.id - b.id)
-  }else{
-    tenants.value = Object.values(user.value.tenantMap).filter(t=>t.parentId!=null).sort((a, b) => a.id - b.id)
-  }
+  tenants.value = Object.values(user.value.tenantMap).filter(t=>t.parentId!=null).sort((a, b) => a.id - b.id)
 })
 
 const handleChange = (value) => {

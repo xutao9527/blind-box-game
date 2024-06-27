@@ -1,19 +1,37 @@
-
 <template>
-  <template v-if="TenantUtil.isSuperTenant()">
+  <template v-if="isSuperTenant">
     <el-table-column prop="tenantId" label="所属租户">
       <template #default="scope">
-        {{TenantUtil.isSuperTenant()}}
         <el-tooltip>
           <template #content>
             {{ scope.row.tenantId }}
           </template>
-          {{ TenantUtil.getTenantName(scope.row.tenantId) }}
+          {{ getTenantName(scope.row.tenantId) }}
         </el-tooltip>
       </template>
     </el-table-column>
   </template>
 </template>
 <script setup>
+import {useUserStore} from "@/store/userStore.js";
+
+const store = useUserStore()
+const isSuperTenant = ref(false)
+const user = ref(null)
+const tenantMap = ref(null)
+
+const getTenantName = (tenantId) => {
+  if(tenantId){
+     return tenantMap.value[tenantId].tenantName
+  }
+  return ""
+}
+
+onMounted(async () => {
+  user.value = await store.getUser
+  isSuperTenant.value = user.value.superTenant
+  tenantMap.value = user.value.tenantMap
+
+})
 
 </script>
