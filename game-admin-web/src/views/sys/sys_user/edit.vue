@@ -1,5 +1,6 @@
 <template>
   <el-container class="bbg-form">
+    {{data}}
     <el-header class="bbg-form-header">
       <el-text tag="b" size="large" type="primary">
         <h3>{{ submitText }}-系统用户</h3>
@@ -22,7 +23,7 @@
               <el-form-item label="超管">
                 <el-switch v-model="data.superAdmin"/>
               </el-form-item>
-              <TenantIdSelect v-model="data.tenantId"></TenantIdSelect>
+              <TenantIdSelect v-model:value="data.tenantId"/>
               <el-form-item label="状态">
                 <el-switch v-model="data.enable"/>
               </el-form-item>
