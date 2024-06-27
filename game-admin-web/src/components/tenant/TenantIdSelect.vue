@@ -33,7 +33,9 @@ const props = defineProps(
 )
 
 watch(() => props.value, (newVal) => {
-  selectValue.value = newVal
+  if(newVal){
+    selectValue.value = newVal.toString()
+  }
 })
 
 const store = useUserStore()
@@ -54,7 +56,11 @@ onMounted(async () => {
   }
 })
 
-const handleChange = (value) => {
-  emit('update:value', JSONbig.parse(value))
+const handleChange = (value) =>{
+    if(value){
+      emit('update:value', JSONbig.parse(value))
+    }else{
+      emit('update:value', value)
+    }
 }
 </script>
