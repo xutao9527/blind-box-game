@@ -16,30 +16,25 @@
 </template>
 <script setup>
 import {useUserStore} from "@/store/userStore.js";
+import JSONbig from "json-bigint";
 
 const emit = defineEmits(['update:value'])
+
 const props = defineProps(
     {
       value: {
-        type: String,
+        type: Object,
       },
       includeTopTenant: {
         type: Boolean,
         default: false
-      },
-      // dataId: {
-      //   type: String,
-      // }
+      }
     }
 )
 
 watch(() => props.value, (newVal) => {
   selectValue.value = newVal
 })
-
-// watch(() => props.dataId, (newVal) => {
-//   console.log(props.dataId)
-// })
 
 const store = useUserStore()
 const isSuperTenant = ref(false)
@@ -48,7 +43,6 @@ const tenants = ref([])
 const selectValue = ref(props.value)
 
 onMounted(async () => {
-  // console.log(props.dataId)
   user.value = await store.getUser
   isSuperTenant.value =  user.value.superTenant
   if (isSuperTenant.value && user.value.tenantMap) {
@@ -61,6 +55,6 @@ onMounted(async () => {
 })
 
 const handleChange = (value) => {
-  emit('update:value', value)
+  emit('update:value', JSONbig.parse(value))
 }
 </script>
