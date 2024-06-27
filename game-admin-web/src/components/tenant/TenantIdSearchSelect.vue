@@ -1,5 +1,4 @@
 <template>
-
   <div class="bbg-table-header-input" v-if="isSuperTenant">
     <el-select v-model="selectValue"
                placeholder="租户"
@@ -14,7 +13,6 @@
       </el-option>
     </el-select>
   </div>
-
 </template>
 <script setup>
 import {useUserStore} from "@/store/userStore.js";
@@ -46,7 +44,8 @@ onMounted(async () => {
   user.value = await store.getUser
   isSuperTenant.value = user.value.superTenant
   if (isSuperTenant.value && user.value.tenantMap) {
-    tenants.value = Object.values(user.value.tenantMap).filter(t => t.parentId != null).sort((a, b) => a.id - b.id)
+    // tenants.value = Object.values(user.value.tenantMap).filter(t => t.parentId != null).sort((a, b) => a.id - b.id)
+    tenants.value = Object.values(user.value.tenantMap).sort((a, b) => a.id - b.id)
   }
 })
 
