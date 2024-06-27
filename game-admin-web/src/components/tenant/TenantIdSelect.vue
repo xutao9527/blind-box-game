@@ -43,10 +43,12 @@ const selectValue = ref(props.value)
 onMounted(async () => {
   user.value = await store.getUser
   isSuperTenant.value =  user.value.superTenant
-  if(props.includeTopTenant){
-    tenants.value = Object.values(user.value.tenantMap).sort((a, b) => a.id - b.id)
-  }else{
-    tenants.value = Object.values(user.value.tenantMap).filter(t=>t.parentId!=null).sort((a, b) => a.id - b.id)
+  if (isSuperTenant.value && user.value.tenantMap) {
+    if(props.includeTopTenant){
+      tenants.value = Object.values(user.value.tenantMap).sort((a, b) => a.id - b.id)
+    }else{
+      tenants.value = Object.values(user.value.tenantMap).filter(t=>t.parentId!=null).sort((a, b) => a.id - b.id)
+    }
   }
 })
 
