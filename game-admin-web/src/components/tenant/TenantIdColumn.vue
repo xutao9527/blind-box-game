@@ -15,5 +15,5 @@
   </template>
 </template>
 <script setup>
-import TenantUtil from "@/core/tenant/index.js";
+
 </script>

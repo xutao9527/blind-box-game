@@ -80,7 +80,6 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import AuthRole from "./AuthRole.vue";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
-import TenantUtil from "@/core/tenant/index.js";
 import TenantIdColumn from "@/components/tenant/TenantIdColumn.vue";
 
 const authRoleRef = ref(null)

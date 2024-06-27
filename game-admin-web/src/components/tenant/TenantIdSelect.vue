@@ -1,4 +1,5 @@
 <template>
+  <el-form-item label="租户" v-if="isSuperTenant">
   <el-select v-model="selectValue"
              placeholder="租户"
              @change="handleChange"
@@ -11,10 +12,9 @@
       <span style="float: left">{{ tenant.tenantName }}</span>
     </el-option>
   </el-select>
+  </el-form-item>
 </template>
 <script setup>
-import TenantUtil from "@/core/tenant/index.js";
-
 const emit = defineEmits(['update:value'])
 const props = defineProps(
     {
@@ -28,11 +28,14 @@ const props = defineProps(
     }
 )
 
+const isSuperTenant = computed(() => user.value.superTenant)
+const user = ref(null)
 const tenants = ref([])
 const selectValue = ref(props.value)
 
-onMounted(() => {
-  tenants.value = TenantUtil.getTenants(props.includeTopTenant)
+onMounted(async () => {
+  user.value = await store.getUser
+  tenants.value = user.value.tenantMap
 })
 
 const handleChange = (value) => {

@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column prop="tenantId" label="所属租户">
           <template #default="scope">
-            {{scope.row.tenantId}} {{TenantUtil.isSuperTenant()}}
+            {{scope.row.tenantId}}
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"/>
@@ -78,7 +78,7 @@
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
-import TenantUtil from "@/core/tenant/index.js";
+
 
 const header = ref(null);
 const tableDynamicHeight = ref(0)
