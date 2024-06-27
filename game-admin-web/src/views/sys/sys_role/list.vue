@@ -5,17 +5,9 @@
         <el-col :span="18">
           <el-row>
             <div class="bbg-table-header-input">
-              <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
+              <el-input v-model="tableProps.reqParams.queryEntity.name" placeholder="角色名"/>
             </div>
-            <div class="bbg-table-header-input" style="width: 420px">
-              <el-date-picker
-                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
-                  type="datetimerange"
-                  start-placeholder="Start date"
-                  end-placeholder="End date"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-              />
-            </div>
+            <TenantIdSearchSelect v-model="tableProps.reqParams.queryEntity.tenantId"/>
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
