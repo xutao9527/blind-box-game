@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant> implements SysTenantService {
-    public final  RedisService redisService;
+    public final RedisService redisService;
 
     @Override
     public boolean save(SysTenant entity) {
@@ -43,7 +43,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     public boolean updateById(SysTenant entity) {
         entity.setTenantCode(null); // 不允许修改租户编码
         entity.setParentId(null);// 不允许修改父租户编号
-        redisService.delete(KeyConst.TENANT_All);//清缓存
+        redisService.delete(KeyConst.TENANT_All);// 清缓存
         return super.updateById(entity);
 
     }
@@ -52,10 +52,10 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     @RedisClear(value = "#id", key = KeyConst.TENANT_ID)
     public boolean removeById(Serializable id) {
         SysTenant entity = getById(id); // 逻辑删除
-        if (entity.getParentId() != null) {//不允许禁用顶级租户
+        if (entity.getParentId() != null) {// 不允许禁用顶级租户
             entity.setEnable(false);
         }
-        redisService.delete(KeyConst.TENANT_All);//清缓存
+        redisService.delete(KeyConst.TENANT_All);// 清缓存
         return this.updateById(entity);
     }
 
