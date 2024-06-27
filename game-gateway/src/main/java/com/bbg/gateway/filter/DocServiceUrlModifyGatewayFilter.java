@@ -17,7 +17,7 @@ public class DocServiceUrlModifyGatewayFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
-        System.out.println(request);
+        // System.out.println(request);
         return chain.filter(exchange);
     }
 
