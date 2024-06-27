@@ -33,9 +33,8 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     public boolean save(SysTenant entity) {
         SysTenant rootTenant = getOne(QueryWrapper.create(new SysTenant().setEnable(true)).isNull(SysTenant::getParentId));
         entity.setId(IdTool.nextId());
-        entity.setParentId(rootTenant.getId());
+        entity.setParentId(rootTenant.getId());// 设置父级租户编号
         entity.setTenantCode(Base58.encode(Convert.longToBytes(entity.getId())));   // 生成租户编码
-
         return super.save(entity);
     }
 
