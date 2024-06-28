@@ -3,6 +3,7 @@ package com.bbg.admin.controller.sys;
 import com.bbg.admin.base.controller.sys.BaseSysUserController;
 import com.bbg.core.service.sys.*;
 import com.bbg.core.entity.ApiRet;
+import com.bbg.model.record.SysMenuRecord;
 import com.bbg.model.record.SysRoleMenuRecord;
 import com.bbg.model.sys.*;
 import com.mybatisflex.core.mask.MaskManager;
@@ -43,10 +44,16 @@ public class SysUserController extends BaseSysUserController {
         ApiRet<String> ret;
         QueryWrapper queryWrapper = QueryWrapper.create().and(SysUser::getAccount).eq(sysUser.getAccount());
         SysUser user = TenantManager.withoutTenantCondition(
-                ()->MaskManager.execWithoutMask(() -> sysUserService.getOne(queryWrapper))
+                () -> MaskManager.execWithoutMask(() -> sysUserService.getOne(queryWrapper))
         );
         if (user != null && user.getEnable() && user.getPassword().equals(sysUser.getPassword())) {
             user.setPassword(null);
+            // 判断是不是超级租户
+            SysTenant currentTenant = sysTenantService.getById(user.getTenantId());
+            if (currentTenant.getParentId() == null) {
+                user.setSuperTenant(true);
+                user.setTenantMap(sysTenantService.list().stream().collect(Collectors.toMap(SysTenant::getId, sysTenant -> sysTenant)));
+            }
             String token = redisService.adminLogin(user);
             ret = ApiRet.buildOk(token);
         } else {
@@ -124,6 +131,10 @@ public class SysUserController extends BaseSysUserController {
                 }
             }
         }
+        // 不是顶级租户,则过滤顶级租户菜单
+        if (sysUser != null && sysMenus != null && !sysUser.isSuperTenant()) {
+            sysMenus = sysMenus.stream().filter(sysMenu -> !sysMenu.getTenantPermissions()).collect(Collectors.toList());
+        }
         return sysUser == null ? ApiRet.buildNo(null, "令牌失效") : ApiRet.buildOk(sysMenus);
     }
 
@@ -135,14 +146,6 @@ public class SysUserController extends BaseSysUserController {
         String token = request.getHeader("token");
         if (token != null) {
             sysUser = redisService.getAdmin(token);
-        }
-        if(sysUser!=null){
-            SysTenant currentTenant = sysTenantService.getById(sysUser.getTenantId());
-            // 判断是不是超级租户
-            if (currentTenant.getParentId() == null) {
-                sysUser.setSuperTenant(true);
-                sysUser.setTenantMap(sysTenantService.list().stream().collect(Collectors.toMap(SysTenant::getId, sysTenant -> sysTenant)));
-            }
         }
         return sysUser == null ? ApiRet.buildNo(null, "令牌失效") : ApiRet.buildOk(sysUser);
     }
