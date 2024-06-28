@@ -37,8 +37,8 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         TenantManager.setTenantFactory(new BbgTenantFactory());
         // 逻辑删除配置
         flexGlobalConfig.setLogicDeleteColumn("is_deleted");
-        flexGlobalConfig.setNormalValueOfLogicDelete(false);
-        flexGlobalConfig.setDeletedValueOfLogicDelete(true);
+        flexGlobalConfig.setNormalValueOfLogicDelete(0);
+        flexGlobalConfig.setDeletedValueOfLogicDelete(1);
     }
 
     static class SnowFlakeIdKeyGenerator implements IKeyGenerator{
