@@ -13,6 +13,7 @@
             <div class="bbg-table-header-input">
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.status" ref="dictBattleStatusRef" :tag="'csgo_battle_status'" placeholder="房间状态"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
@@ -59,6 +60,7 @@
         <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
+
 <!--        <el-table-column fixed="right" label="操作" width="120">-->
 <!--          <template #default="scope">-->
 <!--            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>-->

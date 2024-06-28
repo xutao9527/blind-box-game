@@ -7,6 +7,7 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"

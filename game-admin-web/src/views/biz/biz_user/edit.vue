@@ -12,7 +12,6 @@
       <el-scrollbar :max-height="formDynamicHeight">
         <el-row>
           <el-col :offset="7" :span="8">
-
             <el-form label-position="right" label-width="120">
               <TenantIdSelect v-model:value="data.tenantId" :include-top-tenant="true"/>
               <el-form-item label="手机号">

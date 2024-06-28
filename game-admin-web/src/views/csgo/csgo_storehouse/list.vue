@@ -13,7 +13,7 @@
             <div class="bbg-table-header-input">
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.status" ref="goodStatusRef" :tag="'csgo_good_status'" placeholder="装备状态"/>
             </div>
-
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"

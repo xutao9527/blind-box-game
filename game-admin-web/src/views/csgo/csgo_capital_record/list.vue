@@ -10,6 +10,7 @@
             <div class="bbg-table-header-input">
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="capitalTypeRef" :tag="'csgo_capital_type'" placeholder="流水类型"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"

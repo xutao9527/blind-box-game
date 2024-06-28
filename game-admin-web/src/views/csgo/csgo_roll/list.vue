@@ -7,7 +7,6 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.rollTitle" placeholder="房间标题"/>
             </div>
-
             <div class="bbg-table-header-input">
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.rollType" ref="rollTypeRef" :tag="'csgo_roll_type'" placeholder="撸房类型"/>
             </div>
@@ -17,6 +16,7 @@
             <div class="bbg-table-header-input">
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.status" ref="rollStatusRef" :tag="'csgo_roll_status'" placeholder="撸房状态"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
 <!--            <div class="bbg-table-header-input" style="width: 420px">-->
 <!--              <el-date-picker-->
 <!--                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"-->

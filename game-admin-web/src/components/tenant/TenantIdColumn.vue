@@ -1,6 +1,6 @@
 <template>
   <template v-if="isSuperTenant">
-    <el-table-column prop="tenantId" label="所属租户">
+    <el-table-column prop="tenantId" label="所属租户" width="100">
       <template #default="scope">
         <el-tooltip>
           <template #content>
