@@ -43,7 +43,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     public boolean updateById(SysTenant entity) {
         entity.setTenantCode(null); // 不允许修改租户编码
         entity.setParentId(null);// 不允许修改父租户编号
-        redisService.delete(KeyConst.TENANT_All);// 清缓存
+        redisService.delete(KeyConst.TENANT_LIST);// 清缓存
         return super.updateById(entity);
 
     }
@@ -55,7 +55,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         if (entity.getParentId() != null) {// 不允许禁用顶级租户
             entity.setEnable(false);
         }
-        redisService.delete(KeyConst.TENANT_All);// 清缓存
+        redisService.delete(KeyConst.TENANT_LIST);// 清缓存
         return this.updateById(entity);
     }
 
@@ -66,7 +66,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     }
 
     @Override
-    @RedisCache(key = KeyConst.TENANT_All)
+    @RedisCache(key = KeyConst.TENANT_LIST)
     public List<SysTenant> list() {
         return super.list();
     }

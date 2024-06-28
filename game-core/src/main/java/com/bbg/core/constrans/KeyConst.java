@@ -4,7 +4,7 @@ public class KeyConst {
     // 租户缓存
     public final static String TENANT_ID = "tenant::id";
     // 所有租户缓存
-    public final static String TENANT_All = "tenant::all";
+    public final static String TENANT_LIST = "tenant::list";
     // admin uid 指向 token
     public final static String ADMIN_TOKEN_UID = "admin::token::uid";
     // admin token
@@ -57,6 +57,9 @@ public class KeyConst {
     public final static String METHOD_JOIN_ROLL_LOCK = "method::joinRoll::rollId";
 
     public static String build(String prefix, String key) {
+        if (key == null || key.isEmpty()) {
+            return prefix;
+        }
         return "%s::%s".formatted(prefix, key);
     }
 }
