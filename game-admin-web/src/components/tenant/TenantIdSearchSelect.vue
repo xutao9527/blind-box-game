@@ -28,6 +28,10 @@ const props = defineProps(
         type: Boolean,
         default: false
       }
+      , includeTopTenant: {
+        type: Boolean,
+        default: false
+      }
     }
 )
 
@@ -45,14 +49,15 @@ watchEffect(() => {
 });
 
 
-
-
 onMounted(async () => {
   user.value = await store.getUser
   isSuperTenant.value = user.value.superTenant
   if (isSuperTenant.value && user.value.tenantMap) {
-    // tenants.value = Object.values(user.value.tenantMap).filter(t => t.parentId != null).sort((a, b) => a.id - b.id)
-    tenants.value = Object.values(user.value.tenantMap).sort((a, b) => a.id - b.id)
+    if(props.includeTopTenant){
+      tenants.value = Object.values(user.value.tenantMap).sort((a, b) => a.id - b.id)
+    }else{
+      tenants.value = Object.values(user.value.tenantMap).filter(t=>t.parentId!=null).sort((a, b) => a.id - b.id)
+    }
   }
 })
 

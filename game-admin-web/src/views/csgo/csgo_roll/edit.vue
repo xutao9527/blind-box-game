@@ -19,7 +19,7 @@
 <!--              <el-form-item label="创建用户头像">-->
 <!--                <el-input v-model="data.createUserPhoto"/>-->
 <!--              </el-form-item>-->
-              <TenantIdSelect v-model:value="data.tenantId" :include-top-tenant="true"/>
+              <TenantIdSelect v-model:value="data.tenantId" />
               <el-form-item label="房间标题">
                 <el-input v-model="data.rollTitle" />
               </el-form-item>

@@ -10,7 +10,7 @@
         <el-row>
           <el-col :offset="7" :span="8">
             <el-form label-position="right" label-width="120">
-              <TenantIdSelect v-model:value="data.tenantId" :include-top-tenant="true"/>
+              <TenantIdSelect v-model:value="data.tenantId" />
               <el-form-item label="数据类型">
                   <bbg-dict-select v-model:value="data.type" ref="dataTypeRef" :tag="'biz_data_type'" placeholder="数据类型"/>
               </el-form-item>

@@ -10,7 +10,7 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.mobile" placeholder="手机" clearable/>
             </div>
-            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId" :include-top-tenant="true"/>
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">

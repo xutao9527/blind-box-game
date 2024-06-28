@@ -10,7 +10,7 @@
         <el-row>
           <el-col :offset="5" :span="12">
             <el-form label-position="right" label-width="120">
-              <TenantIdSelect v-model:value="data.tenantId" :include-top-tenant="true"/>
+              <TenantIdSelect v-model:value="data.tenantId" />
               <el-form-item label="配置名称">
                 <el-input v-model="data.name"/>
               </el-form-item>

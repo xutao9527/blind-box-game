@@ -12,7 +12,7 @@
             <el-form size="small" label-position="right" label-width="120">
               <el-row>
                 <el-col :span="10">
-                <TenantIdSelect v-model:value="data.tenantId" :include-top-tenant="true"/>
+                <TenantIdSelect v-model:value="data.tenantId" />
                 </el-col>
               </el-row>
               <el-row>
