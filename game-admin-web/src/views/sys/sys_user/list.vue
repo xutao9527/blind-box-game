@@ -15,7 +15,7 @@
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
-            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
+            <el-button class="bbg-table-header-control" icon="Plus" @click="add" v-has="'1'">新增</el-button>
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>

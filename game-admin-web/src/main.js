@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 import '@/config/style/global.less'
 import 'element-plus/theme-chalk/dark/css-vars.css'
@@ -7,6 +7,7 @@ import "@/core/common/browser_patch.js"
 import {bbgConf} from "@/config/index.js";
 import router from '@/router'
 import store from "@/store/index";
+import {hasPermission} from "@/components/permission/index.js";
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import ElementPlus from 'element-plus'
 
@@ -20,6 +21,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 app.use(store)
 app.use(router)
-
+app.use(hasPermission)
 app.mount('#app')
 
