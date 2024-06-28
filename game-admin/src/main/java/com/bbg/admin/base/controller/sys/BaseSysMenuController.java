@@ -1,6 +1,7 @@
 package com.bbg.admin.base.controller.sys;
 
 import com.bbg.admin.base.BaseController;
+import com.bbg.model.csgo.CsgoConfig;
 import com.bbg.model.sys.SysMenu;
 import com.bbg.core.service.sys.SysMenuService;
 import com.bbg.core.entity.ApiRet;
@@ -67,7 +68,8 @@ public class BaseSysMenuController extends BaseController<SysMenu, SysMenuServic
     @Operation(summary = "分页查询", description = "分页查询")
     public ApiRet<Page<SysMenu>> page(@RequestBody @Parameter(description = "分页信息") ReqParams<SysMenu> reqParams) {
         // Entity 转查询条件
-        SqlOperators operators = SqlOperators.of().set(SysMenu::getId, SqlOperator.EQUALS);
+        SqlOperators operators = SqlOperators.of().set(SysMenu::getId, SqlOperator.EQUALS)
+                .set(SysMenu::getTitle,SqlOperator.LIKE);
         QueryWrapper queryWrapper = reqParams.getQueryEntity() == null ? QueryWrapper.create() : QueryWrapper.create(reqParams.getQueryEntity(), operators);
         queryWrapper = super.buildQueryWrapper(queryWrapper, reqParams.getQueryEntity());
         queryWrapper.orderBy(SysMenu::getParentId, true);
