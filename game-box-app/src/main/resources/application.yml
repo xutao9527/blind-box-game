@@ -33,13 +33,11 @@ spring:
           # 连接分配应该阻塞的最大时间
           max-wait: 2000
 
-# springdoc-openapi项目配置
+
 springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
     path: /doc
-    urls:
-      - name: 盲盒服务
-        url: /api-docs
+    url: /v3/api-docs
 
