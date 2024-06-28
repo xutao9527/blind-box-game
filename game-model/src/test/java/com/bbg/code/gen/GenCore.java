@@ -51,9 +51,11 @@ public class GenCore {
     // 生成 model -> Entity
     public void generateEntity(){
         CodeGenEntity codeGenEntity = new CodeGenEntity();
-        codeGenEntity.generate(bizTables, "com.bbg", ".biz");
-        codeGenEntity.generate(sysTables, "com.bbg", ".sys");
-        codeGenEntity.generate(csgoTables, "com.bbg", ".csgo");
+        // codeGenEntity.generate(bizTables, "com.bbg", ".biz");
+        // codeGenEntity.generate(sysTables, "com.bbg", ".sys");
+        // codeGenEntity.generate(csgoTables, "com.bbg", ".csgo");
+
+        codeGenEntity.generate(new String[]{"sys_menu"}, "com.bbg", ".sys");
     }
 
     @Test

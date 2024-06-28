@@ -73,6 +73,11 @@
             {{scope.row.enable?'启动':'停用'}}
           </template>
         </el-table-column>
+        <el-table-column prop="enable" label="租户权限" width="70">
+          <template #default="scope">
+            {{scope.row.tenantPermissions?'顶级租户':'所有租户'}}
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="140"/>
         <el-table-column prop="updateTime" label="修改时间"  width="140"/>
         <el-table-column fixed="right" label="操作">

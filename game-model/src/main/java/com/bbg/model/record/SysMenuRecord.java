@@ -100,6 +100,12 @@ public class SysMenuRecord extends BaseModel implements Serializable {
     private Boolean enable;
 
     /**
+     * 租户权限:1=顶级,0=所有
+     */
+    @Schema(description = "租户权限:1=顶级,0=所有")
+    private Boolean tenantPermissions;
+
+    /**
      * 创建时间
      */
     @Schema(description = "创建时间")

@@ -50,6 +50,12 @@
               <el-form-item label="启用">
                 <el-switch v-model="data.enable"/>
               </el-form-item>
+              <el-form-item label="租户权限">
+                <el-radio-group v-model="data.tenantPermissions">
+                  <el-radio :label="false" :value="false">所有租户</el-radio>
+                  <el-radio :label="true" :value="true">顶级租户</el-radio>
+                </el-radio-group>
+              </el-form-item>
             </el-form>
           </el-col>
         </el-row>
@@ -88,6 +94,9 @@ const toEdit = async (id) => {
   } else {
     data.id = null
   }
+  if(!data.tenantPermissions){
+    data.tenantPermissions = false
+  }
 }
 
 const submit = async () => {
@@ -116,6 +125,7 @@ defineExpose({
 
 const formDynamicHeight = ref(0)
 onMounted(() => {
+
   let top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'))
   formDynamicHeight.value = document.body.offsetHeight - top - 60 - 60 - 51 - 32
   emitter.on('bbgWindowResize', () => {
