@@ -46,6 +46,7 @@
         <el-table-column prop="callbackContent" label="回调内容"/>
         <el-table-column prop="payOrderRemark" label="支付订单描述"/>
         <el-table-column prop="payStatus" label="支付状态"/>
+        <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作">

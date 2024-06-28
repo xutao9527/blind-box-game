@@ -52,6 +52,7 @@
             {{scope.row.enable?'启用':'停用'}}
         </template>
         </el-table-column>
+        <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作">

@@ -10,6 +10,7 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.nameAlias" placeholder="配置别名"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -33,6 +34,7 @@
         <el-table-column prop="nameAlias" label="配置别名" width="220px"/>
         <el-table-column prop="value" label="配置值" width="220"/>
         <el-table-column prop="remark" label="配置描述"/>
+        <TenantIdColumn/>
         <el-table-column prop="updateTime" label="修改时间" width="140"/>
         <el-table-column prop="enable" label="状态" width="60">
           <template #default="scope">

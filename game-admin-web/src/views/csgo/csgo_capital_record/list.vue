@@ -52,6 +52,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="sourceId" label="变更来源" width="185"/>
+        <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间" width="170"/>
 <!--        <el-table-column prop="updateTime" label="修改时间"/>-->
 <!--        <el-table-column fixed="right" label="操作">-->

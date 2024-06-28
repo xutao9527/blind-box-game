@@ -13,6 +13,7 @@
             <div class="bbg-table-header-input">
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="userTypeRef" :tag="'user_type'" placeholder="用户类型"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -65,6 +66,7 @@
             {{scope.row.enable?'启动':'停用'}}
         </template>
         </el-table-column>
+        <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作" width="120">

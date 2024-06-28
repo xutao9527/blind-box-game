@@ -12,6 +12,11 @@
             <el-form size="small" label-position="right" label-width="120">
               <el-row>
                 <el-col :span="10">
+                <TenantIdSelect v-model:value="data.tenantId" :include-top-tenant="true"/>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="10">
                   <el-form-item label="支付名称">
                     <el-input v-model="data.payName"/>
                   </el-form-item>

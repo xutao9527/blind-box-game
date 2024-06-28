@@ -81,7 +81,8 @@
               {{scope.row.enable?'启用':'停用'}}
           </template>
         </el-table-column>
-          <el-table-column prop="sort" label="排序" width="60"/>
+        <el-table-column prop="sort" label="排序" width="60"/>
+        <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间" width="165"/>
         <el-table-column prop="updateTime" label="修改时间" width="165"/>
         <el-table-column fixed="right" label="操作" width="100">

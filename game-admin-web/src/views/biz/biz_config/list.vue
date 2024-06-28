@@ -10,6 +10,7 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.nameAlias" placeholder="配置别名"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -39,6 +40,7 @@
             {{ scope.row.enable ? '启用' : '停用' }}
           </template>
         </el-table-column>
+        <TenantIdColumn/>
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作" width="100">
           <template #default="scope">

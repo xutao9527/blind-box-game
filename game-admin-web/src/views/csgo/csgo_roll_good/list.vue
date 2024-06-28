@@ -43,6 +43,7 @@
         <el-table-column prop="nameAlias" label="商品别名"/>
         <el-table-column prop="goodPrice" label="商品价格"/>
         <el-table-column prop="goodImage" label="商品图片"/>
+        <TenantIdColumn/>
         <el-table-column fixed="right" label="操作">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>

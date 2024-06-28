@@ -15,6 +15,7 @@
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.payCurrency" ref="payCurrencyRef" :tag="'third_pay_currency'"
                                placeholder="支付币种"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -72,43 +73,7 @@
         </el-table-column>
         <el-table-column prop="callbackIp" label="回调白名单"  width="130"/>
         <el-table-column prop="payRemark" label="支付描述"  width="130"/>
-<!--        <el-table-column prop="callEngine" label="调用引擎" width="100">-->
-<!--          <template #default="scope">-->
-<!--            {{ payEngineDictObject.getLabel(scope.row.callEngine) }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column prop="callArg" label="调用参数" width="80"/>-->
-<!--        <el-table-column prop="callContent" label="调用引擎内容" width="100"/>-->
-<!--        <el-table-column prop="callReload" label="调用引擎重载" width="90">-->
-<!--          <template #default="scope">-->
-<!--            {{ scope.row.callReload ? '启用' : '停用' }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column prop="callbackEngine" label="回调引擎"  width="100">-->
-<!--          <template #default="scope">-->
-<!--            {{ payEngineDictObject.getLabel(scope.row.callbackEngine) }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column prop="callbackArg" label="回调参数" width="80"/>-->
-<!--        <el-table-column prop="callbackContent" label="回调引擎内容" width="100"/>-->
-<!--        <el-table-column prop="callbackReload" label="回调引擎重载" width="90">-->
-<!--          <template #default="scope">-->
-<!--            {{ scope.row.callbackReload ? '启用' : '停用' }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-
-<!--        <el-table-column prop="queryEngine" label="查询引擎"  width="100">-->
-<!--          <template #default="scope">-->
-<!--            {{ payEngineDictObject.getLabel(scope.row.queryEngine) }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column prop="queryArg" label="查询参数"  width="80"/>-->
-<!--        <el-table-column prop="queryContent" label="查询引擎内容"  width="100"/>-->
-<!--        <el-table-column prop="queryReload" label="查询引擎重载" width="90">-->
-<!--          <template #default="scope">-->
-<!--            {{ scope.row.queryReload ? '待重载' : '已编译' }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+        <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间" width="140"/>
         <el-table-column prop="updateTime" label="修改时间" width="140"/>
         <el-table-column fixed="right" label="操作" width="100">

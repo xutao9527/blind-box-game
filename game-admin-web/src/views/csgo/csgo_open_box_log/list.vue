@@ -7,6 +7,7 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.id" placeholder="编号"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
             <div class="bbg-table-header-input" style="width: 420px">
               <el-date-picker
                   v-model="tableProps.reqParams.queryEntity.expandProps.createTime"
@@ -51,6 +52,7 @@
 <!--        <el-table-column prop="goodImageUrl" label="商品图片"/>-->
         <el-table-column prop="goodPrice" label="商品价格"/>
         <el-table-column prop="openBoxTime" label="开箱时间" width="170"/>
+        <TenantIdColumn/>
 <!--        <el-table-column fixed="right" label="操作">-->
 <!--          <template #default="scope">-->
 <!--            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>-->

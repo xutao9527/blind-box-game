@@ -56,6 +56,7 @@
             {{dictBattleStatusRef.getLabel(scope.row.status)}}
           </template>
         </el-table-column>
+        <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column prop="updateTime" label="修改时间"/>
 <!--        <el-table-column fixed="right" label="操作" width="120">-->

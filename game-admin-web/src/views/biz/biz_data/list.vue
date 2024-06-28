@@ -11,6 +11,7 @@
               <bbg-dict-select v-model:value="tableProps.reqParams.queryEntity.type" ref="dataTypeRef"
                                :tag="'biz_data_type'" placeholder="数据类型"/>
             </div>
+            <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId"/>
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
@@ -57,6 +58,7 @@
             {{ scope.row.enable ? '启用' : '停用' }}
           </template>
         </el-table-column>
+        <TenantIdColumn/>
         <el-table-column prop="createTime" label="创建时间" width="170"/>
         <el-table-column prop="updateTime" label="修改时间" width="170"/>
         <el-table-column fixed="right" label="操作" width="120">

@@ -41,6 +41,7 @@
         <el-table-column prop="userType" label="用户类型"/>
         <el-table-column prop="nickName" label="昵称"/>
         <el-table-column prop="imageUrl" label="头像图片"/>
+        <TenantIdColumn/>
         <el-table-column fixed="right" label="操作">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
