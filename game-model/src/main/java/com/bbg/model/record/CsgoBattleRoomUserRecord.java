@@ -17,7 +17,7 @@ import java.io.Serial;
  * 对战房间用户 实体类。
  *
  * @author bbg
- * @since 2024-06-17
+ * @since 2024-06-28
  */
 @Data
 @NoArgsConstructor
@@ -73,5 +73,11 @@ public class CsgoBattleRoomUserRecord extends BaseModel implements Serializable 
      */
     @Schema(description = "是否赢家")
     private Boolean isWin;
+
+    /**
+     * 租户编号
+     */
+    @Schema(description = "租户编号")
+    private Long tenantId;
 
 }

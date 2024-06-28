@@ -17,7 +17,7 @@ import java.io.Serial;
  * 撸房用户 实体类。
  *
  * @author bbg
- * @since 2024-06-17
+ * @since 2024-06-28
  */
 @Data
 @NoArgsConstructor
@@ -67,5 +67,11 @@ public class CsgoRollUserRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "头像图片")
     private String imageUrl;
+
+    /**
+     * 租户编号
+     */
+    @Schema(description = "租户编号")
+    private Long tenantId;
 
 }

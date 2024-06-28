@@ -18,7 +18,7 @@ import java.io.Serial;
  * 渠道管理 实体类。
  *
  * @author bbg
- * @since 2024-06-17
+ * @since 2024-06-28
  */
 @Data
 @NoArgsConstructor
@@ -86,5 +86,17 @@ public class BizChannelRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "修改时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 逻辑删除
+     */
+    @Schema(description = "逻辑删除")
+    private Boolean isDeleted;
+
+    /**
+     * 租户编号
+     */
+    @Schema(description = "租户编号")
+    private Long tenantId;
 
 }

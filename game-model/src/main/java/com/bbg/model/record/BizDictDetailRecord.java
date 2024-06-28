@@ -18,7 +18,7 @@ import java.io.Serial;
  * 系统字典详情 实体类。
  *
  * @author bbg
- * @since 2024-06-17
+ * @since 2024-06-28
  */
 @Data
 @NoArgsConstructor
@@ -86,5 +86,11 @@ public class BizDictDetailRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "修改时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 逻辑删除
+     */
+    @Schema(description = "逻辑删除")
+    private Boolean isDeleted;
 
 }

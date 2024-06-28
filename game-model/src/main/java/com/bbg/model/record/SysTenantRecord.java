@@ -1,7 +1,6 @@
 package com.bbg.model.record;
 
 import com.bbg.model.base.BaseModel;
-import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
@@ -19,7 +18,7 @@ import java.io.Serial;
  * 系统租户 实体类。
  *
  * @author bbg
- * @since 2024-06-27
+ * @since 2024-06-28
  */
 @Data
 @NoArgsConstructor
@@ -65,13 +64,6 @@ public class SysTenantRecord extends BaseModel implements Serializable {
     private Boolean enable;
 
     /**
-     * 逻辑删除
-     */
-    @Schema(description = "逻辑删除")
-    @Column(isLogicDelete = true)
-    private Integer isDelete;
-
-    /**
      * 创建时间
      */
     @Schema(description = "创建时间")
@@ -82,5 +74,11 @@ public class SysTenantRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "修改时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 逻辑删除
+     */
+    @Schema(description = "逻辑删除")
+    private Integer isDeleted;
 
 }

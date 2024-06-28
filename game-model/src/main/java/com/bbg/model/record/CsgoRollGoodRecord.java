@@ -15,17 +15,17 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 撸房装备 实体类。
+ * 撸房装备记录 实体类。
  *
  * @author bbg
- * @since 2024-06-17
+ * @since 2024-06-28
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "撸房装备")
+@Schema(description = "撸房装备记录")
 @Table("csgo_roll_good")
 public class CsgoRollGoodRecord extends BaseModel implements Serializable {
 
@@ -80,5 +80,11 @@ public class CsgoRollGoodRecord extends BaseModel implements Serializable {
      */
     @Schema(description = "商品图片")
     private String goodImage;
+
+    /**
+     * 租户编号
+     */
+    @Schema(description = "租户编号")
+    private Long tenantId;
 
 }

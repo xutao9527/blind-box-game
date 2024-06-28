@@ -18,7 +18,7 @@ import java.io.Serial;
  * 对战奖励装备记录 实体类。
  *
  * @author bbg
- * @since 2024-06-17
+ * @since 2024-06-28
  */
 @Data
 @NoArgsConstructor
@@ -104,5 +104,11 @@ public class CsgoBattleRoomGoodRecord extends BaseModel implements Serializable 
      */
     @Schema(description = "商品图片")
     private String goodImage;
+
+    /**
+     * 租户编号
+     */
+    @Schema(description = "租户编号")
+    private Long tenantId;
 
 }
