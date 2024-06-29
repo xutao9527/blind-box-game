@@ -1,33 +1,80 @@
 <template>
-  <el-cascader-panel
-      :options="menus"
-      :props="cascaderProps"
-      v-model="selectValue"
-      @change="handleChange"
-  />
+  <template v-if="isPanel">
+    <el-cascader-panel
+        :options="mutMenus"
+        :props="cascaderProps"
+        v-model="selectValue"
+        @change="handleChange"
+        clearable
+        placeholder="菜单"
+    />
+  </template>
+  <template v-else>
+    <el-cascader
+        :options="mutMenus"
+        :props="cascaderProps"
+        v-model="selectValue"
+        @change="handleChange"
+        clearable
+        placeholder="菜单"
+    />
+  </template>
 </template>
 <script setup>
 import {http} from "@/core/axios/index.js";
 
 const cascaderProps = {
-  checkStrictly: true,
+
   emitPath: false
 }
-
 
 const emit = defineEmits(['update:value'])
 const props = defineProps(
     {
       value: {
         type: String,
+      },
+      isPanel: {
+        type: Boolean,
+        default: false
+      },
+      isMenu: {
+        type: String,
+        default: "2"
       }
     }
 )
+
+const mutMenus = computed(() => {
+  const copiedMenus = JSON.parse(JSON.stringify(menus.value))
+  if(isMenu.value==='1'){
+    copiedMenus.forEach(oneItem => {
+      oneItem.children.forEach(twoItem => {
+        twoItem.children = []
+      })
+    })
+    return copiedMenus
+  }else{
+    copiedMenus.forEach(oneItem => {
+      oneItem.children.forEach(twoItem => {
+        twoItem.children.forEach(threeItem => {
+          threeItem.children = []
+        })
+      })
+    })
+    return copiedMenus
+  }
+})
 const menus = ref([])
 const selectValue = ref(props.value)
+const isPanel = ref(props.isPanel)
+const isMenu = ref(props.isMenu)
 
-watch(() => props.value, (newVal) => {
-  selectValue.value = newVal
+watchEffect(() => {
+  selectValue.value = props.value;
+  isPanel.value = props.isPanel;
+  isMenu.value = props.isMenu;
+  console.log(isPanel.value)
 })
 
 onMounted(() => {
@@ -47,7 +94,7 @@ const handleChange = (value) => {
   emit('update:value', value)
 }
 
- const convertToTree = (menuList) => {
+const convertToTree = (menuList) => {
   const map = {};
   const tree = [];
   menuList.forEach(item => {

@@ -6,14 +6,14 @@
       </el-text>
     </el-header>
     <el-main class="bbg-form-main">
-<!--      <pre>{{JSON.stringify(data,null,2)}}</pre>-->
+      <pre>{{JSON.stringify(data,null,2)}}</pre>
       <el-scrollbar :max-height="formDynamicHeight">
         <el-row>
           <el-col :offset="7" :span="8">
             <el-form label-position="right" label-width="120">
               <template v-if="!data.id">
-                <el-form-item label="父Id">
-                  <BbgMenuSelect v-model:value="data.parentId"/>
+                <el-form-item label="父菜单">
+                  <BbgMenuSelect v-model:value="data.parentId" :is-panel="true" :is-menu="data.type"/>
                 </el-form-item>
               </template>
               <template v-else-if="data.id && data.parentId != null">
@@ -77,7 +77,10 @@ import {http} from "@/core/axios";
 import emitter from "@/core/mitt/index.js";
 
 const data = reactive({
-
+  type: '1',
+  view: true,
+  enable: true,
+  tenantPermissions: false
 });
 const submitText = computed(() => {
   return data.id ? '修改' : '添加'
