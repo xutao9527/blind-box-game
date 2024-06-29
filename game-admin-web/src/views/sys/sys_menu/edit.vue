@@ -6,7 +6,7 @@
       </el-text>
     </el-header>
     <el-main class="bbg-form-main">
-      <pre>{{JSON.stringify(data,null,2)}}</pre>
+<!--      <pre>{{JSON.stringify(data,null,2)}}</pre>-->
       <el-scrollbar :max-height="formDynamicHeight">
         <el-row>
           <el-col :offset="7" :span="8">
