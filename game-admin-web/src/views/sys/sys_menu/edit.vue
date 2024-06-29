@@ -6,6 +6,7 @@
       </el-text>
     </el-header>
     <el-main class="bbg-form-main">
+      <pre>{{JSON.stringify(data,null,2)}}</pre>
       <el-scrollbar :max-height="formDynamicHeight">
         <el-row>
           <el-col :offset="7" :span="8">
@@ -125,7 +126,6 @@ defineExpose({
 
 const formDynamicHeight = ref(0)
 onMounted(() => {
-
   let top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'))
   formDynamicHeight.value = document.body.offsetHeight - top - 60 - 60 - 51 - 32
   emitter.on('bbgWindowResize', () => {

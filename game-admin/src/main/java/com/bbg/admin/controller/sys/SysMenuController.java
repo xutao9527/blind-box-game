@@ -44,14 +44,11 @@ public class SysMenuController extends BaseSysMenuController {
     @GetMapping("getSelectMenus")
     @Operation(summary = "获得前端菜单", description = "获得前端菜单")
     public ApiRet<List<SysMenu>> getSelectMenus() {
-        List<SysMenu> allMenus = new ArrayList<>();
-        SysMenu rootMenu = sysMenuService.getOne(QueryWrapper.create(new SysMenu().setEnable(true)).isNull(SysMenu::getParentId));
-        if (rootMenu != null) {
-            allMenus = sysMenuService.list(QueryWrapper.create(new SysMenu().setEnable(true)).eq(SysMenu::getParentId, rootMenu.getId()));
-            allMenus.addFirst(rootMenu);
-        }
-        return ApiRet.buildOk(allMenus);
+        List<SysMenu> list = sysMenuService.list(QueryWrapper.create().and(SysMenu::getType).eq("1"));
+        return ApiRet.buildOk(list);
     }
+
+
 
     @GetMapping("syncPermission")
     @Operation(summary = "同步权限数据", description = "同步权限数据")
