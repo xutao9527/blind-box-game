@@ -1,15 +1,4 @@
 <template>
-<!--  <el-select v-model="selectValue"-->
-<!--             placeholder=""-->
-<!--             @change="handleChange"-->
-<!--             clearable-->
-<!--             filterable>-->
-<!--    <el-option v-for="menu in menus"-->
-<!--               :label="menu.title"-->
-<!--               :value="menu.id.toString()">-->
-<!--      <span style="float: left">{{ menu.title }}</span>-->
-<!--    </el-option>-->
-<!--  </el-select>-->
   <el-cascader-panel
       :options="menus"
       :props="cascaderProps"

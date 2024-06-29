@@ -12,7 +12,7 @@
               <div class="bbg-table-header-input">
                 <el-input  v-model="tableProps.reqParams.queryEntity.name" placeholder="角色名"/>
               </div>
-              <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId" :disabled="true"/>
+              <TenantIdSearchSelect v-model:value="tableProps.reqParams.queryEntity.tenantId" :disabled="true" :includeTopTenant="true"/>
               <div class="bbg-table-header-input" style="display: grid;place-items: center">
                 当前角色: {{ roleName }}
               </div>
