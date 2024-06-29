@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @since 2024-05-13
  */
 @RestController
-@Tag(name = "对战房间用户接口")
+@Tag(name = "对战房间箱子接口")
 @RequestMapping("/csgoBattleRoomBox")
 public class CsgoBattleRoomBoxController extends BaseCsgoBattleRoomBoxController {
 

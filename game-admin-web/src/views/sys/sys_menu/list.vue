@@ -7,20 +7,22 @@
             <div class="bbg-table-header-input">
               <el-input v-model="tableProps.reqParams.queryEntity.title" placeholder="菜单标题" clearable/>
             </div>
-<!--            <div class="bbg-table-header-input" style="width: 420px">-->
-<!--              <el-date-picker-->
-<!--                  v-model="tableProps.reqParams.queryEntity.expandProps.createTime"-->
-<!--                  type="datetimerange"-->
-<!--                  start-placeholder="Start date"-->
-<!--                  end-placeholder="End date"-->
-<!--                  value-format="YYYY-MM-DD HH:mm:ss"-->
-<!--              />-->
-<!--            </div>-->
+            <div class="bbg-table-header-input">
+              <el-select v-model="tableProps.reqParams.queryEntity.type"
+                         placeholder="菜单类型"
+
+                         clearable
+                         filterable>
+                <el-option label="菜单" value="1"/>
+                <el-option label="接口" value="2"/>
+              </el-select>
+            </div>
           </el-row>
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
             <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
+            <el-button class="bbg-table-header-control" icon="Magnet" @click="syncData">同步权限</el-button>
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
@@ -42,7 +44,7 @@
               <template #content>
                 {{ scope.row.parentId }}
               </template>
-              {{ scope.row.expandProps.parentTitle }}
+              {{ scope.row.parentTitle }}
             </el-tooltip>
           </template>
         </el-table-column>
@@ -60,7 +62,7 @@
         <el-table-column prop="sort" label="排序" width="50"/>
         <el-table-column prop="type" label="类型" width="50">
           <template #default="scope">
-            {{ scope.row.type === '1' ? '菜单' : '按钮' }}
+            {{ scope.row.type === '1' ? '菜单' : '接口' }}
           </template>
         </el-table-column>
         <el-table-column prop="enable" label="显示" width="50">
@@ -112,6 +114,15 @@ import emitter from "@/core/mitt/";
 
 const header = ref(null);
 const tableDynamicHeight = ref(0)
+
+const syncData = async () => {
+  const apiRet = await http.get(`/sysMenu/syncPermission`)
+  if(apiRet && apiRet.ok){
+    if(apiRet.data){
+      ElMessage({type: 'success', message: '同步数据完成!'})
+    }
+  }
+}
 
 const scope = effectScope()
 scope.run(() => {

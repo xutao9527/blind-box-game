@@ -41,7 +41,7 @@
               <el-form-item label="类型">
                 <el-radio-group v-model="data.type" >
                   <el-radio-button value="1" label="菜单">菜单</el-radio-button>
-                  <el-radio-button value="2" label="按钮">按钮</el-radio-button>
+                  <el-radio-button value="2" label="按钮">接口</el-radio-button>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="显示">

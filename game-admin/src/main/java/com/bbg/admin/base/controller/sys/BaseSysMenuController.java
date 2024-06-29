@@ -7,9 +7,11 @@ import com.bbg.core.service.sys.SysMenuService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.entity.ReqParams;
 import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.constant.SqlOperator;
 import com.mybatisflex.core.query.SqlOperators;
+import com.mybatisflex.core.row.Row;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
@@ -74,6 +76,9 @@ public class BaseSysMenuController extends BaseController<SysMenu, SysMenuServic
         queryWrapper = super.buildQueryWrapper(queryWrapper, reqParams.getQueryEntity());
         queryWrapper.orderBy(SysMenu::getParentId, true);
         queryWrapper.orderBy(SysMenu::getSort, true);
+        queryWrapper
+                .select("b.title as parent_title")
+        .as("a") .leftJoin(SysMenu.class).as("b").on("a.parent_id = b.id");
         return ApiRet.buildOk(sysMenuService.page(reqParams.getPage(), queryWrapper));
     }
 }

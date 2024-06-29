@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  * @author bbg
  * @since 2024-05-13
  */
-@Tag(name = "对战房间用户接口")
+@Tag(name = "对战房间箱子接口")
 @RequestMapping("/csgoBattleRoomBox")
 public class BaseCsgoBattleRoomBoxController extends BaseController<CsgoBattleRoomBox, CsgoBattleRoomBoxService> {
     @Autowired

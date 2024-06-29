@@ -94,7 +94,6 @@ onMounted(() => {
 
 const syncData = async () => {
   const apiRet = await http.get(`/csgoGoods/syncData`)
-  console.log(JSON.stringify(apiRet,null,2))
   if(apiRet && apiRet.ok){
     if(apiRet.data){
       ElMessage({type: 'success', message: '同步数据通知完成!'})
