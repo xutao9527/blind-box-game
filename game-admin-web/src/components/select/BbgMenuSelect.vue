@@ -74,7 +74,6 @@ watchEffect(() => {
   selectValue.value = props.value;
   isPanel.value = props.isPanel;
   isMenu.value = props.isMenu;
-  console.log(isPanel.value)
 })
 
 onMounted(() => {
