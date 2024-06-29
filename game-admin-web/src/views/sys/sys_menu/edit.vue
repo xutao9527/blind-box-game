@@ -17,8 +17,8 @@
                 </el-form-item>
               </template>
               <template v-else-if="data.id && data.parentId != null">
-                <el-form-item label="父Id">
-                  <BbgMenuSelect v-model:value="data.parentId"/>
+                <el-form-item label="父菜单">
+                  <BbgMenuSelect v-model:value="data.parentId" :is-panel="true"/>
                 </el-form-item>
               </template>
               <el-form-item label="菜单标题">

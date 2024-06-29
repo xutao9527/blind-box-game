@@ -8,7 +8,7 @@
               <el-input v-model="tableProps.reqParams.queryEntity.title" placeholder="菜单标题" clearable/>
             </div>
             <div class="bbg-table-header-input">
-<!--              <BbgMenuSelect v-model:value="tableProps.reqParams.queryEntity.parentId" :is-panel="false" />-->
+              <BbgMenuSelect v-model:value="tableProps.reqParams.queryEntity.parentId" :is-panel="false" />
             </div>
             <div class="bbg-table-header-input">
               <el-select v-model="tableProps.reqParams.queryEntity.type"
