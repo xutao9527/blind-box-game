@@ -40,9 +40,15 @@ public class RedisConfig {
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,ObjectMapper.DefaultTyping.NON_FINAL);
         objectMapper.registerModules(javaTimeModule());
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
         redisTemplate.setConnectionFactory(factory);
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
+
+        redisTemplate.setValueSerializer(serializer);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
+
+        redisTemplate.setHashValueSerializer(serializer);
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+
         return redisTemplate;
     }
 

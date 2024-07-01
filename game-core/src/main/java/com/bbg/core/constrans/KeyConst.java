@@ -7,8 +7,10 @@ public class KeyConst {
     public final static String TENANT_LIST = "tenant::list";
     // admin uid 指向 token
     public final static String ADMIN_TOKEN_UID = "admin::token::uid";
-    // admin token
+    // admin token 指向 管理员信息
     public final static String ADMIN_INFO_TOKEN = "admin::info::token";
+    // admin token 指向 管理员权限
+    public final static String ADMIN_PERMISSION_TOKEN = "admin::permission::token";
     // user uid 指向 token
     public final static String USER_TOKEN_UID = "user::token::uid";
     // user token

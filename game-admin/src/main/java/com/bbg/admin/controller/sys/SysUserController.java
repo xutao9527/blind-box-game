@@ -56,7 +56,9 @@ public class SysUserController extends BaseSysUserController {
             }
             String token = redisService.adminLogin(user);
             ret = ApiRet.buildOk(token);
-        } else {
+        } else if(user == null){
+            ret = ApiRet.buildNo(null, "用户不存在!");
+        }else{
             ret = ApiRet.buildNo(null, "密码错误!");
         }
         return ret;
@@ -134,6 +136,7 @@ public class SysUserController extends BaseSysUserController {
         if (sysUser != null && sysMenus != null && !sysUser.isSuperTenant()) {
             sysMenus = sysMenus.stream().filter(sysMenu -> !sysMenu.getTenantPermissions()).collect(Collectors.toList());
         }
+        redisService.updateAdminPermission(token, sysMenus);
         return sysUser == null ? ApiRet.buildNo(null, "令牌失效") : ApiRet.buildOk(sysMenus);
     }
 

@@ -4,10 +4,16 @@ import com.bbg.core.base.RedisBaseImpl;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.model.biz.BizUser;
+import com.bbg.model.sys.SysMenu;
 import com.bbg.model.sys.SysUser;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
@@ -50,6 +56,24 @@ public class RedisServiceImpl extends RedisBaseImpl implements RedisService {
             expire(adminUserToken, adminLiveTime, TimeUnit.SECONDS);
         }
         return sysUser;
+    }
+
+    public void updateAdminPermission(String token, List<SysMenu> sysMenus){
+        deleteAdminPermission(token);
+        String adminPermissionToken = KeyConst.build(KeyConst.ADMIN_PERMISSION_TOKEN, token);
+        Map<String,SysMenu> map = sysMenus.stream().filter(sysMenu -> sysMenu.getType().equals("2")).collect(Collectors.toMap(SysMenu::getPath,sysMenu -> sysMenu));
+        redisTemplate.opsForHash().putAll(adminPermissionToken,map);
+        redisTemplate.expire(adminPermissionToken, adminLiveTime, TimeUnit.SECONDS);
+    }
+
+    public void deleteAdminPermission(String token){
+        String adminPermissionToken = KeyConst.build(KeyConst.ADMIN_PERMISSION_TOKEN, token);
+        redisTemplate.delete(adminPermissionToken);
+    }
+
+    public SysMenu getAdminPermission(String token, String path){
+        String adminPermissionToken = KeyConst.build(KeyConst.ADMIN_PERMISSION_TOKEN, token);
+        return (SysMenu) redisTemplate.opsForHash().get(adminPermissionToken,path);
     }
 
     public String userLogin(BizUser user) {

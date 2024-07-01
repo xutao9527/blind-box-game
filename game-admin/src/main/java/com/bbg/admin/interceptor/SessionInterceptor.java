@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.service.sys.SysTenantService;
+import com.bbg.model.sys.SysMenu;
 import com.bbg.model.sys.SysTenant;
 import com.bbg.model.sys.SysUser;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,10 +12,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 
 @Slf4j
 @Component
@@ -23,10 +28,12 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     public final RedisService redisService;
     public final SysTenantService sysTenantService;
+
     @Override
     // 在请求处理之前进行拦截逻辑，返回 true 表示继续执行，返回 false 表示终止执行
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
+        String matchingUrl = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
         if (token != null) {
             SysUser sysUser = redisService.expireAdmin(token);
             if (sysUser == null) {
@@ -35,12 +42,14 @@ public class SessionInterceptor implements HandlerInterceptor {
             }
             // 获得用户的租户信息
             SysTenant sysTenant = sysTenantService.getById(sysUser.getTenantId());
-            if(sysTenant != null){
+            if (sysTenant != null) {
                 request.setAttribute("tenantObject", sysTenant);
-            }else{
+            } else {
                 noTenant(response);
                 return false;
             }
+            SysMenu sysMenu = redisService.getAdminPermission(token, matchingUrl);
+            System.out.println(sysMenu);
         } else {
             noLogin(response);
             return false;

@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 public class RedisBaseImpl implements RedisBase {
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    protected RedisTemplate<String, Object> redisTemplate;
     @Autowired
-    private RedissonClient redissonClient;
+    protected RedissonClient redissonClient;
 
     public Pair<Boolean, RLock> tryLock(RedisLock redisLock,String lockKey) throws InterruptedException {
         RLock rLock = redissonClient.getLock(lockKey);

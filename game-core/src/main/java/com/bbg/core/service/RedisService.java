@@ -1,8 +1,15 @@
 package com.bbg.core.service;
 
 import com.bbg.core.base.RedisBase;
+import com.bbg.core.constrans.KeyConst;
 import com.bbg.model.biz.BizUser;
+import com.bbg.model.sys.SysMenu;
 import com.bbg.model.sys.SysUser;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public interface RedisService extends RedisBase {
     // 管理员登录
@@ -16,6 +23,15 @@ public interface RedisService extends RedisBase {
 
     // 管理员session延期
     SysUser expireAdmin(String token);
+
+    // 更新管理员权限
+    void updateAdminPermission(String token, List<SysMenu> sysMenus);
+
+    // 删除管理员权限
+    void deleteAdminPermission(String token);
+
+    // 获得单个权限
+    SysMenu getAdminPermission(String token, String path);
 
     // 用户登录
     String userLogin(BizUser user);
