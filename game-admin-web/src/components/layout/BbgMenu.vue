@@ -1,44 +1,4 @@
 <template>
-  <!--  <el-menu-->
-  <!--      default-active="1-1"-->
-  <!--      :collapse="props.isCollapse"-->
-  <!--      :collapse-transition="false"-->
-  <!--      style="border: 0"-->
-  <!--      :router="true"-->
-  <!--  >-->
-  <!--    <el-sub-menu index="1">-->
-  <!--      <template #title>-->
-  <!--        <el-icon>-->
-  <!--          <location/>-->
-  <!--        </el-icon>-->
-  <!--        <span>System</span>-->
-  <!--      </template>-->
-  <!--      <el-menu-item index="1-1" route="/user">-->
-  <!--        <template #title>-->
-  <!--          <el-icon>-->
-  <!--            <User/>-->
-  <!--          </el-icon>-->
-  <!--          <span>User</span>-->
-  <!--        </template>-->
-  <!--      </el-menu-item>-->
-  <!--      <el-menu-item index="1-2" route="/role">-->
-  <!--        <template #title>-->
-  <!--          <el-icon>-->
-  <!--            <Aim/>-->
-  <!--          </el-icon>-->
-  <!--          <span>Role</span>-->
-  <!--        </template>-->
-  <!--      </el-menu-item>-->
-  <!--      <el-menu-item index="1-3" route="/menu">-->
-  <!--        <template #title>-->
-  <!--          <el-icon>-->
-  <!--            <Aim/>-->
-  <!--          </el-icon>-->
-  <!--          <span>Menu</span>-->
-  <!--        </template>-->
-  <!--      </el-menu-item>-->
-  <!--    </el-sub-menu>-->
-  <!--  </el-menu>-->
   <el-scrollbar :max-height="dynamicHeight">
     <el-menu
         :default-active="activeMenu"

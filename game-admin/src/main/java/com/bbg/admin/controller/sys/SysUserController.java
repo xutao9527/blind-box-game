@@ -131,7 +131,7 @@ public class SysUserController extends BaseSysUserController {
                 }
             }
         }
-        // 不是顶级租户,则过滤顶级租户菜单
+        // 不是顶级租户,则过滤顶级租户菜单与接口
         if (sysUser != null && sysMenus != null && !sysUser.isSuperTenant()) {
             sysMenus = sysMenus.stream().filter(sysMenu -> !sysMenu.getTenantPermissions()).collect(Collectors.toList());
         }
