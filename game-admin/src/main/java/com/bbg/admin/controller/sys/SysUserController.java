@@ -109,7 +109,6 @@ public class SysUserController extends BaseSysUserController {
         return ApiRet.buildOk(sysMenuList);
     }
 
-
     @GetMapping("currentUserMenu")
     @Operation(summary = "当前管理员菜单", description = "当前管理员菜单")
     public ApiRet<List<SysMenu>> currentUserMenu() {
@@ -137,7 +136,6 @@ public class SysUserController extends BaseSysUserController {
         }
         return sysUser == null ? ApiRet.buildNo(null, "令牌失效") : ApiRet.buildOk(sysMenus);
     }
-
 
     @GetMapping("currentUser")
     @Operation(summary = "当前管理员信息", description = "当前管理员信息")

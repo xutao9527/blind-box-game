@@ -3,7 +3,7 @@
     <el-tab-pane label="数 据" name="list">
       <list @activeRightTabs="activeTabs" ref="listRef"/>
     </el-tab-pane>
-    <el-tab-pane label="表 单" name="form">
+    <el-tab-pane label="表 单" name="form" v-if="has(['sysMenu_add','sysMenu_update'])">
       <edit @activeRightTabs="activeTabs" ref="editRef"/>
     </el-tab-pane>
   </el-tabs>
