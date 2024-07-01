@@ -23,7 +23,7 @@
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
-            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
+            <el-button class="bbg-table-header-control" icon="Plus" @click="add" v-has="'sysMenu_save'">新增</el-button>
             <el-button class="bbg-table-header-control" icon="Magnet" @click="syncData">同步权限</el-button>
           </el-row>
           <el-row>

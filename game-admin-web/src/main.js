@@ -19,6 +19,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
     bbgConf.iconList.push(key);
 }
+
 app.use(store)
 app.use(router)
 app.use(hasPermission)

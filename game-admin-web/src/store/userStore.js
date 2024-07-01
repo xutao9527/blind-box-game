@@ -58,6 +58,14 @@ export const useUserStore = defineStore('userStore', {
                 this.setToken(null)
             }
         },
+        hasPermission(permission) {
+            let menu = this.menus.find(m => m.name === permission)
+            if (menu == null) {
+                return false
+            }
+            console.log("hasPermission", menu)
+            return true
+        },
         setToken(t) {
             this.token = t
             if (!t) {
