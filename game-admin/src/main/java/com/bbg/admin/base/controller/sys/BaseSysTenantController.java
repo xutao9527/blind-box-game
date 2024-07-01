@@ -9,12 +9,10 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.constant.SqlOperator;
 import com.mybatisflex.core.query.SqlOperators;
-import lombok.RequiredArgsConstructor;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -68,6 +66,9 @@ public class BaseSysTenantController extends BaseController<SysTenant, SysTenant
         SqlOperators operators = SqlOperators.of().set(SysTenant::getId, SqlOperator.EQUALS);
         QueryWrapper queryWrapper = reqParams.getQueryEntity() == null ? QueryWrapper.create() : QueryWrapper.create(reqParams.getQueryEntity(), operators);
         queryWrapper = super.buildQueryWrapper(queryWrapper, reqParams.getQueryEntity());
+        queryWrapper
+                .select("b.tenant_name as parent_tenant_name")
+                .as("a") .leftJoin(SysTenant.class).as("b").on("a.parent_id = b.id");
         return ApiRet.buildOk(sysTenantService.page(reqParams.getPage(), queryWrapper));
     }
 }

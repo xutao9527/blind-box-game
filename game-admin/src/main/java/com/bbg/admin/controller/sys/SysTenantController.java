@@ -28,37 +28,18 @@ public class SysTenantController extends BaseSysTenantController {
     @Override
     public ApiRet<Page<SysTenant>> page(ReqParams<SysTenant> reqParams) {
         ApiRet<Page<SysTenant>> apiRet = super.page(reqParams);
-        List<SysTenant> records = apiRet.getData().getRecords();
-        SysTenant rootTenant = sysTenantService.getOne(QueryWrapper.create(new SysTenant().setEnable(true)).isNull(SysTenant::getParentId));
-        records = records.stream().peek(sysTenant -> {
-            if (sysTenant.getParentId() != null) {
-                if (sysTenant.getExpandProps() == null) {
-                    sysTenant.setExpandProps(HashMap.newHashMap(1));
-                }
-                sysTenant.getExpandProps().put("parentTenantName", Objects.isNull(rootTenant) ? "" : rootTenant.getTenantName());
-            }
-        }).toList();
-        apiRet.getData().setRecords(records);
+        // List<SysTenant> records = apiRet.getData().getRecords();
+        // SysTenant rootTenant = sysTenantService.getOne(QueryWrapper.create(new SysTenant().setEnable(true)).isNull(SysTenant::getParentId));
+        // records = records.stream().peek(sysTenant -> {
+        //     if (sysTenant.getParentId() != null) {
+        //         if (sysTenant.getExpandProps() == null) {
+        //             sysTenant.setExpandProps(HashMap.newHashMap(1));
+        //         }
+        //         sysTenant.getExpandProps().put("parentTenantName", Objects.isNull(rootTenant) ? "" : rootTenant.getTenantName());
+        //     }
+        // }).toList();
+        // apiRet.getData().setRecords(records);
         return apiRet;
     }
 
-    @GetMapping("getSelectTenants")
-    @Operation(summary = "获得一二级租户", description = "获得一二级租户")
-    public ApiRet<List<SysTenant>> getSelectTenants() {
-        List<SysTenant> allTenant = new ArrayList<>();
-        SysTenant rootTenant = sysTenantService.getOne(QueryWrapper.create(new SysTenant().setEnable(true)).isNull(SysTenant::getParentId));
-        if(rootTenant!=null){
-            // allTenant = sysTenantService.list(QueryWrapper.create(new SysTenant().setEnable(true)).eq(SysTenant::getParentId, rootTenant.getId()));
-            allTenant.addFirst(rootTenant);
-        }
-        return ApiRet.buildOk(allTenant);
-    }
-
-    @GetMapping("getTenants")
-    @Operation(summary = "获得所有租户", description = "获得所有租户")
-    public ApiRet<Map<Long,SysTenant>> getTenants() {
-        List<SysTenant> sysTenants =sysTenantService.list();
-        Map<Long,SysTenant> map = sysTenants.stream().collect(Collectors.toMap(SysTenant::getId, sysTenant -> sysTenant));
-        return ApiRet.buildOk(map);
-    }
 }

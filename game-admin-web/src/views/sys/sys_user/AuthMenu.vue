@@ -11,7 +11,20 @@
             default-expand-all
             node-key="id"
             ref="menuTreeRef"
-        />
+        >
+          <template #default="{ node, data }">
+            <template v-if="data.tenantPermissions">
+              <el-text type="warning">
+                {{ data.title }}[{{data.type==='1'?'菜单':'接口'}}]
+              </el-text>
+            </template>
+            <template v-else>
+              <el-text type="info">
+                {{ data.title }}[{{data.type==='1'?'菜单':'接口'}}]
+              </el-text>
+            </template>
+          </template>
+        </el-tree>
       </el-scrollbar>
     </template>
     <template #footer>
@@ -71,7 +84,7 @@ onMounted(async () => {
   let apiRet = await http.post('/sysMenu/list', {})
   if (apiRet.ok && apiRet.data) {
     apiRet.data.forEach(item => {
-      item.label = item.title + ">" + item.id
+      item.label = item.title
     })
     allMenu.value = convertToTree(apiRet.data)
   }

@@ -49,7 +49,6 @@ public class SysMenuController extends BaseSysMenuController {
     }
 
 
-
     @GetMapping("syncPermission")
     @Operation(summary = "同步权限数据", description = "同步权限数据")
     public ApiRet<Boolean> syncPermission() {
