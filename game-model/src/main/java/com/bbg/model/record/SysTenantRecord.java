@@ -18,7 +18,7 @@ import java.io.Serial;
  * 系统租户 实体类。
  *
  * @author bbg
- * @since 2024-06-28
+ * @since 2024-07-01
  */
 @Data
 @NoArgsConstructor
@@ -79,6 +79,6 @@ public class SysTenantRecord extends BaseModel implements Serializable {
      * 逻辑删除
      */
     @Schema(description = "逻辑删除")
-    private Integer isDeleted;
+    private Boolean isDeleted;
 
 }

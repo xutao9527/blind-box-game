@@ -8,9 +8,13 @@ import com.mybatisflex.core.audit.ConsoleMessageCollector;
 import com.mybatisflex.core.audit.MessageCollector;
 import com.mybatisflex.core.keygen.IKeyGenerator;
 import com.mybatisflex.core.keygen.KeyGeneratorFactory;
+import com.mybatisflex.core.logicdelete.LogicDeleteManager;
+import com.mybatisflex.core.logicdelete.LogicDeleteProcessor;
+import com.mybatisflex.core.logicdelete.impl.BooleanLogicDeleteProcessor;
 import com.mybatisflex.core.mybatis.FlexConfiguration;
 import com.mybatisflex.core.tenant.TenantManager;
 import com.mybatisflex.spring.boot.ConfigurationCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
@@ -37,8 +41,14 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         TenantManager.setTenantFactory(new BbgTenantFactory());
         // 逻辑删除配置
         flexGlobalConfig.setLogicDeleteColumn("is_deleted");
-        flexGlobalConfig.setNormalValueOfLogicDelete(0);
-        flexGlobalConfig.setDeletedValueOfLogicDelete(1);
+        flexGlobalConfig.setNormalValueOfLogicDelete(false);
+        flexGlobalConfig.setDeletedValueOfLogicDelete(true);
+        // LogicDeleteManager.setProcessor(logicDeleteProcessor());
+    }
+
+    @Bean
+    public LogicDeleteProcessor logicDeleteProcessor(){
+        return new BooleanLogicDeleteProcessor();
     }
 
     static class SnowFlakeIdKeyGenerator implements IKeyGenerator{

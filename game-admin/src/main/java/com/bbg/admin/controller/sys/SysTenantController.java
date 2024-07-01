@@ -27,19 +27,7 @@ public class SysTenantController extends BaseSysTenantController {
 
     @Override
     public ApiRet<Page<SysTenant>> page(ReqParams<SysTenant> reqParams) {
-        ApiRet<Page<SysTenant>> apiRet = super.page(reqParams);
-        // List<SysTenant> records = apiRet.getData().getRecords();
-        // SysTenant rootTenant = sysTenantService.getOne(QueryWrapper.create(new SysTenant().setEnable(true)).isNull(SysTenant::getParentId));
-        // records = records.stream().peek(sysTenant -> {
-        //     if (sysTenant.getParentId() != null) {
-        //         if (sysTenant.getExpandProps() == null) {
-        //             sysTenant.setExpandProps(HashMap.newHashMap(1));
-        //         }
-        //         sysTenant.getExpandProps().put("parentTenantName", Objects.isNull(rootTenant) ? "" : rootTenant.getTenantName());
-        //     }
-        // }).toList();
-        // apiRet.getData().setRecords(records);
-        return apiRet;
+        return super.page(reqParams);
     }
 
 }
