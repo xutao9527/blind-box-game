@@ -6,7 +6,7 @@
         v-model="selectValue"
         @change="handleChange"
         clearable
-        placeholder="菜单"
+        placeholder="父级菜单"
     />
   </template>
   <template v-else>
@@ -16,17 +16,12 @@
         v-model="selectValue"
         @change="handleChange"
         clearable
-        placeholder="菜单"
+        placeholder="父级菜单"
     />
   </template>
 </template>
 <script setup>
 import {http} from "@/core/axios/index.js";
-
-const cascaderProps = {
-
-  emitPath: false
-}
 
 const emit = defineEmits(['update:value'])
 const props = defineProps(
@@ -41,9 +36,18 @@ const props = defineProps(
       isMenu: {
         type: String,
         default: "2"
+      },
+      checkStrictly: {
+        type: Boolean,
+        default: false
       }
     }
 )
+
+const cascaderProps = {
+  checkStrictly: props.checkStrictly,
+  emitPath: false
+}
 
 const mutMenus = computed(() => {
   const copiedMenus = JSON.parse(JSON.stringify(menus.value))
