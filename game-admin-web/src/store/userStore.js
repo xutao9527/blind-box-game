@@ -63,7 +63,6 @@ export const useUserStore = defineStore('userStore', {
             if (menu == null) {
                 return false
             }
-            console.log("hasPermission", menu)
             return true
         },
         setToken(t) {

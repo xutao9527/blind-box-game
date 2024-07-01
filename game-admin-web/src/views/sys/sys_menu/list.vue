@@ -24,7 +24,7 @@
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
             <el-button class="bbg-table-header-control" icon="Plus" @click="add" v-has="'sysMenu_save'">新增</el-button>
-            <el-button class="bbg-table-header-control" icon="Magnet" @click="syncData">同步权限</el-button>
+            <el-button class="bbg-table-header-control" icon="Magnet" v-has="'sysMenu_syncPermission'" @click="syncData">同步权限</el-button>
           </el-row>
           <el-row>
             <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
@@ -84,10 +84,10 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="140"/>
         <el-table-column prop="updateTime" label="修改时间"  width="140"/>
-        <el-table-column fixed="right" label="操作">
+        <el-table-column fixed="right" label="操作" v-if="has(['sysMenu_update','sysMenu_remove_id'])">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
-            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
+            <el-button link type="primary" size="small" v-has="'sysMenu_update'" @click="edit(scope.row)">编辑</el-button>
+            <el-button link type="primary" size="small" v-has="'sysMenu_remove_id'" @click="remove(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
