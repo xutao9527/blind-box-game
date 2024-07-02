@@ -36,9 +36,9 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         // 设置 SQL 审计收集器
         MessageCollector collector = new ConsoleMessageCollector();
         AuditManager.setMessageCollector(collector);
-        // 全局多租户配置
-        flexGlobalConfig.setTenantColumn("tenant_id");
-        TenantManager.setTenantFactory(new TenantIdFactory());
+        // // 全局多租户配置
+        // flexGlobalConfig.setTenantColumn("tenant_id");
+        // TenantManager.setTenantFactory(new TenantIdFactory());
         // 逻辑删除配置
         flexGlobalConfig.setLogicDeleteColumn("is_deleted");
         flexGlobalConfig.setNormalValueOfLogicDelete(false);

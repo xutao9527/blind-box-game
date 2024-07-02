@@ -1,13 +1,8 @@
 package com.bbg.box.tenant;
 
 import com.bbg.core.utils.TenantUtil;
-import com.bbg.model.sys.SysTenant;
 import com.mybatisflex.core.tenant.TenantFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
-@Component
 public class TenantIdFactory implements TenantFactory {
     @Override
     public Object[] getTenantIds() {

@@ -2,9 +2,7 @@ package com.bbg.third.tenant;
 
 import com.bbg.core.utils.TenantUtil;
 import com.mybatisflex.core.tenant.TenantFactory;
-import org.springframework.stereotype.Component;
 
-@Component
 public class TenantIdFactory implements TenantFactory {
     @Override
     public Object[] getTenantIds() {
