@@ -7,6 +7,7 @@ import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.utils.IdTool;
+import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.sys.SysTenant;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 系统租户 服务层实现。
@@ -35,6 +38,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         entity.setId(IdTool.nextId());
         entity.setParentId(rootTenant.getId());// 设置父级租户编号
         entity.setTenantCode(Base58.encode(Convert.longToBytes(entity.getId())));   // 生成租户编码
+        redisService.delete(KeyConst.TENANT_LIST);// 清缓存
         return super.save(entity);
     }
 
@@ -45,7 +49,6 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         entity.setParentId(null);// 不允许修改父租户编号
         redisService.delete(KeyConst.TENANT_LIST);// 清缓存
         return super.updateById(entity);
-
     }
 
     @Override
@@ -69,5 +72,11 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     @RedisCache(key = KeyConst.TENANT_LIST)
     public List<SysTenant> list() {
         return super.list();
+    }
+
+    @RedisCache(value = "#tenantCode", key = KeyConst.TENANT_CODE)
+    public Long getTenantId(String tenantCode) {
+        return getOneAs(QueryWrapper.create(new SysTenant().setEnable(true).setTenantCode(tenantCode)).select(QueryMethods.column(SysTenant::getId)),Long.class);
+        //return super.list(QueryWrapper.create(new SysTenant().setEnable(true)).select(SysTenant::getId, SysTenant::getTenantCode));
     }
 }

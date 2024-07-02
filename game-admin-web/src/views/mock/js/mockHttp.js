@@ -53,6 +53,9 @@ export class AppAxiosHttp {
             if (mockGlobal.bizToken != null) {
                 config.headers['token'] = mockGlobal.bizToken
             }
+            if(mockGlobal.tenantCode != null){
+                config.headers['t_code'] = mockGlobal.tenantCode
+            }
             config.data = config.data ? config.data : {}
             config.params = config.params ? config.params : {}
             return config;

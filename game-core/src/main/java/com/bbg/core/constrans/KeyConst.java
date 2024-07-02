@@ -3,6 +3,8 @@ package com.bbg.core.constrans;
 public class KeyConst {
     // 租户缓存
     public final static String TENANT_ID = "tenant::id";
+    // 租户缓存
+    public final static String TENANT_CODE = "tenant::code";
     // 所有租户缓存
     public final static String TENANT_LIST = "tenant::list";
     // admin uid 指向 token

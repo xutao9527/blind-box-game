@@ -10,5 +10,5 @@ import com.bbg.model.sys.SysTenant;
  * @since 2024-06-24
  */
 public interface SysTenantService extends IService<SysTenant> {
-
+    Long getTenantId(String tenantCode);
 }
