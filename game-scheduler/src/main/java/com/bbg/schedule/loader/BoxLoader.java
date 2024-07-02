@@ -44,15 +44,15 @@ public class BoxLoader {
     public void reLoadJob() {
         List<SysTenant> sysTenants = sysTenantService.list();
         for (SysTenant sysTenant : sysTenants) {
-            System.out.println("before" + sysTenant.getId() +"_"+ TenantUtil.getTenantId());
+
             try {
                 TenantUtil.setTenantId(sysTenant.getId());
                 CsgoConfig csgoConfig = csgoConfigService.getConfigByNameAlias("open_box_interval");
-                log.info("reLoadJob:{}", csgoConfig);
+                System.out.println("csgoConfig: " + csgoConfig);
             }  finally {
                 TenantUtil.clear();
             }
-             System.out.println("after" + sysTenant.getId() +"_"+ TenantUtil.getTenantId());
+
         }
 
 
