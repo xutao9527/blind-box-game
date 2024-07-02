@@ -44,7 +44,6 @@ public class OnlinePayController extends BaseController {
     public final PayEngine beanPayEngine;
     public final DiscoveryClient discoveryClient;
 
-
     @GetMapping("call")
     @Operation(summary = "支付请求", description = "支付请求")
     public ApiRet<Object> call(
