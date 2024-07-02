@@ -46,7 +46,6 @@ public class KeyConst {
     // 撸房信息列表
     public final static String ROLL_LIST_INFO = "roll::info::list";                             //需要租户标识 tenantFlag = true
 
-
     // 方法锁  同步数据
     public final static String METHOD_SYNC_DATA_LOCK = "method::syncData";
     // 方法锁  开盲盒
