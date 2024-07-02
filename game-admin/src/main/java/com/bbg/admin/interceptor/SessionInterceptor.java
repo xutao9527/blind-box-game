@@ -43,7 +43,8 @@ public class SessionInterceptor implements HandlerInterceptor {
             // 获得用户的租户信息
             SysTenant sysTenant = sysTenantService.getById(sysUser.getTenantId());
             if (sysTenant != null) {
-                request.setAttribute("tenantObject", sysTenant);
+                request.setAttribute("tenantId", sysTenant.getId());
+                request.setAttribute("isSuperTenant", sysUser.isSuperTenant());
             } else {
                 noTenant(response);
                 return false;

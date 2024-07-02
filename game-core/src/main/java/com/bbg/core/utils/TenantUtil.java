@@ -16,4 +16,15 @@ public class TenantUtil {
         return null;
     }
 
+    public static boolean isSuperTenant(){
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            Object isSuperTenantObject = attributes.getAttribute("isSuperTenant", RequestAttributes.SCOPE_REQUEST);
+            if (isSuperTenantObject instanceof Boolean isSuperTenant) {
+                return isSuperTenant;
+            }
+        }
+        return false;
+    }
+
 }
