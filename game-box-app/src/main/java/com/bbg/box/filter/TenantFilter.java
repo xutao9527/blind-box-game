@@ -1,10 +1,12 @@
 package com.bbg.box.filter;
 
+import com.alibaba.fastjson2.JSON;
+import com.bbg.core.entity.ApiRet;
 import com.bbg.core.service.sys.SysTenantService;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,16 +24,23 @@ public class TenantFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String tenantCode;
         Long tenantId = null;
-        if(request instanceof HttpServletRequest httpServletRequest){
+        if (request instanceof HttpServletRequest httpServletRequest) {
             tenantCode = httpServletRequest.getHeader("t_code");
-            if(!tenantCode.isEmpty()){
+            if (!tenantCode.isEmpty()) {
                 tenantId = sysTenantService.getTenantId(tenantCode);
             }
         }
-        if(tenantId!=null){
+        if (tenantId != null) {
             request.setAttribute("tenantId", tenantId);
+            filterChain.doFilter(request, response);
+        }else{
+            if (response instanceof HttpServletResponse httpServletResponse) {
+                httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+                httpServletResponse.setContentType("application/json");
+                httpServletResponse.getWriter().write(JSON.toJSONString(ApiRet.buildNo("Invalid t_code")));
+            }
         }
-        filterChain.doFilter(request, response);
+
     }
 
     @Override

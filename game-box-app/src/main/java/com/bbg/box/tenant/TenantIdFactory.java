@@ -12,15 +12,11 @@ public class TenantIdFactory implements TenantFactory {
     public Object[] getTenantIds() {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
-            Object tenantObject = attributes.getAttribute("tenantObject", RequestAttributes.SCOPE_REQUEST);
-            if (tenantObject instanceof SysTenant sysTenant) {
-                if (sysTenant.getParentId() == null) {              // 超级租户,返回空数据
-                    return new Object[]{};
-                } else {
-                    return new Object[]{sysTenant.getId()};
-                }
+            Object tenantIdObject = attributes.getAttribute("tenantId", RequestAttributes.SCOPE_REQUEST);
+            if (tenantIdObject instanceof Long tenantId) {
+                return new Object[]{tenantId};
             }
         }
-        return new Object[]{};                                      // 未登录用户,返回空数据
+        return new Object[]{0L};                                      // 找不到租户编号，返回0让操作不了数据
     }
 }
