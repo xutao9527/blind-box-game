@@ -1,4 +1,4 @@
-package com.bbg.core.config;
+package com.bbg.admin.tenant;
 
 import com.bbg.model.sys.SysTenant;
 import com.mybatisflex.core.tenant.TenantFactory;
@@ -7,20 +7,20 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 @Component
-public class BbgTenantFactory implements TenantFactory {
+public class TenantIdFactory implements TenantFactory {
     @Override
     public Object[] getTenantIds() {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             Object tenantObject = attributes.getAttribute("tenantObject", RequestAttributes.SCOPE_REQUEST);
-            if(tenantObject instanceof SysTenant sysTenant){
-                if(sysTenant.getParentId() == null){    //超级租户,返回空数据
+            if (tenantObject instanceof SysTenant sysTenant) {
+                if (sysTenant.getParentId() == null) {              // 超级租户,返回空数据
                     return new Object[]{};
-                }else{
+                } else {
                     return new Object[]{sysTenant.getId()};
                 }
             }
         }
-        return new Object[]{};
+        return new Object[]{};                                      // 未登录用户,返回空数据
     }
 }

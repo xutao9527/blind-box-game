@@ -1,5 +1,6 @@
-package com.bbg.core.config;
+package com.bbg.admin.config;
 
+import com.bbg.admin.tenant.TenantIdFactory;
 import com.bbg.core.utils.IdTool;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.FlexGlobalConfig;
@@ -8,7 +9,6 @@ import com.mybatisflex.core.audit.ConsoleMessageCollector;
 import com.mybatisflex.core.audit.MessageCollector;
 import com.mybatisflex.core.keygen.IKeyGenerator;
 import com.mybatisflex.core.keygen.KeyGeneratorFactory;
-import com.mybatisflex.core.logicdelete.LogicDeleteManager;
 import com.mybatisflex.core.logicdelete.LogicDeleteProcessor;
 import com.mybatisflex.core.logicdelete.impl.BooleanLogicDeleteProcessor;
 import com.mybatisflex.core.mybatis.FlexConfiguration;
@@ -38,7 +38,7 @@ public class MybatisFlexConfig implements ConfigurationCustomizer {
         AuditManager.setMessageCollector(collector);
         // 全局多租户配置
         flexGlobalConfig.setTenantColumn("tenant_id");
-        TenantManager.setTenantFactory(new BbgTenantFactory());
+        TenantManager.setTenantFactory(new TenantIdFactory());
         // 逻辑删除配置
         flexGlobalConfig.setLogicDeleteColumn("is_deleted");
         flexGlobalConfig.setNormalValueOfLogicDelete(false);
