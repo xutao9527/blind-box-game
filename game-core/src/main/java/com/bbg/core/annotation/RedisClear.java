@@ -16,4 +16,8 @@ public @interface RedisClear {
      * 缓存 key 前缀
      */
     String key() default "";
+    /**
+     * 是否需要租户标识
+     */
+    boolean tenantFlag() default false;
 }

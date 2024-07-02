@@ -25,4 +25,8 @@ public @interface RedisCache {
      * 时间单位，默认为秒
      */
     TimeUnit timeUnit() default TimeUnit.SECONDS;
+    /**
+     * 是否需要租户标识
+     */
+    boolean tenantFlag() default false;
 }

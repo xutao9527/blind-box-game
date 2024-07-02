@@ -86,7 +86,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
      * 获得撸房列表信息
      * 缓存信息默认存储500毫秒,避免高并发,缓解数据库压力
      */
-    @RedisCache(key = KeyConst.ROLL_LIST_INFO, liveTime = ROLL_LIST_LIVE_TIME, timeUnit = TimeUnit.MILLISECONDS)
+    @RedisCache(key = KeyConst.ROLL_LIST_INFO, liveTime = ROLL_LIST_LIVE_TIME, timeUnit = TimeUnit.MILLISECONDS, tenantFlag = true)
     public Page<CsgoRoll> getRollList(RollDto.GetRollListReq getRollListReq) {
         BizDict rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
         QueryWrapper queryWrapper = QueryWrapper.create()

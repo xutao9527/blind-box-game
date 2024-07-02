@@ -23,7 +23,8 @@ public class RedisCacheAspect extends BaseAspect {
     public Object aroundRedisCache(ProceedingJoinPoint point, RedisCache redisCache) throws Throwable {
         String keyPrefix = redisCache.key();
         String keyValue = parserSpEL(redisCache.value(), point).toString();
-        String cacheKey = KeyConst.build(keyPrefix, keyValue);
+        boolean tenantFlag = redisCache.tenantFlag();
+        String cacheKey = KeyConst.build(keyPrefix, keyValue, tenantFlag);
         Object cacheObject = redisService.get(cacheKey);
         if (cacheObject == null) {
             cacheObject = point.proceed();
@@ -42,7 +43,8 @@ public class RedisCacheAspect extends BaseAspect {
     public Object aroundRedisClear(ProceedingJoinPoint point, RedisClear redisClear) throws Throwable {
         String keyPrefix = redisClear.key();
         String keyValue = parserSpEL(redisClear.value(), point).toString();
-        String cacheKey = KeyConst.build(keyPrefix, keyValue);
+        boolean tenantFlag = redisClear.tenantFlag();
+        String cacheKey = KeyConst.build(keyPrefix, keyValue, tenantFlag);
         redisService.delete(cacheKey);
         Object result = point.proceed();
         redisService.delete(cacheKey);

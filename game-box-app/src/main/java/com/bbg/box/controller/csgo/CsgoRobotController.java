@@ -34,7 +34,7 @@ public class CsgoRobotController extends BaseController<CsgoRobot> {
 
     @GetMapping("list")
     @Operation(summary = "获得所有机器人", description = "获得所有机器人")
-    @RedisCache(key = KeyConst.ROBOT_LIST)
+    @RedisCache(key = KeyConst.ROBOT_LIST, tenantFlag = true)
     public ApiRet<List<CsgoRobot>> list() {
         log.info("获得所有机器人");
         return ApiRet.buildOk(csgoRobotService.list(QueryWrapper.create().eq(CsgoRobot::getEnable,true)));

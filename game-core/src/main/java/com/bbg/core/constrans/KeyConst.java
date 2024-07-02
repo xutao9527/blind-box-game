@@ -1,5 +1,7 @@
 package com.bbg.core.constrans;
 
+import com.bbg.core.utils.TenantUtil;
+
 public class KeyConst {
     // 租户缓存
     public final static String TENANT_ID = "tenant::id";
@@ -18,17 +20,17 @@ public class KeyConst {
     // user token
     public final static String USER_INFO_TOKEN = "user::info::token";
     // 不同用户类型的人数
-    public final static String USER_TYPE_COUNT = "user::type::count";
+    public final static String USER_TYPE_COUNT = "user::type::count";                           //需要租户标识 tenantFlag = true
     // 用户短信验证码
-    public final static String USER_SMS_CODE = "user::sms::code";
+    public final static String USER_SMS_CODE = "user::sms::code";                               //需要租户标识 tenantFlag = true
 
     // 业务平台配置
-    public final static String BIZ_CONFIG_NAME_ALIAS = "biz::config::nameAlias";
+    public final static String BIZ_CONFIG_NAME_ALIAS = "biz::config::nameAlias";                //需要租户标识 tenantFlag = true
     // 业务渠道列表
-    public final static String BIZ_CHANNEL_LIST = "biz::channel::list";
+    public final static String BIZ_CHANNEL_LIST = "biz::channel::list";                         //需要租户标识 tenantFlag = true
 
     // 游戏配置
-    public final static String GAME_CONFIG_NAME_ALIAS = "game::config::nameAlias";
+    public final static String GAME_CONFIG_NAME_ALIAS = "game::config::nameAlias";              //需要租户标识 tenantFlag = true
     // 字典标签缓存
     public final static String DICT_TAG = "dict::tag";
     // 箱子缓存
@@ -38,13 +40,13 @@ public class KeyConst {
     // 对战房间信息
     public final static String ROOM_INFO_ID = "battleRoom::info::roomId";
     // 对战房间信息列表
-    public final static String ROOM_LIST_INFO = "battleRoom::list";
+    public final static String ROOM_LIST_INFO = "battleRoom::list";                             //需要租户标识 tenantFlag = true
     // 对战房间信息列表-战斗模式
     public final static String ROOM_LIST_INFO_BATTLE_MODEL = "battleRoom::list::battleModel";
     // 撸房信息
     public final static String ROLL_INFO_ID = "roll::info::rollId";
     // 撸房信息列表
-    public final static String ROLL_LIST_INFO = "roll::info::list";
+    public final static String ROLL_LIST_INFO = "roll::info::list";                             //需要租户标识 tenantFlag = true
 
 
     // 方法锁  同步数据
@@ -59,6 +61,18 @@ public class KeyConst {
     public final static String METHOD_JOIN_ROOM_LOCK = "method::joinRoom::roomId";
     // 方法锁 加入撸房
     public final static String METHOD_JOIN_ROLL_LOCK = "method::joinRoll::rollId";
+
+    public static String build(String prefix, String key, boolean tenantFlag) {
+        if (tenantFlag) {
+            Long tenantId = TenantUtil.getTenantId();
+            if (key == null || key.isEmpty()) {
+                return "%s::%s".formatted(prefix, tenantId);
+            }
+            return "%s::%s::%s".formatted(prefix, tenantId, key);
+        } else {
+            return build(prefix, key);
+        }
+    }
 
     public static String build(String prefix, String key) {
         if (key == null || key.isEmpty()) {
