@@ -14,10 +14,10 @@
         </el-col>
         <el-col :span="6" style="display: flex;flex-direction: column ;justify-content:space-between">
           <el-row>
-            <el-button class="bbg-table-header-control" icon="Plus" @click="add">新增</el-button>
+            <el-button class="bbg-table-header-control" icon="Plus" v-has="'sysTenant_save'" @click="add">新增</el-button>
           </el-row>
           <el-row>
-            <el-button class="bbg-table-header-control" icon="Search" @click="tableProps.fetchData">查询</el-button>
+            <el-button class="bbg-table-header-control" icon="Search" v-has="'sysTenant_page'" @click="tableProps.fetchData">查询</el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -52,8 +52,8 @@
         <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column fixed="right" label="操作" width="120">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
-            <el-button link type="primary" size="small" @click="remove(scope.row)">删除</el-button>
+            <el-button link type="primary" size="small" v-has="'sysTenant_update'"  @click="edit(scope.row)">编辑</el-button>
+            <el-button link type="primary" size="small" v-has="'sysTenant_remove_id'"  @click="remove(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

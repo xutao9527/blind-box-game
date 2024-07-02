@@ -4,7 +4,7 @@
       <list @activeRightTabs="activeTabs" ref="listRef"/>
     </el-tab-pane>
     <el-tab-pane label="表 单" name="form">
-      <edit @activeRightTabs="activeTabs" ref="editRef"/>
+      <edit @activeRightTabs="activeTabs" ref="editRef" v-if="has(['sysTenant_save','sysTenant_update'])"/>
     </el-tab-pane>
   </el-tabs>
 </template>
