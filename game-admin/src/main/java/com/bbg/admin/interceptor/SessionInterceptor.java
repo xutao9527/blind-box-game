@@ -48,8 +48,12 @@ public class SessionInterceptor implements HandlerInterceptor {
                 noTenant(response);
                 return false;
             }
+            // 判断是否有权限
             SysMenu sysMenu = redisService.getAdminPermission(token, matchingUrl);
-            System.out.println(sysMenu);
+            if (sysMenu == null) {
+                noPermission(response);
+                return false;
+            }
         } else {
             noLogin(response);
             return false;
@@ -66,7 +70,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     // 请求完成后的拦截逻辑，可以用于资源清理等操作
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 
@@ -78,5 +81,10 @@ public class SessionInterceptor implements HandlerInterceptor {
     public void noTenant(HttpServletResponse response) throws IOException {
         response.setContentType("application/json; charset=utf-8");
         response.getWriter().print(JSON.toJSON(ApiRet.buildNo("不存在租户")));
+    }
+
+    public void noPermission(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json; charset=utf-8");
+        response.getWriter().print(JSON.toJSON(ApiRet.buildNo("没有接口权限")));
     }
 }

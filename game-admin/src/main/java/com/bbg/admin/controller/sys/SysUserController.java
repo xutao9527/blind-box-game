@@ -122,7 +122,7 @@ public class SysUserController extends BaseSysUserController {
         }
         // 判断是不是超级管理员
         if (sysUser != null && sysUser.getSuperAdmin()) {
-            sysMenus = sysMenuService.list();
+            sysMenus = sysMenuService.list(QueryWrapper.create(new SysMenu().setEnable(true)));
         } else if (sysUser != null) {
             SysUserRole sysUserRole = sysUserRoleService.getOne(QueryWrapper.create(new SysUserRole().setUserId(sysUser.getId())));
             if (sysUserRole != null) {
@@ -134,7 +134,7 @@ public class SysUserController extends BaseSysUserController {
         }
         // 不是顶级租户,则过滤顶级租户菜单与接口
         if (sysUser != null && sysMenus != null && !sysUser.isSuperTenant()) {
-            sysMenus = sysMenus.stream().filter(sysMenu -> !sysMenu.getTenantPermissions()).collect(Collectors.toList());
+            sysMenus = sysMenus.stream().filter(sysMenu -> !sysMenu.getTenantPermissions() && sysMenu.getEnable()).collect(Collectors.toList());
         }
         redisService.updateAdminPermission(token, sysMenus);
         return sysUser == null ? ApiRet.buildNo(null, "令牌失效") : ApiRet.buildOk(sysMenus);

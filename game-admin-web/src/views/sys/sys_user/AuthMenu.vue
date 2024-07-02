@@ -81,7 +81,7 @@ const close = () => {
 }
 
 onMounted(async () => {
-  let apiRet = await http.post('/sysMenu/list', {})
+  let apiRet = await http.post('/sysMenu/list', {enable: true})
   if (apiRet.ok && apiRet.data) {
     apiRet.data.forEach(item => {
       item.label = item.title
