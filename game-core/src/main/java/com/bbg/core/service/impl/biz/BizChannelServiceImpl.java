@@ -40,14 +40,14 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
     @Autowired
     private BizChannelService selfProxy;
 
-    @RedisCache(key = KeyConst.BIZ_CHANNEL_LIST)
+    @RedisCache(key = KeyConst.BIZ_CHANNEL_LIST, tenantFlag = true)
     public Map<String, BizChannel> getChannelAsMap() {
         List<BizChannel> bizChannels = super.list(QueryWrapper.create().eq(BizChannel::getEnable, true));
         return bizChannels.stream().collect(Collectors.toMap(BizChannel::getChannelDomain, Function.identity()));
     }
 
     @Override
-    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST)
+    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST, tenantFlag = true)
     public boolean save(BizChannel entity) {
         entity.setId(IdTool.nextId());
         entity.setChannelCode(Base58.encode(Convert.longToBytes(entity.getId())));
@@ -55,13 +55,13 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
     }
 
     @Override
-    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST)
+    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST, tenantFlag = true)
     public boolean removeById(Serializable id) {
         return super.removeById(id);
     }
 
     @Override
-    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST)
+    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST, tenantFlag = true)
     public boolean updateById(BizChannel entity) {
         entity.setChannelCode(null);
         return super.updateById(entity);

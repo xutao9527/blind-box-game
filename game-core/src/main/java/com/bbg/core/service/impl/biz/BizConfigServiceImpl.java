@@ -26,7 +26,7 @@ public class BizConfigServiceImpl extends ServiceImpl<BizConfigMapper, BizConfig
     public final RedisService redisService;
 
     @Override
-    @RedisCache(value = "#nameAlias", key = KeyConst.BIZ_CONFIG_NAME_ALIAS)
+    @RedisCache(value = "#nameAlias", key = KeyConst.BIZ_CONFIG_NAME_ALIAS, tenantFlag = true)
     public BizConfig getConfigByNameAlias(String nameAlias) {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .eq(BizConfig::getEnable, true)
@@ -38,18 +38,18 @@ public class BizConfigServiceImpl extends ServiceImpl<BizConfigMapper, BizConfig
     public boolean removeById(Serializable id) {
         BizConfig bizConfig = getMapper().selectOneById(id);
         if (bizConfig != null) {
-            redisService.delete(KeyConst.build(KeyConst.BIZ_CONFIG_NAME_ALIAS, bizConfig.getNameAlias()));
+            redisService.delete(KeyConst.build(KeyConst.BIZ_CONFIG_NAME_ALIAS, bizConfig.getNameAlias(),true));
             return getMapper().deleteById(id) > 0;
         }
         return false;
     }
 
     @Override
-    @RedisClear(value = "#entity.nameAlias", key = KeyConst.BIZ_CONFIG_NAME_ALIAS)
+    @RedisClear(value = "#entity.nameAlias", key = KeyConst.BIZ_CONFIG_NAME_ALIAS, tenantFlag = true)
     public boolean updateById(BizConfig entity) {
         BizConfig bizConfig = getMapper().selectOneById(entity.getId());
         if (bizConfig != null) {
-            redisService.delete(KeyConst.build(KeyConst.BIZ_CONFIG_NAME_ALIAS, bizConfig.getNameAlias()));
+            redisService.delete(KeyConst.build(KeyConst.BIZ_CONFIG_NAME_ALIAS, bizConfig.getNameAlias(), true));
             return this.updateById(entity, true);
         }
         return false;

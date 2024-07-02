@@ -76,7 +76,7 @@ public class BizUserController extends BaseBizUserController {
     @Operation(summary = "后台查看验证码", description = "后台查看验证码")
     @GetMapping("viewCode/{mobile}")
     public ApiRet<String> viewSmsCode(@PathVariable(name = "mobile") @Parameter(description = "手机号") @NotNull String mobile) {
-        String code = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE, mobile));
+        String code = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE, mobile,true));
         if (code != null) {
             return ApiRet.buildOk(code);
         }

@@ -20,7 +20,7 @@ public class SmsService {
      */
     public boolean sendSmsCode(String phone, String code) {
         log.info("send sms code to {} with code: {}", phone, code);
-        redisService.set(KeyConst.build(KeyConst.USER_SMS_CODE, phone), code, 10L, TimeUnit.MINUTES);
+        redisService.set(KeyConst.build(KeyConst.USER_SMS_CODE, phone,true), code, 10L, TimeUnit.MINUTES);
         return true;
     }
 
@@ -29,7 +29,7 @@ public class SmsService {
      */
     public boolean verifySmsCode(String phone, String code) {
         log.info("verify sms code {} for phone: {}", code, phone);
-        String smsCode = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE, phone));
+        String smsCode = (String) redisService.get(KeyConst.build(KeyConst.USER_SMS_CODE, phone,true));
         return smsCode != null && smsCode.equals(code);
     }
 }

@@ -389,7 +389,6 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
      * 获得对战房间信息
      * 缓存信息默认存储500毫秒,避免高并发,缓解数据库压力
      */
-    // @RedisCache(value = "#getRoomListReq.battleModel", key = KeyConst.ROOM_LIST_INFO_BATTLE_MODEL, liveTime = 500, timeUnit = TimeUnit.MILLISECONDS)
     @RedisCache(value = "#getRoomListReq.battleModel", key = KeyConst.ROOM_LIST_INFO, liveTime = 400, timeUnit = TimeUnit.MILLISECONDS, tenantFlag = true)
     public Page<CsgoBattleRoom> getRoomList(BattleRoomDto.GetRoomListReq getRoomListReq) {
         BizDict battleStatusDict = bizDictService.getDictByTag("csgo_battle_status");

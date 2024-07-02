@@ -36,13 +36,11 @@ public class KeyConst {
     // 箱子缓存
     public final static String BOX_ID = "box::id";
     // 所有机器人
-    public final static String ROBOT_LIST = "robot::list";
+    public final static String ROBOT_LIST = "robot::list";                                      //需要租户标识 tenantFlag = true
     // 对战房间信息
     public final static String ROOM_INFO_ID = "battleRoom::info::roomId";
-    // 对战房间信息列表
+    // 对战房间信息列表 ,对战模式:0=所有,1=欧皇,2=非酋
     public final static String ROOM_LIST_INFO = "battleRoom::list";                             //需要租户标识 tenantFlag = true
-    // 对战房间信息列表-战斗模式
-    public final static String ROOM_LIST_INFO_BATTLE_MODEL = "battleRoom::list::battleModel";
     // 撸房信息
     public final static String ROLL_INFO_ID = "roll::info::rollId";
     // 撸房信息列表

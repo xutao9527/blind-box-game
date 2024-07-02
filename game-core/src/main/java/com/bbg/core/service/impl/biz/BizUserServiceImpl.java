@@ -119,7 +119,7 @@ public class BizUserServiceImpl extends ServiceImpl<BizUserMapper, BizUser> impl
     /**
      * 不同用户类型的人数
      */
-    @RedisCache(value = "#userType", key = KeyConst.USER_TYPE_COUNT, liveTime = 5 * 60, timeUnit = TimeUnit.SECONDS)
+    @RedisCache(value = "#userType", key = KeyConst.USER_TYPE_COUNT, liveTime = 5 * 60, timeUnit = TimeUnit.SECONDS, tenantFlag = true)
     public long getUserTypeCount(String userType) {
         QueryWrapper queryWrapper = QueryWrapper.create(new BizUser().setType(userType));
         return getMapper().selectCountByQuery(queryWrapper);

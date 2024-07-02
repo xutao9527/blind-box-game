@@ -77,6 +77,5 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     @RedisCache(value = "#tenantCode", key = KeyConst.TENANT_CODE)
     public Long getTenantId(String tenantCode) {
         return getOneAs(QueryWrapper.create(new SysTenant().setEnable(true).setTenantCode(tenantCode)).select(QueryMethods.column(SysTenant::getId)),Long.class);
-        //return super.list(QueryWrapper.create(new SysTenant().setEnable(true)).select(SysTenant::getId, SysTenant::getTenantCode));
     }
 }
