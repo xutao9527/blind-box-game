@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "装备仓库接口")
 @RequestMapping("/csgoStorehouse")
-public class BaseCsgoStorehouseController extends BaseController<CsgoStorehouse, CsgoStorehouseService> {
+public class BaseCsgoStorehouseController extends BaseController {
     @Autowired
     protected  CsgoStorehouseService csgoStorehouseService;
 

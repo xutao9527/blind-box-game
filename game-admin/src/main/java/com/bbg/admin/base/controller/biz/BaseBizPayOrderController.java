@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "支付订单接口")
 @RequestMapping("/bizPayOrder")
-public class BaseBizPayOrderController extends BaseController<BizPayOrder, BizPayOrderService> {
+public class BaseBizPayOrderController extends BaseController {
     @Autowired
     protected BizPayOrderService bizPayOrderService;
 

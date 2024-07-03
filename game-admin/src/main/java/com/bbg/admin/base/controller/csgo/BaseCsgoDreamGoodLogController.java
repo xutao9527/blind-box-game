@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "CSGO追梦日志接口")
 @RequestMapping("/csgoDreamGoodLog")
-public class BaseCsgoDreamGoodLogController extends BaseController<CsgoDreamGoodLog, CsgoDreamGoodLogService> {
+public class BaseCsgoDreamGoodLogController extends BaseController {
     @Autowired
     protected CsgoDreamGoodLogService csgoDreamGoodLogService;
 

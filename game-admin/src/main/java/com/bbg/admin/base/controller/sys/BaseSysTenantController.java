@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "系统租户接口")
 @RequestMapping("/sysTenant")
-public class BaseSysTenantController extends BaseController<SysTenant, SysTenantService> {
+public class BaseSysTenantController extends BaseController {
     @Autowired
     protected SysTenantService sysTenantService;
 

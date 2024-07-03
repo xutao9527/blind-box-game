@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "游戏配置接口")
 @RequestMapping("/csgoConfig")
-public class BaseCsgoConfigController extends BaseController<CsgoConfig, CsgoConfigService> {
+public class BaseCsgoConfigController extends BaseController {
     @Autowired
     protected  CsgoConfigService csgoConfigService;
 

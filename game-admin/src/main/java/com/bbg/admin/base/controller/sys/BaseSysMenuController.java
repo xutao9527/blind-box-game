@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "系统菜单接口")
 @RequestMapping("/sysMenu")
-public class BaseSysMenuController extends BaseController<SysMenu, SysMenuService> {
+public class BaseSysMenuController extends BaseController {
     @Autowired
     protected SysMenuService sysMenuService;
 

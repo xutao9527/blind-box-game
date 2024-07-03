@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "业务数据接口")
 @RequestMapping("/bizData")
-public class BaseBizDataController extends BaseController<BizData, BizDataService> {
+public class BaseBizDataController extends BaseController {
     @Autowired
     protected BizDataService bizDataService;
 

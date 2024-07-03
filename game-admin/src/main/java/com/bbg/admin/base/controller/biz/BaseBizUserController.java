@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "业务用户接口")
 @RequestMapping("/bizUser")
-public class BaseBizUserController extends BaseController<BizUser, BizUserService> {
+public class BaseBizUserController extends BaseController {
     @Autowired
     protected  BizUserService bizUserService;
 

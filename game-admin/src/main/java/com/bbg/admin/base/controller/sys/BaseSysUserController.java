@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "系统用户接口")
 @RequestMapping("/sysUser")
-public class BaseSysUserController extends BaseController<SysUser, SysUserService> {
+public class BaseSysUserController extends BaseController {
     @Autowired
     protected  SysUserService sysUserService;
 

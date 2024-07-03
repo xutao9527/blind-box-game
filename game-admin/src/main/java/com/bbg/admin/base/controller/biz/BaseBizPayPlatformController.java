@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "支付平台管理接口")
 @RequestMapping("/bizPayPlatform")
-public class BaseBizPayPlatformController extends BaseController<BizPayPlatform, BizPayPlatformService> {
+public class BaseBizPayPlatformController extends BaseController {
     @Autowired
     protected BizPayPlatformService bizPayPlatformService;
 

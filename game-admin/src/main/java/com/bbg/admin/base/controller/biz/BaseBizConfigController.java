@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "平台配置接口")
 @RequestMapping("/bizConfig")
-public class BaseBizConfigController extends BaseController<BizConfig, BizConfigService> {
+public class BaseBizConfigController extends BaseController {
     @Autowired
     protected BizConfigService bizConfigService;
 

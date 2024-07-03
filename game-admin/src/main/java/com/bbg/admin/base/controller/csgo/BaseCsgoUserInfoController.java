@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "CSGO用户信息接口")
 @RequestMapping("/csgoUserInfo")
-public class BaseCsgoUserInfoController extends BaseController<CsgoUserInfo, CsgoUserInfoService> {
+public class BaseCsgoUserInfoController extends BaseController {
     @Autowired
     protected  CsgoUserInfoService csgoUserInfoService;
 

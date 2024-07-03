@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "CSGO开箱日志接口")
 @RequestMapping("/csgoOpenBoxLog")
-public class BaseCsgoOpenBoxLogController extends BaseController<CsgoOpenBoxLog, CsgoOpenBoxLogService> {
+public class BaseCsgoOpenBoxLogController extends BaseController {
     @Autowired
     protected CsgoOpenBoxLogService csgoOpenBoxLogService;
 

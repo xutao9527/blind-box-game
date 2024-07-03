@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "CSGO箱子接口")
 @RequestMapping("/csgoBox")
-public class BaseCsgoBoxController extends BaseController<CsgoBox, CsgoBoxService> {
+public class BaseCsgoBoxController extends BaseController {
     @Autowired
     protected  CsgoBoxService csgoBoxService;
 

@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "系统角色接口")
 @RequestMapping("/sysRole")
-public class BaseSysRoleController extends BaseController<SysRole, SysRoleService> {
+public class BaseSysRoleController extends BaseController {
     @Autowired
     protected  SysRoleService sysRoleService;
 

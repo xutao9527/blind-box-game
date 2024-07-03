@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "渠道管理接口")
 @RequestMapping("/bizChannel")
-public class BaseBizChannelController extends BaseController<BizChannel, BizChannelService> {
+public class BaseBizChannelController extends BaseController {
     @Autowired
     protected BizChannelService bizChannelService;
 

@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @Tag(name = "Roll房间用户接口")
 @RequestMapping("/csgoRollUser")
-public class BaseCsgoRollUserController extends BaseController<CsgoRollUser, CsgoRollUserService> {
+public class BaseCsgoRollUserController extends BaseController {
     @Autowired
     protected  CsgoRollUserService csgoRollUserService;
 
