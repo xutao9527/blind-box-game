@@ -19,10 +19,12 @@
         <dependency>
             <groupId>com.mybatis-flex</groupId>
             <artifactId>mybatis-flex-spring-boot3-starter</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -35,6 +37,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>

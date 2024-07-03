@@ -30,4 +30,9 @@ public class SysTenantController extends BaseSysTenantController {
         return super.page(reqParams);
     }
 
+    @GetMapping("all")
+    @Operation(summary = "查询所有", description = "查询所有")
+    public List<SysTenant> all() {
+        return sysTenantService.list();
+    }
 }

@@ -1,9 +1,11 @@
 package com.bbg.admin.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.bbg.core.constrans.ServicesConst;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.core.service.sys.SysTenantService;
+import com.bbg.core.utils.DiscoveryUtil;
 import com.bbg.model.sys.SysMenu;
 import com.bbg.model.sys.SysTenant;
 import com.bbg.model.sys.SysUser;
@@ -28,6 +30,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     public final RedisService redisService;
     public final SysTenantService sysTenantService;
+
 
     @Override
     // 在请求处理之前进行拦截逻辑，返回 true 表示继续执行，返回 false 表示终止执行
@@ -55,11 +58,15 @@ public class SessionInterceptor implements HandlerInterceptor {
                 noPermission(response);
                 return false;
             }
-        } else {
-            noLogin(response);
-            return false;
         }
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+        if(DiscoveryUtil.isServiceCall(ServicesConst.GATEWAY_SERVER.getServiceName())){
+            System.out.println("网关调用");
+            return true;
+        }
+        noLogin(response);
+        return false;
+
+
     }
 
     @Override

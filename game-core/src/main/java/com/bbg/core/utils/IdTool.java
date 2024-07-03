@@ -6,7 +6,6 @@ import com.bbg.core.constrans.ServicesConst;
 
 
 public class IdTool {
-    // private final static Snowflake snowflake = IdUtil.getSnowflake(ServicesConst.ADMIN_SERVER.ordinal());
     private final static Snowflake snowflake = IdUtil.getSnowflake();
 
     public static long nextId(){
