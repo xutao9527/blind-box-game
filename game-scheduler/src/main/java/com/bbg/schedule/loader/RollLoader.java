@@ -73,8 +73,10 @@ public class RollLoader {
                             }
                         }
                     } else {                                                                                                    // 停用状态
-                        scheduleService.delete(JobKey.jobKey(ROLL_ONLINE + "-[" + sysTenant.getTenantName() + "]-" + roll.getId().toString(), ROll_GROUP));         // 删除任务
-                        scheduleService.delete(JobKey.jobKey(ROLL_OFFLINE + "-[" + sysTenant.getTenantName() + "]-" + roll.getId().toString(), ROll_GROUP));        // 删除任务
+                                                                                                                                // 删除任务
+                        scheduleService.delete(JobKey.jobKey(ROLL_ONLINE + "-[" + sysTenant.getTenantName() + "]-" + roll.getId().toString(), ROll_GROUP));
+                                                                                                                                // 删除任务
+                        scheduleService.delete(JobKey.jobKey(ROLL_OFFLINE + "-[" + sysTenant.getTenantName() + "]-" + roll.getId().toString(), ROll_GROUP));
                     }
                 }
             } finally {
@@ -86,7 +88,7 @@ public class RollLoader {
     /**
      * 上架任务
      */
-    public void OnlineJob(CsgoRoll roll,SysTenant sysTenant) {
+    public void OnlineJob(CsgoRoll roll, SysTenant sysTenant) {
         var currentTime = LocalDateTime.now();
         if (currentTime.isBefore(roll.getStartTime())) {                                                                // 当前时间 < 开始时间
             Trigger trigger = TriggerBuilder.newTrigger()
@@ -108,7 +110,7 @@ public class RollLoader {
     /**
      * 下架任务
      */
-    public void OfflineJob(CsgoRoll roll,SysTenant sysTenant) {
+    public void OfflineJob(CsgoRoll roll, SysTenant sysTenant) {
         var currentTime = LocalDateTime.now();
         if (currentTime.isBefore(roll.getEndTime())) {                                                                  // 当前时间 < 结束时间
             Trigger trigger = TriggerBuilder.newTrigger()
