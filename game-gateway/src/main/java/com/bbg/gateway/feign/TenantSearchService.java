@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@FeignClient(name = "admin-server",path = "/sysTenant")
+@FeignClient(name = "admin-server")
 public interface TenantSearchService {
-    @GetMapping("all")
+    @GetMapping("/sysTenant/all")
     List<SysTenant> all();
 }

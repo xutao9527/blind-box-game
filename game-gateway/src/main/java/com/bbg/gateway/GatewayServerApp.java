@@ -8,9 +8,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
-@EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
+// @EnableFeignClients(basePackages = {"com.bbg.gateway.feign"})
 public class GatewayServerApp {
 
     public static void main(String[] args) {
