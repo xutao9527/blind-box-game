@@ -31,6 +31,7 @@
             ]"
             :filter-method="(value, row, column) => row.jobGroup === value"
         />
+        <el-table-column prop="tenantName" label="所属租户"/>
         <el-table-column prop="jobClassName" label="任务类详情"/>
         <el-table-column prop="triggerType" label="触发器"/>
         <el-table-column prop="triggerType" label="执行频率">

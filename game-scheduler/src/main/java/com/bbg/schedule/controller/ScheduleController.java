@@ -25,7 +25,9 @@ public class ScheduleController extends BaseController {
     @GetMapping("list")
     @Operation(summary = "所有任务", description = "所有任务")
     public ApiRet<List<QuartzJobInfo>> list() throws Exception {
-        return ApiRet.buildOk(scheduleService.getAll());
+        List<QuartzJobInfo> all = scheduleService.getAll();
+        all = all.stream().sorted(Comparator.comparing(QuartzJobInfo::getJobName)).toList();
+        return ApiRet.buildOk(all);
     }
 
 
