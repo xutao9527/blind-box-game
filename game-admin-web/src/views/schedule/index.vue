@@ -31,7 +31,7 @@
             ]"
             :filter-method="(value, row, column) => row.jobGroup === value"
         />
-        <el-table-column prop="tenantName" label="所属租户"/>
+        <TenantIdColumn/>
         <el-table-column prop="jobClassName" label="任务类详情"/>
         <el-table-column prop="triggerType" label="触发器"/>
         <el-table-column prop="triggerType" label="执行频率">
@@ -59,6 +59,7 @@
 import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
+import TenantIdColumn from "@/components/tenant/TenantIdColumn.vue";
 
 const header = ref(null);
 const tableDynamicHeight = ref(0)

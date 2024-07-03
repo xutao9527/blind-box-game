@@ -104,7 +104,7 @@ onMounted(async () => {
 const tableProps = reactive({
   reqParams: dreamMock.dreamListReq,
   apiRet: {
-    data: {},
+    data: [],
     totalRow: 0,
   },
   pageChange: (currentPage, pageSize) => {

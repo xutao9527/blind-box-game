@@ -142,7 +142,7 @@ const tableProps = reactive({
     }
   },
   apiRet: {
-    data: {},
+    data: [],
     totalRow: 0,
   },
   pageChange: (currentPage, pageSize) => {
