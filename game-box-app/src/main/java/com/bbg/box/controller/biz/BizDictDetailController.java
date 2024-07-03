@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "系统字典详情接口")
 @RequestMapping("/bizDictDetail")
 @RequiredArgsConstructor
-public class BizDictDetailController extends BaseController<BizDictDetail> {
+public class BizDictDetailController extends BaseController {
 
     public final BizDictDetailService bizDictDetailService;
 }

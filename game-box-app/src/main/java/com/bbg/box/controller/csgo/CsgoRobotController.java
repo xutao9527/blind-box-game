@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping("/csgoRobot")
 @RequiredArgsConstructor
 @Slf4j
-public class CsgoRobotController extends BaseController<CsgoRobot> {
+public class CsgoRobotController extends BaseController {
 
     public final CsgoRobotService csgoRobotService;
 

@@ -34,7 +34,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @RestController
 @RequestMapping("/csgoBox")
 @RequiredArgsConstructor
-public class CsgoBoxController extends BaseController<CsgoBox> {
+public class CsgoBoxController extends BaseController {
 
     public final CsgoBoxService csgoBoxService;
 

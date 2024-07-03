@@ -41,7 +41,7 @@ import java.util.List;
 @RequestMapping("/bizUser")
 @RequiredArgsConstructor
 @Validated
-public class BizUserController extends BaseController<BizUser> {
+public class BizUserController extends BaseController {
     public final BizUserService bizUserService;
     public final SmsService smsService;
     public final BizDictService bizDictService;

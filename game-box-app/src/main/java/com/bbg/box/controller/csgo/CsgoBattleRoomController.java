@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @Tag(name = "CS:GO对战接口")
 @RequestMapping("/csgoBattleRoom")
 @RequiredArgsConstructor
-public class CsgoBattleRoomController extends BaseController<CsgoBattleRoom> {
+public class CsgoBattleRoomController extends BaseController {
 
     public final CsgoBattleRoomService csgoBattleRoomService;
     public final BizUserService bizUserService;

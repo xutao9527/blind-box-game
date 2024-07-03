@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 
-public class BaseController<T> {
+public class BaseController {
     @Autowired
     protected HttpServletRequest request;
 

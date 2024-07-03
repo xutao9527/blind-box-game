@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "对战房间用户接口")
 @RequestMapping("/csgoBattleRoomUser")
 @RequiredArgsConstructor
-public class CsgoBattleRoomUserController extends BaseController<CsgoBattleRoomUser> {
+public class CsgoBattleRoomUserController extends BaseController {
 
     public final CsgoBattleRoomUserService csgoBattleRoomUserService;
 

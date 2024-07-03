@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @Tag(name = "CS:GO撸房接口")
 @RequestMapping("/csgoRoll")
 @RequiredArgsConstructor
-public class CsgoRollController extends BaseController<CsgoRoll> {
+public class CsgoRollController extends BaseController {
 
     public final CsgoRollService csgoRollService;
     public final CsgoRollUserService csgoRollUserService;

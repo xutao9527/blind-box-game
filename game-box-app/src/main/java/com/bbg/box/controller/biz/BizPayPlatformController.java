@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 @Tag(name = "支付接口")
 @RequestMapping("/bizPayPlatform")
 @RequiredArgsConstructor
-public class BizPayPlatformController extends BaseController<BizPayPlatform> {
+public class BizPayPlatformController extends BaseController {
     public final PayService payService;
     public final BizPayPlatformService bizPayPlatformService;
 
