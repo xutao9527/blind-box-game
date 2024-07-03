@@ -42,37 +42,33 @@ public class BoxLoader {
     }
 
     public void reLoadJob() {
-        List<SysTenant> sysTenants = sysTenantService.list();
+        List<SysTenant> sysTenants = sysTenantService.list().stream()
+                .filter(sysTenant -> sysTenant.getEnable() && sysTenant.getParentId() != null).toList();
         for (SysTenant sysTenant : sysTenants) {
-
             try {
                 TenantUtil.setTenantId(sysTenant.getId());
                 CsgoConfig csgoConfig = csgoConfigService.getConfigByNameAlias("open_box_interval");
-                System.out.println("csgoConfig: " + csgoConfig);
+                if(csgoConfig!=null){
+                    long openBoxInterval = Long.parseLong(csgoConfig.getValue());
+                    Trigger trigger = TriggerBuilder.newTrigger()
+                            .withIdentity(BOX_OEPN + "-[" + sysTenant.getTenantName() + "]", BOX_GROUP)
+                            .withSchedule(SimpleScheduleBuilder
+                                    .simpleSchedule()
+                                    .withIntervalInMilliseconds(openBoxInterval)
+                                    .repeatForever())
+                            .build();
+                    JobDetail jobDetail = JobBuilder.newJob(BoxJob.OpenBox.class)
+                            .withIdentity(BOX_OEPN + "-[" + sysTenant.getTenantName() + "]", BOX_GROUP)
+                            .usingJobData("tenantId", sysTenant.getId())
+                            .build();
+                    scheduleService.save(jobDetail, trigger);
+                }else{
+                    scheduleService.delete(JobKey.jobKey(BOX_OEPN, BOX_GROUP));
+                }
             }  finally {
                 TenantUtil.clear();
             }
-
         }
-
-
-        // CsgoConfig csgoConfig = csgoConfigService.getConfigByNameAlias("open_box_interval");
-        // if(csgoConfig!=null){
-        //     long openBoxInterval = Long.parseLong(csgoConfig.getValue());
-        //     Trigger trigger = TriggerBuilder.newTrigger()
-        //             .withIdentity(BOX_OEPN, BOX_GROUP)
-        //             .withSchedule(SimpleScheduleBuilder
-        //                     .simpleSchedule()
-        //                     .withIntervalInMilliseconds(openBoxInterval)
-        //                     .repeatForever())
-        //             .build();
-        //     JobDetail jobDetail = JobBuilder.newJob(BoxJob.OpenBox.class)
-        //             .withIdentity(BOX_OEPN, BOX_GROUP)
-        //             .build();
-        //     scheduleService.save(jobDetail, trigger);
-        // }else{
-        //     scheduleService.delete(JobKey.jobKey(BOX_OEPN, BOX_GROUP));
-        // }
     }
 
 }

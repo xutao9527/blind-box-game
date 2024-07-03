@@ -26,7 +26,13 @@ public class QuartzJobInfo {
     String cronExpression;
 
     // 执行频率[SimpleTrigger]
-    long repeatInterval;
+    Long repeatInterval;
+
+    // 租户ID
+    Long tenantId;
+
+    // 租户名称
+    String tenantName;
 
     // 任务描述
     String description;

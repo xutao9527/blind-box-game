@@ -2,6 +2,7 @@ package com.bbg.schedule.job;
 
 import com.bbg.core.service.csgo.CsgoRollService;
 import com.bbg.core.utils.SpringUtil;
+import com.bbg.core.utils.TenantUtil;
 import com.bbg.model.csgo.CsgoRoll;
 import com.bbg.schedule.loader.RollLoader;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +26,16 @@ public class RollJob  {
         @Override
         public void execute(JobExecutionContext jobExecutionContext)  {
             JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
-            CsgoRoll csgoRoll = new CsgoRoll();
-            csgoRoll.setId(jobDataMap.getLongValue("rollId"));
-            CsgoRollService csgoRollService = SpringUtil.getBean(CsgoRollService.class);
-            csgoRollService.onlineRoll(csgoRoll);
+            long tenantId = jobDataMap.getLongValue("tenantId");
+            try {
+                TenantUtil.setTenantId(tenantId);
+                CsgoRoll csgoRoll = new CsgoRoll();
+                csgoRoll.setId(jobDataMap.getLongValue("rollId"));
+                CsgoRollService csgoRollService = SpringUtil.getBean(CsgoRollService.class);
+                csgoRollService.onlineRoll(csgoRoll);
+            } finally {
+                TenantUtil.clear();
+            }
         }
     }
 
@@ -36,10 +43,16 @@ public class RollJob  {
         @Override
         public void execute(JobExecutionContext jobExecutionContext)  {
             JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
-            CsgoRoll csgoRoll = new CsgoRoll();
-            csgoRoll.setId(jobDataMap.getLongValue("rollId"));
-            CsgoRollService csgoRollService = SpringUtil.getBean(CsgoRollService.class);
-            csgoRollService.offlineRoll(csgoRoll);
+            long tenantId = jobDataMap.getLongValue("tenantId");
+            try {
+                TenantUtil.setTenantId(tenantId);
+                CsgoRoll csgoRoll = new CsgoRoll();
+                csgoRoll.setId(jobDataMap.getLongValue("rollId"));
+                CsgoRollService csgoRollService = SpringUtil.getBean(CsgoRollService.class);
+                csgoRollService.offlineRoll(csgoRoll);
+            } finally {
+                TenantUtil.clear();
+            }
         }
     }
 }

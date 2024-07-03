@@ -1,6 +1,8 @@
 package com.bbg.schedule.service.impl;
 
 import com.bbg.core.entity.QuartzJobInfo;
+import com.bbg.core.service.sys.SysTenantService;
+import com.bbg.model.sys.SysTenant;
 import com.bbg.schedule.service.ScheduleService;
 import com.esotericsoftware.minlog.Log;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,19 +24,30 @@ import java.util.Set;
 public class ScheduleServiceImpl implements ScheduleService {
 
     public final Scheduler scheduler;
+    public final SysTenantService sysTenantService;
 
     public List<QuartzJobInfo> getAll() throws SchedulerException {
+
+        Map<Long,SysTenant> sysTenantMap = sysTenantService.list().stream().collect(Collectors.toMap(SysTenant::getId, sysTenant -> sysTenant));
+
         List<QuartzJobInfo> jobInfoList = new ArrayList<>();
         GroupMatcher<TriggerKey> matcher = GroupMatcher.anyTriggerGroup();
         Set<TriggerKey> triggerKeys = scheduler.getTriggerKeys(matcher);
         for (TriggerKey triggerKey : triggerKeys) {
             Trigger trigger = scheduler.getTrigger(triggerKey);
             JobDetailImpl jobDetail = (JobDetailImpl) scheduler.getJobDetail(JobKey.jobKey(trigger.getJobKey().getName(), trigger.getJobKey().getGroup()));
+            Object tenantId = jobDetail.getJobDataMap().get("tenantId");
+            tenantId = tenantId == null ? null : Long.parseLong(tenantId.toString());
+            SysTenant sysTenant = sysTenantMap.get(tenantId);
             QuartzJobInfo jobInfo = new QuartzJobInfo()
                     .setJobName(triggerKey.getName())
                     .setJobGroup(triggerKey.getGroup())
                     .setDescription(jobDetail.getDescription())
-                    .setJobClassName(jobDetail.getJobClass().getName());
+                    .setJobClassName(jobDetail.getJobClass().getName())
+                    .setTenantId(sysTenant == null ? null : sysTenant.getId())
+                    .setTenantName(sysTenant == null ? null : sysTenant.getTenantName());
+
+
             if (trigger instanceof CronTrigger cronTrigger) {
                 jobInfo.setNextExecuteTime(cronTrigger.getNextFireTime());
                 jobInfo.setStartTime(cronTrigger.getStartTime());
