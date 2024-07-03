@@ -40,7 +40,6 @@ public class TenantFilter implements Filter {
                 httpServletResponse.getWriter().write(JSON.toJSONString(ApiRet.buildNo("Invalid t_code")));
             }
         }
-
     }
 
     @Override
