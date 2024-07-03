@@ -24,14 +24,27 @@
         <el-table-column
             prop="jobGroup"
             label="任务分组"
-            :filters="[
-                { text: 'BATTLE', value: 'BATTLE' },
-                { text: 'ROLL', value: 'ROLL' },
-                { text: 'BOX', value: 'BOX' }
-            ]"
+            :filters="jobGroupFilter"
             :filter-method="(value, row, column) => row.jobGroup === value"
         />
-        <TenantIdColumn/>
+        <template v-if="isSuperTenant">
+          <el-table-column
+              prop="tenantId"
+              label="所属租户"
+              width="100"
+              :filters="tenantNameFilter"
+              :filter-method="(value, row, column) => row.tenantName === value || !row.tenantName"
+          >
+            <template #default="scope">
+              <el-tooltip>
+                <template #content>
+                  {{ scope.row.tenantId }}
+                </template>
+                {{ scope.row.tenantName }}
+              </el-tooltip>
+            </template>
+          </el-table-column>
+        </template>
         <el-table-column prop="jobClassName" label="任务类详情"/>
         <el-table-column prop="triggerType" label="触发器"/>
         <el-table-column prop="triggerType" label="执行频率">
@@ -60,6 +73,7 @@ import {useEventListener, useResizeObserver, useWindowSize} from "@vueuse/core";
 import {http} from "@/core/axios";
 import emitter from "@/core/mitt/";
 import TenantIdColumn from "@/components/tenant/TenantIdColumn.vue";
+import {useUserStore} from "@/store/userStore.js";
 
 const header = ref(null);
 const tableDynamicHeight = ref(0)
@@ -79,8 +93,14 @@ scope.run(() => {
   })
 })
 
-onMounted(() => {
-  tableProps.fetchData()
+const jobGroupFilter = ref([])
+const tenantNameFilter = ref([])
+const store = useUserStore()
+const isSuperTenant = ref(false)
+
+onMounted( async () => {
+  isSuperTenant.value = (await store.getUser).superTenant
+  await tableProps.fetchData()
 })
 
 const tableProps = reactive({
@@ -91,6 +111,28 @@ const tableProps = reactive({
   fetchData: async () => {
     const apiRet = await http.get('/schedule/list')
     if (apiRet.ok) {
+      jobGroupFilter.value = apiRet.data.map(obj => {
+        return {
+          text: obj.jobGroup,
+          value: obj.jobGroup
+        }
+      }).reduce((acc, cur) => {
+        if (acc.findIndex(obj => obj.value === cur.value) === -1) {
+          acc.push(cur)
+        }
+        return acc
+      }, [])
+      tenantNameFilter.value = apiRet.data.filter(obj=> obj.tenantName).map(obj => {
+        return {
+          text: obj.tenantName,
+          value: obj.tenantName
+        }
+      }).reduce((acc, cur) => {
+        if (acc.findIndex(obj => obj.value === cur.value) === -1) {
+          acc.push(cur)
+        }
+        return acc
+      }, [])
       tableProps.apiRet = apiRet
     }
   },
