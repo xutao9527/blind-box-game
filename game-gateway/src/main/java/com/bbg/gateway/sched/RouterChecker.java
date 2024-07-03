@@ -19,9 +19,12 @@ public class RouterChecker {
         System.out.println("webBuilder = " + webBuilder);
 
         Mono<Object> objectMono = webBuilder
-                .baseUrl("http://admin-server/").build().get()
-                .uri("/tenant/all")
-                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(Object.class));
+                .baseUrl("admin-server").build().get()
+                .uri("/sysTenant/all")
+                .exchangeToMono(clientResponse -> {
+                    System.out.println("clientResponse = " + clientResponse);
+                    return clientResponse.bodyToMono(Object.class);
+                });
         Object block = objectMono.subscribe();
         System.out.println(block);
         // List<SysTenant> sysTenantList = tenantSearchService.all();
