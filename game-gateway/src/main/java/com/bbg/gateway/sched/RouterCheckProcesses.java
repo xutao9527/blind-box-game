@@ -24,7 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RouterCheckProcesses {
 
-    private static final Logger log = LoggerFactory.getLogger(RouterCheckProcesses.class);
     private final RouteDefinitionLocator routeDefinitionLocator;
     private final RouteDefinitionWriter routeDefinitionWriter;
     private final WebClient.Builder webClientBuilder;
@@ -73,8 +72,10 @@ public class RouterCheckProcesses {
                                 routeDefinition.setPredicates(Collections.singletonList(
                                         new PredicateDefinition("Path=/" + tenant.getTenantCode() + "/**")
                                 ));
+
+                                FilterDefinition filterDefinition = new FilterDefinition("StripPrefixHeader=1");
                                 routeDefinition.setFilters(Collections.singletonList(
-                                        new FilterDefinition("StripPrefix=1")
+                                        filterDefinition
                                 ));
                                 return routeDefinitionWriter.save(Mono.just(routeDefinition));
                             }
