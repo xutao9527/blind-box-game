@@ -110,10 +110,12 @@ const handleMessageEvent  = (event) => {
 };
 
 onMounted(() => {
+  // console.log('script debug mounted')
   webSocket.socket.addEventListener('message', handleMessageEvent);
 });
 
 onUnmounted(() => {
+  // console.log('script debug onUnmounted')
   webSocket.socket.removeEventListener('message', handleMessageEvent);
 });
 
