@@ -5,37 +5,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @Component
 // @RequiredArgsConstructor
-public class RouterChecker {
+public class RouterCheckProcesses {
 
     //private final RouteDefinitionLocator routeDefinitionLocator;
     private final WebClient.Builder webClientBuilder;
 
     @Autowired
-    public RouterChecker(WebClient.Builder webClientBuilder) {
+    public RouterCheckProcesses(WebClient.Builder webClientBuilder) {
         this.webClientBuilder = webClientBuilder;
     }
 
-    @Scheduled(fixedRate = 5000) // 每隔 1 秒检查一次配置
-    public void fetchAndProcessData() {
+    @Scheduled(initialDelay = 2000, fixedRate = 5000) // 每隔 1 秒检查一次配置
+    public void fetchTenantData() {
         String url = "http://admin-server/sysTenant/all";
         WebClient webClient = webClientBuilder.build();
         webClient
                 .get()
                 .uri(url)
                 .retrieve()
-                .bodyToFlux(String.class).collectList()
+                .bodyToFlux(SysTenant.class).collectList()
                 .doOnSuccess(this::processData)
                 .subscribe();
     }
 
-    private  void processData(List<String> sysTenants) {
-        sysTenants.forEach(System.out::println);
+    private  void processData(List<SysTenant> sysTenants) {
+        sysTenants.forEach(sysTenant -> {
+            System.out.println("sysTenant = " + sysTenant);
+        });
        // System.out.println("sysTenants = " + sysTenants);
     }
 }
