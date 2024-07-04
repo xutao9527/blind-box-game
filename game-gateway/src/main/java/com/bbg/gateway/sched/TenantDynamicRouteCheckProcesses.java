@@ -65,8 +65,8 @@ public class TenantDynamicRouteCheckProcesses {
                                 return routeDefinitionWriter.save(Mono.just(routeDefinition));
                             }
                         }))
-                .then(routeDefinitionLocator.getRouteDefinitions().collectList().doOnNext(this::printRoutes).then());
-                // .then();
+                //.then(routeDefinitionLocator.getRouteDefinitions().collectList().doOnNext(this::printRoutes).then());
+                .then();
     }
 
     private void printRoutes(List<RouteDefinition> routes) {
