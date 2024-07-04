@@ -1,7 +1,6 @@
 package com.bbg.socket.handler;
 
 import com.bbg.socket.annotation.WebSocketMapping;
-import com.bbg.socket.entity.WebSocketSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;

@@ -29,12 +29,10 @@ public class AdminWebSocketHandler implements WebSocketHandler {
                 .doOnNext(log::info).then();
         Mono<Void> outgoing = session.send(
                 Flux.create(sink -> {
-                    //log.info("session opened: {}", session.getId());
                     adminSenderMap.put(session.getId(), new WebSocketSender(session, sink));
                 })
         );
         return Mono.when(outgoing, incoming).then().doFinally(signalType -> {
-            //log.info("session closed: {}", session.getId());
             adminSenderMap.remove(session.getId());
         });
     }
