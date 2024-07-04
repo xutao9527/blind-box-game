@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,7 @@ public class TenantDynamicRouteCheckProcesses {
     private final WebClient.Builder webClientBuilder;
     private final StripPrefixGatewayFilterFactory stripPrefixGatewayFilterFactory;
 
-    @Scheduled(initialDelay = 2000, fixedRate = 5000) // 每隔 1 秒检查一次配置
+    @Scheduled(initialDelay = 500, fixedRate = 5000) // 每隔 5 秒检查一次配置
     public void fetchTenantData() {
         String url = "http://admin-server/sysTenant/getSubTenant";
         WebClient webClient = webClientBuilder.build();
@@ -38,19 +39,6 @@ public class TenantDynamicRouteCheckProcesses {
                 .collectList()
                 .flatMap(this::processData)
                 .subscribe();
-
-        // routeDefinitionLocator.getRouteDefinitions()
-        //         .doOnNext(route -> {
-        //             if (route.getUri().toString().equals("lb://box-app-server")) {
-        //                 System.out.println("Route Id: " + route.getId() );
-        //                 System.out.println("Route Predicates: " + route.getPredicates() );
-        //                 System.out.println("Route Uri: " + route.getUri() );
-        //                 System.out.println("Route Filters: " + route.getFilters() );
-        //                 System.out.println();
-        //             }
-        //         })
-        //         .subscribe();
-
     }
 
     private Mono<Void> processData(List<SysTenant> sysTenants) {
@@ -77,12 +65,19 @@ public class TenantDynamicRouteCheckProcesses {
                                 return routeDefinitionWriter.save(Mono.just(routeDefinition));
                             }
                         }))
-                //.then(routeDefinitionLocator.getRouteDefinitions().collectList().doOnNext(this::printRoutes).then());
-                .then();
+                .then(routeDefinitionLocator.getRouteDefinitions().collectList().doOnNext(this::printRoutes).then());
+                // .then();
     }
 
     private void printRoutes(List<RouteDefinition> routes) {
         System.out.println("Current Routes:");
         routes.forEach(route -> System.out.println(route.toString()));
+        // routes.forEach(route -> {
+        //     System.out.println("Route Id: " + route.getId());
+        //     System.out.println("Route Predicates: " + route.getPredicates());
+        //     System.out.println("Route Uri: " + route.getUri());
+        //     System.out.println("Route Filters: " + route.getFilters());
+        // });
+
     }
 }
