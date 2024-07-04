@@ -10,7 +10,7 @@ public class GlobalConfig {
 
     @Bean
     @LoadBalanced
-    public WebClient.Builder loadBalanced() {
+    public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }
 }

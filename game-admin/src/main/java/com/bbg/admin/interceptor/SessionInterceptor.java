@@ -60,7 +60,6 @@ public class SessionInterceptor implements HandlerInterceptor {
             }
         }
         if(DiscoveryUtil.isServiceCall(ServicesConst.GATEWAY_SERVER.getServiceName())){
-            System.out.println("网关调用");
             return true;
         }
         noLogin(response);
