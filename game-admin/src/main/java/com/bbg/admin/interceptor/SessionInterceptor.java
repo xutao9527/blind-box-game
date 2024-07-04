@@ -60,12 +60,12 @@ public class SessionInterceptor implements HandlerInterceptor {
             }
         }
         if(DiscoveryUtil.isServiceCall(ServicesConst.GATEWAY_SERVER.getServiceName())){
-            return true;
+            if (matchingUrl.equals("/sysTenant/getSubTenant")){             //允许网关获取子租户
+                return true;
+            }
         }
         noLogin(response);
         return false;
-
-
     }
 
     @Override
