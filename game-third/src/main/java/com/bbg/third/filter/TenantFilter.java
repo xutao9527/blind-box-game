@@ -26,21 +26,21 @@ public class TenantFilter implements Filter {
         Long tenantId = null;
         if (request instanceof HttpServletRequest httpServletRequest) {
             tenantCode = httpServletRequest.getHeader("t_code");
-            if (!tenantCode.isEmpty()) {
+            if (tenantCode != null && !tenantCode.isEmpty()) {
                 tenantId = sysTenantService.getTenantId(tenantCode);
             }
         }
         if (tenantId != null) {
             request.setAttribute("tenantId", tenantId);
-            filterChain.doFilter(request, response);
-        }else{
-            if (response instanceof HttpServletResponse httpServletResponse) {
-                httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-                httpServletResponse.setContentType("application/json");
-                httpServletResponse.getWriter().write(JSON.toJSONString(ApiRet.buildNo("Invalid t_code")));
-            }
         }
-
+        // else{
+        //     if (response instanceof HttpServletResponse httpServletResponse) {
+        //         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        //         httpServletResponse.setContentType("application/json");
+        //         httpServletResponse.getWriter().write(JSON.toJSONString(ApiRet.buildNo("Invalid t_code")));
+        //     }
+        // }
+        filterChain.doFilter(request, response);
     }
 
     @Override
