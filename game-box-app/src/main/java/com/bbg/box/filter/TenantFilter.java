@@ -34,10 +34,15 @@ public class TenantFilter implements Filter {
             request.setAttribute("tenantId", tenantId);
             filterChain.doFilter(request, response);
         }else{
-            if (response instanceof HttpServletResponse httpServletResponse) {
-                httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-                httpServletResponse.setContentType("application/json");
-                httpServletResponse.getWriter().write(JSON.toJSONString(ApiRet.buildNo("Invalid t_code")));
+            if (request instanceof HttpServletRequest httpServletRequest) {
+                System.out.println(httpServletRequest.getRequestURI());
+                if("/v3/api-docs".equals(httpServletRequest.getRequestURI())){          //请求swagger文档不拦截
+                    filterChain.doFilter(request, response);
+                } else if (response instanceof HttpServletResponse httpServletResponse) {
+                    httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+                    httpServletResponse.setContentType("application/json");
+                    httpServletResponse.getWriter().write(JSON.toJSONString(ApiRet.buildNo("Invalid t_code")));
+                }
             }
         }
     }
