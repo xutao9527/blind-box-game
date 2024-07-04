@@ -33,13 +33,6 @@ public class TenantFilter implements Filter {
         if (tenantId != null) {
             request.setAttribute("tenantId", tenantId);
         }
-        // else{
-        //     if (response instanceof HttpServletResponse httpServletResponse) {
-        //         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-        //         httpServletResponse.setContentType("application/json");
-        //         httpServletResponse.getWriter().write(JSON.toJSONString(ApiRet.buildNo("Invalid t_code")));
-        //     }
-        // }
         filterChain.doFilter(request, response);
     }
 
