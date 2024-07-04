@@ -22,7 +22,7 @@ public class RouterCheckProcesses {
 
     @Scheduled(initialDelay = 2000, fixedRate = 5000) // 每隔 1 秒检查一次配置
     public void fetchTenantData() {
-        String url = "http://admin-server/sysTenant/all";
+        String url = "http://admin-server/sysTenant/getSubTenant";
         WebClient webClient = webClientBuilder.build();
         webClient
                 .get()
@@ -35,7 +35,7 @@ public class RouterCheckProcesses {
 
     private  void processData(List<SysTenant> sysTenants) {
         sysTenants.forEach(sysTenant -> {
-            System.out.println("sysTenant = " + sysTenant);
+            System.out.println("sysTenant = " + sysTenant.getTenantName());
         });
        // System.out.println("sysTenants = " + sysTenants);
     }

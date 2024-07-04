@@ -30,9 +30,11 @@ public class SysTenantController extends BaseSysTenantController {
         return super.page(reqParams);
     }
 
-    @GetMapping("all")
-    @Operation(summary = "查询所有", description = "查询所有")
-    public List<SysTenant> all() {
-        return sysTenantService.list();
+    @GetMapping("getSubTenant")
+    @Operation(summary = "查询所有子租户", description = "查询所有子租户")
+    public List<SysTenant> getSubTenant() {
+        return sysTenantService.list().stream().filter(
+                sysTenant -> sysTenant.getParentId() != null && sysTenant.getEnable()
+        ).collect(Collectors.toList());
     }
 }
