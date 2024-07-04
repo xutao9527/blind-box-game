@@ -44,6 +44,9 @@ public class StripPrefixHeaderGatewayFilterFactory extends AbstractGatewayFilter
 
                         newPath.append(originalParts[i]);
                     }
+                    if (i == (config.getParts() - 1)) {
+                        request = request.mutate().header("t_code", originalParts[i]).build();
+                    }
                 }
 
                 if (newPath.length() > 1 && path.endsWith("/")) {

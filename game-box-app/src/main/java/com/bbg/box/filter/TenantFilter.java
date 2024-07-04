@@ -26,7 +26,7 @@ public class TenantFilter implements Filter {
         Long tenantId = null;
         if (request instanceof HttpServletRequest httpServletRequest) {
             tenantCode = httpServletRequest.getHeader("t_code");
-            if (!tenantCode.isEmpty()) {
+            if (tenantCode!=null && !tenantCode.isEmpty()) {
                 tenantId = sysTenantService.getTenantId(tenantCode);
             }
         }
