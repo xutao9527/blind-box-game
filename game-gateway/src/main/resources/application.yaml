@@ -14,26 +14,26 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: gateway-server
-          uri: lb://gateway-server
-          predicates:
-            - Path=/
-          filters:
-            - RedirectTo=302, /doc.html
-
-        - id: game-third-server
-          uri: lb://game-third-server
-          predicates:
-            - Path=/third/**
-          filters:
-            - StripPrefix=1
-
-        - id: admin-server
-          uri: lb://admin-server
-          predicates:
-            - Path=/admin/**
-          filters:
-            - StripPrefix=1
+#        - id: gateway-server
+#          uri: lb://gateway-server
+#          predicates:
+#            - Path=/
+#          filters:
+#            - RedirectTo=302, /doc.html
+#
+#        - id: game-third-server
+#          uri: lb://game-third-server
+#          predicates:
+#            - Path=/third/**
+#          filters:
+#            - StripPrefix=1
+#
+#        - id: admin-server
+#          uri: lb://admin-server
+#          predicates:
+#            - Path=/admin/**
+#          filters:
+#            - StripPrefix=1
 
         - id: box-app-server
           uri: lb://box-app-server
@@ -42,36 +42,36 @@ spring:
           filters:
             - StripPrefix=1
 
-        - id: scheduler-server
-          uri: lb://scheduler-server
-          predicates:
-            - Path=/sched/**
-          filters:
-            - StripPrefix=1
+#        - id: scheduler-server
+#          uri: lb://scheduler-server
+#          predicates:
+#            - Path=/sched/**
+#          filters:
+#            - StripPrefix=1
+#
+#        - id: socket-server
+#          uri: lb://socket-server
+#          predicates:
+#            - Path=/wss/**
+#          filters:
+#            - StripPrefix=1
 
-        - id: socket-server
-          uri: lb://socket-server
-          predicates:
-            - Path=/wss/**
-          filters:
-            - StripPrefix=1
-
-knife4j:
-  gateway:
-    enabled: true
-    strategy: discover
-    discover:
-      enabled: true
-      oas3:
-        url: /v3/api-docs?group=default
-      service-config:
-        box-app-server:
-          group-name: 1.游戏服务接口
-        admin-server:
-          group-name: 2.后台管理服务接口
-        game-third-server:
-          group-name: 3.第三方服务接口
-        scheduler-server:
-          group-name: 4.调度任务服务接口
-        socket-server:
-          group-name: 5.socket服务接口
+#knife4j:
+#  gateway:
+#    enabled: true
+#    strategy: discover
+#    discover:
+#      enabled: true
+#      oas3:
+#        url: /v3/api-docs?group=default
+#      service-config:
+#        box-app-server:
+#          group-name: 1.游戏服务接口
+#        admin-server:
+#          group-name: 2.后台管理服务接口
+#        game-third-server:
+#          group-name: 3.第三方服务接口
+#        scheduler-server:
+#          group-name: 4.调度任务服务接口
+#        socket-server:
+#          group-name: 5.socket服务接口
