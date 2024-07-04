@@ -1,7 +1,7 @@
 import {bbgConf} from "@/config/index.js";
 
 class WebSocketSingleton {
-     constructor(url) {
+    constructor(url) {
         if (WebSocketSingleton.instances[url]) {
             return WebSocketSingleton.instances[url];
         }
@@ -35,7 +35,7 @@ class WebSocketSingleton {
 
         this.socket.onopen = () => {
             this.isConnected = true;
-             console.log('WebSocket 已连接');
+            console.log('WebSocket 已连接');
         };
 
         this.socket.onmessage = (event) => {
@@ -68,5 +68,5 @@ class WebSocketSingleton {
     }
 }
 
-
-export const webSocket = WebSocketSingleton.getInstance(bbgConf.env.wsBaseUrl)
+const webSocket = WebSocketSingleton.getInstance(bbgConf.env.wsBaseUrl)
+export {WebSocketSingleton, webSocket};
