@@ -12,6 +12,7 @@ import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAd
 import org.springframework.web.reactive.socket.server.upgrade.ReactorNettyRequestUpgradeStrategy;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 @EnableWebFlux
@@ -23,9 +24,10 @@ public class WebSocketConfig {
     }
 
     @Bean
-    public ConcurrentMap<String, WebSocketSender> gameSenderMap() {
+    public ConcurrentMap<String, ConcurrentLinkedQueue<WebSocketSender>> tenantIdSenderMap() {
         return new ConcurrentHashMap<>();
     }
+
 
     @Bean
     public HandlerMapping webSocketMapping() {
