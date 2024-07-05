@@ -4,6 +4,8 @@ import cn.hutool.core.lang.Pair;
 import com.bbg.core.annotation.RedisCache;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.BattleRoomDto;
+import com.bbg.core.entity.WebSocketMsg;
+import com.bbg.core.feign.socket.WebSocketService;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.entity.ApiRet;
@@ -12,6 +14,7 @@ import com.bbg.core.service.biz.BizUserService;
 import com.bbg.core.service.csgo.*;
 import com.bbg.core.utils.FairFactory;
 import com.bbg.core.utils.IdTool;
+import com.bbg.core.utils.TenantUtil;
 import com.bbg.model.biz.BizDict;
 import com.bbg.model.biz.BizUser;
 import com.bbg.model.csgo.*;
@@ -52,6 +55,7 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
     public final BizUserService bizUserService;
     public final CsgoStorehouseService csgoStorehouseService;
     public final RedisService redisService;
+    public final WebSocketService webSocketService;
 
     @Lazy
     @Autowired
@@ -162,6 +166,8 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         battleRoomRes.setCsgoBattleRoom(battleRoom);
         // 更新 [房间缓存]
         redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
+        // 推送消息
+        webSocketService.sendGameMessage(new WebSocketMsg().setTenantId(TenantUtil.getTenantId()).setMessage("房间创建成功"));
         return ApiRet.buildOk(battleRoomRes);
     }
 
@@ -229,6 +235,8 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         battleRoomRes.setCsgoBattleRoom(battleRoom);
         // 更新 [房间缓存]
         redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
+        // 推送消息
+        webSocketService.sendGameMessage(new WebSocketMsg().setTenantId(TenantUtil.getTenantId()).setMessage("房间加入成功"));
         return ApiRet.buildOk(battleRoomRes);
     }
 
