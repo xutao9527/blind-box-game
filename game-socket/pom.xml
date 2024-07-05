@@ -45,6 +45,10 @@
                     <groupId>jakarta.servlet</groupId>
                     <artifactId>jakarta.servlet-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.springdoc</groupId>
+                    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                </exclusion>
             <exclusion>
                 <groupId>com.mybatis-flex</groupId>
                 <artifactId>mybatis-flex-spring-boot3-starter</artifactId>
