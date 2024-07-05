@@ -27,7 +27,7 @@ export class AppAxiosHttp {
     // 请求配置
     requestConfig() {
         this.axiosRequestConfig = {
-            baseURL: bbgConf.env.appBaseUrl,
+            baseURL: bbgConf.env.appBaseUrl +"/"+ bbgConf.env.appUrlPrefix,
             timeout: 5000,
             //  这是核心
             transformResponse: [function (data) {
