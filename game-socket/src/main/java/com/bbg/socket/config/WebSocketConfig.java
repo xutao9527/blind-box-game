@@ -30,7 +30,7 @@ public class WebSocketConfig {
     }
 
     @Bean
-    public ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap() {
+    public ConcurrentMap<Long, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap() {
         return new ConcurrentHashMap<>();
     }
 

@@ -14,7 +14,7 @@ import reactor.core.publisher.FluxSink;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class WebSocketSender {
-    private String tenantId;
+    private Long tenantId;
     private String tenantCode;
     private WebSocketSession session;
     private FluxSink<WebSocketMessage> sink;

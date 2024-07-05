@@ -24,7 +24,7 @@ public class BoxWebSocketHandler implements WebSocketHandler {
 
     public final static ConcurrentMap<String, Long> codeTenantIdMap = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, WebSocketSender> boxSenderMap;
-    private final ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap;
+    private final ConcurrentMap<Long, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap;
 
     @Override
     @NonNull
@@ -32,52 +32,38 @@ public class BoxWebSocketHandler implements WebSocketHandler {
         HandshakeInfo handshakeInfo = session.getHandshakeInfo();
         MultiMap<String> queryParams = UrlEncoded.decodeQuery(handshakeInfo.getUri().getRawQuery());
         String tenantCode = queryParams.getString("t_code");
-        // 进行http请求，根据tenantCode查询tenantId
         if (tenantCode == null || codeTenantIdMap.get(tenantCode) == null) {
-            return session.close();
+            WebSocketMessage closeMessage = session.textMessage("t_code is Invalid");
+            return session.send(Mono.just(closeMessage)).then(session.close());
         }
         Mono<Void> incoming = session.receive().map(WebSocketMessage::getPayloadAsText)
                 .doOnNext(log::info).then();
         Mono<Void> outgoing = session.send(
                 Flux.create(sink -> {
-                    addConnection(session.getId(), new WebSocketSender().setSession(session).setSink(sink));
+                    addConnection(session.getId(), new WebSocketSender()
+                            .setTenantCode(tenantCode)
+                            .setTenantId(codeTenantIdMap.get(tenantCode))
+                            .setSession(session)
+                            .setSink(sink));
                 })
         );
         return Mono.when(outgoing, incoming).then().doFinally(signalType -> {
             removeConnection(session.getId());
         });
-
-
     }
-
 
     // 添加连接
     public void addConnection(String sessionId, WebSocketSender sender) {
-        // 将 sender 添加到 sessionIdSenderMap
         boxSenderMap.put(sessionId, sender);
-        // 将 sessionId 和 tenantId 的映射存储起来
-        // sessionIdTenantIdMap.put(sessionId, tenantId);
-        // 将 sender 添加到 tenantId 对应的列表中
-        // tenantIdSenderMap.computeIfAbsent(tenantId, key -> new ConcurrentLinkedQueue<>()).add(sender);
+        boxTenantSenderMap.computeIfAbsent(sender.getTenantId(), k -> new ConcurrentHashMap<>()).put(sessionId, sender);
     }
 
     // 移除连接
     public void removeConnection(String sessionId) {
-        // 从 sessionIdSenderMap 中移除 sessionId 对应的 sender
         WebSocketSender sender = boxSenderMap.remove(sessionId);
-        // if (sender != null) {
-        //     // 如果存在对应的 sender，从 tenantIdSenderMap 中移除
-        //     String tenantId = sessionIdTenantIdMap.remove(sessionId);
-        //     if (tenantId != null) {
-        //         ConcurrentLinkedQueue<WebSocketSender> senderList = tenantIdSenderMap.get(tenantId);
-        //         if (senderList != null) {
-        //             senderList.remove(sender);
-        //             // 如果列表为空，则移除 tenantId 的映射
-        //             if (senderList.isEmpty()) {
-        //                 tenantIdSenderMap.remove(tenantId);
-        //             }
-        //         }
-        //     }
-        // }
+        if(sender != null) {
+            boxTenantSenderMap.get(sender.getTenantId()).remove(sessionId);
+        }
+
     }
 }
