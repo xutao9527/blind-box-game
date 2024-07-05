@@ -12,4 +12,8 @@ public interface WebSocketService {
     @PostMapping(value = "admin/send")
     @Operation(summary = "后台推送消息", description = "管理后台推送消息")
     ApiRet<Boolean> sendAdminMessage(@RequestBody WebSocketMsg webSocketMsg);
+
+    @PostMapping(value = "box/send")
+    @Operation(summary = "游戏推送消息", description = "游戏推送消息")
+    ApiRet<Boolean> sendGameMessage(@RequestBody WebSocketMsg webSocketMsg);
 }

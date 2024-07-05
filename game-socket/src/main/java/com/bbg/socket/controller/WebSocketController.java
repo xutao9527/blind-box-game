@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentMap;
 public class WebSocketController {
 
     public final ConcurrentMap<String, WebSocketSender> adminSenderMap;
-    //public final ConcurrentMap<String, WebSocketSender> gameSenderMap;
+    private final ConcurrentMap<Long, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap;
 
     @PostMapping(value = "admin/send")
     @Operation(summary = "后台推送消息", description = "管理后台推送消息")
@@ -29,10 +29,17 @@ public class WebSocketController {
         return ApiRet.buildOk();
     }
 
-    // @PostMapping(value = "game/send")
-    // @Operation(summary = "游戏推送消息", description = "游戏推送消息")
-    // public ApiRet<Boolean> sendGameMessage(@RequestBody WebSocketMsg webSocketMsg) {
-    //     gameSenderMap.forEach((id, sender) -> sender.send(webSocketMsg.getMessage()));
-    //     return ApiRet.buildOk();
-    // }
+    @PostMapping(value = "box/send")
+    @Operation(summary = "游戏推送消息", description = "游戏推送消息")
+    public ApiRet<Boolean> sendGameMessage(@RequestBody WebSocketMsg webSocketMsg) {
+        if(webSocketMsg.getTenantId() == null) {
+            return ApiRet.buildNo("tenantId is null");
+        }
+        if(boxTenantSenderMap.get(webSocketMsg.getTenantId()) == null){
+            return ApiRet.buildNo("tenantId is Invalid");
+        }
+        boxTenantSenderMap.get(webSocketMsg.getTenantId())
+                .forEach((id, sender) -> sender.send(webSocketMsg.getMessage()));
+        return ApiRet.buildOk();
+    }
 }
