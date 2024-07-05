@@ -29,10 +29,10 @@ public class RedisCacheAspect extends BaseAspect {
         if (cacheObject == null) {
             cacheObject = point.proceed();
             if (cacheObject != null) {
-                if(redisCache.liveTime()==0){
+                if (redisCache.liveTime() == 0) {
                     redisService.set(cacheKey, cacheObject);
-                }else{
-                    redisService.set(cacheKey, cacheObject,redisCache.liveTime(),redisCache.timeUnit());
+                } else {
+                    redisService.set(cacheKey, cacheObject, redisCache.liveTime(), redisCache.timeUnit());
                 }
             }
         }
