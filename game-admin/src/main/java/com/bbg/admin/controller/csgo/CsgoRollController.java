@@ -30,7 +30,6 @@ public class CsgoRollController extends BaseCsgoRollController {
 
     @Override
     @PostMapping("update")
-    @RedisClear(value = "#model.id", key = KeyConst.ROLL_INFO_ID)
     public ApiRet<Boolean> update(CsgoRoll model) {
         var currentTime = LocalDateTime.now();
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
@@ -54,6 +53,7 @@ public class CsgoRollController extends BaseCsgoRollController {
         } else if (roll != null) {
             return ApiRet.buildOk(csgoRollService.updateById(model));
         }
+        redisService.delete(KeyConst.build(KeyConst.ROLL_INFO_ID, model.getId().toString()));       // 清缓存
         return ApiRet.buildNo("房间号不存在");
     }
 }

@@ -63,7 +63,19 @@ public class KeyConst {
         if (tenantFlag) {
             Long tenantId = TenantUtil.getTenantId();
             if (key == null || key.isEmpty()) {
-                return "%s::%s".formatted(prefix, tenantId);
+                return build(prefix, tenantId.toString());
+            }
+            return "%s::%s::%s".formatted(prefix, tenantId, key);
+        } else {
+            return build(prefix, key);
+        }
+    }
+
+    public static String build(String prefix, String key, String tenantId) {
+        if (tenantId!= null&&!tenantId.isEmpty()) {
+            if (key == null || key.isEmpty()) {
+
+                return build(prefix, tenantId);
             }
             return "%s::%s::%s".formatted(prefix, tenantId, key);
         } else {

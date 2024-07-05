@@ -1,7 +1,6 @@
 package com.bbg.core.service.impl.biz;
 
 import com.bbg.core.annotation.RedisCache;
-import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.service.RedisService;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.model.biz.BizDictDetail;
@@ -44,8 +43,8 @@ public class BizDictServiceImpl extends ServiceImpl<BizDictMapper, BizDict> impl
     }
 
     @Override
-    @RedisClear(value = "#entity.tag", key = KeyConst.DICT_TAG)
     public boolean updateById(BizDict entity) {
+        redisService.delete(KeyConst.build(KeyConst.DICT_TAG, entity.getTag()));        // 清缓存
         return this.updateById(entity, true);
     }
 }

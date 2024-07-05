@@ -1,7 +1,6 @@
 package com.bbg.core.service.impl.csgo;
 
 import com.bbg.core.annotation.RedisCache;
-import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.RedisService;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -38,18 +37,17 @@ public class CsgoConfigServiceImpl extends ServiceImpl<CsgoConfigMapper, CsgoCon
     public boolean removeById(Serializable id) {
         CsgoConfig csgoConfig = getMapper().selectOneById(id);
         if (csgoConfig != null) {
-            redisService.delete(KeyConst.build(KeyConst.GAME_CONFIG_NAME_ALIAS, csgoConfig.getNameAlias(),true));
+            redisService.delete(KeyConst.build(KeyConst.GAME_CONFIG_NAME_ALIAS, csgoConfig.getNameAlias(), csgoConfig.getTenantId().toString()));    // 清缓存
             return getMapper().deleteById(id) > 0;
         }
         return false;
     }
 
     @Override
-    @RedisClear(value = "#entity.nameAlias", key = KeyConst.GAME_CONFIG_NAME_ALIAS, tenantFlag = true)
     public boolean updateById(CsgoConfig entity) {
         CsgoConfig csgoConfig = getMapper().selectOneById(entity.getId());
         if (csgoConfig != null) {
-            redisService.delete(KeyConst.build(KeyConst.GAME_CONFIG_NAME_ALIAS, csgoConfig.getNameAlias(),true));
+            redisService.delete(KeyConst.build(KeyConst.GAME_CONFIG_NAME_ALIAS, csgoConfig.getNameAlias(), csgoConfig.getTenantId().toString()));    // 清缓存
             return this.updateById(entity, true);
         }
         return false;

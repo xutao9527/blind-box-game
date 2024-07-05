@@ -1,7 +1,6 @@
 package com.bbg.core.service.impl.biz;
 
 import com.bbg.core.annotation.RedisCache;
-import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.RedisService;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -45,11 +44,10 @@ public class BizConfigServiceImpl extends ServiceImpl<BizConfigMapper, BizConfig
     }
 
     @Override
-    @RedisClear(value = "#entity.nameAlias", key = KeyConst.BIZ_CONFIG_NAME_ALIAS, tenantFlag = true)
     public boolean updateById(BizConfig entity) {
         BizConfig bizConfig = getMapper().selectOneById(entity.getId());
         if (bizConfig != null) {
-            redisService.delete(KeyConst.build(KeyConst.BIZ_CONFIG_NAME_ALIAS, bizConfig.getNameAlias(), true));
+            redisService.delete(KeyConst.build(KeyConst.BIZ_CONFIG_NAME_ALIAS, bizConfig.getNameAlias(), bizConfig.getTenantId().toString()));
             return this.updateById(entity, true);
         }
         return false;

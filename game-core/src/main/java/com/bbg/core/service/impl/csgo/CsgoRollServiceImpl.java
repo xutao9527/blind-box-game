@@ -1,7 +1,6 @@
 package com.bbg.core.service.impl.csgo;
 
 import com.bbg.core.annotation.RedisCache;
-import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.annotation.RedisLock;
 import com.bbg.core.box.dto.RollDto;
 import com.bbg.core.service.RedisService;
@@ -30,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -225,11 +223,11 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
      * 上线房间
      */
     @RedisLock(value = "#csgoRoll.id", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
-    @RedisClear(value = "#csgoRoll.id", key = KeyConst.ROLL_INFO_ID)
     public boolean onlineRoll(CsgoRoll csgoRoll) {
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
         csgoRoll.setStatus(rollStatusDict.getValueByAlias("roll_online"));
         updateById(csgoRoll);
+        redisService.delete(KeyConst.build(KeyConst.ROLL_INFO_ID, csgoRoll.getId().toString()));    //清缓存
         return true;
     }
 
@@ -238,7 +236,6 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
      */
     @Transactional(rollbackFor = Exception.class)
     @RedisLock(value = "#csgoRoll.id", key = KeyConst.METHOD_JOIN_ROLL_LOCK)
-    @RedisClear(value = "#csgoRoll.id", key = KeyConst.ROLL_INFO_ID)
     public boolean offlineRoll(CsgoRoll csgoRoll) {
         var rollStatusDict = bizDictService.getDictByTag("csgo_roll_status");
         CsgoRoll roll = selfProxy.getInfo(csgoRoll.getId());
@@ -255,6 +252,7 @@ public class CsgoRollServiceImpl extends ServiceImpl<CsgoRollMapper, CsgoRoll> i
             csgoRollGoodService.saveOrUpdateBatch(roll.getRollGoods());                             // 更新商品中奖信息
             this.saveOrUpdate(roll);                                                                // 更新房间状态
         }
+        redisService.delete(KeyConst.build(KeyConst.ROLL_INFO_ID, roll.getId().toString()));        //清缓存
         return true;
     }
 }

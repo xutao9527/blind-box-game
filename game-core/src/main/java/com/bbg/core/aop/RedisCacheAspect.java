@@ -1,9 +1,7 @@
 package com.bbg.core.aop;
 
 import com.bbg.core.annotation.RedisCache;
-import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.service.RedisService;
-
 import com.bbg.core.constrans.KeyConst;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -39,16 +37,16 @@ public class RedisCacheAspect extends BaseAspect {
         return cacheObject;
     }
 
-    @Around("@annotation(redisClear)")
-    public Object aroundRedisClear(ProceedingJoinPoint point, RedisClear redisClear) throws Throwable {
-        String keyPrefix = redisClear.key();
-        String keyValue = parserSpEL(redisClear.value(), point).toString();
-        boolean tenantFlag = redisClear.tenantFlag();
-        String cacheKey = KeyConst.build(keyPrefix, keyValue, tenantFlag);
-        redisService.delete(cacheKey);
-        Object result = point.proceed();
-        redisService.delete(cacheKey);
-        return result;
-    }
+    // @Around("@annotation(redisClear)")
+    // public Object aroundRedisClear(ProceedingJoinPoint point, RedisClear redisClear) throws Throwable {
+    //     String keyPrefix = redisClear.key();
+    //     String keyValue = parserSpEL(redisClear.value(), point).toString();
+    //     boolean tenantFlag = redisClear.tenantFlag();
+    //     String cacheKey = KeyConst.build(keyPrefix, keyValue, tenantFlag);
+    //     redisService.delete(cacheKey);
+    //     Object result = point.proceed();
+    //     redisService.delete(cacheKey);
+    //     return result;
+    // }
 
 }

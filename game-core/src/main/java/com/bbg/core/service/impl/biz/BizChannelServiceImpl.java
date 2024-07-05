@@ -3,13 +3,10 @@ package com.bbg.core.service.impl.biz;
 import cn.hutool.core.codec.Base58;
 import cn.hutool.core.convert.Convert;
 import com.bbg.core.annotation.RedisCache;
-import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.constrans.KeyConst;
-import com.bbg.core.mapper.biz.BizUserMapper;
-import com.bbg.core.service.biz.BizUserService;
+import com.bbg.core.service.RedisService;
 import com.bbg.core.utils.IdTool;
 import com.bbg.model.biz.BizUser;
-import com.bbg.model.csgo.CsgoRobot;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.bbg.model.biz.BizChannel;
@@ -35,7 +32,11 @@ import java.util.stream.Collectors;
  * @since 2024-06-13
  */
 @Service
+@RequiredArgsConstructor
 public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChannel> implements BizChannelService {
+    @Autowired
+    public final RedisService redisService;
+
     @Lazy
     @Autowired
     private BizChannelService selfProxy;
@@ -47,7 +48,6 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
     }
 
     @Override
-    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST, tenantFlag = true)
     public boolean save(BizChannel entity) {
         entity.setId(IdTool.nextId());
         entity.setChannelCode(Base58.encode(Convert.longToBytes(entity.getId())));
@@ -55,15 +55,18 @@ public class BizChannelServiceImpl extends ServiceImpl<BizChannelMapper, BizChan
     }
 
     @Override
-    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST, tenantFlag = true)
     public boolean removeById(Serializable id) {
+        BizChannel entity = getById(id);
+        if (entity != null) {
+            redisService.delete(KeyConst.build(KeyConst.BIZ_CHANNEL_LIST, entity.getTenantId().toString()));
+        }
         return super.removeById(id);
     }
 
     @Override
-    @RedisClear(key = KeyConst.BIZ_CHANNEL_LIST, tenantFlag = true)
     public boolean updateById(BizChannel entity) {
         entity.setChannelCode(null);
+        redisService.delete(KeyConst.build(KeyConst.BIZ_CHANNEL_LIST, entity.getTenantId().toString()));
         return super.updateById(entity);
     }
 
