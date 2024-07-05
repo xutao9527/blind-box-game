@@ -64,6 +64,5 @@ public class BoxWebSocketHandler implements WebSocketHandler {
         if(sender != null) {
             boxTenantSenderMap.get(sender.getTenantId()).remove(sessionId);
         }
-
     }
 }
