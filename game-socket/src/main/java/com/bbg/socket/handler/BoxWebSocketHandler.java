@@ -4,14 +4,17 @@ import com.bbg.socket.annotation.WebSocketMapping;
 import com.bbg.socket.entity.WebSocketSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jetty.util.MultiMap;
+import org.eclipse.jetty.util.UrlEncoded;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.socket.HandshakeInfo;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
@@ -19,15 +22,23 @@ import java.util.concurrent.ConcurrentMap;
 @RequiredArgsConstructor
 @WebSocketMapping("/box")
 public class BoxWebSocketHandler implements WebSocketHandler {
-    // 存储 sessionId 和 WebSocketSender 的映射
+
+    private final WebClient.Builder webClientBuilder;
+
     private final ConcurrentMap<String, WebSocketSender> boxSenderMap ;
-    // 存储 tenantId 和 WebSocketSender 列表的映射
+
     private final ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap;
 
     @Override
     @NonNull
     public Mono<Void> handle(WebSocketSession session) {
-        String queryMap = session.getHandshakeInfo().getUri().getQuery();
+        HandshakeInfo handshakeInfo = session.getHandshakeInfo();
+        MultiMap<String> queryParams = UrlEncoded.decodeQuery(handshakeInfo.getUri().getRawQuery());
+        String tenantCode = queryParams.getString("t_code");
+        //进行http请求，根据tenantCode查询tenantId
+
+        getTenantId(tenantCode);
+
         Mono<Void> incoming = session.receive().map(WebSocketMessage::getPayloadAsText)
                 .doOnNext(log::info).then();
         Mono<Void> outgoing = session.send(
@@ -38,6 +49,16 @@ public class BoxWebSocketHandler implements WebSocketHandler {
         return Mono.when(outgoing, incoming).then().doFinally(signalType -> {
             removeConnection(session.getId());
         });
+    }
+
+    public void getTenantId(String tenantCode) {
+        String url = "http://admin-server/sysTenant/getTenantId?tenantCode=" + tenantCode;
+         webClientBuilder.build()
+                .get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(Long.class)
+                .log().subscribe();
     }
 
     // 添加连接

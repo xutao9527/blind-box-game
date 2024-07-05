@@ -37,4 +37,11 @@ public class SysTenantController extends BaseSysTenantController {
                 sysTenant -> sysTenant.getParentId() != null && sysTenant.getEnable()
         ).collect(Collectors.toList());
     }
+
+    @GetMapping("getTenantId")
+    @Operation(summary = "查询租户编号", description = "根据租户编号查询租户编号")
+    public Long getTenantId(@RequestParam("tenantCode") String tenantCode) {
+        return sysTenantService.getTenantId(tenantCode);
+    }
+
 }
