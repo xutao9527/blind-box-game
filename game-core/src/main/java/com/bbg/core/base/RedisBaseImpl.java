@@ -2,11 +2,13 @@ package com.bbg.core.base;
 
 import cn.hutool.core.lang.Pair;
 import com.bbg.core.annotation.RedisLock;
+import com.esotericsoftware.minlog.Log;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class RedisBaseImpl implements RedisBase {
@@ -50,5 +52,14 @@ public class RedisBaseImpl implements RedisBase {
 
     public void delete(String key) {
         redisTemplate.delete(key);
+        CompletableFuture.runAsync(() -> {
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+                redisTemplate.delete(key);
+
+            } catch (InterruptedException e) {
+                Log.error("delete redis key error", e);
+            }
+        });
     }
 }

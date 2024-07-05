@@ -3,15 +3,12 @@ package com.bbg.admin.controller.csgo;
 import com.bbg.admin.base.controller.csgo.BaseCsgoRollController;
 import com.bbg.core.constrans.KeyConst;
 import com.bbg.core.service.biz.BizDictService;
-import com.bbg.core.annotation.RedisClear;
 import com.bbg.core.entity.ApiRet;
 import com.bbg.model.csgo.CsgoRoll;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import java.time.LocalDateTime;
 
 /**
