@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -167,7 +168,14 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         // 更新 [房间缓存]
         redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
         // 推送消息
-        webSocketService.sendGameMessage(new WebSocketMsg().setTenantId(TenantUtil.getTenantId()).setMessage("房间创建成功"));
+        WebSocketMsg webSocketMsg = new WebSocketMsg().setTenantId(TenantUtil.getTenantId()).setMessage("创建对战房间成功");
+        CompletableFuture.runAsync(() -> {
+            try {
+                webSocketService.sendGameMessage(webSocketMsg);
+            } catch (Exception e) {
+                log.error("推送消息异常:", e);
+            }
+        });
         return ApiRet.buildOk(battleRoomRes);
     }
 
@@ -236,7 +244,14 @@ public class CsgoBattleRoomServiceImpl extends ServiceImpl<CsgoBattleRoomMapper,
         // 更新 [房间缓存]
         redisService.set(KeyConst.build(KeyConst.ROOM_INFO_ID, battleRoom.getId().toString()), battleRoom, ROOM_INFO_LIVE_TIME, TimeUnit.SECONDS);
         // 推送消息
-        webSocketService.sendGameMessage(new WebSocketMsg().setTenantId(TenantUtil.getTenantId()).setMessage("房间加入成功"));
+        WebSocketMsg webSocketMsg = new WebSocketMsg().setTenantId(TenantUtil.getTenantId()).setMessage("加入对战房间成功");
+        CompletableFuture.runAsync(() -> {
+            try {
+                webSocketService.sendGameMessage(webSocketMsg);
+            } catch (Exception e) {
+                log.error("推送消息异常:", e);
+            }
+        });
         return ApiRet.buildOk(battleRoomRes);
     }
 
