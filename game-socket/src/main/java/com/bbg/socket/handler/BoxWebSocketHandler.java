@@ -17,12 +17,12 @@ import java.util.concurrent.ConcurrentMap;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@WebSocketMapping("/game")
+@WebSocketMapping("/box")
 public class BoxWebSocketHandler implements WebSocketHandler {
     // 存储 sessionId 和 WebSocketSender 的映射
-    private final ConcurrentMap<String, WebSocketSender> gameAllSenderMap ;
+    private final ConcurrentMap<String, WebSocketSender> boxSenderMap ;
     // 存储 tenantId 和 WebSocketSender 列表的映射
-    private final ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> gameTenantSenderMap;
+    private final ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap;
 
     @Override
     @NonNull
@@ -43,7 +43,7 @@ public class BoxWebSocketHandler implements WebSocketHandler {
     // 添加连接
     public void addConnection(String sessionId, WebSocketSender sender) {
         // 将 sender 添加到 sessionIdSenderMap
-        gameAllSenderMap.put(sessionId, sender);
+        boxSenderMap.put(sessionId, sender);
         // 将 sessionId 和 tenantId 的映射存储起来
         // sessionIdTenantIdMap.put(sessionId, tenantId);
         // 将 sender 添加到 tenantId 对应的列表中
@@ -53,7 +53,7 @@ public class BoxWebSocketHandler implements WebSocketHandler {
     // 移除连接
     public void removeConnection(String sessionId) {
         // 从 sessionIdSenderMap 中移除 sessionId 对应的 sender
-        WebSocketSender sender = gameAllSenderMap.remove(sessionId);
+        WebSocketSender sender = boxSenderMap.remove(sessionId);
         // if (sender != null) {
         //     // 如果存在对应的 sender，从 tenantIdSenderMap 中移除
         //     String tenantId = sessionIdTenantIdMap.remove(sessionId);

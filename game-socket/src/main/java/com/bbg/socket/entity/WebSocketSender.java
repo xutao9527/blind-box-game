@@ -12,7 +12,6 @@ import reactor.core.publisher.FluxSink;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Accessors(chain = true)
 public class WebSocketSender {
     private String tenantId;

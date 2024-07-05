@@ -24,12 +24,13 @@ public class WebSocketConfig {
         return new ConcurrentHashMap<>();
     }
 
-    @Bean ConcurrentMap<String, WebSocketSender> gameAllSenderMap() {
+    @Bean
+    public ConcurrentMap<String, WebSocketSender> boxSenderMap() {
         return new ConcurrentHashMap<>();
     }
 
     @Bean
-    public ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> gameTenantSenderMap() {
+    public ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap() {
         return new ConcurrentHashMap<>();
     }
 

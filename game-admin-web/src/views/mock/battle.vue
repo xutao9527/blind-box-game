@@ -138,9 +138,16 @@
 </template>
 <script setup>
 import {battleMock} from "@/views/mock/js/battleDto.js";
+import {boxWebSocket} from "@/views/mock/js/mockWebSocket.js";
 
+
+const handleMessageEvent  = (event) => {
+  console.log(event.data)
+};
 
 onMounted(() => {
+  boxWebSocket.socket.addEventListener('message', handleMessageEvent);
+
   battleMock.getBoxList()
   battleMock.getRobotList()
   // 每10秒钟获得一次房间列表,首次立即获得
@@ -149,6 +156,13 @@ onMounted(() => {
   //   battleMock.getRoomList()
   // }, 3000)
 })
+
+onUnmounted(() => {
+  // console.log('script debug onUnmounted')
+  boxWebSocket.socket.removeEventListener('message', handleMessageEvent);
+});
+
+
 </script>
 
 <style lang="less" scoped>

@@ -68,5 +68,5 @@ class WebSocketSingleton {
     }
 }
 
-const webSocket = WebSocketSingleton.getInstance(bbgConf.env.wsAdminBaseUrl)
-export {WebSocketSingleton, webSocket};
+const boxWebSocket = WebSocketSingleton.getInstance(bbgConf.env.wsBoxBaseUrl+"?t_code="+bbgConf.env.appUrlPrefix)
+export {boxWebSocket};
