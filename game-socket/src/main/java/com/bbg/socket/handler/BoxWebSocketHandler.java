@@ -11,30 +11,28 @@ import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
+
 import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@WebSocketMapping("/box")
+@WebSocketMapping("/game")
 public class BoxWebSocketHandler implements WebSocketHandler {
     // 存储 sessionId 和 WebSocketSender 的映射
-    private final ConcurrentMap<String, WebSocketSender> sessionIdSenderMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, WebSocketSender> gameAllSenderMap ;
     // 存储 tenantId 和 WebSocketSender 列表的映射
-    private final ConcurrentMap<String, ConcurrentLinkedQueue<WebSocketSender>> tenantIdSenderMap;
-    // 存储 sessionId 和 tenantId 的映射
-    private final ConcurrentMap<String, String> sessionIdTenantIdMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> gameTenantSenderMap;
 
     @Override
     @NonNull
     public Mono<Void> handle(WebSocketSession session) {
+        String queryMap = session.getHandshakeInfo().getUri().getQuery();
         Mono<Void> incoming = session.receive().map(WebSocketMessage::getPayloadAsText)
                 .doOnNext(log::info).then();
         Mono<Void> outgoing = session.send(
                 Flux.create(sink -> {
-                    addConnection(session.getId(), new WebSocketSender(session, sink), "a");
+                    addConnection(session.getId(), new WebSocketSender().setSession(session).setSink(sink));
                 })
         );
         return Mono.when(outgoing, incoming).then().doFinally(signalType -> {
@@ -43,32 +41,32 @@ public class BoxWebSocketHandler implements WebSocketHandler {
     }
 
     // 添加连接
-    public void addConnection(String sessionId, WebSocketSender sender, String tenantId) {
+    public void addConnection(String sessionId, WebSocketSender sender) {
         // 将 sender 添加到 sessionIdSenderMap
-        sessionIdSenderMap.put(sessionId, sender);
+        gameAllSenderMap.put(sessionId, sender);
         // 将 sessionId 和 tenantId 的映射存储起来
-        sessionIdTenantIdMap.put(sessionId, tenantId);
+        // sessionIdTenantIdMap.put(sessionId, tenantId);
         // 将 sender 添加到 tenantId 对应的列表中
-        tenantIdSenderMap.computeIfAbsent(tenantId, key -> new ConcurrentLinkedQueue<>()).add(sender);
+        // tenantIdSenderMap.computeIfAbsent(tenantId, key -> new ConcurrentLinkedQueue<>()).add(sender);
     }
 
     // 移除连接
     public void removeConnection(String sessionId) {
         // 从 sessionIdSenderMap 中移除 sessionId 对应的 sender
-        WebSocketSender sender = sessionIdSenderMap.remove(sessionId);
-        if (sender != null) {
-            // 如果存在对应的 sender，从 tenantIdSenderMap 中移除
-            String tenantId = sessionIdTenantIdMap.remove(sessionId);
-            if (tenantId != null) {
-                ConcurrentLinkedQueue<WebSocketSender> senderList = tenantIdSenderMap.get(tenantId);
-                if (senderList != null) {
-                    senderList.remove(sender);
-                    // 如果列表为空，则移除 tenantId 的映射
-                    if (senderList.isEmpty()) {
-                        tenantIdSenderMap.remove(tenantId);
-                    }
-                }
-            }
-        }
+        WebSocketSender sender = gameAllSenderMap.remove(sessionId);
+        // if (sender != null) {
+        //     // 如果存在对应的 sender，从 tenantIdSenderMap 中移除
+        //     String tenantId = sessionIdTenantIdMap.remove(sessionId);
+        //     if (tenantId != null) {
+        //         ConcurrentLinkedQueue<WebSocketSender> senderList = tenantIdSenderMap.get(tenantId);
+        //         if (senderList != null) {
+        //             senderList.remove(sender);
+        //             // 如果列表为空，则移除 tenantId 的映射
+        //             if (senderList.isEmpty()) {
+        //                 tenantIdSenderMap.remove(tenantId);
+        //             }
+        //         }
+        //     }
+        // }
     }
 }

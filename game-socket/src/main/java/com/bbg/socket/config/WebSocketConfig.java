@@ -18,16 +18,20 @@ import java.util.concurrent.ConcurrentMap;
 @EnableWebFlux
 @Configuration
 public class WebSocketConfig {
+
     @Bean
     public ConcurrentMap<String, WebSocketSender> adminSenderMap() {
         return new ConcurrentHashMap<>();
     }
 
-    @Bean
-    public ConcurrentMap<String, ConcurrentLinkedQueue<WebSocketSender>> tenantIdSenderMap() {
+    @Bean ConcurrentMap<String, WebSocketSender> gameAllSenderMap() {
         return new ConcurrentHashMap<>();
     }
 
+    @Bean
+    public ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> gameTenantSenderMap() {
+        return new ConcurrentHashMap<>();
+    }
 
     @Bean
     public HandlerMapping webSocketMapping() {
