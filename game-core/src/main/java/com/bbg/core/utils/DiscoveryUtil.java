@@ -21,8 +21,18 @@ public class DiscoveryUtil {
         DiscoveryUtil.staticDiscoveryClient = discoveryClient;
     }
 
+    // 判断是否是某服务调用
     public static boolean isServiceCall(String serviceId) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         return staticDiscoveryClient.getInstances(serviceId).stream().anyMatch(instance -> instance.getHost().equals(request.getRemoteHost()));
+    }
+
+    // 判断是否内部服务调用
+    public static boolean isInnerCall() {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        for (String serviceId : staticDiscoveryClient.getServices()) {
+            return staticDiscoveryClient.getInstances(serviceId).stream().anyMatch(instance -> instance.getHost().equals(request.getRemoteHost()));
+        }
+        return false;
     }
 }
