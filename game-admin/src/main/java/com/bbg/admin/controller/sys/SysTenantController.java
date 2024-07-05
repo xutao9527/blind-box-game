@@ -41,7 +41,8 @@ public class SysTenantController extends BaseSysTenantController {
     @GetMapping("getTenantId")
     @Operation(summary = "查询租户编号", description = "根据租户编号查询租户编号")
     public Long getTenantId(@RequestParam("tenantCode") String tenantCode) {
-        return sysTenantService.getTenantId(tenantCode);
+        Long tenantId = sysTenantService.getTenantId(tenantCode);
+        return tenantId != null ? tenantId : -1L;
     }
 
 }

@@ -60,10 +60,10 @@ public class SessionInterceptor implements HandlerInterceptor {
             }
             return true;
         }
-        if(DiscoveryUtil.isServiceCall(ServicesConst.GATEWAY_SERVER.getServiceName())){
-            if (matchingUrl.equals("/sysTenant/getSubTenant")){             //允许网关获取子租户
-                return true;
-            }
+        // 判断是否是内部调用
+        if(DiscoveryUtil.isInnerCall()){
+            //获取子租户 获取租户编号
+            return matchingUrl.equals("/sysTenant/getSubTenant") || matchingUrl.equals("/sysTenant/getTenantId");
         }
         return false;
     }
