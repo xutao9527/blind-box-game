@@ -2,6 +2,7 @@ package com.bbg.gateway.sched;
 
 import com.bbg.model.sys.SysTenant;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.filter.factory.StripPrefixGatewayFilterFactory;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
@@ -15,9 +16,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TenantDynamicRouteCheckProcesses {
@@ -37,6 +40,10 @@ public class TenantDynamicRouteCheckProcesses {
                 .retrieve()
                 .bodyToFlux(SysTenant.class)
                 .collectList()
+                .doOnError(e -> {
+                    log.error("获取租户信息失败:", e);
+                })
+                .onErrorReturn(new ArrayList<>())
                 .flatMap(this::processData)
                 .subscribe();
     }

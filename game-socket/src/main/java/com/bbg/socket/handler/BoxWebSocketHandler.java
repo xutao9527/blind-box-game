@@ -13,6 +13,7 @@ import org.springframework.web.reactive.socket.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
@@ -21,10 +22,8 @@ import java.util.concurrent.ConcurrentMap;
 @WebSocketMapping("/box")
 public class BoxWebSocketHandler implements WebSocketHandler {
 
-    private final WebClient.Builder webClientBuilder;
-
+    public final static ConcurrentMap<String, Long> codeTenantIdMap = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, WebSocketSender> boxSenderMap;
-
     private final ConcurrentMap<String, ConcurrentMap<String, WebSocketSender>> boxTenantSenderMap;
 
     @Override
@@ -34,36 +33,23 @@ public class BoxWebSocketHandler implements WebSocketHandler {
         MultiMap<String> queryParams = UrlEncoded.decodeQuery(handshakeInfo.getUri().getRawQuery());
         String tenantCode = queryParams.getString("t_code");
         // 进行http请求，根据tenantCode查询tenantId
-        if (tenantCode == null) {
+        if (tenantCode == null || codeTenantIdMap.get(tenantCode) == null) {
             return session.close();
         }
-        // return getTenantId(tenantCode)
-        //         .flatMap(tenantId -> {
-        //             if (tenantId == -1L) {
-        //                 return session.close(CloseStatus.REQUIRED_EXTENSION);
-        //             }
-        //             Mono<Void> incoming = session.receive().map(WebSocketMessage::getPayloadAsText)
-        //                     .doOnNext(log::info).then();
-        //             Mono<Void> outgoing = session.send(
-        //                     Flux.create(sink -> {
-        //                         addConnection(session.getId(), new WebSocketSender().setSession(session).setSink(sink));
-        //                     })
-        //             );
-        //             return Mono.when(outgoing, incoming).then().doFinally(signalType -> {
-        //                 removeConnection(session.getId());
-        //             });
-        //         });
-        return session.close();
+        Mono<Void> incoming = session.receive().map(WebSocketMessage::getPayloadAsText)
+                .doOnNext(log::info).then();
+        Mono<Void> outgoing = session.send(
+                Flux.create(sink -> {
+                    addConnection(session.getId(), new WebSocketSender().setSession(session).setSink(sink));
+                })
+        );
+        return Mono.when(outgoing, incoming).then().doFinally(signalType -> {
+            removeConnection(session.getId());
+        });
+
+
     }
 
-    public Mono<Long> getTenantId(String tenantCode) {
-        String url = "http://admin-server/sysTenant/getTenantId?tenantCode=" + tenantCode;
-        return webClientBuilder.build()
-                .get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(Long.class);
-    }
 
     // 添加连接
     public void addConnection(String sessionId, WebSocketSender sender) {
