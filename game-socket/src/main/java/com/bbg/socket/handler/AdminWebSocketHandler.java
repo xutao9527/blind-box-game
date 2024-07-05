@@ -29,7 +29,7 @@ public class AdminWebSocketHandler implements WebSocketHandler {
                 .doOnNext(log::info).then();
         Mono<Void> outgoing = session.send(
                 Flux.create(sink -> {
-                    adminSenderMap.put(session.getId(), new WebSocketSender(session, sink));
+                    adminSenderMap.put(session.getId(), new WebSocketSender().setSession(session).setSink(sink));
                 })
         );
         return Mono.when(outgoing, incoming).then().doFinally(signalType -> {
