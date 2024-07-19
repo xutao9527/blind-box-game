@@ -18,7 +18,7 @@ import java.util.List;
 public class TenantDynamicRouteCheckProcesses {
     private final WebClient.Builder webClientBuilder;
 
-    @Scheduled(initialDelay = 500, fixedRate = 600000) // 每隔 5 秒检查一次配置
+    @Scheduled(initialDelay = 500, fixedRate = 5000) // 每隔 5 秒检查一次配置
     public void fetchTenantData() {
         String url = "http://admin-server/sysTenant/getSubTenant";
         WebClient webClient = webClientBuilder.build();
